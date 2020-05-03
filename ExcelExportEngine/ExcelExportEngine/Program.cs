@@ -9,10 +9,34 @@ using System.IO;
 using System.Linq;
 
 /// <summary>
+/// *************************************** NUGET PACKAGES ***************************************
 /// Install the below Nuget packagaes.
 /// Install-Package log4net -Version 2.0.8
 /// Install-Package WindowsAzure.Storage -Version 9.3.3
 /// Install-Package EPPlus -Version 4.5.3.2, Do not use higher versions of EPPlus since they are no longer free.
+/// 
+/// 
+/// *************************************** TEST CASES ***************************************
+/// Local Directory With Template
+/// -i "C:\TestData\aaa.txt" -o "C:\TestData\aaa.xlsx" -t "C:\TestData\template.xlsx"
+/// 
+/// Local Directory With Template with Cell Number
+/// -i "C:\TestData\aaa.txt" -o "C:\TestData\bbb.xlsx" -t "C:\TestData\template.xlsx" -cell "A5"
+/// 
+/// Local Directory Without Template
+/// -i "C:\TestData\aaa.txt" -o "C:\TestData\bbb.xlsx"
+/// 
+/// Local Directory Without Template with Header needed argument
+/// -i "C:\TestData\aaa.txt" -o "C:\TestData\bbb.xlsx" -header "false"
+/// 
+/// Local Directory Without Template
+/// -i "C:\TestData\aaa.txt" -o "C:\TestData\bbb.xlsx" -sheet "TestSheetName"
+/// 
+/// Blob location Without Template
+/// -i "test/aaa.txt" -o "test/bbb.xlsx" -t "test/template.xlsx"
+/// 
+/// Blob location Without Template
+/// -i "test/aaa.txt" -o "test/bbb.xlsx"
 /// </summary>
 namespace ExcelExportEngine
 {
@@ -26,7 +50,6 @@ namespace ExcelExportEngine
         private static string strTemplateFilepath;
         private static string strExcelSheetName = "ReportsData";
         private static string strExcelCellNumber = "A1";
-        private static bool blnAllowNULLValues = true;
         private static bool blnHeaderNeeded = true;
 
         static void Main(string[] args)
@@ -43,26 +66,6 @@ namespace ExcelExportEngine
                 }
 
                 DataTable dtReportData = GetReportData();
-
-                // Replace the NULL values in all Nullable string columns.
-                // We cannot replace NULL values in non-string columns since these columns will not accept empty string values.
-                if (!blnAllowNULLValues)
-                {
-                    if (dtReportData.Rows.Count > 0)
-                    {
-                        foreach (DataColumn dc in dtReportData.Columns)
-                        {
-                            if (dc.AllowDBNull && dc.DataType == typeof(string))
-                            {
-                                foreach (DataRow dr in dtReportData.Rows)
-                                {
-                                    if (dr.IsNull(dc))
-                                        dr[dc] = string.Empty;
-                                }
-                            }
-                        }
-                    }
-                }
 
                 LogHelper.WriteDebugLog("Input data from database has been retrieved successfully....");
 
@@ -147,7 +150,7 @@ namespace ExcelExportEngine
             // Fourth argument - Excel Cell Number validation
             if (args.Contains("-cell"))
             {
-                if (strTemplateFilepath.ToLower().EndsWith(".xlsx"))
+                if ((! string.IsNullOrWhiteSpace(strTemplateFilepath)) && strTemplateFilepath.ToLower().EndsWith(".xlsx"))
                 {
                     int index = Array.IndexOf<string>(args, "-cell");
 
@@ -167,21 +170,7 @@ namespace ExcelExportEngine
                 }
             }
 
-            // Fifth argument - NULL values needed validation
-            if (args.Contains("-null"))
-            {
-                int index = Array.IndexOf<string>(args, "-null");
-                if (args[index + 1].ToLower() == "false" || args[index + 1].ToLower() == "true")
-                {
-                    blnAllowNULLValues = Convert.ToBoolean(args[index + 1]);
-                }
-                else
-                {
-                    return "The NULL Values flag should be either true or false.";
-                }
-            }
-
-            // Sixth argument - Header needed validation
+            // Fifth argument - Header needed validation
             if (args.Contains("-header"))
             {
                 int index = Array.IndexOf<string>(args, "-header");
@@ -195,7 +184,7 @@ namespace ExcelExportEngine
                 }
             }
 
-            // Seventh argument - Excel Sheet Name validation
+            // Sixth argument - Excel Sheet Name validation
             if (args.Contains("-sheet"))
             {
                 int index = Array.IndexOf<string>(args, "-sheet");
