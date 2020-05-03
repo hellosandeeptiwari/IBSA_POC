@@ -42,7 +42,7 @@ namespace ExcelExportEngine
 {
     class Program
     {
-        private static string stSQLConnectionString = ConfigurationManager.AppSettings["stSQLConnectionString"].ToString();
+        private static string strSQLConnectionString = ConfigurationManager.AppSettings["strSQLConnectionString"].ToString();
         private static string strBlobConnectionString = ConfigurationManager.AppSettings["strBlobConnectionString"].ToString();
 
         private static string strInputSQLQueryFilepath;
@@ -115,6 +115,11 @@ namespace ExcelExportEngine
                 if (args[index + 1].ToLower().EndsWith(".xlsx") || args[index + 1].ToLower().EndsWith(".csv"))
                 {
                     strOutputFilepath = args[index + 1];
+
+                    // If there is date in the output filename. Replace the correct date accordingly.
+                    strOutputFilepath = strOutputFilepath   .Replace("YYYY", DateTime.Now.ToString("yyyy"))
+                                                            .Replace("MM", DateTime.Now.ToString("MM"))
+                                                            .Replace("DD", DateTime.Now.ToString("dd"));
                 }
                 else
                 {
@@ -204,7 +209,7 @@ namespace ExcelExportEngine
         private static DataTable GetReportData()
         {
             DataTable dtSyncData = new DataTable();
-            using (SqlConnection sqlConn = new SqlConnection(stSQLConnectionString))
+            using (SqlConnection sqlConn = new SqlConnection(strSQLConnectionString))
             {
                 string sqlQuery = string.Empty;
                 if (strInputSQLQueryFilepath.Contains("/"))
