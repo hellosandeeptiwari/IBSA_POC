@@ -1,0 +1,12 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="SFBulkAPIStarter.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="SFBulkAPIStarter_SFEnterpriseV2_SforceService" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">https://test.salesforce.com/services/Soap/c/41.0/0DF0t0000008OJw</Value>
+    </Setting>
+    <Setting Name="SFBulkAPIStarter_SFEnterpriseV3_SforceService" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">https://test.salesforce.com/services/Soap/u/49.0</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
