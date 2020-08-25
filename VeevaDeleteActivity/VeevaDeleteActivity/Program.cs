@@ -48,6 +48,13 @@ namespace VeevaDeleteActivity
 
         static void Main(string[] args)
         {
+            // Prod
+            strVeevaUserId = "conexus.admin@mtpa.com";
+            strVeevaPasswordAndSecurityToken = "[7=D,4szH'C!" + "X0grEq1hfIDPHhxlwbfR5wug";
+            //strVeevaUrl = "https://test.salesforce.com/services/Soap/c/40.0/0DF1D000000003K";
+            strVeevaUrl = "https://test.salesforce.com/services/Soap/u/49.0";
+
+
             // Dev
             strVeevaUserId = "conexus.admin@fidiapharma.com.cnxcfg";
             strVeevaPasswordAndSecurityToken = "5zO{3-ssC!" + "yl1fgUWk7YICwZsMfrfx9YU9X";
@@ -126,7 +133,7 @@ namespace VeevaDeleteActivity
             }
         }
 
-        private static bool DeleteById(string strVeevaObjectName, IEnumerable<string> lstIdToDelete)
+        private static bool DeleteByIds(string strVeevaObjectName, IEnumerable<string> lstIdToDelete)
         {
 
             return false;
@@ -140,14 +147,146 @@ namespace VeevaDeleteActivity
 
         private static bool DeleteByObjectList(IEnumerable<string> lstVeevaObjectNames)
         {
+            foreach(string strVeevaObjectName in lstVeevaObjectNames)
+            {
+                DeleteByQuery($"SELECT Id FROM {strVeevaObjectName}", strVeevaObjectName);
+            }
 
             return false;
         }
 
-        private static bool DeleteByQuery(string strSOQLQuery)
+        private static bool DeleteByQuery(string strSOQLQuery, string strVeevaObjectName)
         {
+            string strResultsJSON = SelectByQuery(strSOQLQuery, strVeevaObjectName);
+
+            string strResultJSON = string.Empty;
+            SFBulkAPIStarter.BulkApiClient apiClient;
+            CreateJobRequest deleteJobRequest;
+            Job deleteJob, queryJob;
+            try
+            {
+                // Create BulkAPI client object.
+                apiClient = new SFBulkAPIStarter.BulkApiClient(strVeevaUserId, strVeevaPasswordAndSecurityToken, strVeevaUrl);
+
+                // Create Job request object
+                deleteJobRequest = BuildDefaultCreateJobRequest(JobOperation.Delete, strVeevaObjectName);
+
+                // Create Job
+                deleteJob = apiClient.CreateJob(deleteJobRequest);
+
+                // Create batch request
+                CreateBatchRequest insertAccountBatchRequest = BuildCreateBatchRequest(deleteJob.Id, strResultsJSON);
+
+                // Create batch object
+                Batch insertMergeBatch = apiClient.CreateBatch(insertAccountBatchRequest);
+
+                // Close job so no more batches are added.
+                apiClient.CloseJob(deleteJob.Id);
+
+                // Complete the job since we will not be able to fetch the results until the job is completed.
+                queryJob = apiClient.GetCompletedJob(deleteJob.Id);
+
+                // Fetch the batch response JSON.
+                strResultJSON = apiClient.GetBatchResult(deleteJob.Id, insertMergeBatch.Id);
+                Console.WriteLine("Below is the complete response JSON from Veeva:");
+                Console.WriteLine(strResultJSON);
+
+                // Check for the status of each record and update status accordingly.
+                var lstBulkAPIResults = apiClient.GetBulkAPIResult(strResultJSON);
+                Console.WriteLine($"Id: {lstBulkAPIResults[0].Id}, Success: {lstBulkAPIResults[0].Success}, Failure: {lstBulkAPIResults[0].Error}");
+                if (lstBulkAPIResults[0].Success)
+                {
+                    Console.WriteLine("Record: {lstBulkAPIResults[0].Id} deleted successfully");
+                    return true;
+                }
+                else
+                {
+                    Console.WriteLine($"Error: { lstBulkAPIResults[0].Error}");
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(strResultJSON);
+                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.StackTrace);
+                throw ex;
+            }
+            finally
+            {
+                //Explicitely clearing variables
+                deleteJob = null;
+                queryJob = null;
+                deleteJob = null;
+                apiClient = null;
+            }
 
             return false;
+        }
+
+        private static string SelectByQuery(string strSOQLQuery, string strVeevaObjectName)
+        {
+            string strResultJSON = string.Empty;
+            SFBulkAPIStarter.BulkApiClient apiClient;
+            CreateJobRequest deleteJobRequest;
+            Job deleteJob, queryJob;
+            try
+            {
+                // Create BulkAPI client object.
+                apiClient = new SFBulkAPIStarter.BulkApiClient(strVeevaUserId, strVeevaPasswordAndSecurityToken, strVeevaUrl);
+
+                // Create Job request object
+                deleteJobRequest = BuildDefaultCreateJobRequest(JobOperation.Query, strVeevaObjectName);
+
+                // Create Job
+                deleteJob = apiClient.CreateJob(deleteJobRequest);
+                
+                // Create batch request
+                CreateBatchRequest insertAccountBatchRequest = BuildCreateBatchRequest(deleteJob.Id, strResultJSON);
+
+                // Create batch object
+                Batch insertMergeBatch = apiClient.CreateBatch(insertAccountBatchRequest);
+
+                // Close job so no more batches are added.
+                apiClient.CloseJob(deleteJob.Id);
+
+                // Complete the job since we will not be able to fetch the results until the job is completed.
+                queryJob = apiClient.GetCompletedJob(deleteJob.Id);
+
+                // Fetch the batch response JSON.
+                strResultJSON = apiClient.GetBatchResult(deleteJob.Id, insertMergeBatch.Id);
+                Console.WriteLine("Below is the complete response JSON from Veeva:");
+                Console.WriteLine(strResultJSON);
+
+                // Check for the status of each record and update status accordingly.
+                var lstBulkAPIResults = apiClient.GetBulkAPIResult(strResultJSON);
+                Console.WriteLine($"Id: {lstBulkAPIResults[0].Id}, Success: {lstBulkAPIResults[0].Success}, Failure: {lstBulkAPIResults[0].Error}");
+                if (lstBulkAPIResults[0].Success)
+                {
+                    Console.WriteLine("Record: {lstBulkAPIResults[0].Id} deleted successfully");
+                    return strResultJSON;
+                }
+                else
+                {
+                    Console.WriteLine($"Error: { lstBulkAPIResults[0].Error}");
+                    return string.Empty;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(strResultJSON);
+                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.StackTrace);
+                throw ex;
+            }
+            finally
+            {
+                //Explicitely clearing variables
+                deleteJob = null;
+                queryJob = null;
+                deleteJob = null;
+                apiClient = null;
+            }
         }
     }
 }
