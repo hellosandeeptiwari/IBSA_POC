@@ -1,0 +1,3 @@
+﻿CREATE DATABASE SCOPED CREDENTIAL [CPDBCredential]
+    WITH IDENTITY = N'cpprodadmin@cpprod';
+
