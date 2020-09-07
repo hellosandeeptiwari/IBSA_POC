@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -14,10 +15,10 @@ namespace SendEmailActivity
 {
     class Program
     {
-        private readonly static string AzureConnectionstring =
-                 System.Configuration.ConfigurationManager.AppSettings["AzureconnectionString"];
-        private readonly static string blobContainer =
-            System.Configuration.ConfigurationManager.AppSettings["blobContainer"];
+        private readonly static string strBlobConnectionstring =
+                 System.Configuration.ConfigurationManager.AppSettings["BlobConnectionString"];
+        private readonly static string strBlobContainer =
+            System.Configuration.ConfigurationManager.AppSettings["BlobContainer"];
 
         [Newtonsoft.Json.JsonProperty(PropertyName = "userProperties")]
         public IList<UserProperty> UserProperties { get; set; }
@@ -51,24 +52,26 @@ namespace SendEmailActivity
             dynamic datasets = JsonConvert.DeserializeObject(File.ReadAllText("datasets.json"));
             Console.WriteLine(datasets);
             Console.WriteLine("Completed");
-            
-            
-            var client = new SendGridClient("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");
-            var msg = new SendGridMessage();
+
+
+            SendGridClient objSendGridClient = new SendGridClient("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");
+            SendGridMessage objMessage = new SendGridMessage();
 
             Console.WriteLine (activity.typeProperties.extendedProperties.emailTo.ToString());
             //// For a detailed description of each of these settings, please see the [documentation](https://sendgrid.com/docs/API_Reference/api_v3.html).
-            var toEmails = activity.typeProperties.extendedProperties.emailTo.ToString();
-            toEmails.split();
-            msg.AddTo(new EmailAddress(activity.typeProperties.extendedProperties.emailTo.ToString()));
-            var to_emails = new List<EmailAddress>
-            {
-                new EmailAddress("jagadeeshkumbar1@gmail.com", "Example User2"),
-                new EmailAddress("test3@gmail.com", "Example User3")
-            };
-            msg.AddTos(to_emails);
 
-            msg.AddCc(new EmailAddress(activity.typeProperties.extendedProperties.emailCC.ToString()));
+            //objMessage.AddTo(new EmailAddress(activity.typeProperties.extendedProperties.emailTo.ToString()));
+            //var to_emails = new List<EmailAddress>
+            //{
+            //    new EmailAddress("jagadeeshkumbar1@gmail.com", "Example User2"),
+            //    new EmailAddress("test3@gmail.com", "Example User3")
+            //};
+
+            string[] strToEmails = activity.typeProperties.extendedProperties.emailTo.ToString().Split(",");
+            List<EmailAddress> lstToEmails = new List<EmailAddress>(strToEmails.Select(str => new EmailAddress(str)));
+            objMessage.AddTos(lstToEmails);
+
+            objMessage.AddCc(new EmailAddress(activity.typeProperties.extendedProperties.emailCC.ToString()));
             ////var cc_emails = new List<EmailAddress>
             ////{
             ////    new EmailAddress("test5@gmail.com", "Example User5"),
@@ -76,7 +79,7 @@ namespace SendEmailActivity
             ////};
             ////msg.AddCcs(cc_emails);
 
-            msg.AddBcc(new EmailAddress(activity.typeProperties.extendedProperties.emailBCC.ToString()));
+            objMessage.AddBcc(new EmailAddress(activity.typeProperties.extendedProperties.emailBCC.ToString()));
             ////var bcc_emails = new List<EmailAddress>
             ////{
             ////    new EmailAddress("test8@gmail.com", "Example User8"),
@@ -86,14 +89,14 @@ namespace SendEmailActivity
 
             //// The values below this comment are global to an entire message
 
-            msg.SetFrom(activity.typeProperties.extendedProperties.emailFrom.ToString());
+            objMessage.SetFrom(activity.typeProperties.extendedProperties.emailFrom.ToString());
 
-            msg.SetSubject(activity.typeProperties.extendedProperties.emailSubject.ToString());
+            objMessage.SetSubject(activity.typeProperties.extendedProperties.emailSubject.ToString());
 
             ////msg.SetGlobalSubject("Sending with Twilio SendGrid is Fun");
 
             //msg.AddContent(MimeType.Text, "and easy to do anywhere, even with C#");
-            msg.AddContent(MimeType.Html, activity.typeProperties.extendedProperties.emailBody.ToString());
+            objMessage.AddContent(MimeType.Html, activity.typeProperties.extendedProperties.emailBody.ToString());
 
 
             //// For base64 encoding, see [`Convert.ToBase64String`](https://msdn.microsoft.com/en-us/library/system.convert.tobase64string(v=vs.110).aspx)
@@ -129,17 +132,17 @@ namespace SendEmailActivity
             ////    await msg.AddAttachmentAsync("DailyTracker.xlsx", fileStream);
             ////}
 
-            var storageAccount = CloudStorageAccount.Parse(AzureConnectionstring);
+            var storageAccount = CloudStorageAccount.Parse(strBlobConnectionstring);
             var blobClient = storageAccount.CreateCloudBlobClient();
-            var container = blobClient.GetContainerReference(blobContainer);
+            var container = blobClient.GetContainerReference(strBlobContainer);
             var blob = container.GetBlockBlobReference("outbound/NewHCPsFound_2020-08-31.csv");
-            Console.WriteLine("input blob details folder: {0}, filename: {1}", blobContainer, blob);
+            Console.WriteLine("input blob details folder: {0}, filename: {1}", strBlobContainer, blob);
             var memoryStream = new MemoryStream();
             blob.DownloadToStream(memoryStream);
             memoryStream.Position = 0;
-            await msg.AddAttachmentAsync("NewHCPsFound_2020-08-31.csv", memoryStream);
+            await objMessage.AddAttachmentAsync("NewHCPsFound_2020-08-31.csv", memoryStream);
 
-            var response = await client.SendEmailAsync(msg);
+            var response = await objSendGridClient.SendEmailAsync(objMessage);
             //Console.WriteLine(msg.Serialize());
             //Console.WriteLine(response.StatusCode);
             //Console.WriteLine(response.Body.ReadAsStringAsync().Result);
