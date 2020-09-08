@@ -5,148 +5,77 @@ using System.IO;
 using System.Threading.Tasks;
 using SendGrid;
 using SendGrid.Helpers.Mail;
-using Microsoft.Azure;
 using Microsoft.WindowsAzure.Storage;
-using System.Configuration;
-using Microsoft.Azure.Management.DataFactory.Models;
 using Newtonsoft.Json;
+using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace SendEmailActivity
 {
     class Program
     {
-        private readonly static string strBlobConnectionstring =
-                 System.Configuration.ConfigurationManager.AppSettings["BlobConnectionString"];
-        private readonly static string strBlobContainer =
-            System.Configuration.ConfigurationManager.AppSettings["BlobContainer"];
-
-        [Newtonsoft.Json.JsonProperty(PropertyName = "userProperties")]
-        public IList<UserProperty> UserProperties { get; set; }
         static void Main(string[] args)
         {
-            //GetBlobDetails();
+            Console.WriteLine("Send email activity started");
             Execute().Wait();
-            Console.WriteLine("completed");
-
+            Console.WriteLine("Send email activity completed");
         }
-        //public static void GetBlobDetails()
-        //{
-        //    var storageAccount = CloudStorageAccount.Parse(AzureConnectionstring);
-        //    var blobClient = storageAccount.CreateCloudBlobClient();
-        //    var container = blobClient.GetContainerReference(blobContainer);
-        //    var blob = container.GetBlockBlobReference("outbound/NewHCPsFound_2020-08-31.csv");
-        //    Console.WriteLine("input blob details folder: {0}, filename: {1}", blobContainer, blob);
-        //}
         static async Task Execute()
         {
-
-            
-            Console.WriteLine("Printng the pipeline properties");
+            Console.WriteLine("Printing the pipeline properties");
             dynamic activity = JsonConvert.DeserializeObject(File.ReadAllText("activity.json"));
-            Console.WriteLine(activity.userProperties[0].value.ToString());
-            Console.WriteLine("Completed");
-            Console.WriteLine("Printng the LinkedService properties");
+            Console.WriteLine(activity);
+            Console.WriteLine("Printing the LinkedService properties");
             dynamic linkedServices = JsonConvert.DeserializeObject(File.ReadAllText("linkedServices.json"));
             Console.WriteLine(linkedServices);
-            Console.WriteLine("Printng the Datasets properties");
+            Console.WriteLine("Printing the Datasets properties");
             dynamic datasets = JsonConvert.DeserializeObject(File.ReadAllText("datasets.json"));
             Console.WriteLine(datasets);
-            Console.WriteLine("Completed");
 
-
-            SendGridClient objSendGridClient = new SendGridClient("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");
+            SendGridClient objSendGridClient = new SendGridClient("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");
             SendGridMessage objMessage = new SendGridMessage();
-
-            Console.WriteLine (activity.typeProperties.extendedProperties.emailTo.ToString());
-            //// For a detailed description of each of these settings, please see the [documentation](https://sendgrid.com/docs/API_Reference/api_v3.html).
-
-            //objMessage.AddTo(new EmailAddress(activity.typeProperties.extendedProperties.emailTo.ToString()));
-            //var to_emails = new List<EmailAddress>
-            //{
-            //    new EmailAddress("jagadeeshkumbar1@gmail.com", "Example User2"),
-            //    new EmailAddress("test3@gmail.com", "Example User3")
-            //};
-
-            string[] strToEmails = activity.typeProperties.extendedProperties.emailTo.ToString().Split(",");
-            List<EmailAddress> lstToEmails = new List<EmailAddress>(strToEmails.Select(str => new EmailAddress(str)));
+            
+            string strToEmails = activity.typeProperties.extendedProperties.emailTo.ToString();
+            Console.WriteLine(strToEmails);
+            string[] strArrToEmails = strToEmails.Split(',');
+            List<EmailAddress> lstToEmails = new List<EmailAddress>(strArrToEmails.Select(str => new EmailAddress(str)));
             objMessage.AddTos(lstToEmails);
 
-            objMessage.AddCc(new EmailAddress(activity.typeProperties.extendedProperties.emailCC.ToString()));
-            ////var cc_emails = new List<EmailAddress>
-            ////{
-            ////    new EmailAddress("test5@gmail.com", "Example User5"),
-            ////    new EmailAddress("test6@gmail.com", "Example User6")
-            ////};
-            ////msg.AddCcs(cc_emails);
-
-            objMessage.AddBcc(new EmailAddress(activity.typeProperties.extendedProperties.emailBCC.ToString()));
-            ////var bcc_emails = new List<EmailAddress>
-            ////{
-            ////    new EmailAddress("test8@gmail.com", "Example User8"),
-            ////    new EmailAddress("test9@gmail.com", "Example User9")
-            ////};
-            ////msg.AddBccs(bcc_emails);
-
-            //// The values below this comment are global to an entire message
-
+            string strCCEmails = activity.typeProperties.extendedProperties.emailCC.ToString();
+            if(strCCEmails.Trim().Length > 0)
+            {
+                Console.WriteLine(strCCEmails);
+                string[] strArrCCEmails = strCCEmails.Split(',');
+                List<EmailAddress> lstCCEmails = new List<EmailAddress>(strArrCCEmails.Select(str => new EmailAddress(str)));
+                objMessage.AddCcs(lstCCEmails);
+            }
+            string strBCCEmails = activity.typeProperties.extendedProperties.emailBCC.ToString();
+            if(strBCCEmails.Trim().Length > 0)
+            {
+                Console.WriteLine(strBCCEmails);
+                string[] strArrBCCEmails = strBCCEmails.Split(',');
+                List<EmailAddress> lstBCCEmails = new List<EmailAddress>(strArrBCCEmails.Select(str => new EmailAddress(str)));
+                objMessage.AddBccs(lstBCCEmails);
+            }
+            
             objMessage.SetFrom(activity.typeProperties.extendedProperties.emailFrom.ToString());
-
             objMessage.SetSubject(activity.typeProperties.extendedProperties.emailSubject.ToString());
-
-            ////msg.SetGlobalSubject("Sending with Twilio SendGrid is Fun");
-
-            //msg.AddContent(MimeType.Text, "and easy to do anywhere, even with C#");
             objMessage.AddContent(MimeType.Html, activity.typeProperties.extendedProperties.emailBody.ToString());
 
-
-            //// For base64 encoding, see [`Convert.ToBase64String`](https://msdn.microsoft.com/en-us/library/system.convert.tobase64string(v=vs.110).aspx)
-            //// For an example using an attachment, please see this [use case](USE_CASES.md#attachments).
-            ////msg.AddAttachment("balance_001.pdf",
-            ////                  "base64 encoded string",
-            ////                  "application/pdf",
-            ////                  "attachment",
-            ////                  "Balance Sheet");
-            ////var attachments = new List<Attachment>()
-            ////{
-            ////    new Attachment()
-            ////    {
-            ////        Content = "base64 encoded string",
-            ////        Type = "image/png",
-            ////        Filename = "banner.png",
-            ////        Disposition = "inline",
-            ////        ContentId = "Banner"
-            ////    },
-            ////    new Attachment()
-            ////    {
-            ////        Content = "base64 encoded string",
-            ////        Type = "image/png",
-            ////        Filename = "banner2.png",
-            ////        Disposition = "inline",
-            ////        ContentId = "Banner 2"
-            ////    }
-            ////};
-            ////msg.AddAttachments(attachments);
-
-            ////using (var fileStream = File.OpenRead("C:\\Users\\Jagadeesh\\Desktop\\DailyTracker.xlsx"))
-            ////{
-            ////    await msg.AddAttachmentAsync("DailyTracker.xlsx", fileStream);
-            ////}
-
-            var storageAccount = CloudStorageAccount.Parse(strBlobConnectionstring);
-            var blobClient = storageAccount.CreateCloudBlobClient();
-            var container = blobClient.GetContainerReference(strBlobContainer);
-            var blob = container.GetBlockBlobReference("outbound/NewHCPsFound_2020-08-31.csv");
-            Console.WriteLine("input blob details folder: {0}, filename: {1}", strBlobContainer, blob);
-            var memoryStream = new MemoryStream();
-            blob.DownloadToStream(memoryStream);
-            memoryStream.Position = 0;
-            await objMessage.AddAttachmentAsync("NewHCPsFound_2020-08-31.csv", memoryStream);
-
+            var storageAccount = CloudStorageAccount.Parse(activity.typeProperties.extendedProperties.strBlobConnectionstring.ToString());
+            string strBlobURLs = activity.typeProperties.extendedProperties.attachmentURLs.ToString();
+            if (strBlobURLs.Trim().Length > 0)
+            {
+                string[] strArrBlobURLs = strBlobURLs.Split(',');
+                foreach (var blobURLs in strArrBlobURLs)
+                {
+                    CloudBlockBlob blob = new CloudBlockBlob(new Uri(blobURLs), storageAccount.Credentials);
+                    var memoryStream = new MemoryStream();
+                    blob.DownloadToStream(memoryStream);
+                    memoryStream.Position = 0;
+                    await objMessage.AddAttachmentAsync(blob.Name, memoryStream);
+                }
+            }
             var response = await objSendGridClient.SendEmailAsync(objMessage);
-            //Console.WriteLine(msg.Serialize());
-            //Console.WriteLine(response.StatusCode);
-            //Console.WriteLine(response.Body.ReadAsStringAsync().Result);
-            //Console.WriteLine(response.Headers);
         }
     }
 }
