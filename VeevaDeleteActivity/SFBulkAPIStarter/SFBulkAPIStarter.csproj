@@ -56,12 +56,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="SforceService.cs" />
-    <Compile Include="Web References\SFEnterpriseV2\Reference.cs">
+    <Compile Include="Web References\MTPAProd\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
-    <Compile Include="Web References\SFEnterpriseV3\Reference.cs">
+    <Compile Include="Web References\MTPAFullSandox\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
@@ -81,333 +81,339 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <None Include="Web References\SFEnterpriseV2\ChangeOwnPasswordResult.datasource">
+    <None Include="Web References\MTPAFullSandox\ChangeOwnPasswordResult.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\SFEnterpriseV2\DeleteResult.datasource">
+    <None Include="Web References\MTPAFullSandox\DeleteByExampleResult.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\SFEnterpriseV2\DescribeAppMenuItem.datasource">
+    <None Include="Web References\MTPAFullSandox\DeleteResult.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\SFEnterpriseV2\DescribeApprovalLayout.datasource">
+    <None Include="Web References\MTPAFullSandox\DescribeAppMenuItem.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\SFEnterpriseV2\DescribeAvailableQuickActionResult.datasource">
+    <None Include="Web References\MTPAFullSandox\DescribeApprovalLayout.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\SFEnterpriseV2\DescribeCompactLayout.datasource">
+    <None Include="Web References\MTPAFullSandox\DescribeAvailableQuickActionResult.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\SFEnterpriseV2\DescribeCompactLayoutsResult.datasource">
+    <None Include="Web References\MTPAFullSandox\DescribeCompactLayout.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\SFEnterpriseV2\DescribeDataCategoryGroupResult.datasource">
+    <None Include="Web References\MTPAFullSandox\DescribeCompactLayoutsResult.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\SFEnterpriseV2\DescribeDataCategoryGroupStructureResult.datasource">
+    <None Include="Web References\MTPAFullSandox\DescribeDataCategoryGroupResult.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\SFEnterpriseV2\DescribeGlobalResult.datasource">
+    <None Include="Web References\MTPAFullSandox\DescribeDataCategoryGroupStructureResult.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\SFEnterpriseV2\DescribeGlobalTheme.datasource">
+    <None Include="Web References\MTPAFullSandox\DescribeDataCategoryMappingResult.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\SFEnterpriseV2\DescribeLayoutResult.datasource">
+    <None Include="Web References\MTPAFullSandox\DescribeGlobalResult.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\SFEnterpriseV2\DescribeNounResult.datasource">
+    <None Include="Web References\MTPAFullSandox\DescribeGlobalTheme.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\SFEnterpriseV2\DescribePathAssistant.datasource">
+    <None Include="Web References\MTPAFullSandox\DescribeLayoutResult.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\SFEnterpriseV2\DescribeQuickActionResult.datasource">
+    <None Include="Web References\MTPAFullSandox\DescribeNounResult.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\SFEnterpriseV2\DescribeSearchableEntityResult.datasource">
+    <None Include="Web References\MTPAFullSandox\DescribePathAssistant.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\SFEnterpriseV2\DescribeSearchLayoutResult.datasource">
+    <None Include="Web References\MTPAFullSandox\DescribeQuickActionResult.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\SFEnterpriseV2\DescribeSearchScopeOrderResult.datasource">
+    <None Include="Web References\MTPAFullSandox\DescribeSearchableEntityResult.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\SFEnterpriseV2\DescribeSObjectResult.datasource">
+    <None Include="Web References\MTPAFullSandox\DescribeSearchLayoutResult.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\SFEnterpriseV2\DescribeSoftphoneLayoutResult.datasource">
+    <None Include="Web References\MTPAFullSandox\DescribeSearchScopeOrderResult.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\SFEnterpriseV2\DescribeSoqlListView.datasource">
+    <None Include="Web References\MTPAFullSandox\DescribeSObjectResult.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\SFEnterpriseV2\DescribeTab.datasource">
+    <None Include="Web References\MTPAFullSandox\DescribeSoftphoneLayoutResult.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\SFEnterpriseV2\DescribeTabSetResult.datasource">
+    <None Include="Web References\MTPAFullSandox\DescribeSoqlListView.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\SFEnterpriseV2\DescribeThemeItem.datasource">
+    <None Include="Web References\MTPAFullSandox\DescribeTab.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\SFEnterpriseV2\DescribeVisualForceResult.datasource">
+    <None Include="Web References\MTPAFullSandox\DescribeTabSetResult.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\SFEnterpriseV2\EmptyRecycleBinResult.datasource">
+    <None Include="Web References\MTPAFullSandox\DescribeThemeItem.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\SFEnterpriseV2\ExecuteListViewResult.datasource">
+    <None Include="Web References\MTPAFullSandox\DescribeVisualForceResult.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\SFEnterpriseV2\FindDuplicatesResult.datasource">
+    <None Include="Web References\MTPAFullSandox\EmptyRecycleBinResult.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\SFEnterpriseV2\GetDeletedResult.datasource">
+    <None Include="Web References\MTPAFullSandox\ExecuteListViewResult.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\SFEnterpriseV2\GetServerTimestampResult.datasource">
+    <None Include="Web References\MTPAFullSandox\FindDuplicatesResult.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\SFEnterpriseV2\GetUpdatedResult.datasource">
+    <None Include="Web References\MTPAFullSandox\GetDeletedResult.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\SFEnterpriseV2\GetUserInfoResult.datasource">
+    <None Include="Web References\MTPAFullSandox\GetServerTimestampResult.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\SFEnterpriseV2\InvalidateSessionsResult.datasource">
+    <None Include="Web References\MTPAFullSandox\GetUpdatedResult.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\SFEnterpriseV2\KnowledgeSettings.datasource">
+    <None Include="Web References\MTPAFullSandox\GetUserInfoResult.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\SFEnterpriseV2\LeadConvertResult.datasource">
+    <None Include="Web References\MTPAFullSandox\InvalidateSessionsResult.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\SFEnterpriseV2\LoginResult.datasource">
+    <None Include="Web References\MTPAFullSandox\KnowledgeSettings.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\SFEnterpriseV2\MergeResult.datasource">
+    <None Include="Web References\MTPAFullSandox\LeadConvertResult.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\SFEnterpriseV2\PerformQuickActionResult.datasource">
+    <None Include="Web References\MTPAFullSandox\LoginResult.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\SFEnterpriseV2\ProcessResult.datasource">
+    <None Include="Web References\MTPAFullSandox\MergeResult.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\SFEnterpriseV2\QueryResult.datasource">
+    <None Include="Web References\MTPAFullSandox\PerformQuickActionResult.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\SFEnterpriseV2\QuickActionTemplateResult.datasource">
+    <None Include="Web References\MTPAFullSandox\ProcessResult.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\SFEnterpriseV2\Reference.map">
+    <None Include="Web References\MTPAFullSandox\QueryResult.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\MTPAFullSandox\QuickActionTemplateResult.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\MTPAFullSandox\RenderEmailTemplateResult.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\MTPAFullSandox\RenderStoredEmailTemplateResult.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\MTPAFullSandox\ResetPasswordResult.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\MTPAFullSandox\SaveResult.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\MTPAFullSandox\SearchResult.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\MTPAFullSandox\SendEmailResult.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\MTPAFullSandox\SetPasswordResult.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\MTPAFullSandox\sObject.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\MTPAFullSandox\UndeleteResult.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\MTPAFullSandox\UpsertResult.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\MTPAProd\ChangeOwnPasswordResult1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\MTPAProd\DeleteByExampleResult1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\MTPAProd\DeleteResult1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\MTPAProd\DescribeAppMenuItem1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\MTPAProd\DescribeApprovalLayout1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\MTPAProd\DescribeAvailableQuickActionResult1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\MTPAProd\DescribeCompactLayout1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\MTPAProd\DescribeCompactLayoutsResult1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\MTPAProd\DescribeDataCategoryGroupResult1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\MTPAProd\DescribeDataCategoryGroupStructureResult1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\MTPAProd\DescribeDataCategoryMappingResult1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\MTPAProd\DescribeGlobalResult1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\MTPAProd\DescribeGlobalTheme1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\MTPAProd\DescribeLayoutResult1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\MTPAProd\DescribeNounResult1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\MTPAProd\DescribePathAssistant1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\MTPAProd\DescribeQuickActionResult1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\MTPAProd\DescribeSearchableEntityResult1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\MTPAProd\DescribeSearchLayoutResult1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\MTPAProd\DescribeSearchScopeOrderResult1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\MTPAProd\DescribeSObjectResult1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\MTPAProd\DescribeSoftphoneLayoutResult1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\MTPAProd\DescribeSoqlListView1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\MTPAProd\DescribeTab1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\MTPAProd\DescribeTabSetResult1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\MTPAProd\DescribeThemeItem1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\MTPAProd\DescribeVisualForceResult1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\MTPAProd\EmptyRecycleBinResult1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\MTPAProd\ExecuteListViewResult1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\MTPAProd\FindDuplicatesResult1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\MTPAProd\GetDeletedResult1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\MTPAProd\GetServerTimestampResult1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\MTPAProd\GetUpdatedResult1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\MTPAProd\GetUserInfoResult1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\MTPAProd\InvalidateSessionsResult1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\MTPAProd\KnowledgeSettings1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\MTPAProd\LeadConvertResult1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\MTPAProd\LoginResult1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\MTPAProd\MergeResult1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\MTPAProd\PerformQuickActionResult1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\MTPAProd\ProcessResult1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\MTPAProd\QueryResult1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\MTPAProd\QuickActionTemplateResult1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\MTPAProd\Reference.map">
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
-    <None Include="Web References\SFEnterpriseV2\RenderEmailTemplateResult.datasource">
+    <None Include="Web References\MTPAProd\RenderEmailTemplateResult1.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\SFEnterpriseV2\RenderStoredEmailTemplateResult.datasource">
+    <None Include="Web References\MTPAProd\RenderStoredEmailTemplateResult1.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\SFEnterpriseV2\ResetPasswordResult.datasource">
+    <None Include="Web References\MTPAProd\ResetPasswordResult1.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\SFEnterpriseV2\SaveResult.datasource">
+    <None Include="Web References\MTPAProd\SaveResult1.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\SFEnterpriseV2\SearchResult.datasource">
+    <None Include="Web References\MTPAProd\SearchResult1.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\SFEnterpriseV2\SendEmailResult.datasource">
+    <None Include="Web References\MTPAProd\SendEmailResult1.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\SFEnterpriseV2\SetPasswordResult.datasource">
+    <None Include="Web References\MTPAProd\SetPasswordResult1.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\SFEnterpriseV2\sObject.datasource">
+    <None Include="Web References\MTPAProd\sObject1.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\SFEnterpriseV2\UndeleteResult.datasource">
+    <None Include="Web References\MTPAProd\UndeleteResult1.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\SFEnterpriseV2\UpsertResult.datasource">
+    <None Include="Web References\MTPAProd\UpsertResult1.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\SFEnterpriseV2\wsdl.wsdl" />
-    <None Include="Web References\SFEnterpriseV3\ChangeOwnPasswordResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\SFEnterpriseV3\DeleteByExampleResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\SFEnterpriseV3\DeleteResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\SFEnterpriseV3\DescribeAppMenuItem.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\SFEnterpriseV3\DescribeApprovalLayout.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\SFEnterpriseV3\DescribeAvailableQuickActionResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\SFEnterpriseV3\DescribeCompactLayout.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\SFEnterpriseV3\DescribeCompactLayoutsResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\SFEnterpriseV3\DescribeDataCategoryGroupResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\SFEnterpriseV3\DescribeDataCategoryGroupStructureResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\SFEnterpriseV3\DescribeDataCategoryMappingResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\SFEnterpriseV3\DescribeGlobalResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\SFEnterpriseV3\DescribeGlobalTheme.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\SFEnterpriseV3\DescribeLayoutResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\SFEnterpriseV3\DescribeNounResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\SFEnterpriseV3\DescribePathAssistant.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\SFEnterpriseV3\DescribeQuickActionResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\SFEnterpriseV3\DescribeSearchableEntityResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\SFEnterpriseV3\DescribeSearchLayoutResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\SFEnterpriseV3\DescribeSearchScopeOrderResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\SFEnterpriseV3\DescribeSObjectResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\SFEnterpriseV3\DescribeSoftphoneLayoutResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\SFEnterpriseV3\DescribeSoqlListView.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\SFEnterpriseV3\DescribeTab.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\SFEnterpriseV3\DescribeTabSetResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\SFEnterpriseV3\DescribeThemeItem.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\SFEnterpriseV3\DescribeVisualForceResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\SFEnterpriseV3\EmptyRecycleBinResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\SFEnterpriseV3\ExecuteListViewResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\SFEnterpriseV3\FindDuplicatesResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\SFEnterpriseV3\GetDeletedResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\SFEnterpriseV3\GetServerTimestampResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\SFEnterpriseV3\GetUpdatedResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\SFEnterpriseV3\GetUserInfoResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\SFEnterpriseV3\InvalidateSessionsResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\SFEnterpriseV3\KnowledgeSettings.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\SFEnterpriseV3\LeadConvertResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\SFEnterpriseV3\LoginResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\SFEnterpriseV3\MergeResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\SFEnterpriseV3\PerformQuickActionResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\SFEnterpriseV3\ProcessResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\SFEnterpriseV3\QueryResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\SFEnterpriseV3\QuickActionTemplateResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\SFEnterpriseV3\Reference.map">
+    <None Include="Web References\MTPAProd\wsdl.wsdl" />
+    <None Include="Web References\MTPAFullSandox\Reference.map">
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
-    <None Include="Web References\SFEnterpriseV3\RenderEmailTemplateResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\SFEnterpriseV3\RenderStoredEmailTemplateResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\SFEnterpriseV3\ResetPasswordResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\SFEnterpriseV3\SaveResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\SFEnterpriseV3\SearchResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\SFEnterpriseV3\SendEmailResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\SFEnterpriseV3\SetPasswordResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\SFEnterpriseV3\sObject.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\SFEnterpriseV3\UndeleteResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\SFEnterpriseV3\UpsertResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\SFEnterpriseV3\wsdl.wsdl" />
+    <None Include="Web References\MTPAFullSandox\wsdl.wsdl" />
   </ItemGroup>
   <ItemGroup>
     <WebReferenceUrl Include="https://cs34.salesforce.com/soap/wsdl.jsp">
       <UrlBehavior>Dynamic</UrlBehavior>
-      <RelPath>Web References\SFEnterpriseV3\</RelPath>
+      <RelPath>Web References\MTPAFullSandox\</RelPath>
       <UpdateFromURL>https://cs34.salesforce.com/soap/wsdl.jsp</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
@@ -416,16 +422,16 @@
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>SFBulkAPIStarter_SFEnterpriseV3_SforceService</CachedSettingsPropName>
     </WebReferenceUrl>
-    <WebReferenceUrl Include="https://cs77.salesforce.com/soap/wsdl.jsp%3fver_VEM=6.1&amp;type=%2a&amp;ver_sf_com_apps=1.7">
+    <WebReferenceUrl Include="https://na96.salesforce.com/soap/wsdl.jsp">
       <UrlBehavior>Dynamic</UrlBehavior>
-      <RelPath>Web References\SFEnterpriseV2\</RelPath>
-      <UpdateFromURL>https://cs77.salesforce.com/soap/wsdl.jsp%3fver_VEM=6.1&amp;type=%2a&amp;ver_sf_com_apps=1.7</UpdateFromURL>
+      <RelPath>Web References\MTPAProd\</RelPath>
+      <UpdateFromURL>https://na96.salesforce.com/soap/wsdl.jsp</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
       <CachedDynamicPropName>
       </CachedDynamicPropName>
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
-      <CachedSettingsPropName>SFBulkAPIStarter_SFEnterpriseV2_SforceService</CachedSettingsPropName>
+      <CachedSettingsPropName>SFBulkAPIStarter_MTPAVeevaProd_SforceService</CachedSettingsPropName>
     </WebReferenceUrl>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SFBulkAPIStarter.SFEnterpriseV3
+namespace SFBulkAPIStarter.MTPAProd
 {
     public partial class SforceService
     {

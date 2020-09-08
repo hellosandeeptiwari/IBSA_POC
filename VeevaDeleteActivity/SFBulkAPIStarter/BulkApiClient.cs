@@ -22,14 +22,13 @@ namespace SFBulkAPIStarter
         private String _Password { get; set; }
         private String _LoginURL { get; set; }
 
-        //V2 for DEV sandbox
-        //SFEnterpriseV2.SforceService _sfService = null;
-        //SFEnterpriseV2.LoginResult _loginResult = null;
-        //V2 for DEV sandbox
+        // MTPA Full Sandbox
+        //MTPAFullSandox.SforceService _sfService = null;
+        //MTPAFullSandox.LoginResult _loginResult = null;
 
-        //V3 for FULL sandbox
-        SFEnterpriseV3.SforceService _sfService = null;
-        public SFEnterpriseV3.LoginResult _loginResult = null;
+        // MTPA Prod
+        MTPAProd.SforceService _sfService = null;
+        public MTPAProd.LoginResult _loginResult = null;
         //V3 for FULL sandbox
 
         public BulkApiClient(String username, String password, String loginUrl)
@@ -277,7 +276,7 @@ namespace SFBulkAPIStarter
 
         private void Login()
         {
-            _sfService = new SFEnterpriseV3.SforceService();
+            _sfService = new MTPAProd.SforceService();
             System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             _sfService.Url = _LoginURL;
             _loginResult = _sfService.login(_UserName, _Password);

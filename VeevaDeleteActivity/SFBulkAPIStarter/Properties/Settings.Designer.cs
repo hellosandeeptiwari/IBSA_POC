@@ -26,20 +26,20 @@ namespace SFBulkAPIStarter.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
-        [global::System.Configuration.DefaultSettingValueAttribute("https://test.salesforce.com/services/Soap/c/41.0/0DF0t0000008OJw")]
-        public string SFBulkAPIStarter_SFEnterpriseV2_SforceService {
+        [global::System.Configuration.DefaultSettingValueAttribute("https://test.salesforce.com/services/Soap/u/49.0")]
+        public string SFBulkAPIStarter_SFEnterpriseV3_SforceService {
             get {
-                return ((string)(this["SFBulkAPIStarter_SFEnterpriseV2_SforceService"]));
+                return ((string)(this["SFBulkAPIStarter_SFEnterpriseV3_SforceService"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
-        [global::System.Configuration.DefaultSettingValueAttribute("https://test.salesforce.com/services/Soap/u/49.0")]
-        public string SFBulkAPIStarter_SFEnterpriseV3_SforceService {
+        [global::System.Configuration.DefaultSettingValueAttribute("https://login.salesforce.com/services/Soap/u/49.0")]
+        public string SFBulkAPIStarter_MTPAVeevaProd_SforceService {
             get {
-                return ((string)(this["SFBulkAPIStarter_SFEnterpriseV3_SforceService"]));
+                return ((string)(this["SFBulkAPIStarter_MTPAVeevaProd_SforceService"]));
             }
         }
     }
