@@ -1,8 +1,12 @@
-﻿using SFBulkAPIStarter;
+﻿using Newtonsoft.Json;
+using SFBulkAPIStarter;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 /// <summary>
+/// Install-Package Newtonsoft.Json -Version 12.0.3
+/// 
 /// Issue - 1:
 /// https://developer.salesforce.com/forums/?id=906F0000000Aj5kIAC
 /// Error with ListViewRecordColumn[][]. Removed extra [] in Reference.cs class.
@@ -48,20 +52,31 @@ namespace VeevaDeleteActivity
 
         static void Main(string[] args)
         {
-            // Prod
-            strVeevaUserId = "conexus.admin@mtpa.com";
-            strVeevaPasswordAndSecurityToken = "[7=D,4szH'C!" + "X0grEq1hfIDPHhxlwbfR5wug";
-            //strVeevaUrl = "https://test.salesforce.com/services/Soap/c/40.0/0DF1D000000003K";
-            strVeevaUrl = "https://test.salesforce.com/services/Soap/u/49.0";
+            //// Prod
+            //strVeevaUserId = "conexus.admin@mtpa.com";
+            //strVeevaPasswordAndSecurityToken = "[7=D,4szH'C!" + "X0grEq1hfIDPHhxlwbfR5wug";
+            //strVeevaUrl = "https://login.salesforce.com/services/Soap/u/49.0";
 
 
             // Dev
-            strVeevaUserId = "conexus.admin@fidiapharma.com.cnxcfg";
-            strVeevaPasswordAndSecurityToken = "5zO{3-ssC!" + "yl1fgUWk7YICwZsMfrfx9YU9X";
+            strVeevaUserId = "conexus.admin@mtpa.com.full";
+            strVeevaPasswordAndSecurityToken = "S_rsr9*C!" + "yycz2WFiIPUiY8vFszPqN6Q1";
             //strVeevaUrl = "https://test.salesforce.com/services/Soap/c/40.0/0DF1D000000003K";
             strVeevaUrl = "https://test.salesforce.com/services/Soap/u/49.0";
 
-            DeleteById("Account_Territory_Loader_vod__c", "a0w2f000000NlDzAAK");
+            //string strVeevaObjects = "PS_Area_of_Interest_CNX__c,PS_OnTopic_CNX__c";
+            //DeleteByObjectList(strVeevaObjects.Split(','));
+
+            //DeleteById("Account_Territory_Loader_vod__c", "a0w2f000000NlDzAAK");
+
+            // Pull the Veeva object list from Extend Properties
+            Console.WriteLine("Printing the acitivty properties");
+            dynamic objActitivy = JsonConvert.DeserializeObject(File.ReadAllText("activity.json"));
+            Console.WriteLine(objActitivy);
+
+            string strVeevaObjects = objActitivy.typeProperties.extendedProperties.VeevaObjects.ToString();
+            Console.WriteLine($"Deleting data from the following Veeva objects: {strVeevaObjects}");
+            DeleteByObjectList(strVeevaObjects.Split(','));
         }
 
         private static bool DeleteById(string strVeevaObjectName, string idToDelete)
@@ -149,7 +164,7 @@ namespace VeevaDeleteActivity
         {
             foreach(string strVeevaObjectName in lstVeevaObjectNames)
             {
-                DeleteByQuery($"SELECT Id FROM {strVeevaObjectName}", strVeevaObjectName);
+                DeleteByQuery($"SELECT Id FROM {strVeevaObjectName} LIMIT 1 ", strVeevaObjectName);
             }
 
             return false;
@@ -157,7 +172,14 @@ namespace VeevaDeleteActivity
 
         private static bool DeleteByQuery(string strSOQLQuery, string strVeevaObjectName)
         {
-            string strResultsJSON = SelectByQuery(strSOQLQuery, strVeevaObjectName);
+            string strBatchContents = SelectByQuery(strSOQLQuery, strVeevaObjectName);
+
+            // The input batch should have atleast one Id to delete. Otherwise there is no point in making a delete api call.
+            if(string.IsNullOrWhiteSpace(strBatchContents))
+            {
+                Console.WriteLine("Input batch is Empty. Hence there is nothing to delete");
+                return false;
+            }
 
             string strResultJSON = string.Empty;
             SFBulkAPIStarter.BulkApiClient apiClient;
@@ -175,7 +197,7 @@ namespace VeevaDeleteActivity
                 deleteJob = apiClient.CreateJob(deleteJobRequest);
 
                 // Create batch request
-                CreateBatchRequest insertAccountBatchRequest = BuildCreateBatchRequest(deleteJob.Id, strResultsJSON);
+                CreateBatchRequest insertAccountBatchRequest = BuildCreateBatchRequest(deleteJob.Id, strBatchContents);
 
                 // Create batch object
                 Batch insertMergeBatch = apiClient.CreateBatch(insertAccountBatchRequest);
@@ -220,61 +242,57 @@ namespace VeevaDeleteActivity
                 deleteJob = null;
                 apiClient = null;
             }
-
-            return false;
         }
 
         private static string SelectByQuery(string strSOQLQuery, string strVeevaObjectName)
         {
-            string strResultJSON = string.Empty;
+            string strResultXML = string.Empty;
             SFBulkAPIStarter.BulkApiClient apiClient;
-            CreateJobRequest deleteJobRequest;
-            Job deleteJob, queryJob;
+            CreateJobRequest selectJobRequest;
+            Job selectJob, queryJob;
             try
             {
                 // Create BulkAPI client object.
                 apiClient = new SFBulkAPIStarter.BulkApiClient(strVeevaUserId, strVeevaPasswordAndSecurityToken, strVeevaUrl);
 
                 // Create Job request object
-                deleteJobRequest = BuildDefaultCreateJobRequest(JobOperation.Query, strVeevaObjectName);
+                selectJobRequest = BuildDefaultCreateJobRequest(JobOperation.Query, strVeevaObjectName);
 
                 // Create Job
-                deleteJob = apiClient.CreateJob(deleteJobRequest);
+                selectJob = apiClient.CreateJob(selectJobRequest);
                 
                 // Create batch request
-                CreateBatchRequest insertAccountBatchRequest = BuildCreateBatchRequest(deleteJob.Id, strResultJSON);
+                CreateBatchRequest selectBatchRequest = BuildCreateBatchRequest(selectJob.Id, strSOQLQuery);
 
                 // Create batch object
-                Batch insertMergeBatch = apiClient.CreateBatch(insertAccountBatchRequest);
+                Batch selectBatch = apiClient.CreateBatch(selectBatchRequest);
 
                 // Close job so no more batches are added.
-                apiClient.CloseJob(deleteJob.Id);
+                apiClient.CloseJob(selectJob.Id);
 
                 // Complete the job since we will not be able to fetch the results until the job is completed.
-                queryJob = apiClient.GetCompletedJob(deleteJob.Id);
+                queryJob = apiClient.GetCompletedJob(selectJob.Id);
 
-                // Fetch the batch response JSON.
-                strResultJSON = apiClient.GetBatchResult(deleteJob.Id, insertMergeBatch.Id);
-                Console.WriteLine("Below is the complete response JSON from Veeva:");
-                Console.WriteLine(strResultJSON);
-
-                // Check for the status of each record and update status accordingly.
-                var lstBulkAPIResults = apiClient.GetBulkAPIResult(strResultJSON);
-                Console.WriteLine($"Id: {lstBulkAPIResults[0].Id}, Success: {lstBulkAPIResults[0].Success}, Failure: {lstBulkAPIResults[0].Error}");
-                if (lstBulkAPIResults[0].Success)
+                if(queryJob.NumberBatchesFailed == queryJob.NumberBatchesTotal)
                 {
-                    Console.WriteLine("Record: {lstBulkAPIResults[0].Id} deleted successfully");
-                    return strResultJSON;
+                    throw new Exception("Error in executing the SELECT query");
                 }
                 else
                 {
-                    Console.WriteLine($"Error: { lstBulkAPIResults[0].Error}");
-                    return string.Empty;
+                    // Fetch the batch response XML.
+                    strResultXML = apiClient.GetBatchResult(selectJob.Id, selectBatch.Id);
+
+                    // Get the Batch results
+                    List<String> resultIds = apiClient.GetResultIds(strResultXML);
+
+                    String strBatchQueryResults = apiClient.GetBatchResult(selectBatch.JobId, selectBatch.Id, resultIds[0]);
+
+                    return strBatchQueryResults;
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine(strResultJSON);
+                Console.WriteLine(strResultXML);
                 Console.WriteLine(ex.Message);
                 Console.WriteLine(ex.StackTrace);
                 throw ex;
@@ -282,9 +300,9 @@ namespace VeevaDeleteActivity
             finally
             {
                 //Explicitely clearing variables
-                deleteJob = null;
+                selectJob = null;
                 queryJob = null;
-                deleteJob = null;
+                selectJob = null;
                 apiClient = null;
             }
         }

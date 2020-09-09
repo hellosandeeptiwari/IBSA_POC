@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<DiscoveryClientResultsFile xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <Results>
-    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.ContractReference" url="https://cs77.salesforce.com/soap/wsdl.jsp?ver_VEM=6.1&amp;type=*&amp;ver_sf_com_apps=1.7" filename="wsdl.wsdl" />
-  </Results>
-</DiscoveryClientResultsFile>
