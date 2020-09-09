@@ -40,23 +40,31 @@ namespace SendEmailActivity
             List<EmailAddress> lstToEmails = new List<EmailAddress>(strArrToEmails.Select(str => new EmailAddress(str)));
             objMessage.AddTos(lstToEmails);
 
-            string strCCEmails = activity.typeProperties.extendedProperties.emailCC.ToString();
-            if(strCCEmails.Trim().Length > 0)
+            string extendedProperties = activity.typeProperties.extendedProperties.ToString();
+            if(extendedProperties.Contains("emailCC"))
             {
-                Console.WriteLine(strCCEmails);
-                string[] strArrCCEmails = strCCEmails.Split(',');
-                List<EmailAddress> lstCCEmails = new List<EmailAddress>(strArrCCEmails.Select(str => new EmailAddress(str)));
-                objMessage.AddCcs(lstCCEmails);
+                string strCCEmails = activity.typeProperties.extendedProperties.emailCC.ToString();
+                if (strCCEmails.Trim().Length > 0)
+                {
+                    Console.WriteLine(strCCEmails);
+                    string[] strArrCCEmails = strCCEmails.Split(',');
+                    List<EmailAddress> lstCCEmails = new List<EmailAddress>(strArrCCEmails.Select(str => new EmailAddress(str)));
+                    objMessage.AddCcs(lstCCEmails);
+                }
             }
-            string strBCCEmails = activity.typeProperties.extendedProperties.emailBCC.ToString();
-            if(strBCCEmails.Trim().Length > 0)
+
+            if (extendedProperties.Contains("emailBCC"))
             {
-                Console.WriteLine(strBCCEmails);
-                string[] strArrBCCEmails = strBCCEmails.Split(',');
-                List<EmailAddress> lstBCCEmails = new List<EmailAddress>(strArrBCCEmails.Select(str => new EmailAddress(str)));
-                objMessage.AddBccs(lstBCCEmails);
+                string strBCCEmails = activity.typeProperties.extendedProperties.emailBCC.ToString();
+                if (strBCCEmails.Trim().Length > 0)
+                {
+                    Console.WriteLine(strBCCEmails);
+                    string[] strArrBCCEmails = strBCCEmails.Split(',');
+                    List<EmailAddress> lstBCCEmails = new List<EmailAddress>(strArrBCCEmails.Select(str => new EmailAddress(str)));
+                    objMessage.AddBccs(lstBCCEmails);
+                }
             }
-            
+           
             objMessage.SetFrom(activity.typeProperties.extendedProperties.emailFrom.ToString());
             objMessage.SetSubject(activity.typeProperties.extendedProperties.emailSubject.ToString());
             objMessage.AddContent(MimeType.Html, activity.typeProperties.extendedProperties.emailBody.ToString());
