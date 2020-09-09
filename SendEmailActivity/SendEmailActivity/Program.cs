@@ -69,18 +69,24 @@ namespace SendEmailActivity
             objMessage.SetSubject(activity.typeProperties.extendedProperties.emailSubject.ToString());
             objMessage.AddContent(MimeType.Html, activity.typeProperties.extendedProperties.emailBody.ToString());
 
-            var storageAccount = CloudStorageAccount.Parse(activity.typeProperties.extendedProperties.strBlobConnectionstring.ToString());
-            string strBlobURLs = activity.typeProperties.extendedProperties.attachmentURLs.ToString();
-            if (strBlobURLs.Trim().Length > 0)
+            if (extendedProperties.Contains("strBlobConnectionstring"))
             {
-                string[] strArrBlobURLs = strBlobURLs.Split(',');
-                foreach (var blobURLs in strArrBlobURLs)
+                var storageAccount = CloudStorageAccount.Parse(activity.typeProperties.extendedProperties.strBlobConnectionstring.ToString());
+                if (extendedProperties.Contains("attachmentURLs"))
                 {
-                    CloudBlockBlob blob = new CloudBlockBlob(new Uri(blobURLs), storageAccount.Credentials);
-                    var memoryStream = new MemoryStream();
-                    blob.DownloadToStream(memoryStream);
-                    memoryStream.Position = 0;
-                    await objMessage.AddAttachmentAsync(blob.Name, memoryStream);
+                    string strBlobURLs = activity.typeProperties.extendedProperties.attachmentURLs.ToString();
+                    if (strBlobURLs.Trim().Length > 0)
+                    {
+                        string[] strArrBlobURLs = strBlobURLs.Split(',');
+                        foreach (var blobURLs in strArrBlobURLs)
+                        {
+                            CloudBlockBlob blob = new CloudBlockBlob(new Uri(blobURLs), storageAccount.Credentials);
+                            var memoryStream = new MemoryStream();
+                            blob.DownloadToStream(memoryStream);
+                            memoryStream.Position = 0;
+                            await objMessage.AddAttachmentAsync(blob.Name, memoryStream);
+                        }
+                    }
                 }
             }
             var response = await objSendGridClient.SendEmailAsync(objMessage);
