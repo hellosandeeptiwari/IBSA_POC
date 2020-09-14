@@ -1,9 +1,7 @@
 ﻿
 
-CREATE PROC [dbo].[sp_veev_synctracking_transform]
-
+CREATE OR ALTER PROCEDURE [dbo].[sp_veev_synctracking_transform]
 AS
-
 BEGIN
 	
 	UPDATE ST
