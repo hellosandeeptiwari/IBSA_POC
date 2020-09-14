@@ -53,16 +53,21 @@ namespace VeevaDeleteActivity
         static void Main(string[] args)
         {
             //// Prod
-            //strVeevaUserId = "conexus.admin@mtpa.com";
-            //strVeevaPasswordAndSecurityToken = "[7=D,4szH'C!" + "X0grEq1hfIDPHhxlwbfR5wug";
-            //strVeevaUrl = "https://login.salesforce.com/services/Soap/u/49.0";
+            strVeevaUserId = "conexus.admin@mtpa.com";
+            strVeevaPasswordAndSecurityToken = "[7=D,4szH'C!" + "X0grEq1hfIDPHhxlwbfR5wug";
+            strVeevaUrl = "https://login.salesforce.com/services/Soap/u/49.0";
 
 
-            // Dev
-            strVeevaUserId = "conexus.admin@mtpa.com.full";
-            strVeevaPasswordAndSecurityToken = "S_rsr9*C!" + "yycz2WFiIPUiY8vFszPqN6Q1";
-            //strVeevaUrl = "https://test.salesforce.com/services/Soap/c/40.0/0DF1D000000003K";
-            strVeevaUrl = "https://test.salesforce.com/services/Soap/u/49.0";
+            //// Dev
+            //strVeevaUserId = "conexus.admin@mtpa.com.full";
+            //strVeevaPasswordAndSecurityToken = "S_rsr9*C!" + "yycz2WFiIPUiY8vFszPqN6Q1";
+            ////strVeevaUrl = "https://test.salesforce.com/services/Soap/c/40.0/0DF1D000000003K";
+            //strVeevaUrl = "https://test.salesforce.com/services/Soap/u/49.0";
+
+            //strVeevaUserId = "conexus.admin@cnxpharma.com.trg14";
+            //strVeevaPasswordAndSecurityToken = "Conexus123!" + "Xl4npK6E0gDVKftIB05IkVb6";
+            ////strVeevaUrl = "https://test.salesforce.com/services/Soap/c/40.0/0DF1D000000003K";
+            //strVeevaUrl = "https://test.salesforce.com/services/Soap/u/49.0";
 
             //string strVeevaObjects = "PS_Area_of_Interest_CNX__c,PS_OnTopic_CNX__c";
             //DeleteByObjectList(strVeevaObjects.Split(','));
@@ -74,9 +79,41 @@ namespace VeevaDeleteActivity
             dynamic objActitivy = JsonConvert.DeserializeObject(File.ReadAllText("activity.json"));
             Console.WriteLine(objActitivy);
 
-            string strVeevaObjects = objActitivy.typeProperties.extendedProperties.VeevaObjects.ToString();
-            Console.WriteLine($"Deleting data from the following Veeva objects: {strVeevaObjects}");
-            DeleteByObjectList(strVeevaObjects.Split(','));
+            if (!(objActitivy.typeProperties.ToString().Contains("extendedProperties")))
+            {
+                throw new Exception("extendedProperties are mandatory. Please add extendedProperties(VeevaObjects,VeevaQueries) to the Azure activity" +
+                    "(VeevaObjects or VeevaQueries property should be Pipe(|) delimited).");
+            }
+            Console.WriteLine("Printing the Extended properies");
+            //if (!(objActitivy.typeProperties.extendedProperties.ToString().Contains("strVeevaUserId") && objActitivy.typeProperties.extendedProperties.ToString().Contains("strVeevaPasswordAndSecurityToken") && objActitivy.typeProperties.extendedProperties.ToString().Contains("strVeevaUrl")))
+            //{
+            //    throw new Exception("strVeevaUserId, strVeevaPasswordAndSecurityToken(UserName+Password) and strVeevaUrl are mandatory." +
+            //        " Please add strVeevaUserId, strVeevaPasswordAndSecurityToken(UserName+Password) and strVeevaUrl properties to the Extended Properties " +
+            //        "in the Azure activity");
+            //}
+            //else
+            //{
+            //    strVeevaUserId = objActitivy.typeProperties.extendedProperties.strVeevaUserId.ToString();
+            //    strVeevaPasswordAndSecurityToken = objActitivy.typeProperties.extendedProperties.strVeevaPasswordAndSecurityToken.ToString();
+            //    strVeevaUrl = objActitivy.typeProperties.extendedProperties.strVeevaUrl.ToString();
+            //}
+            if (!(objActitivy.typeProperties.extendedProperties.ToString().Contains("VeevaObjects") || objActitivy.typeProperties.extendedProperties.ToString().Contains("VeevaQueries")))
+            {
+                throw new Exception("VeevaObjects or VeevaQueries property is mandatory." +
+                    " Please enter either of one(VeevaObjects Or VeevaQueries property should be Pipe(|) delemited.");
+            }
+            if (objActitivy.typeProperties.extendedProperties.ToString().Contains("VeevaObjects"))
+            {
+                string strVeevaObjects = objActitivy.typeProperties.extendedProperties.VeevaObjects.ToString();
+                Console.WriteLine($"Deleting data from the following Veeva objects: {strVeevaObjects}");
+                DeleteByObjectList(strVeevaObjects.Split('|'));
+            }
+            if (objActitivy.typeProperties.extendedProperties.ToString().Contains("VeevaQueries"))
+            {
+                string strVeevaQueries = objActitivy.typeProperties.extendedProperties.VeevaQueries.ToString();
+                Console.WriteLine($"Deleting data from the following Veeeva Query: {strVeevaQueries}");
+                DeleteBySOQLQueryList(strVeevaQueries.Split('|'));
+            }
         }
 
         private static bool DeleteById(string strVeevaObjectName, string idToDelete)
@@ -162,11 +199,43 @@ namespace VeevaDeleteActivity
 
         private static bool DeleteByObjectList(IEnumerable<string> lstVeevaObjectNames)
         {
-            foreach(string strVeevaObjectName in lstVeevaObjectNames)
+            foreach (string strVeevaObjectName in lstVeevaObjectNames)
             {
-                DeleteByQuery($"SELECT Id FROM {strVeevaObjectName} LIMIT 1 ", strVeevaObjectName);
+                DeleteByQuery($"SELECT Id FROM {strVeevaObjectName}", strVeevaObjectName);
             }
 
+            return false;
+        }
+
+        //select Id from Account|select Id from Task
+         //select Id from Account where Id = 'tttt'
+        private static bool DeleteBySOQLQueryList(IEnumerable<string> lstSOQLQueries)
+        {
+            foreach (string strSOQLQuery in lstSOQLQueries)
+            {
+                string strSelectSOQLQuery = strSOQLQuery;
+                // To get the Veeva Object Name 
+                while (strSelectSOQLQuery.IndexOf("  ") > 0)
+                {
+                    strSelectSOQLQuery = strSelectSOQLQuery.Replace("  ", " ");
+                }
+
+                strSelectSOQLQuery = strSelectSOQLQuery.ToUpper();
+                int iStartIndex = strSelectSOQLQuery.IndexOf(" ", strSelectSOQLQuery.IndexOf("FROM")) + 1;
+                int iEndIndex = strSelectSOQLQuery.IndexOf(" ", iStartIndex);
+                string strVeevaObjectName;
+                if (iEndIndex > 0)
+                {
+                    strVeevaObjectName = strSelectSOQLQuery.Substring(iStartIndex, iEndIndex - iStartIndex);
+                    Console.WriteLine(strVeevaObjectName);
+                }
+                else
+                {
+                    strVeevaObjectName = strSelectSOQLQuery.Substring(iStartIndex);
+                    Console.WriteLine(strVeevaObjectName);
+                }
+                DeleteByQuery(strSOQLQuery, strVeevaObjectName);
+            }
             return false;
         }
 
@@ -175,7 +244,7 @@ namespace VeevaDeleteActivity
             string strBatchContents = SelectByQuery(strSOQLQuery, strVeevaObjectName);
 
             // The input batch should have atleast one Id to delete. Otherwise there is no point in making a delete api call.
-            if(string.IsNullOrWhiteSpace(strBatchContents))
+            if (string.IsNullOrWhiteSpace(strBatchContents) || strBatchContents == "Records not found for this query")
             {
                 Console.WriteLine("Input batch is Empty. Hence there is nothing to delete");
                 return false;
@@ -286,7 +355,6 @@ namespace VeevaDeleteActivity
                     List<String> resultIds = apiClient.GetResultIds(strResultXML);
 
                     String strBatchQueryResults = apiClient.GetBatchResult(selectBatch.JobId, selectBatch.Id, resultIds[0]);
-
                     return strBatchQueryResults;
                 }
             }
