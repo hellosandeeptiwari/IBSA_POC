@@ -1,0 +1,9 @@
+﻿
+CREATE OR ALTER FUNCTION dbo.fn_GetCamelCase (@strInput VARCHAR(400))
+RETURNS VARCHAR(400)
+AS
+BEGIN
+    DECLARE @strOutput VARCHAR(400);
+    SELECT @strOutput = STRING_AGG(UPPER(LEFT(VALUE, 1)) + LOWER(SUBSTRING(VALUE, 2, 999)), ' ') FROM STRING_SPLIT(@strInput, ' ') 
+    RETURN @strOutput;
+END
