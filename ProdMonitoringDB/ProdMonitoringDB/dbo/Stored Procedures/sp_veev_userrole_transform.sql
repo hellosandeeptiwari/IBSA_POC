@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[sp_veev_userrole_transform]
+﻿CREATE OR ALTER PROCEDURE [dbo].[sp_veev_userrole_transform]
 AS
 BEGIN
 	UPDATE UR

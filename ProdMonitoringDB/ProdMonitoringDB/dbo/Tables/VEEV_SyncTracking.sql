@@ -4,6 +4,7 @@
     [SyncTrackingName]      VARCHAR (200)    NULL,
     [CreatedById]           VARCHAR (50)     NOT NULL,
     [CreatedDate]           DATETIME         NOT NULL,
+	[EndDate]				DATETIME          NULL,
     [IsDeleted]             BIT              NOT NULL,
     [LastModifiedById]      VARCHAR (50)     NOT NULL,
     [LastModifiedDate]      DATETIME         NOT NULL,

@@ -1,5 +1,4 @@
-﻿
-CREATE PROC [dbo].[sp_veev_asyncapexjob_transfrom]
+﻿CREATE OR ALTER PROC [dbo].[sp_veev_asyncapexjob_transfrom]
 AS
 BEGIN
 
