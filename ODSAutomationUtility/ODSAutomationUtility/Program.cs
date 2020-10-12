@@ -47,6 +47,7 @@ namespace ODSAutomationUtility
         static bool bCreateOdsObjects = Convert.ToBoolean(ConfigurationManager.AppSettings["strCreateOdsObjects"]);
         static string strPipelineDataLoadMode = ConfigurationManager.AppSettings["strPipelineDataLoadMode"].ToString();
         static bool bSCDNeeded = ConfigurationManager.AppSettings["strSCDNeeded"].ToString().ToUpper() == "NO" ? false : true;
+        static int iVeevaDataLoadForLastNDays = Convert.ToInt32(ConfigurationManager.AppSettings["iVeevaDataLoadForLastNDays"]);
 
         #endregion
 
@@ -56,7 +57,7 @@ namespace ODSAutomationUtility
 
             try
             {
-                //CreateOdsDatabase();
+                CreateOdsDatabase();
 
                 CreateAzurePipeline();
             }
@@ -88,11 +89,8 @@ namespace ODSAutomationUtility
             LoadDIIDetails();
             LogHelper.WriteDebugLog("DII document contents have been loaded into database");
 
-            if (bSCDNeeded)
-            {
-                CreateScdDatabseObjects();
-                LogHelper.WriteDebugLog("SCD specific database objects have been created");
-            }
+            CreateScdDatabseObjects();
+            LogHelper.WriteDebugLog("SCD specific database objects have been created");
 
             CreateOdsDatabaseObjects();
             LogHelper.WriteDebugLog("ODS database objects have been created");
@@ -113,6 +111,8 @@ namespace ODSAutomationUtility
                     File.WriteAllText(strODSScriptsOutputFilePath + "Stored Procedures\\" + objSchema.ObjectName + ".sql", objSchema.ObjectScript);
                 }
             }
+
+
             LogHelper.WriteDebugLog("ODS database object schema files have been created");
         }
 
@@ -172,7 +172,7 @@ namespace ODSAutomationUtility
             // Create Azure SQL Database datasets
             foreach (string strOdsTableName in lstVeevaOdsFieldMappingModel.Select(item => item.OdsTableName).Distinct())
             {
-                LogHelper.WriteDebugLog("Creating dataset " + "StagingAccountDataset" + "...");
+                LogHelper.WriteDebugLog("Creating dataset " + strOdsTableName.Replace("_", "") + "Dataset" + "...");
                 DatasetResource sqlDataset = new DatasetResource(
                     new AzureSqlTableDataset
                     {
@@ -192,7 +192,7 @@ namespace ODSAutomationUtility
             // Create Veeva datasets
             foreach (var objModel in lstVeevaOdsFieldMappingModel.Select(item => new { item.VeevaObjectAPIName, item.OdsTableName }).Distinct())
             {
-                LogHelper.WriteDebugLog("Creating dataset " + "VeevaAccountDataset" + "...");
+                LogHelper.WriteDebugLog("Creating dataset " + objModel.OdsTableName.Replace("Staging_", "Veeva").Replace("_", "") + "Dataset" + "...");
                 DatasetResource sqlDataset = new DatasetResource(
                     new SalesforceObjectDataset
                     {
@@ -214,7 +214,7 @@ namespace ODSAutomationUtility
             #region Pipeline Creation Section
 
             // Create a pipeline with copy and transformation activities
-            LogHelper.WriteDebugLog("Creating pipeline " + "VeevaToODSPipline" + "...");
+            LogHelper.WriteDebugLog("Creating pipeline " + "VeevaToODSPipeline" + "...");
             PipelineResource objPipeline = new PipelineResource();
             objPipeline.Activities = new List<Activity>();
 
@@ -224,7 +224,7 @@ namespace ODSAutomationUtility
             {
                 var objModel = lstVeevaOdsFieldMappingModel.Where(item => item.OdsTableName == "Staging_" + arrVeevaObjectsDataLoadOrder[iObjectIndex]).Select(item => new { item.VeevaObjectAPIName, item.OdsTableName }).Distinct().First();
                 string strVeevaFieldList = lstVeevaOdsFieldMappingModel.Where(item => item.OdsTableName == objModel.OdsTableName).Select(item => item.VeevaFieldAPIName.Replace(" ", "")).CommaSeparate(item => item);
-                string strSOQLWhereClase = " WHERE SystemModstamp >= LAST_N_DAYS:7 ";
+                string strSOQLWhereClase = $" WHERE SystemModstamp >= LAST_N_DAYS:{iVeevaDataLoadForLastNDays} ";
                 string strAdditionalSOQLWhereClase = string.Empty;
 
                 // If the Delete support is needed for an object, then we need to load full data everyday.
@@ -609,6 +609,27 @@ namespace ODSAutomationUtility
                             {
                                 ObjectName = "sp_" + drSchema.GetString(0).ToLower() + "_transform",
                                 ObjectScript = drSchema.GetString(3),
+                                ObjectType = OdsObjectTypeEnum.StoredProcedure,
+                            });
+                        }
+                    }
+                }
+
+                using (SqlConnection sqlConn = new SqlConnection(strSQLConnectionString))
+                {
+                    string strQuery = @"SELECT name, REPLACE(Object_definition(object_id), 'CREATE   PROCEDURE', 'CREATE OR ALTER PROCEDURE')
+                                FROM sys.procedures WHERE name IN ('sp_veeva_datahealthcheck')";
+                    using (SqlCommand cmd = new SqlCommand(strQuery, sqlConn))
+                    {
+                        sqlConn.Open();
+                        SqlDataReader drSchema = cmd.ExecuteReader();
+                        while (drSchema.Read())
+                        {
+                            // Stored Procedure Schema
+                            lstSchemas.Add(new OdsObjectSchemaModel
+                            {
+                                ObjectName = drSchema.GetString(0),
+                                ObjectScript = drSchema.GetString(1),
                                 ObjectType = OdsObjectTypeEnum.StoredProcedure,
                             });
                         }

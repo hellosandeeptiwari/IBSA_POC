@@ -72,6 +72,15 @@ BEGIN
 	FROM cte_VeevaOdsFieldMapping 
 	WHERE RowNum = 1;
 
+	-- Add the word 'Id' at the end of any Veeva Id columns if it is not already present.
+	UPDATE VeevaOdsFieldMapping SET OdsColumnName = CASE WHEN RIGHT(OdsColumnName, 2) <> 'Id' THEN OdsColumnName + 'Id' ELSE OdsColumnName END
+	WHERE OdsDataType = 'CHAR(18)';
+
+	-- If any VeevaId columns have digits, remove them.
+	UPDATE VeevaOdsFieldMapping SET 
+		OdsColumnName = [dbo].[fn_GetStringWithoutDigits](OdsColumnName) 
+	WHERE OdsDataType = 'CHAR(18)' AND OdsColumnName LIKE '%Id'
+
 	IF EXISTS (SELECT 1 FROM VeevaOdsFieldMapping WHERE OdsDataType IS NULL)
 		THROW 51000, 'There is ods datatype information missing for few rows in VeevaOdsFieldMapping. Please check the Veeva Ods column mapping.', 1;
 

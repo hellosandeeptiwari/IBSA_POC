@@ -8,10 +8,6 @@ BEGIN
 
 SET NOCOUNT ON
 
--- Add the word 'Id' at the end of any Veeva Id columns if it is not already present.
-UPDATE VeevaOdsFieldMapping SET OdsColumnName = CASE WHEN RIGHT(OdsColumnName, 2) <> 'Id' THEN OdsColumnName + 'Id' ELSE OdsColumnName END
-WHERE OdsDataType = 'CHAR(18)';
-
 DECLARE 
 	@iOdsTableCount INT, @iMaxColumnNameLength AS INT, 
 	@strTableType VARCHAR(20), @strOdsTableName VARCHAR(400), 
@@ -199,6 +195,87 @@ CREATE NONCLUSTERED INDEX IX_' + @strOdsTableName + '_EndDate ON ' + CASE WHEN @
 '
 	END
 
+	-- Step-8: Add Additional Indexes on Production tables.
+	IF @strTableType = 'Production'
+	BEGIN
+
+		SET @strOdsTableScript = @strOdsTableScript + 
+			CASE 
+				WHEN @strOdsTableName = 'Account' THEN
+'
+CREATE NONCLUSTERED INDEX IX_Account_RecordTypeId ON Account(RecordTypeId);
+'
+				WHEN @strOdsTableName = 'AccountTerritoryLoader' THEN
+'
+CREATE NONCLUSTERED INDEX IX_AccountTerritoryLoader_AccountId ON AccountTerritoryLoader(AccountId);
+
+CREATE NONCLUSTERED INDEX IX_AccountTerritoryLoader_Territory ON AccountTerritoryLoader(Territory);
+'
+				WHEN @strOdsTableName = 'Address' THEN
+'
+CREATE NONCLUSTERED INDEX IX_Address_AccountId ON Address(AccountId);
+
+CREATE NONCLUSTERED INDEX IX_Address_Zip ON Address(Zip);
+'
+				WHEN @strOdsTableName = 'Affiliation' THEN
+'
+CREATE NONCLUSTERED INDEX IX_Affiliation_FromAccountId ON Affiliation(FromAccountId);
+
+CREATE NONCLUSTERED INDEX IX_Affiliation_ToAccountId ON Affiliation(ToAccountId);
+'
+				WHEN @strOdsTableName = 'Call' THEN
+'
+CREATE NONCLUSTERED INDEX IX_Call_AccountId ON Call(AccountId);
+
+CREATE NONCLUSTERED INDEX IX_Call_Territory ON Call(Territory);
+
+CREATE NONCLUSTERED INDEX IX_Call_OwnerId ON Call(OwnerId);
+
+CREATE NONCLUSTERED INDEX IX_Call_ParentCallId ON Call(ParentCallId);
+'
+				WHEN @strOdsTableName = 'CallDetail' THEN
+'
+CREATE NONCLUSTERED INDEX IX_CallDetail_CallId ON CallDetail(CallId);
+
+CREATE NONCLUSTERED INDEX IX_CallDetail_ProductId ON CallDetail(ProductId);
+'
+				WHEN @strOdsTableName = 'CallSample' THEN
+'
+CREATE NONCLUSTERED INDEX IX_CallSample_CallId ON CallSample(CallId);
+'
+				WHEN @strOdsTableName = 'MedicalInquiry' THEN
+'
+CREATE NONCLUSTERED INDEX IX_MedicalInquiry_AccountId ON MedicalInquiry(AccountId);
+
+CREATE NONCLUSTERED INDEX IX_MedicalInquiry_CallId ON MedicalInquiry(CallId);
+
+CREATE NONCLUSTERED INDEX IX_MedicalInquiry_OwnerId ON MedicalInquiry(OwnerId);
+'
+				WHEN @strOdsTableName = 'MedicalInsight' THEN
+'
+CREATE NONCLUSTERED INDEX IX_MedicalInsight_AccountId ON MedicalInsight(AccountId);
+
+CREATE NONCLUSTERED INDEX IX_MedicalInsight_OwnerId ON MedicalInsight(OwnerId);
+'
+				WHEN @strOdsTableName = 'TimeOffTerritory' THEN
+'
+CREATE NONCLUSTERED INDEX IX_TimeOffTerritory_OwnerId ON TimeOffTerritory(OwnerId);
+'
+				WHEN @strOdsTableName = 'UserTerritory' THEN
+'
+CREATE NONCLUSTERED INDEX IX_UserTerritory_TerritoryId ON UserTerritory(TerritoryId);
+
+CREATE NONCLUSTERED INDEX IX_UserTerritory_UserId ON UserTerritory(UserId);
+'
+				WHEN @strOdsTableName = 'ZipToTerr' THEN
+'
+CREATE NONCLUSTERED INDEX IX_ZipToTerr_Territory ON ZipToTerr(Territory);
+
+CREATE NONCLUSTERED INDEX IX_ZipToTerr_Name ON ZipToTerr(Name);
+'
+				ELSE ''
+			END
+	END
 
 	--SELECT @strOdsTableScript;
 	IF @bCreateObjectsInDatabase = 1
