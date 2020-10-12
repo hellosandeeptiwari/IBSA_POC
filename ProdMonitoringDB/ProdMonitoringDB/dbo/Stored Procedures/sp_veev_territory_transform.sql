@@ -1,5 +1,4 @@
-﻿
-CREATE PROCEDURE [dbo].[sp_veev_territory_transform]
+﻿CREATE OR ALTER PROCEDURE [dbo].[sp_veev_territory_transform]
 AS
 BEGIN
 

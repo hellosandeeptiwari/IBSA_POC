@@ -1,4 +1,4 @@
-﻿CREATE PROC [dbo].[sp_veev_userlicense_transform]
+﻿CREATE OR ALTER PROC [dbo].[sp_veev_userlicense_transform]
 as
 begin
 

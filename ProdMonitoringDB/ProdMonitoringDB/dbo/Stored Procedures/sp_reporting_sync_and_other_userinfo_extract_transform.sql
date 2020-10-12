@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[sp_reporting_sync_and_other_userinfo_extract_transform]
+﻿CREATE OR ALTER PROCEDURE [dbo].[sp_reporting_sync_and_other_userinfo_extract_transform]
 AS
 BEGIN
 

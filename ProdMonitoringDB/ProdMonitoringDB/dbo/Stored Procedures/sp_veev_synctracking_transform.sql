@@ -1,6 +1,4 @@
-﻿
-
-CREATE OR ALTER PROCEDURE [dbo].[sp_veev_synctracking_transform]
+﻿CREATE OR ALTER PROCEDURE [dbo].[sp_veev_synctracking_transform]
 AS
 BEGIN
 	
@@ -11,8 +9,6 @@ BEGIN
 		ST.[IsDeleted] = SST.[IsDeleted],
 		ST.[LastModifiedById] = SST.[LastModifiedById],
 		ST.[LastModifiedDate] = SST.[LastModifiedDate],
-		ST.[MayEdit] = SST.[MayEdit],
-		ST.[IsLocked] = SST.[IsLocked],
 		ST.[MobileId] = SST.[MobileId],
 		ST.[Ownerid] = SST.[Ownerid],
 		ST.[NumberofRetries] = SST.[NumberofRetries],
@@ -44,8 +40,6 @@ INSERT INTO [dbo].[VEEV_SyncTracking]
            ,[IsDeleted]
            ,[LastModifiedById]
            ,[LastModifiedDate]
-           ,[MayEdit]
-           ,[IsLocked]
            ,[MobileId]
            ,[Ownerid]
            ,[NumberofRetries]
@@ -75,8 +69,6 @@ SELECT NEWID() AS [SyncTrackingId]
 		  ,SVS.[LastModifiedById]
 		  ,SVS.[LastModifiedDate]
 		  ,SVS.[MayEdit]
-		  ,SVS.[IsLocked]
-		  ,SVS.[MobileId]
 		  ,VU.[ExternalId1]
 		  ,SVS.[NumberofRetries]
 		  ,SVS.[NumberofUploadErrors]

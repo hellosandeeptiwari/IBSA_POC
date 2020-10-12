@@ -1,5 +1,4 @@
-﻿
-CREATE PROC [dbo].[sp_veev_userterritory_transform]
+﻿CREATE OR ALTER PROC [dbo].[sp_veev_userterritory_transform]
 AS
 BEGIN
 	UPDATE UT
