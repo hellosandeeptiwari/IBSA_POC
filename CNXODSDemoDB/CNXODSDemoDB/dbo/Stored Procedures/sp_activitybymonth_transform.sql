@@ -1,6 +1,6 @@
 ﻿
 
-CREATE   PROCEDURE [dbo].[sp_activitybymonth_transform]
+CREATE OR ALTER PROCEDURE [dbo].[sp_activitybymonth_transform]
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -326,6 +326,21 @@ CREATE NONCLUSTERED INDEX IX_Reporting_ActivityByMonthWithTargetTypes_Metric ON 
 IF EXISTS (SELECT name FROM sys.indexes WHERE name = N'IX_Reporting_ActivityByMonthWithTargetTypes_TargetType')   
     DROP INDEX IX_Reporting_ActivityByMonthWithTargetTypes_TargetType ON dbo.Reporting_ActivityByMonthWithTargetTypes;
 CREATE NONCLUSTERED INDEX IX_Reporting_ActivityByMonthWithTargetTypes_TargetType ON dbo.Reporting_ActivityByMonthWithTargetTypes (TargetType ASC); 
+
+
+TRUNCATE TABLE Reporting_ActivityByMonthWithTargetTypes_KPI;
+
+INSERT INTO Reporting_ActivityByMonthWithTargetTypes_KPI
+SELECT Metric, SUM(Value) AS TotalCalls 
+FROM Reporting_ActivityByMonthWithTargetTypes
+WHERE Metric <> 'Calls/day'
+GROUP BY Metric
+UNION ALL
+SELECT Metric, AVG(Value) AS TotalCalls 
+FROM Reporting_ActivityByMonthWithTargetTypes
+WHERE Metric = 'Calls/day'
+GROUP BY Metric;
+
 
 END
 

@@ -1,4 +1,4 @@
-﻿CREATE   PROCEDURE [dbo].[sp_activitybyterritory_transform]
+﻿CREATE OR ALTER PROCEDURE [dbo].[sp_activitybyterritory_transform]
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -576,6 +576,22 @@ CREATE NONCLUSTERED INDEX IX_Reporting_ActivityByTerritoryWithTargetTypes_Metric
 IF EXISTS (SELECT name FROM sys.indexes WHERE name = N'IX_Reporting_ActivityByTerritoryWithTargetTypes_TargetType')   
     DROP INDEX IX_Reporting_ActivityByTerritoryWithTargetTypes_TargetType ON dbo.Reporting_ActivityByTerritoryWithTargetTypes;
 CREATE NONCLUSTERED INDEX IX_Reporting_ActivityByTerritoryWithTargetTypes_TargetType ON dbo.Reporting_ActivityByTerritoryWithTargetTypes (TargetType ASC);  
+
+
+
+TRUNCATE TABLE Reporting_ActivityByTerritoryWithTargetTypes_KPI;
+
+INSERT INTO Reporting_ActivityByTerritoryWithTargetTypes_KPI
+SELECT [Time Period], [TimePeriodInteger], Metric, SUM(Value) AS TotalCalls 
+FROM Reporting_ActivityByTerritoryWithTargetTypes
+WHERE Metric <> 'Calls/day'
+GROUP BY [Time Period], [TimePeriodInteger], Metric
+UNION ALL
+SELECT [Time Period], [TimePeriodInteger], Metric, AVG(Value) AS TotalCalls 
+FROM Reporting_ActivityByTerritoryWithTargetTypes
+WHERE Metric = 'Calls/day'
+GROUP BY [Time Period], [TimePeriodInteger], Metric;
+
 
 
 END
