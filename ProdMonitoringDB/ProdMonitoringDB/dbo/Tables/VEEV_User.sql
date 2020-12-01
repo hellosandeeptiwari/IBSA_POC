@@ -35,6 +35,14 @@
     [UserRoleId]             VARCHAR (50)     NULL,
     [UserType]               VARCHAR (200)    NULL,
     [CustomerId]             INT              NOT NULL,
+	[Demo_Email]		    VARCHAR (200)     NULL,
+	[Demo_FirstName]        VARCHAR (200)     NULL,
+	[Demo_LastName]         VARCHAR (200)     NULL,
+	[Demo_Name]             VARCHAR (200)     NULL,
+	[Demo_MobilePhone]      VARCHAR (50)      NULL,
+	[Demo_Phone]            VARCHAR (50)      NULL,
+	[Demo_Street]           VARCHAR (200)     NULL,
+	[Demo_Username]         VARCHAR (200)     NULL,
 	CONSTRAINT PK_VEEV_User PRIMARY KEY (UserId)
 );
 
