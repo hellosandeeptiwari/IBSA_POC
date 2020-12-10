@@ -45,6 +45,8 @@ namespace ExcelExportEngine
         private static string strSQLConnectionString = ConfigurationManager.AppSettings["strSQLConnectionString"].ToString();
         private static string strBlobConnectionString = ConfigurationManager.AppSettings["strBlobConnectionString"].ToString();
 
+        static int iSqlCommandTimeout = Convert.ToInt32(ConfigurationManager.AppSettings["iSqlCommandTimeout"]);
+
         private static string strInputSQLQueryFilepath;
         private static string strOutputFilepath;
         private static string strTemplateFilepath;
@@ -208,7 +210,7 @@ namespace ExcelExportEngine
 
         private static DataTable GetReportData()
         {
-            DataTable dtSyncData = new DataTable();
+            DataTable dtData = new DataTable();
             using (SqlConnection sqlConn = new SqlConnection(strSQLConnectionString))
             {
                 string sqlQuery = string.Empty;
@@ -238,11 +240,12 @@ namespace ExcelExportEngine
 
                 using (SqlCommand cmd = new SqlCommand(sqlQuery, sqlConn))
                 {
+                    cmd.CommandTimeout = iSqlCommandTimeout;
                     SqlDataAdapter da = new SqlDataAdapter(cmd);
-                    da.Fill(dtSyncData);
+                    da.Fill(dtData);
                 }
             }
-            return dtSyncData;
+            return dtData;
         }
 
         private static void CreateExcelFileFromTableInAzureBlob(DataTable datatable, string strTemplateFilepath, string strOutputFilepath)
