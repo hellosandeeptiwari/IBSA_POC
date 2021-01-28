@@ -14,16 +14,16 @@ BEGIN
 	('Lookup', 'VEEVAID', 0), ('Master-Detail', 'VEEVAID', 0), ('Name', 'VARCHAR', 1), ('Phone', 'VARCHAR', 1), 
 	('Picklist', 'VARCHAR', 1), ('Record Type', 'VEEVAID', 0), ('Rich Text Area', 'VARCHAR', 0), 
 	('Text', 'VARCHAR', 0), ('Text Area', 'VARCHAR', 0), ('URL', 'VARCHAR', 0), ('Auto Number', 'VARCHAR', 0), 
-	('Formula (Text)', 'VARCHAR', 0),
+	('Formula (Text)', 'VARCHAR', 0), ('Hierarchy Required Filtered Lookup', 'VEEVAID', 1),
 
 	-- Boolean Types
-	('<Check box>', 'BIT', 1), ('Checkbox', 'BIT', 1), 
+	('<Check box>', 'BIT', 1), ('Checkbox', 'BIT', 1), ('Check Box', 'BIT', 1), 
 
 	-- Number Types
-	('Numeric', 'DECIMAL', 0), ('Percent', 'DECIMAL', 0), ('Formula (Number)', 'INT', 0), ('Number', 'INT', 0), 
+	('Numeric', 'DECIMAL', 0), ('Percent', 'DECIMAL', 0), ('Formula (Number)', 'INT', 0), ('Number', 'INT', 1), ('Number', 'DECIMAL', 0), ('Currency', 'DECIMAL', 0), 
 
 	-- Date Types
-	('Date', 'DATE', 1), ('Date/Time', 'DATETIME', 1);
+	('Date', 'DATE', 1), ('Date/Time', 'DATETIME', 1), ('Formula (Date)', 'DATE', 1);
 
 
 	TRUNCATE TABLE VeevaOdsFieldMapping;
@@ -50,6 +50,7 @@ BEGIN
 				WHEN DTM.OdsType = 'VARCHAR' AND CHARINDEX('(', FD.DataType) > 0 THEN DTM.OdsType + SUBSTRING(FD.DataType, CHARINDEX('(', FD.DataType), CHARINDEX(')', FD.DataType) - CHARINDEX('(', FD.DataType) + 1)
 				-- If the length is not provided in Veeva, then we will use 400 as the default length.
 				WHEN DTM.OdsType = 'VARCHAR' THEN DTM.OdsType + '(400)'
+				WHEN DTM.OdsType = 'DECIMAL' AND CHARINDEX('(', FD.DataType) > 0 THEN DTM.OdsType + SUBSTRING(FD.DataType, CHARINDEX('(', FD.DataType), CHARINDEX(')', FD.DataType) - CHARINDEX('(', FD.DataType) + 1)
 				ELSE DTM.OdsType
 			END AS OdsDataType,
 			ROW_NUMBER() OVER(PARTITION BY FD.ObjectName, FD.FieldAPIName ORDER BY FD.SCDRequired DESC) AS RowNum

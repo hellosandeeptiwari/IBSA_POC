@@ -47,8 +47,8 @@ BEGIN
 				GROUP BY U.VeevaId HAVING COUNT(*) > 1)
 	BEGIN
 		INSERT INTO LogMessage(ProcedureName, Comments, LogUTCDate) 
-		VALUES(''sp_data_healthcheck'', ''A user to aligned to multiple territories'', GETUTCDATE());
-		THROW 51000, ''A user is aligned to multiple territories.'', 1;
+		VALUES(''sp_data_healthcheck'', ''A user is assigned to multiple territories.'', GETUTCDATE());
+		THROW 51000, ''A user is assigned to multiple territories.'', 1;
 	END
 
 ';
