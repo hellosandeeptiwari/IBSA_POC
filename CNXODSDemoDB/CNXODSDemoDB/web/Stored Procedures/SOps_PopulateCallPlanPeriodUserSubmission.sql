@@ -1,4 +1,6 @@
-﻿create proc [web].SOps_PopulateCallPlanPeriodUserSubmission(
+drop proc [web].SOps_PopulateCallPlanPeriodUserSubmission
+go
+create proc [web].SOps_PopulateCallPlanPeriodUserSubmission(
 	@previousCallPlanPeriodId int
 )
 as

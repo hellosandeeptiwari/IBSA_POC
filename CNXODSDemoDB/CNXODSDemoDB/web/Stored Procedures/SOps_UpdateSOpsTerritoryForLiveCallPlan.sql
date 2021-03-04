@@ -1,4 +1,6 @@
-﻿create proc [web].SOps_UpdateSOpsTerritoryForLiveCallPlan(
+drop proc [web].SOps_UpdateSOpsTerritoryForLiveCallPlan
+GO
+create proc [web].SOps_UpdateSOpsTerritoryForLiveCallPlan(
 	@sOpsTerritoryId int,
 	@callPlanId int
 )

@@ -1,4 +1,6 @@
-﻿create proc SOps_UpdateSOpsUserForLiveCallPlan(
+drop proc SOps_UpdateSOpsUserForLiveCallPlan
+GO
+create proc SOps_UpdateSOpsUserForLiveCallPlan(
 	@sOpsUserId int,
 	@callPlanId int
 )

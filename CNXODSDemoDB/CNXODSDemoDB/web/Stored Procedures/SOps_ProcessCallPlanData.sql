@@ -1,4 +1,6 @@
-﻿create proc [web].SOps_ProcessCallPlanData
+drop proc [web].SOps_ProcessCallPlanData
+GO
+create proc [web].SOps_ProcessCallPlanData
 (
 	@callPlanId int,
 	@repPeriodActualStartDate date
@@ -7,7 +9,10 @@ as
 begin
 	begin transaction
 		truncate table [web].SOpsAccountTierAudit
+		truncate table [web].SOpsCallPlanOneLevelAccountTierDynamic
+		alter table [web].SOpsCallPlanOneLevelAccountTierDynamic drop CONSTRAINT FK_SOpsCallPlanOneLevelAccountTierDynamic_SOpsCallPlanOneLevelAccountTierId
 		truncate table [web].SOpsCallPlanOneLevelAccountTier
+		alter table [web].SOpsCallPlanOneLevelAccountTierDynamic add CONSTRAINT FK_SOpsCallPlanOneLevelAccountTierDynamic_SOpsCallPlanOneLevelAccountTierId FOREIGN KEY ([SOpsCallPlanOneLevelAccountTierId]) REFERENCES [web].[SOpsCallPlanOneLevelAccountTier] ([SOpsCallPlanOneLevelAccountTierId]);
 		truncate table [web].SOpsAccountReview
 		truncate table [web].SOpsCallPlanPeriodUserSubmission
 		exec [web].SOps_PopulateSOpsAccountReviewForLiveCallPlan @callPlanId
@@ -29,3 +34,4 @@ begin
 			update [web].SOpsCallPlan set Status='EROR' where SOpsCallPlanId=@callPlanId
 		end
 end
+GO

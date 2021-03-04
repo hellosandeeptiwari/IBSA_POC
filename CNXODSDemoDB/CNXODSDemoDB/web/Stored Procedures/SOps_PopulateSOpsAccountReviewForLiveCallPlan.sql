@@ -1,4 +1,6 @@
-﻿create proc [web].SOps_PopulateSOpsAccountReviewForLiveCallPlan
+drop proc [web].SOps_PopulateSOpsAccountReviewForLiveCallPlan
+GO
+create proc [web].SOps_PopulateSOpsAccountReviewForLiveCallPlan
 (
 	@sOpsCallPlanId int
 )

@@ -1,4 +1,6 @@
-﻿ create proc [web].SOps_UpdateSOpsAccountTerritoryFutureTier(
+ drop proc [web].SOps_UpdateSOpsAccountTerritoryFutureTier
+ GO
+ create proc [web].SOps_UpdateSOpsAccountTerritoryFutureTier(
 	@callPlanPeriodId int
 )
 as

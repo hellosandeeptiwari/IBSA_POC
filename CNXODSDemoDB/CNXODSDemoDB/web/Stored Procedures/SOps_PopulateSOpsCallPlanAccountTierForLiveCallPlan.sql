@@ -1,4 +1,6 @@
-﻿create proc [web].SOps_PopulateSOpsCallPlanAccountTierForLiveCallPlan(
+drop proc [web].SOps_PopulateSOpsCallPlanAccountTierForLiveCallPlan
+GO
+create proc [web].SOps_PopulateSOpsCallPlanAccountTierForLiveCallPlan(
 	@sOpsTerritoryId int,
 	@callPlanId int
 )
