@@ -213,7 +213,7 @@ namespace JobMonitor
                     string strQuery = @"
 SELECT PipelineId, ResourceGroupName, DataFactoryName, PipelineName, TriggerName, TriggerStatus 
 FROM ADF_Pipeline (NOLOCK)
-WHERE TriggerName IS NOT NULL AND TriggerStatus = 'Started' AND CustomerId <> -1; ";
+WHERE CustomerId <> -1; ";
                     using (SqlCommand cmd = new SqlCommand(strQuery, sqlConn))
                     {
                         sqlConn.Open();
@@ -226,8 +226,8 @@ WHERE TriggerName IS NOT NULL AND TriggerStatus = 'Started' AND CustomerId <> -1
                                 ResourceGroupName = drPipeline.GetString(1),
                                 DataFactoryName = drPipeline.GetString(2),
                                 PipelineName = drPipeline.GetString(3),
-                                TriggerName = drPipeline.GetString(4),
-                                TriggerStatus = drPipeline.GetString(5),
+                                TriggerName = drPipeline.IsDBNull(4) ? string.Empty : drPipeline.GetString(4),
+                                TriggerStatus = drPipeline.IsDBNull(5) ? string.Empty : drPipeline.GetString(5),
                             });
                         }
                     }
