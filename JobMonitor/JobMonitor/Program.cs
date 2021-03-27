@@ -194,7 +194,7 @@ namespace JobMonitor
                 StringBuilder sbInsertQueries = new StringBuilder("TRUNCATE TABLE ADF_Pipeline;");
                 foreach (PipelineModel item in lstPipelineDetails)
                 {
-                    sbInsertQueries.AppendLine($"INSERT INTO ADF_Pipeline VALUES({item.CustomerId}, '{item.ResourceGroupName}', '{item.DataFactoryName}', '{item.PipelineName}', {(string.IsNullOrWhiteSpace(item.TriggerName) ? "NULL" : "'" + item.TriggerName + "'")}, {(string.IsNullOrWhiteSpace(item.TriggerStatus) ? "NULL" : "'" + item.TriggerStatus + "'")}, {(string.IsNullOrWhiteSpace(item.ScheduledFrequency) ? "NULL" : "'" + item.ScheduledFrequency + "'")}, {(string.IsNullOrWhiteSpace(item.ScheduledTime) ? "NULL" : "'" + item.ScheduledTime + "'")}, {(string.IsNullOrWhiteSpace(item.ScheduledTimeZone) ? "NULL" : "'" + item.ScheduledTimeZone + "'")}, {(item.StartTime.ToString() == "01-01-0001 00:00:00" ? "NULL" : "'" + item.StartTime.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'")}, {(item.EndTime.ToString() == "01-01-0001 00:00:00" ? "NULL" : "'" + item.EndTime.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'")});");
+                    sbInsertQueries.AppendLine($"INSERT INTO ADF_Pipeline VALUES({item.CustomerId}, '{item.ResourceGroupName}', '{item.DataFactoryName}', '{item.PipelineName}', {(string.IsNullOrWhiteSpace(item.TriggerName) ? "NULL" : "'" + item.TriggerName + "'")}, {(string.IsNullOrWhiteSpace(item.TriggerStatus) ? "NULL" : "'" + item.TriggerStatus + "'")}, {(string.IsNullOrWhiteSpace(item.ScheduledFrequency) ? "NULL" : "'" + item.ScheduledFrequency + "'")}, {(string.IsNullOrWhiteSpace(item.ScheduledTime) ? "NULL" : "'" + item.ScheduledTime + "'")}, {(string.IsNullOrWhiteSpace(item.ScheduledTimeZone) ? "NULL" : "'" + item.ScheduledTimeZone + "'")}, {(item.StartTime.Year == 1 ? "NULL" : "'" + item.StartTime.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'")}, {(item.EndTime.Year == 1 ? "NULL" : "'" + item.EndTime.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'")});");
                 }
 
                 ExecuteQuery(sbInsertQueries.ToString());
@@ -247,7 +247,7 @@ WHERE CustomerId <> -1; ";
         {
             try
             {
-                //LogHelper.WriteDebugLog(sqlQuery);
+                LogHelper.WriteDebugLog(sqlQuery);
                 using (SqlConnection sqlConn = new SqlConnection(strSQLConnectionString))
                 {
                     using (SqlCommand cmd = new SqlCommand(sqlQuery, sqlConn))
