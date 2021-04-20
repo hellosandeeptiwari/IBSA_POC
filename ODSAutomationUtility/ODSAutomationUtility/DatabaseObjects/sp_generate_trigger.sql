@@ -8,20 +8,32 @@ SET NOCOUNT ON
 
 DECLARE  @tableCount INT, @sqlTrigger NVARCHAR(MAX), @PrimaryKeyColumnName NVARCHAR(400);
 
-CREATE TABLE #AuditDefinition(AuditColumnDefinitionId INT, TableName NVARCHAR(400), PrimaryKeyColumnName NVARCHAR(400), ColumnName NVARCHAR(400));
+CREATE TABLE #AuditDefinition
+(
+	AuditColumnDefinitionId INT NOT NULL, 
+	TableName NVARCHAR(400) NOT NULL, 
+	PrimaryKeyColumnName NVARCHAR(400) NOT NULL, 
+	ColumnName NVARCHAR(400) NOT NULL,
+	IsNullable BIT NOT NULL,
+);
+
 IF @tableName = 'All'
-	INSERT INTO #AuditDefinition(AuditColumnDefinitionId, TableName, PrimaryKeyColumnName, ColumnName) 
+	INSERT INTO #AuditDefinition(AuditColumnDefinitionId, TableName, PrimaryKeyColumnName, ColumnName, IsNullable) 
 	SELECT 
-		ADC.[AuditColumnDefinitionId], ADT.[TableName], ADT.PrimaryKeyColumnName, ADC.[ColumnName]
-	FROM [AuditTableDefinition] ADT
-	INNER JOIN [AuditColumnDefinition] ADC ON ADT.[AuditTableDefinitionId] = ADC.[AuditTableDefinitionId]
+		ADC.AuditColumnDefinitionId, ADT.TableName, ADT.PrimaryKeyColumnName, ADC.ColumnName, C.is_nullable AS IsNullable
+	FROM AuditTableDefinition ADT
+	INNER JOIN AuditColumnDefinition ADC ON ADT.AuditTableDefinitionId = ADC.AuditTableDefinitionId
+	INNER JOIN sys.tables T ON ADT.TableName = T.name
+	INNER JOIN sys.columns C ON T.object_id = C.object_id AND ADC.ColumnName = C.name
 	ORDER BY ADT.TableName;
 ELSE
-	INSERT INTO #AuditDefinition(AuditColumnDefinitionId, TableName, PrimaryKeyColumnName, ColumnName) 
+	INSERT INTO #AuditDefinition(AuditColumnDefinitionId, TableName, PrimaryKeyColumnName, ColumnName, IsNullable) 
 	SELECT 
-		ADC.[AuditColumnDefinitionId], ADT.[TableName], ADT.PrimaryKeyColumnName, ADC.[ColumnName]
-	FROM [AuditTableDefinition] ADT
-	INNER JOIN [AuditColumnDefinition] ADC ON ADT.[AuditTableDefinitionId] = ADC.[AuditTableDefinitionId]
+		ADC.AuditColumnDefinitionId, ADT.TableName, ADT.PrimaryKeyColumnName, ADC.ColumnName, C.is_nullable AS IsNullable
+	FROM AuditTableDefinition ADT
+	INNER JOIN AuditColumnDefinition ADC ON ADT.AuditTableDefinitionId = ADC.AuditTableDefinitionId
+	INNER JOIN sys.tables T ON ADT.TableName = T.name
+	INNER JOIN sys.columns C ON T.object_id = C.object_id AND ADC.ColumnName = C.name
 	WHERE ADT.TableName = @tableName;
 
 IF NOT EXISTS(SELECT 1 FROM #AuditDefinition)
@@ -121,7 +133,8 @@ BEGIN
 				-- and create a new row with the latest values.
 				IF ' +
 					STUFF((
-					SELECT ' OR @' + ColumnName + 'INSERT <> @' + ColumnName + 'DELETE OR (@' + ColumnName + 'INSERT IS NULL AND @' + ColumnName + 'DELETE IS NOT NULL) OR (@' + ColumnName + 'INSERT IS NOT NULL AND @' + ColumnName + 'DELETE IS NULL)'
+					SELECT ' OR @' + ColumnName + 'INSERT <> @' + ColumnName + 'DELETE' + 
+						CASE WHEN IsNullable = 1 THEN ' OR (@' + ColumnName + 'INSERT IS NULL AND @' + ColumnName + 'DELETE IS NOT NULL) OR (@' + ColumnName + 'INSERT IS NOT NULL AND @' + ColumnName + 'DELETE IS NULL)' ELSE '' END
 					FROM #AuditDefinition C WHERE TableName = @tableName
 					FOR XML PATH(''), TYPE).value('.', 'NVARCHAR(MAX)'), 1, 4, '') + '
 					BEGIN
