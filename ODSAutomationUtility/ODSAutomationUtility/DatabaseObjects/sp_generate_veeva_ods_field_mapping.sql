@@ -12,12 +12,13 @@ BEGIN
 	-- Text Types
 	('Email', 'VARCHAR', 1), ('Fax', 'VARCHAR', 1), ('Hierarchy', 'VEEVAID', 1), ('Long Text Area', 'VARCHAR', 0), 
 	('Lookup', 'VEEVAID', 0), ('Master-Detail', 'VEEVAID', 0), ('Name', 'VARCHAR', 1), ('Phone', 'VARCHAR', 1), 
-	('Picklist', 'VARCHAR', 1), ('Record Type', 'VEEVAID', 0), ('Rich Text Area', 'VARCHAR', 0), 
+	('Picklist', 'VARCHAR', 0), ('Picklist (Multi-Select)', 'VARCHAR', 1), 
+	('Record Type', 'VEEVAID', 0), ('RecordType', 'VEEVAID', 0), ('Rich Text Area', 'VARCHAR', 0), 
 	('Text', 'VARCHAR', 0), ('Text Area', 'VARCHAR', 0), ('URL', 'VARCHAR', 0), ('Auto Number', 'VARCHAR', 0), 
 	('Formula (Text)', 'VARCHAR', 0), ('Hierarchy Required Filtered Lookup', 'VEEVAID', 1),
 
 	-- Boolean Types
-	('<Check box>', 'BIT', 1), ('Checkbox', 'BIT', 1), ('Check Box', 'BIT', 1), 
+	('<Check box>', 'BIT', 1), ('Checkbox', 'BIT', 1), ('Check Box', 'BIT', 1), ('Formula (Checkbox)', 'BIT', 1),
 
 	-- Number Types
 	('Numeric', 'DECIMAL', 0), ('Percent', 'DECIMAL', 0), ('Formula (Number)', 'INT', 0), ('Number', 'INT', 1), ('Number', 'DECIMAL', 0), ('Currency', 'DECIMAL', 0), 
@@ -42,6 +43,8 @@ BEGIN
 				WHEN DTM.OdsType = 'VEEVAID' THEN 'CHAR(18)'
 				-- Formula (Text) datatypes in Veeva are converted to varchar(400).
 				WHEN DTM.OdsType = 'VARCHAR' AND FD.DataType LIKE 'Formula%' THEN DTM.OdsType + '(400)'
+				-- Picklist (Multi-Select) datatypes in Veeva are converted to varchar(400).
+				WHEN DTM.OdsType = 'VARCHAR' AND FD.DataType LIKE 'Picklist%' THEN DTM.OdsType + '(400)'
 				-- Auto Number datatypes in Veeva are actually strings since they ususally contain some pre-fixed string like 'CNX-'. Hence it is better to use string datatype like VARCHAR in ODS.
 				WHEN DTM.OdsType = 'VARCHAR' AND FD.DataType LIKE '%Auto%Number%' THEN DTM.OdsType + '(400)'
 				-- If the length of the string datatype in Veeva is more than 8000 characters then we should use MAX datatype.
