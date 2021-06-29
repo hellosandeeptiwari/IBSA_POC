@@ -5,11 +5,22 @@ BEGIN
 ALTER TABLE ADF_Pipeline DROP COLUMN PipelineDescription;
 
 END
+GO
 
 
 CREATE OR ALTER PROCEDURE sp_adf_pipeline_postprocess
 AS
 BEGIN
+
+/* Code to archive all the pipeline run history details since ADF stores just 45 days of history */
+INSERT INTO ADF_PipelineRunHistory
+SELECT P.CustomerId, P.ResourceGroupName, P.DataFactoryName, P.PipelineName, 
+	PR.PipelineRunId, PR.RunStart, PR.RunEnd, PR.RunStatus, PR.LastUpdated, PR.DurationInMilliSeconds, 
+	PR.InvokedById, PR.InvokedByType, PR.InvokedByName, PR.ErrorMessage, PR.RunGroupId
+FROM ADF_PipelineRun PR INNER JOIN ADF_Pipeline P ON PR.PipelineId = P.PipelineId
+WHERE NOT EXISTS (	SELECT 1 FROM ADF_PipelineRunHistory H 
+					WHERE PR.PipelineRunId = H.PipelineRunId AND PR.LastUpdated = H.LastUpdated AND PR.RunStatus = H.RunStatus);
+
 
 IF NOT EXISTS (SELECT 1 FROM sys.tables t INNER JOIN sys.columns c ON t.object_id = c.object_id WHERE T.name = 'ADF_Pipeline' AND c.name = 'PipelineDescription')
 	ALTER TABLE ADF_Pipeline ADD PipelineDescription VARCHAR(200) NULL;
