@@ -78,7 +78,9 @@ namespace JobMonitor
                 {
                     if (strAzureDataFactoryList.Contains(objDataFactory.Name) || strAzureDataFactoryList.ToUpper() == "ALL")
                     {
-                        foreach (var objPipeline in objClient.Pipelines.ListByFactory(arrResourceGroupList[iRGIndex], objDataFactory.Name))
+                        // ListByFactory method is returning a maximum of 50 pipelines in one single call.
+                        var lstPages = objClient.Pipelines.ListByFactory(arrResourceGroupList[iRGIndex], objDataFactory.Name);
+                        foreach (var objPipeline in lstPages)
                         {
                             lstPipelines.Add(new PipelineModel
                             {
@@ -87,6 +89,23 @@ namespace JobMonitor
                                 DataFactoryName = objDataFactory.Name,
                                 CustomerId = dicDataFactoryCustomerIdMapping[objDataFactory.Name]
                             });
+                        }
+
+                        // We are calling the below method only if NextPageLink is not null/blank which will be the case only when there are more than 50 pipelines in a single data factory.
+                        // We run the loop until there are no further pages of pipelines within the data factory. Each page will contain a maximum of 50 pipelines.
+                        while (!string.IsNullOrEmpty(lstPages.NextPageLink))
+                        {
+                            lstPages = objClient.Pipelines.ListByFactoryNext(lstPages.NextPageLink);
+                            foreach (var objPipeline in lstPages)
+                            {
+                                lstPipelines.Add(new PipelineModel
+                                {
+                                    PipelineName = objPipeline.Name,
+                                    ResourceGroupName = arrResourceGroupList[iRGIndex],
+                                    DataFactoryName = objDataFactory.Name,
+                                    CustomerId = dicDataFactoryCustomerIdMapping[objDataFactory.Name]
+                                });
+                            }
                         }
 
                         foreach (var objTrigger in objClient.Triggers.ListByFactory(arrResourceGroupList[iRGIndex], objDataFactory.Name))
