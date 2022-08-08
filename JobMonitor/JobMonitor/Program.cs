@@ -49,7 +49,8 @@ namespace JobMonitor
             ["PACPDataFactory"] = 31,
             ["THVProdDataFactory"] = 29,
             ["URGNProdDataFactory"] = 34,
-            ["PSProdDataFactory"] = 32
+            ["PSProdDataFactory"] = 32,
+            ["IBSADWHProdDataFactory"] = 1000044
         };
 
         #endregion
