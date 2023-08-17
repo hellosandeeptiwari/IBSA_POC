@@ -1,0 +1,10 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/ExcelExportEngine/ExcelExportEngine/obj
+/JobMonitor/JobMonitor/obj
+/ODSAutomationUtility/ODSAutomationUtility/obj
+/SendEmailActivity/SendEmailActivity/obj
+/VeevaDeleteActivity
