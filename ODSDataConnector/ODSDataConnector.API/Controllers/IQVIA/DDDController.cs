@@ -12,20 +12,21 @@ namespace ODSDataConnector.Controllers.IQVIA
     [Route("[controller]")]
     public class DDDController : ControllerBase
     {
-        private readonly IStorageService StorageService;
-        public DDDController(IStorageService storageService)
+        private readonly IStorageService storageService;
+        private readonly IDDDAdfService DDDAdfService;
+        public DDDController(IStorageService StorageService, IDDDAdfService dDDAdfService)
         {
-            this.StorageService = storageService;
+            this.storageService = StorageService;
+            this.DDDAdfService = dDDAdfService;
         }
 
 
         [HttpPost("SetupDemographicData")]
         public async Task<IActionResult> SetupDemographicDataAsync(DataRequest request)
         {
-            var res = this.StorageService.ExcecuteSQLScripts(request);
-            //1. Based on the data source execute SQL scripts
-                     //- keep the scripts in storage, path in DB 
-            //2. Connect to ADF, create pipeline, create linked service
+            var res = this.storageService.ExcecuteSQLScripts(request);
+            var result = this.DDDAdfService.CreateDemographicPipeline(request);
+           
             return this.Ok();
         }
 

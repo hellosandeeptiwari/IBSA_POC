@@ -6,6 +6,15 @@ namespace ODSDataConnector.Core.Models;
 
 public partial class AppDBContext : DbContext
 {
+    public AppDBContext()
+    {
+    }
+
+    public AppDBContext(DbContextOptions<AppDBContext> options)
+        : base(options)
+    {
+    }
+
     public virtual DbSet<Customer> Customers { get; set; }
 
     public virtual DbSet<CustomerConfiguration> CustomerConfigurations { get; set; }
@@ -20,6 +29,9 @@ public partial class AppDBContext : DbContext
                 .HasNoKey()
                 .ToTable("Customer");
 
+            entity.Property(e => e.Adfname)
+                .HasMaxLength(30)
+                .HasColumnName("ADFName");
             entity.Property(e => e.Dbname)
                 .IsRequired()
                 .HasMaxLength(100)

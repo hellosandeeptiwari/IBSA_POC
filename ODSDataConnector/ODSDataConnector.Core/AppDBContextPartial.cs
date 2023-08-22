@@ -10,10 +10,6 @@ public partial class AppDBContext : DbContext
 {
     private readonly IConfiguration configuration;
 
-    public AppDBContext()
-    {
-    }
-
     public AppDBContext(DbContextOptions<AppDBContext> options, IConfiguration configuration)
         : base(options)
     {

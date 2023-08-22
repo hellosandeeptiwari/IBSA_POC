@@ -18,4 +18,6 @@ public partial class Customer
     public string Password { get; set; }
 
     public string LinkedService { get; set; }
+
+    public string Adfname { get; set; }
 }

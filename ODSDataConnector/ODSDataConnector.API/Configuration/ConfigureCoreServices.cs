@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ODSDataConnector.Core.Interfaces;
+using ODSDataConnector.Core.Repository;
 using ODSDataConnector.Core.Services;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,9 @@ namespace ODSDataConnector.API.Configuration
         public static IServiceCollection AddCoreServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<IStorageService, StorageService>();
-
+            services.AddScoped<IDDDAdfService, DDDAdfService>();
+            services.AddScoped<IPlantrakAdfService, PlantrakAdfService>();
+            services.AddScoped <ICustomerRepository, CustomerRepository>();
             return services;
         }
     }

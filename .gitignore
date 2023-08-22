@@ -8,3 +8,8 @@
 /ODSAutomationUtility/ODSAutomationUtility/obj
 /SendEmailActivity/SendEmailActivity/obj
 /VeevaDeleteActivity
+/ODSDataConnector/ODSDataConnector.Core/obj
+/ODSDataConnector/ODSDataConnector.API/obj
+/ODSDataConnector/ODSDataConnector.API/.vs/ODSDataConnector
+/ODSDataConnector/ODSDataConnector.API/bin/Debug/net6.0
+/ODSDataConnector/ODSDataConnector.Core/bin/Debug/net6.0
