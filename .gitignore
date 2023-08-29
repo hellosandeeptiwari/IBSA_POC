@@ -13,3 +13,8 @@
 /ODSDataConnector/ODSDataConnector.API/.vs/ODSDataConnector
 /ODSDataConnector/ODSDataConnector.API/bin/Debug/net6.0
 /ODSDataConnector/ODSDataConnector.Core/bin/Debug/net6.0
+/DWHPackages/DWHPackages/.vs/DWHPackages
+/DWHPackages/DWHPackages/DWHPackages.API/obj
+/DWHPackages/DWHPackages/DWHPackages.API/bin/Debug/net6.0
+/DWHPackages/DWHPackages/DWHPackages.Core/bin/Debug/net6.0
+/DWHPackages/DWHPackages/DWHPackages.Core/obj
