@@ -43,7 +43,7 @@ namespace ODSDataConnector.Core.Services
 
 
                 // Define the SQL Linked Service name and its properties
-                var sQLlsProperties = createSQLLinkedServiceProperties(resourceGroupName,dataFactoryName,customer);
+                var sQLlsProperties = createSQLLinkedServiceProperties(resourceGroupName, dataFactoryName, customer);
 
                 dataFactoryManagementClient = this.aDFService.CreateLinkedService(sQLlsProperties, dataFactoryManagementClient);
                 Console.WriteLine("SQL Linked Service created successfully.");
@@ -53,7 +53,7 @@ namespace ODSDataConnector.Core.Services
 
                 dataFactoryManagementClient = this.aDFService.CreateLinkedService(fslsProperties, dataFactoryManagementClient);
                 Console.WriteLine("FTP Linked Service created successfully.");
-               
+
                 #endregion
 
 
@@ -178,7 +178,7 @@ namespace ODSDataConnector.Core.Services
 
                 return true;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex;
             }
@@ -590,24 +590,23 @@ namespace ODSDataConnector.Core.Services
                 string datasetName = "PlanModelDataset";
                 var blobDataset = new DatasetResource
                    (
-                       new AzureBlobDataset
-                       {
-
-                           LinkedServiceName = new LinkedServiceReference
-                           {
-                               ReferenceName = dsConfig.LinkedService
-                           },
-                           FolderPath = dsConfig.Url,
-                           FileName = "Plan Model Type Listing_Final - FROM PAUL.xlsx",
-                           //AdditionalProperties = new ExcelDataset { SheetName = "", FirstRowAsHeader = "Yes" },
-
-                           Structure = new ExcelDataset
-                           {
-                               SheetName = "Table 1", // Specify the sheet name
-                               FirstRowAsHeader = true // Number of rows to skip (optional)
-                           }
-                       }
+                      new ExcelDataset
+                      {
+                          LinkedServiceName = new LinkedServiceReference
+                          {
+                              ReferenceName = dsConfig.LinkedService
+                          },
+                          Location = new AzureBlobStorageLocation
+                          {
+                              Container = dsConfig.Url.Split('/').First(),
+                              FolderPath = dsConfig.Url.Split('/')[1] + " /" + dsConfig.Url.Split('/')[2],
+                              FileName = "Plan Model Type Listing_Final - FROM PAUL.xlsx",
+                          },
+                          SheetName = "Table 1",
+                          FirstRowAsHeader = true,
+                      }
                    );
+
                 dataFactoryManagementClient.Datasets.CreateOrUpdate(resourceGroupName, dataFactoryName, datasetName, blobDataset);
 
 

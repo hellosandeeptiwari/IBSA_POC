@@ -14,10 +14,12 @@ namespace ODSDataConnector.Controllers.IQVIA
     {
         private readonly IStorageService StorageService;
         private readonly IPlantrakAdfService PlantrakAdfService;
-        public PlantrakController(IStorageService storageService, IPlantrakAdfService plantrakAdfService)
+        private readonly IAppLogger AppLogger;
+        public PlantrakController(IStorageService storageService, IPlantrakAdfService plantrakAdfService, IAppLogger appLogger)
         {
             this.StorageService = storageService;
-            PlantrakAdfService = plantrakAdfService;
+            this.PlantrakAdfService = plantrakAdfService;
+            this.AppLogger = appLogger;
         }
 
         [HttpPost("SetupPrescriberSalesData")]
@@ -25,9 +27,10 @@ namespace ODSDataConnector.Controllers.IQVIA
         {
             try
             {
+                this.AppLogger.LogInformation($"SetupPrescriberSalesDataAsync Method Started at {DateTime.UtcNow}");
                 var res = await this.StorageService.ExcecuteSQLScripts(request);
                 var result = await this.PlantrakAdfService.CreatePrescriberSalesPipeline(request);
-
+                this.AppLogger.LogInformation($"SetupPrescriberSalesDataAsync Method completed at {DateTime.UtcNow}");
                 return this.Ok();
             }
             catch (Exception ex)

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using ODSDataConnector.Core.Logging;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ODSDataConnector.Core.Interfaces;
 using ODSDataConnector.Core.Repository;
@@ -20,6 +21,7 @@ namespace ODSDataConnector.API.Configuration
             services.AddScoped<IPlantrakAdfService, PlantrakAdfService>();
             services.AddScoped <ICustomerRepository, CustomerRepository>();
             services.AddScoped<IADFService, ADFService>();
+            services.AddScoped<IAppLogger,AppInsightsLogger>();
 
             return services;
         }

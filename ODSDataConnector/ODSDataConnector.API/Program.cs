@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.ApplicationInsights;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,16 @@ namespace ODSDataConnector
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+
+                    webBuilder.ConfigureLogging((hostingContext, configureLogging) =>
+                    {
+                        var configuration = hostingContext.Configuration.GetSection("ConnectionStrings:AppInsightsInstrumentationKey");
+                        configureLogging.AddApplicationInsights(configuration.Value);
+
+                        configureLogging.AddFilter<ApplicationInsightsLoggerProvider>(typeof(Program).FullName, LogLevel.Trace);
+                        configureLogging.AddFilter<ApplicationInsightsLoggerProvider>(typeof(Startup).FullName, LogLevel.Trace);
+                    });
+
                     webBuilder.UseStartup<Startup>();
                 });
     }
