@@ -17,37 +17,25 @@ namespace ODSDataConnector.Core.Services
     {
         private readonly ICustomerRepository customerRepository;
 
-        private readonly string subscriptionId = "3bf6616d-4f38-4fd4-82ab-51e652c757a9";
-        private readonly string clientId = "8349448f-2016-4cf0-b7c7-27c62e9be090";
-        private readonly string clientSecret = "x.L8Q~bdcKxbmDsNG.TZYF0MmLUqRnDymCD3haiV";
-        private readonly string tenantId = "907cef94-e870-49f6-b843-09417459b152";
-        private readonly string strAzureAuthenticationKey = "pjI7Q~EEIGfNY8TLOwRTDjUwaGY65Xi--vCJT";
+        private readonly IADFService aDFService;
 
-        public DDDAdfService(ICustomerRepository customerRepository)
+        public DDDAdfService(ICustomerRepository customerRepository, IADFService ADFService)
         {
             this.customerRepository = customerRepository;
+            this.aDFService = ADFService;
         }
 
         public async Task<bool> CreateDemographicPipeline(DataRequest request)
         {
             try
             {
-                // Authenticate and Create a data factory management client
-                AuthenticationContext objAuthenticationContext = new AuthenticationContext("https://login.windows.net/" + tenantId);
-                ClientCredential objClientCredential = new ClientCredential(clientId, strAzureAuthenticationKey);
-                AuthenticationResult objAuthenticationResult = objAuthenticationContext.AcquireTokenAsync("https://management.azure.com/", objClientCredential).Result;
-                ServiceClientCredentials objTokenCredentials = new TokenCredentials(objAuthenticationResult.AccessToken);
-                var dataFactoryManagementClient = new DataFactoryManagementClient(objTokenCredentials)
-                {
-                    SubscriptionId = subscriptionId
-                };
-
+                var dataFactoryManagementClient = this.aDFService.GetADFClient();
 
                 var customer = await this.customerRepository.GetCustomerByIdAsync(request.customerId);
 
                 #region Linked Servcie Creation Section
                 string resourceGroupName = "ODSDev";
-                string dataFactoryName = "ODSAutomationDataFactory";
+                string dataFactoryName = customer.Adfname;
 
 
                 // Define the SQL Linked Service name and its properties

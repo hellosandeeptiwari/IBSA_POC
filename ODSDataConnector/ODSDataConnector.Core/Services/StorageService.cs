@@ -29,6 +29,8 @@ namespace ODSDataConnector.Core.Services
     {
         private readonly ICustomerRepository customerRepository;
 
+        
+
         public StorageService(ICustomerRepository customerRepository)
         {
             this.customerRepository = customerRepository;
@@ -73,7 +75,7 @@ namespace ODSDataConnector.Core.Services
                     {
                         using (SqlCommand command = new SqlCommand(script, connection))
                         {
-                            //command.ExecuteNonQuery();
+                            command.ExecuteNonQuery();
                         }
                     }
 
@@ -82,7 +84,7 @@ namespace ODSDataConnector.Core.Services
             }
             catch (Exception ex)
             {
-                return false;
+                throw ex;
             }
         }
 

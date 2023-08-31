@@ -29,5 +29,13 @@ namespace ODSDataConnector.Core.Repository
         {
             return await this.context.DataSources.Where(x => x.Name == request.dataSource && x.Module == request.module && x.Entity == request.entity && x.Version == request.version).FirstOrDefaultAsync();
         }
+
+        public async Task<CustomerConfiguration> GetDataSourceConfigAsync(DataRequest request)
+        {
+            return await (from cc in this.context.CustomerConfigurations 
+                                join ds in this.context.DataSources on cc.DatasourceId equals ds.Id
+                                where cc.CustomerId == request.customerId && ds.Module == request.module && ds.Entity == request.entity && ds.Version == request.version
+                                select cc).FirstOrDefaultAsync();
+        }
     }
 }

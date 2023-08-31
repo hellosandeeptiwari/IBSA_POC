@@ -11,7 +11,7 @@ namespace ODSDataConnector.Core.Interfaces
     public interface ICustomerRepository
     {
         Task<Customer> GetCustomerByIdAsync(int CustomerId);
-
         Task<DataSource> GetDataSourceByIdAsync(DataRequest request);
+        Task<CustomerConfiguration> GetDataSourceConfigAsync(DataRequest request);
     }
 }

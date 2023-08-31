@@ -19,6 +19,8 @@ namespace ODSDataConnector.API.Configuration
             services.AddScoped<IDDDAdfService, DDDAdfService>();
             services.AddScoped<IPlantrakAdfService, PlantrakAdfService>();
             services.AddScoped <ICustomerRepository, CustomerRepository>();
+            services.AddScoped<IADFService, ADFService>();
+
             return services;
         }
     }

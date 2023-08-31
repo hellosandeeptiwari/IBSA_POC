@@ -19,79 +19,41 @@ namespace ODSDataConnector.Core.Services
     {
         private readonly ICustomerRepository customerRepository;
 
-        private readonly string subscriptionId = "3bf6616d-4f38-4fd4-82ab-51e652c757a9";
-        private readonly string clientId = "8349448f-2016-4cf0-b7c7-27c62e9be090";
-        private readonly string clientSecret = "x.L8Q~bdcKxbmDsNG.TZYF0MmLUqRnDymCD3haiV";
-        private readonly string tenantId = "907cef94-e870-49f6-b843-09417459b152";
-        private readonly string strAzureAuthenticationKey = "pjI7Q~EEIGfNY8TLOwRTDjUwaGY65Xi--vCJT";
+        private readonly IADFService aDFService;
 
-        public PlantrakAdfService(ICustomerRepository customerRepository)
+        public PlantrakAdfService(ICustomerRepository customerRepository, IADFService ADFService)
         {
             this.customerRepository = customerRepository;
+            this.aDFService = ADFService;
         }
 
         public async Task<bool> CreatePrescriberSalesPipeline(DataRequest request)
         {
             try
             {
-                // Authenticate and Create a data factory management client
-                AuthenticationContext objAuthenticationContext = new AuthenticationContext("https://login.windows.net/" + tenantId);
-                ClientCredential objClientCredential = new ClientCredential(clientId, strAzureAuthenticationKey);
-                AuthenticationResult objAuthenticationResult = objAuthenticationContext.AcquireTokenAsync("https://management.azure.com/", objClientCredential).Result;
-                ServiceClientCredentials objTokenCredentials = new TokenCredentials(objAuthenticationResult.AccessToken);
-                var dataFactoryManagementClient = new DataFactoryManagementClient(objTokenCredentials)
-                {
-                    SubscriptionId = subscriptionId
-                };
-
+                var dataFactoryManagementClient = this.aDFService.GetADFClient();
 
                 var customer = await this.customerRepository.GetCustomerByIdAsync(request.customerId);
 
+                var dsConfig = await this.customerRepository.GetDataSourceConfigAsync(request);
+
                 #region Linked Servcie Creation Section
                 string resourceGroupName = "ODSDev";
-                string dataFactoryName = "ODSAutomationDataFactory";
+                string dataFactoryName = customer.Adfname;
 
 
                 // Define the SQL Linked Service name and its properties
-                string linkedServiceName = "ODSSQLLinkedService";
+                var sQLlsProperties = createSQLLinkedServiceProperties(resourceGroupName,dataFactoryName,customer);
 
-                var sQLLS = dataFactoryManagementClient.LinkedServices.Get(resourceGroupName, dataFactoryName, linkedServiceName);
-
-                if (sQLLS == null)
-                {
-                    var sqlLinkedService = new LinkedServiceResource(
-                         new AzureSqlDatabaseLinkedService
-                         {
-                             ConnectionString = "Data Source=" + customer.Dbserver + ";Initial Catalog=" + customer.Dbname + ";User Id=" + customer.Username + ";Password=" + customer.Password
-                         }
-                    );
-
-                    // Create or update the SQL Linked Service
-                    dataFactoryManagementClient.LinkedServices.CreateOrUpdate(resourceGroupName, dataFactoryName, linkedServiceName, sqlLinkedService);
-                    Console.WriteLine("SQL Linked Service created successfully.");
-                }
+                dataFactoryManagementClient = this.aDFService.CreateLinkedService(sQLlsProperties, dataFactoryManagementClient);
+                Console.WriteLine("SQL Linked Service created successfully.");
 
                 // Define the File System Linked Service name and its properties
-                string FSlinkedServiceName = "CNXFTPLinkedService";
+                var fslsProperties = CreateFSLinkedServiceProperties(resourceGroupName, dataFactoryName, dsConfig);
 
-                var fsLS = dataFactoryManagementClient.LinkedServices.Get(resourceGroupName, dataFactoryName, FSlinkedServiceName);
-
-                if (fsLS == null)
-                {
-                    var fileSystemLinkedService = new LinkedServiceResource(
-                        new FileServerLinkedService
-                        {
-                            ConnectVia = new IntegrationRuntimeReference("CNXIntegrationRuntime"),
-                            Host = "E:\\",
-                            UserId = ".\\CP01VMEUS05adm",
-                            Password = new SecureString("yvd6$20JD")
-                        }
-                    );
-
-                    // Create or update the File system Linked Service
-                    dataFactoryManagementClient.LinkedServices.CreateOrUpdate(resourceGroupName, dataFactoryName, FSlinkedServiceName, fileSystemLinkedService);
-                    Console.WriteLine("FTP Linked Service created successfully.");
-                }
+                dataFactoryManagementClient = this.aDFService.CreateLinkedService(fslsProperties, dataFactoryManagementClient);
+                Console.WriteLine("FTP Linked Service created successfully.");
+               
                 #endregion
 
 
@@ -104,11 +66,11 @@ namespace ODSDataConnector.Core.Services
 
                            LinkedServiceName = new LinkedServiceReference
                            {
-                               ReferenceName = "CNXFTPLinkedService"
+                               ReferenceName = dsConfig.LinkedService
                            },
                            Location = new FtpServerLocation
                            {
-                               FolderPath = "sFTP_Accounts/IBSA_IQVIA/Inbound/PlanTrak",
+                               FolderPath = dsConfig.Url,
                                FileName = "@concat('NEW_GW5620H_C144R01_W',activity('GetWeekNumberAndYearLookupActivity').output.firstRow.WeeknumberAndYear,'_D3.001.GZ')"
                            },
                            //CompressionLevel = new DatasetCompression { Type = "ZipDeflate (.zip)", Level = "Fastest" },
@@ -131,9 +93,9 @@ namespace ODSDataConnector.Core.Services
                       {
                           LinkedServiceName = new LinkedServiceReference
                           {
-                              ReferenceName = "ODSSQLLinkedService"
+                              ReferenceName = customer.LinkedService
                           },
-                          TableName = "Staging_PT_FullData"
+                          TableName = dsConfig.DestTable
 
                       }
                     );
@@ -216,9 +178,9 @@ namespace ODSDataConnector.Core.Services
 
                 return true;
             }
-            catch { }
+            catch(Exception ex)
             {
-                return false;
+                throw ex;
             }
         }
 
@@ -227,64 +189,28 @@ namespace ODSDataConnector.Core.Services
             try
             {
                 // Authenticate and Create a data factory management client
-                AuthenticationContext objAuthenticationContext = new AuthenticationContext("https://login.windows.net/" + tenantId);
-                ClientCredential objClientCredential = new ClientCredential(clientId, strAzureAuthenticationKey);
-                AuthenticationResult objAuthenticationResult = objAuthenticationContext.AcquireTokenAsync("https://management.azure.com/", objClientCredential).Result;
-                ServiceClientCredentials objTokenCredentials = new TokenCredentials(objAuthenticationResult.AccessToken);
-                var dataFactoryManagementClient = new DataFactoryManagementClient(objTokenCredentials)
-                {
-                    SubscriptionId = subscriptionId
-                };
+                var dataFactoryManagementClient = this.aDFService.GetADFClient();
 
 
                 var customer = await this.customerRepository.GetCustomerByIdAsync(request.customerId);
-
+                var dsConfig = await this.customerRepository.GetDataSourceConfigAsync(request);
 
                 string resourceGroupName = "ODSDev";
-                string dataFactoryName = "ODSAutomationDataFactory";
+                string dataFactoryName = customer.Adfname;
 
 
                 #region Linked Servcie Creation Section
                 // Define the SQL Linked Service name and its properties
-                string linkedServiceName = "ODSSQLLinkedService";
+                var sQLlsProperties = createSQLLinkedServiceProperties(resourceGroupName, dataFactoryName, customer);
 
-                var sQLLS = dataFactoryManagementClient.LinkedServices.Get(resourceGroupName, dataFactoryName, linkedServiceName);
-
-                if (sQLLS == null)
-                {
-                    var sqlLinkedService = new LinkedServiceResource(
-                         new AzureSqlDatabaseLinkedService
-                         {
-                             ConnectionString = "Data Source=" + customer.Dbserver + ";Initial Catalog=" + customer.Dbname + ";User Id=" + customer.Username + ";Password=" + customer.Password
-                         }
-                    );
-
-                    // Create or update the SQL Linked Service
-                    dataFactoryManagementClient.LinkedServices.CreateOrUpdate(resourceGroupName, dataFactoryName, linkedServiceName, sqlLinkedService);
-                    Console.WriteLine("SQL Linked Service created successfully.");
-                }
+                dataFactoryManagementClient = this.aDFService.CreateLinkedService(sQLlsProperties, dataFactoryManagementClient);
+                Console.WriteLine("SQL Linked Service created successfully.");
 
                 // Define the File System Linked Service name and its properties
-                string FSlinkedServiceName = "CNXFTPLinkedService";
+                var fslsProperties = CreateFSLinkedServiceProperties(resourceGroupName, dataFactoryName, dsConfig);
 
-                var fsLS = dataFactoryManagementClient.LinkedServices.Get(resourceGroupName, dataFactoryName, FSlinkedServiceName);
-
-                if (fsLS == null)
-                {
-                    var fileSystemLinkedService = new LinkedServiceResource(
-                        new FileServerLinkedService
-                        {
-                            ConnectVia = new IntegrationRuntimeReference("CNXIntegrationRuntime"),
-                            Host = "E:\\",
-                            UserId = ".\\CP01VMEUS05adm",
-                            Password = new SecureString("yvd6$20JD")
-                        }
-                    );
-
-                    // Create or update the File system Linked Service
-                    dataFactoryManagementClient.LinkedServices.CreateOrUpdate(resourceGroupName, dataFactoryName, FSlinkedServiceName, fileSystemLinkedService);
-                    Console.WriteLine("FTP Linked Service created successfully.");
-                }
+                dataFactoryManagementClient = this.aDFService.CreateLinkedService(fslsProperties, dataFactoryManagementClient);
+                Console.WriteLine("FTP Linked Service created successfully.");
                 #endregion
 
                 #region Dataset
@@ -297,11 +223,11 @@ namespace ODSDataConnector.Core.Services
 
                            LinkedServiceName = new LinkedServiceReference
                            {
-                               ReferenceName = "CNXFTPLinkedService"
+                               ReferenceName = dsConfig.LinkedService
                            },
                            Location = new FtpServerLocation
                            {
-                               FolderPath = "sFTP_Accounts/IBSA_IQVIA/Inbound/PlanTrak",
+                               FolderPath = dsConfig.Url,
                                FileName = "@concat('NEW_PROD_GW561652_CLI144U_WK',activity('GetWeekNumberLookupActivity').output.firstRow.Weeknumber,'.001.GZ')"
                            }
                        }
@@ -316,9 +242,9 @@ namespace ODSDataConnector.Core.Services
                       {
                           LinkedServiceName = new LinkedServiceReference
                           {
-                              ReferenceName = "ODSSQLLinkedService"
+                              ReferenceName = customer.LinkedService
                           },
-                          TableName = "Staging_PT_ControlData"
+                          TableName = dsConfig.DestTable
 
                       }
                     );
@@ -366,13 +292,11 @@ namespace ODSDataConnector.Core.Services
 
                 #endregion
 
-
                 return true;
             }
             catch (Exception ex)
             {
-
-                return false;
+                throw ex;
             }
         }
 
@@ -381,60 +305,28 @@ namespace ODSDataConnector.Core.Services
             try
             {
                 // Authenticate and Create a data factory management client
-                AuthenticationContext objAuthenticationContext = new AuthenticationContext("https://login.windows.net/" + tenantId);
-                ClientCredential objClientCredential = new ClientCredential(clientId, strAzureAuthenticationKey);
-                AuthenticationResult objAuthenticationResult = objAuthenticationContext.AcquireTokenAsync("https://management.azure.com/", objClientCredential).Result;
-                ServiceClientCredentials objTokenCredentials = new TokenCredentials(objAuthenticationResult.AccessToken);
-                var dataFactoryManagementClient = new DataFactoryManagementClient(objTokenCredentials)
-                {
-                    SubscriptionId = subscriptionId
-                };
-
+                var dataFactoryManagementClient = this.aDFService.GetADFClient();
 
                 var customer = await this.customerRepository.GetCustomerByIdAsync(request.customerId);
-
+                var dsConfig = await this.customerRepository.GetDataSourceConfigAsync(request);
 
                 string resourceGroupName = "ODSDev";
-                string dataFactoryName = "ODSAutomationDataFactory";
+                string dataFactoryName = customer.Adfname;
 
                 #region Linked Servcie Creation Section
+
                 // Define the SQL Linked Service name and its properties
-                string linkedServiceName = "ODSSQLLinkedService";
+                var sQLlsProperties = createSQLLinkedServiceProperties(resourceGroupName, dataFactoryName, customer);
 
-                var sQLLS = dataFactoryManagementClient.LinkedServices.Get(resourceGroupName, dataFactoryName, linkedServiceName);
+                dataFactoryManagementClient = this.aDFService.CreateLinkedService(sQLlsProperties, dataFactoryManagementClient);
+                Console.WriteLine("SQL Linked Service created successfully.");
 
-                if (sQLLS == null)
-                {
-                    var sqlLinkedService = new LinkedServiceResource(
-                         new AzureSqlDatabaseLinkedService
-                         {
-                             ConnectionString = "Data Source=" + customer.Dbserver + ";Initial Catalog=" + customer.Dbname + ";User Id=" + customer.Username + ";Password=" + customer.Password
-                         }
-                    );
+                // Define the Storage Blob Linked Service name and its properties
+                var blobLsProperties = CreateBlobLinkedServiceProperties(resourceGroupName, dataFactoryName, dsConfig);
 
-                    // Create or update the SQL Linked Service
-                    dataFactoryManagementClient.LinkedServices.CreateOrUpdate(resourceGroupName, dataFactoryName, linkedServiceName, sqlLinkedService);
-                    Console.WriteLine("SQL Linked Service created successfully.");
-                }
+                dataFactoryManagementClient = this.aDFService.CreateLinkedService(blobLsProperties, dataFactoryManagementClient);
+                Console.WriteLine("Blob Linked Service created successfully.");
 
-                // Define the File System Linked Service name and its properties
-                string ODSBloblinkedServiceName = "CNXStorageBlobLinkedService";
-
-                var bolbLS = dataFactoryManagementClient.LinkedServices.Get(resourceGroupName, dataFactoryName, ODSBloblinkedServiceName);
-
-                if (bolbLS == null)
-                {
-                    var azureBlobStorageLinkedService = new LinkedServiceResource(
-                        new AzureBlobStorageLinkedService
-                        {
-                            ConnectionString = new SecureString("DefaultEndpointsProtocol=https;AccountName=odsblobcontainer;AccountKey=EJSJZS/kQFUamEp0w70nJ6yP4CQOwiLjC8abIUtRwdD/EBsxeM3u3nmdTgqA6xrelOX1JLh3Q71WUN7wifzfYA==;EndpointSuffix=core.windows.net")
-                        }
-                    );
-
-                    // Create or update the File system Linked Service
-                    dataFactoryManagementClient.LinkedServices.CreateOrUpdate(resourceGroupName, dataFactoryName, ODSBloblinkedServiceName, azureBlobStorageLinkedService);
-                    Console.WriteLine("FTP Linked Service created successfully.");
-                }
                 #endregion
 
 
@@ -447,9 +339,9 @@ namespace ODSDataConnector.Core.Services
 
                            LinkedServiceName = new LinkedServiceReference
                            {
-                               ReferenceName = "CNXStorageBlobLinkedService"
+                               ReferenceName = dsConfig.LinkedService
                            },
-                           FolderPath = "ibsa/IQVIA/PlanTrack/",
+                           FolderPath = dsConfig.Url,
                            FileName = "FEB_22_Workbook.xls",
                            //AdditionalProperties = new ExcelDataset { SheetName = "", FirstRowAsHeader = "Yes" },
 
@@ -470,9 +362,9 @@ namespace ODSDataConnector.Core.Services
                       {
                           LinkedServiceName = new LinkedServiceReference
                           {
-                              ReferenceName = "ODSSQLLinkedService"
+                              ReferenceName = customer.LinkedService
                           },
-                          TableName = "Staging_PT_PBMPlans"
+                          TableName = dsConfig.DestTable
 
                       }
                     );
@@ -523,7 +415,8 @@ namespace ODSDataConnector.Core.Services
                             }
                     }
                 };
-
+                // Create or update the pipeline
+                dataFactoryManagementClient.Pipelines.CreateOrUpdate(resourceGroupName, dataFactoryName, pipelineName, pipeline);
                 Console.WriteLine("Pipeline created successfully.");
                 #endregion
 
@@ -531,7 +424,7 @@ namespace ODSDataConnector.Core.Services
             }
             catch (Exception ex)
             {
-                return false;
+                throw ex;
             }
         }
 
@@ -540,66 +433,27 @@ namespace ODSDataConnector.Core.Services
             try
             {
                 // Authenticate and Create a data factory management client
-                AuthenticationContext objAuthenticationContext = new AuthenticationContext("https://login.windows.net/" + tenantId);
-                ClientCredential objClientCredential = new ClientCredential(clientId, strAzureAuthenticationKey);
-                AuthenticationResult objAuthenticationResult = objAuthenticationContext.AcquireTokenAsync("https://management.azure.com/", objClientCredential).Result;
-                ServiceClientCredentials objTokenCredentials = new TokenCredentials(objAuthenticationResult.AccessToken);
-                var dataFactoryManagementClient = new DataFactoryManagementClient(objTokenCredentials)
-                {
-                    SubscriptionId = subscriptionId
-                };
-
+                var dataFactoryManagementClient = this.aDFService.GetADFClient();
 
                 var customer = await this.customerRepository.GetCustomerByIdAsync(request.customerId);
-
+                var dsConfig = await this.customerRepository.GetDataSourceConfigAsync(request);
 
                 string resourceGroupName = "ODSDev";
-                string dataFactoryName = "ODSAutomationDataFactory";
+                string dataFactoryName = customer.Adfname;
 
                 #region Linked Servcie Creation Section
                 // Define the SQL Linked Service name and its properties
-                string linkedServiceName = "ODSSQLLinkedService";
+                var sQLlsProperties = createSQLLinkedServiceProperties(resourceGroupName, dataFactoryName, customer);
 
-                var sQLLS = dataFactoryManagementClient.LinkedServices.Get(resourceGroupName, dataFactoryName, linkedServiceName);
-
-                if (sQLLS == null)
-                {
-                    var sqlLinkedService = new LinkedServiceResource(
-                         new AzureSqlDatabaseLinkedService
-                         {
-                             ConnectionString = "Data Source=" + customer.Dbserver + ";Initial Catalog=" + customer.Dbname + ";User Id=" + customer.Username + ";Password=" + customer.Password
-                         }
-                    );
-
-                    // Create or update the SQL Linked Service
-                    dataFactoryManagementClient.LinkedServices.CreateOrUpdate(resourceGroupName, dataFactoryName, linkedServiceName, sqlLinkedService);
-                    Console.WriteLine("SQL Linked Service created successfully.");
-                }
+                dataFactoryManagementClient = this.aDFService.CreateLinkedService(sQLlsProperties, dataFactoryManagementClient);
+                Console.WriteLine("SQL Linked Service created successfully.");
 
                 // Define the File System Linked Service name and its properties
-                // Define the File System Linked Service name and its properties
-                string FSlinkedServiceName = "CNXFTPLinkedService";
+                var fslsProperties = CreateFSLinkedServiceProperties(resourceGroupName, dataFactoryName, dsConfig);
 
-                var fsLS = dataFactoryManagementClient.LinkedServices.Get(resourceGroupName, dataFactoryName, FSlinkedServiceName);
-
-                if (fsLS == null)
-                {
-                    var fileSystemLinkedService = new LinkedServiceResource(
-                        new FileServerLinkedService
-                        {
-                            ConnectVia = new IntegrationRuntimeReference("CNXIntegrationRuntime"),
-                            Host = "E:\\",
-                            UserId = ".\\CP01VMEUS05adm",
-                            Password = new SecureString("yvd6$20JD")
-                        }
-                    );
-
-                    // Create or update the File system Linked Service
-                    dataFactoryManagementClient.LinkedServices.CreateOrUpdate(resourceGroupName, dataFactoryName, FSlinkedServiceName, fileSystemLinkedService);
-                    Console.WriteLine("FTP Linked Service created successfully.");
-                }
+                dataFactoryManagementClient = this.aDFService.CreateLinkedService(fslsProperties, dataFactoryManagementClient);
+                Console.WriteLine("FTP Linked Service created successfully.");
                 #endregion
-
 
                 #region Dataset
                 string datasetName = "PlanTrakPayerPlanFileDataset";
@@ -610,11 +464,11 @@ namespace ODSDataConnector.Core.Services
 
                            LinkedServiceName = new LinkedServiceReference
                            {
-                               ReferenceName = "CNXFTPLinkedService"
+                               ReferenceName = dsConfig.LinkedService
                            },
                            Location = new FtpServerLocation
                            {
-                               FolderPath = "sFTP_Accounts/IBSA_IQVIA/Inbound/MCWB",
+                               FolderPath = dsConfig.Url,
                                FileName = "@concat('MCWB_NEWVIEW_M',startOfMonth(addToTime(utcnow(), -1, 'Month'), 'MM'),'.001')"
                            },
                            //CompressionLevel = new DatasetCompression { Type = "ZipDeflate (.zip)", Level = "Fastest" },
@@ -638,9 +492,9 @@ namespace ODSDataConnector.Core.Services
                       {
                           LinkedServiceName = new LinkedServiceReference
                           {
-                              ReferenceName = "ODSSQLLinkedService"
+                              ReferenceName = customer.LinkedService
                           },
-                          TableName = "Staging_PT_PayerPlan"
+                          TableName = dsConfig.DestTable
 
                       }
                     );
@@ -691,7 +545,8 @@ namespace ODSDataConnector.Core.Services
                             }
                     }
                 };
-
+                // Create or update the pipeline
+                dataFactoryManagementClient.Pipelines.CreateOrUpdate(resourceGroupName, dataFactoryName, pipelineName, pipeline);
                 Console.WriteLine("Pipeline created successfully.");
                 #endregion
 
@@ -708,60 +563,26 @@ namespace ODSDataConnector.Core.Services
             try
             {
                 // Authenticate and Create a data factory management client
-                AuthenticationContext objAuthenticationContext = new AuthenticationContext("https://login.windows.net/" + tenantId);
-                ClientCredential objClientCredential = new ClientCredential(clientId, strAzureAuthenticationKey);
-                AuthenticationResult objAuthenticationResult = objAuthenticationContext.AcquireTokenAsync("https://management.azure.com/", objClientCredential).Result;
-                ServiceClientCredentials objTokenCredentials = new TokenCredentials(objAuthenticationResult.AccessToken);
-                var dataFactoryManagementClient = new DataFactoryManagementClient(objTokenCredentials)
-                {
-                    SubscriptionId = subscriptionId
-                };
-
+                var dataFactoryManagementClient = this.aDFService.GetADFClient();
 
                 var customer = await this.customerRepository.GetCustomerByIdAsync(request.customerId);
-
+                var dsConfig = await this.customerRepository.GetDataSourceConfigAsync(request);
 
                 string resourceGroupName = "ODSDev";
-                string dataFactoryName = "ODSAutomationDataFactory";
+                string dataFactoryName = customer.Adfname;
 
                 #region Linked Servcie Creation Section
                 // Define the SQL Linked Service name and its properties
-                string linkedServiceName = "ODSSQLLinkedService";
+                var sQLlsProperties = createSQLLinkedServiceProperties(resourceGroupName, dataFactoryName, customer);
 
-                var sQLLS = dataFactoryManagementClient.LinkedServices.Get(resourceGroupName, dataFactoryName, linkedServiceName);
+                dataFactoryManagementClient = this.aDFService.CreateLinkedService(sQLlsProperties, dataFactoryManagementClient);
+                Console.WriteLine("SQL Linked Service created successfully.");
 
-                if (sQLLS == null)
-                {
-                    var sqlLinkedService = new LinkedServiceResource(
-                         new AzureSqlDatabaseLinkedService
-                         {
-                             ConnectionString = "Data Source=" + customer.Dbserver + ";Initial Catalog=" + customer.Dbname + ";User Id=" + customer.Username + ";Password=" + customer.Password
-                         }
-                    );
+                // Define the Storage Blob Linked Service name and its properties
+                var blobLsProperties = CreateBlobLinkedServiceProperties(resourceGroupName, dataFactoryName, dsConfig);
 
-                    // Create or update the SQL Linked Service
-                    dataFactoryManagementClient.LinkedServices.CreateOrUpdate(resourceGroupName, dataFactoryName, linkedServiceName, sqlLinkedService);
-                    Console.WriteLine("SQL Linked Service created successfully.");
-                }
-
-                // Define the File System Linked Service name and its properties
-                string ODSBloblinkedServiceName = "CNXStorageBlobLinkedService";
-
-                var bolbLS = dataFactoryManagementClient.LinkedServices.Get(resourceGroupName, dataFactoryName, ODSBloblinkedServiceName);
-
-                if (bolbLS == null)
-                {
-                    var azureBlobStorageLinkedService = new LinkedServiceResource(
-                        new AzureBlobStorageLinkedService
-                        {
-                            ConnectionString = new SecureString("DefaultEndpointsProtocol=https;AccountName=odsblobcontainer;AccountKey=EJSJZS/kQFUamEp0w70nJ6yP4CQOwiLjC8abIUtRwdD/EBsxeM3u3nmdTgqA6xrelOX1JLh3Q71WUN7wifzfYA==;EndpointSuffix=core.windows.net")
-                        }
-                    );
-
-                    // Create or update the File system Linked Service
-                    dataFactoryManagementClient.LinkedServices.CreateOrUpdate(resourceGroupName, dataFactoryName, ODSBloblinkedServiceName, azureBlobStorageLinkedService);
-                    Console.WriteLine("FTP Linked Service created successfully.");
-                }
+                dataFactoryManagementClient = this.aDFService.CreateLinkedService(blobLsProperties, dataFactoryManagementClient);
+                Console.WriteLine("Blob Linked Service created successfully.");
                 #endregion
 
 
@@ -774,9 +595,9 @@ namespace ODSDataConnector.Core.Services
 
                            LinkedServiceName = new LinkedServiceReference
                            {
-                               ReferenceName = "CNXStorageBlobLinkedService"
+                               ReferenceName = dsConfig.LinkedService
                            },
-                           FolderPath = "ibsa/IQVIA/PlanTrack/",
+                           FolderPath = dsConfig.Url,
                            FileName = "Plan Model Type Listing_Final - FROM PAUL.xlsx",
                            //AdditionalProperties = new ExcelDataset { SheetName = "", FirstRowAsHeader = "Yes" },
 
@@ -797,9 +618,9 @@ namespace ODSDataConnector.Core.Services
                       {
                           LinkedServiceName = new LinkedServiceReference
                           {
-                              ReferenceName = "ODSSQLLinkedService"
+                              ReferenceName = customer.LinkedService
                           },
-                          TableName = "Staging_PT_PlanModel"
+                          TableName = dsConfig.DestTable
 
                       }
                     );
@@ -850,7 +671,8 @@ namespace ODSDataConnector.Core.Services
                             }
                     }
                 };
-
+                // Create or update the pipeline
+                dataFactoryManagementClient.Pipelines.CreateOrUpdate(resourceGroupName, dataFactoryName, pipelineName, pipeline);
                 Console.WriteLine("Pipeline created successfully.");
                 #endregion
 
@@ -858,7 +680,7 @@ namespace ODSDataConnector.Core.Services
             }
             catch (Exception ex)
             {
-                return false;
+                throw ex;
             }
         }
 
@@ -867,63 +689,26 @@ namespace ODSDataConnector.Core.Services
             try
             {
                 // Authenticate and Create a data factory management client
-                AuthenticationContext objAuthenticationContext = new AuthenticationContext("https://login.windows.net/" + tenantId);
-                ClientCredential objClientCredential = new ClientCredential(clientId, strAzureAuthenticationKey);
-                AuthenticationResult objAuthenticationResult = objAuthenticationContext.AcquireTokenAsync("https://management.azure.com/", objClientCredential).Result;
-                ServiceClientCredentials objTokenCredentials = new TokenCredentials(objAuthenticationResult.AccessToken);
-                var dataFactoryManagementClient = new DataFactoryManagementClient(objTokenCredentials)
-                {
-                    SubscriptionId = subscriptionId
-                };
-
+                var dataFactoryManagementClient = this.aDFService.GetADFClient();
 
                 var customer = await this.customerRepository.GetCustomerByIdAsync(request.customerId);
-
+                var dsConfig = await this.customerRepository.GetDataSourceConfigAsync(request);
 
                 string resourceGroupName = "ODSDev";
-                string dataFactoryName = "ODSAutomationDataFactory";
+                string dataFactoryName = customer.Adfname;
 
                 #region Linked Servcie Creation Section
                 // Define the SQL Linked Service name and its properties
-                string linkedServiceName = "ODSSQLLinkedService";
+                var sQLlsProperties = createSQLLinkedServiceProperties(resourceGroupName, dataFactoryName, customer);
 
-                var sQLLS = dataFactoryManagementClient.LinkedServices.Get(resourceGroupName, dataFactoryName, linkedServiceName);
-
-                if (sQLLS == null)
-                {
-                    var sqlLinkedService = new LinkedServiceResource(
-                         new AzureSqlDatabaseLinkedService
-                         {
-                             ConnectionString = "Data Source=" + customer.Dbserver + ";Initial Catalog=" + customer.Dbname + ";User Id=" + customer.Username + ";Password=" + customer.Password
-                         }
-                    );
-
-                    // Create or update the SQL Linked Service
-                    dataFactoryManagementClient.LinkedServices.CreateOrUpdate(resourceGroupName, dataFactoryName, linkedServiceName, sqlLinkedService);
-                    Console.WriteLine("SQL Linked Service created successfully.");
-                }
+                dataFactoryManagementClient = this.aDFService.CreateLinkedService(sQLlsProperties, dataFactoryManagementClient);
+                Console.WriteLine("SQL Linked Service created successfully.");
 
                 // Define the File System Linked Service name and its properties
-                string FSlinkedServiceName = "CNXFTPLinkedService";
+                var fslsProperties = CreateFSLinkedServiceProperties(resourceGroupName, dataFactoryName, dsConfig);
 
-                var fsLS = dataFactoryManagementClient.LinkedServices.Get(resourceGroupName, dataFactoryName, FSlinkedServiceName);
-
-                if (fsLS == null)
-                {
-                    var fileSystemLinkedService = new LinkedServiceResource(
-                        new FileServerLinkedService
-                        {
-                            ConnectVia = new IntegrationRuntimeReference("CNXIntegrationRuntime"),
-                            Host = "E:\\",
-                            UserId = ".\\CP01VMEUS05adm",
-                            Password = new SecureString("yvd6$20JD")
-                        }
-                    );
-
-                    // Create or update the File system Linked Service
-                    dataFactoryManagementClient.LinkedServices.CreateOrUpdate(resourceGroupName, dataFactoryName, FSlinkedServiceName, fileSystemLinkedService);
-                    Console.WriteLine("FTP Linked Service created successfully.");
-                }
+                dataFactoryManagementClient = this.aDFService.CreateLinkedService(fslsProperties, dataFactoryManagementClient);
+                Console.WriteLine("FTP Linked Service created successfully.");
                 #endregion
 
 
@@ -936,11 +721,11 @@ namespace ODSDataConnector.Core.Services
 
                            LinkedServiceName = new LinkedServiceReference
                            {
-                               ReferenceName = "CNXFTPLinkedService"
+                               ReferenceName = dsConfig.LinkedService
                            },
                            Location = new FtpServerLocation
                            {
-                               FolderPath = "sFTP_Accounts/IBSA_IQVIA/Inbound/Market_Definition",
+                               FolderPath = dsConfig.Url,
                                FileName = "@concat('NRX_NRXMM45A_CSVFILE_CLI144_M',startOfMonth(addToTime(utcnow(), 0, 'Month'), 'MM'),'.001')"
                            },
                            //CompressionLevel = new DatasetCompression { Type = "ZipDeflate (.zip)", Level = "Fastest" },
@@ -963,9 +748,9 @@ namespace ODSDataConnector.Core.Services
                       {
                           LinkedServiceName = new LinkedServiceReference
                           {
-                              ReferenceName = "ODSSQLLinkedService"
+                              ReferenceName = customer.LinkedService
                           },
-                          TableName = "Staging_IQVIA_Product"
+                          TableName = dsConfig.DestTable
 
                       }
                     );
@@ -1016,7 +801,8 @@ namespace ODSDataConnector.Core.Services
                             }
                     }
                 };
-
+                // Create or update the pipeline
+                dataFactoryManagementClient.Pipelines.CreateOrUpdate(resourceGroupName, dataFactoryName, pipelineName, pipeline);
                 Console.WriteLine("Pipeline created successfully.");
                 #endregion
 
@@ -1024,7 +810,7 @@ namespace ODSDataConnector.Core.Services
             }
             catch (Exception ex)
             {
-                return false;
+                throw ex;
             }
         }
 
@@ -1032,64 +818,26 @@ namespace ODSDataConnector.Core.Services
         {
             try
             {
-                // Authenticate and Create a data factory management client
-                AuthenticationContext objAuthenticationContext = new AuthenticationContext("https://login.windows.net/" + tenantId);
-                ClientCredential objClientCredential = new ClientCredential(clientId, strAzureAuthenticationKey);
-                AuthenticationResult objAuthenticationResult = objAuthenticationContext.AcquireTokenAsync("https://management.azure.com/", objClientCredential).Result;
-                ServiceClientCredentials objTokenCredentials = new TokenCredentials(objAuthenticationResult.AccessToken);
-                var dataFactoryManagementClient = new DataFactoryManagementClient(objTokenCredentials)
-                {
-                    SubscriptionId = subscriptionId
-                };
-
+                var dataFactoryManagementClient = this.aDFService.GetADFClient();
 
                 var customer = await this.customerRepository.GetCustomerByIdAsync(request.customerId);
-
+                var dsConfig = await this.customerRepository.GetDataSourceConfigAsync(request);
 
                 string resourceGroupName = "ODSDev";
-                string dataFactoryName = "ODSAutomationDataFactory";
+                string dataFactoryName = customer.Adfname;
 
                 #region Linked Servcie Creation Section
                 // Define the SQL Linked Service name and its properties
-                string linkedServiceName = "ODSSQLLinkedService";
+                var sQLlsProperties = createSQLLinkedServiceProperties(resourceGroupName, dataFactoryName, customer);
 
-                var sQLLS = dataFactoryManagementClient.LinkedServices.Get(resourceGroupName, dataFactoryName, linkedServiceName);
-
-                if (sQLLS == null)
-                {
-                    var sqlLinkedService = new LinkedServiceResource(
-                         new AzureSqlDatabaseLinkedService
-                         {
-                             ConnectionString = "Data Source=" + customer.Dbserver + ";Initial Catalog=" + customer.Dbname + ";User Id=" + customer.Username + ";Password=" + customer.Password
-                         }
-                    );
-
-                    // Create or update the SQL Linked Service
-                    dataFactoryManagementClient.LinkedServices.CreateOrUpdate(resourceGroupName, dataFactoryName, linkedServiceName, sqlLinkedService);
-                    Console.WriteLine("SQL Linked Service created successfully.");
-                }
+                dataFactoryManagementClient = this.aDFService.CreateLinkedService(sQLlsProperties, dataFactoryManagementClient);
+                Console.WriteLine("SQL Linked Service created successfully.");
 
                 // Define the File System Linked Service name and its properties
-                string FSlinkedServiceName = "CNXFTPLinkedService";
+                var fslsProperties = CreateFSLinkedServiceProperties(resourceGroupName, dataFactoryName, dsConfig);
 
-                var fsLS = dataFactoryManagementClient.LinkedServices.Get(resourceGroupName, dataFactoryName, FSlinkedServiceName);
-
-                if (fsLS == null)
-                {
-                    var fileSystemLinkedService = new LinkedServiceResource(
-                        new FileServerLinkedService
-                        {
-                            ConnectVia = new IntegrationRuntimeReference("CNXIntegrationRuntime"),
-                            Host = "E:\\",
-                            UserId = ".\\CP01VMEUS05adm",
-                            Password = new SecureString("yvd6$20JD")
-                        }
-                    );
-
-                    // Create or update the File system Linked Service
-                    dataFactoryManagementClient.LinkedServices.CreateOrUpdate(resourceGroupName, dataFactoryName, FSlinkedServiceName, fileSystemLinkedService);
-                    Console.WriteLine("FTP Linked Service created successfully.");
-                }
+                dataFactoryManagementClient = this.aDFService.CreateLinkedService(fslsProperties, dataFactoryManagementClient);
+                Console.WriteLine("FTP Linked Service created successfully.");
                 #endregion
 
 
@@ -1102,11 +850,11 @@ namespace ODSDataConnector.Core.Services
 
                            LinkedServiceName = new LinkedServiceReference
                            {
-                               ReferenceName = "CNXFTPLinkedService"
+                               ReferenceName = dsConfig.LinkedService
                            },
                            Location = new FtpServerLocation
                            {
-                               FolderPath = "sFTP_Accounts/IBSA_IQVIA/Inbound/PDRP",
+                               FolderPath = dsConfig.Url,
                                FileName = "RXD_US_C01_UM21401_Y23M01_R01.CSV.001"
                            },
                            //CompressionLevel = new DatasetCompression { Type = "ZipDeflate (.zip)", Level = "Fastest" },
@@ -1129,9 +877,9 @@ namespace ODSDataConnector.Core.Services
                       {
                           LinkedServiceName = new LinkedServiceReference
                           {
-                              ReferenceName = "ODSSQLLinkedService"
+                              ReferenceName = customer.LinkedService
                           },
-                          TableName = "Staging_IQVIA_PdrpDetails"
+                          TableName = dsConfig.DestTable
 
                       }
                     );
@@ -1182,7 +930,8 @@ namespace ODSDataConnector.Core.Services
                             }
                     }
                 };
-
+                // Create or update the pipeline
+                dataFactoryManagementClient.Pipelines.CreateOrUpdate(resourceGroupName, dataFactoryName, pipelineName, pipeline);
                 Console.WriteLine("Pipeline created successfully.");
                 #endregion
 
@@ -1190,7 +939,7 @@ namespace ODSDataConnector.Core.Services
             }
             catch (Exception ex)
             {
-                return false;
+                throw ex;
             }
         }
 
@@ -1199,63 +948,26 @@ namespace ODSDataConnector.Core.Services
             try
             {
                 // Authenticate and Create a data factory management client
-                AuthenticationContext objAuthenticationContext = new AuthenticationContext("https://login.windows.net/" + tenantId);
-                ClientCredential objClientCredential = new ClientCredential(clientId, strAzureAuthenticationKey);
-                AuthenticationResult objAuthenticationResult = objAuthenticationContext.AcquireTokenAsync("https://management.azure.com/", objClientCredential).Result;
-                ServiceClientCredentials objTokenCredentials = new TokenCredentials(objAuthenticationResult.AccessToken);
-                var dataFactoryManagementClient = new DataFactoryManagementClient(objTokenCredentials)
-                {
-                    SubscriptionId = subscriptionId
-                };
-
+                var dataFactoryManagementClient = this.aDFService.GetADFClient();
 
                 var customer = await this.customerRepository.GetCustomerByIdAsync(request.customerId);
-
+                var dsConfig = await this.customerRepository.GetDataSourceConfigAsync(request);
 
                 string resourceGroupName = "ODSDev";
-                string dataFactoryName = "ODSAutomationDataFactory";
+                string dataFactoryName = customer.Adfname;
 
                 #region Linked Servcie Creation Section
                 // Define the SQL Linked Service name and its properties
-                string linkedServiceName = "ODSSQLLinkedService";
+                var sQLlsProperties = createSQLLinkedServiceProperties(resourceGroupName, dataFactoryName, customer);
 
-                var sQLLS = dataFactoryManagementClient.LinkedServices.Get(resourceGroupName, dataFactoryName, linkedServiceName);
-
-                if (sQLLS == null)
-                {
-                    var sqlLinkedService = new LinkedServiceResource(
-                         new AzureSqlDatabaseLinkedService
-                         {
-                             ConnectionString = "Data Source=" + customer.Dbserver + ";Initial Catalog=" + customer.Dbname + ";User Id=" + customer.Username + ";Password=" + customer.Password
-                         }
-                    );
-
-                    // Create or update the SQL Linked Service
-                    dataFactoryManagementClient.LinkedServices.CreateOrUpdate(resourceGroupName, dataFactoryName, linkedServiceName, sqlLinkedService);
-                    Console.WriteLine("SQL Linked Service created successfully.");
-                }
+                dataFactoryManagementClient = this.aDFService.CreateLinkedService(sQLlsProperties, dataFactoryManagementClient);
+                Console.WriteLine("SQL Linked Service created successfully.");
 
                 // Define the File System Linked Service name and its properties
-                string FSlinkedServiceName = "CNXFTPLinkedService";
+                var fslsProperties = CreateFSLinkedServiceProperties(resourceGroupName, dataFactoryName, dsConfig);
 
-                var fsLS = dataFactoryManagementClient.LinkedServices.Get(resourceGroupName, dataFactoryName, FSlinkedServiceName);
-
-                if (fsLS == null)
-                {
-                    var fileSystemLinkedService = new LinkedServiceResource(
-                        new FileServerLinkedService
-                        {
-                            ConnectVia = new IntegrationRuntimeReference("CNXIntegrationRuntime"),
-                            Host = "E:\\",
-                            UserId = ".\\CP01VMEUS05adm",
-                            Password = new SecureString("yvd6$20JD")
-                        }
-                    );
-
-                    // Create or update the File system Linked Service
-                    dataFactoryManagementClient.LinkedServices.CreateOrUpdate(resourceGroupName, dataFactoryName, FSlinkedServiceName, fileSystemLinkedService);
-                    Console.WriteLine("FTP Linked Service created successfully.");
-                }
+                dataFactoryManagementClient = this.aDFService.CreateLinkedService(fslsProperties, dataFactoryManagementClient);
+                Console.WriteLine("FTP Linked Service created successfully.");
                 #endregion
 
 
@@ -1265,14 +977,13 @@ namespace ODSDataConnector.Core.Services
                    (
                        new DelimitedTextDataset
                        {
-
                            LinkedServiceName = new LinkedServiceReference
                            {
-                               ReferenceName = "CNXFTPLinkedService"
+                               ReferenceName = dsConfig.LinkedService
                            },
                            Location = new FtpServerLocation
                            {
-                               FolderPath = "sFTP_Accounts/IBSA_IQVIA/Inbound/No_Contact",
+                               FolderPath = dsConfig.Url,
                                FileName = "HCR_PROD_AMA_NO_CONTACTS_APR23.001"
                            },
                            //CompressionLevel = new DatasetCompression { Type = "ZipDeflate (.zip)", Level = "Fastest" },
@@ -1295,9 +1006,9 @@ namespace ODSDataConnector.Core.Services
                       {
                           LinkedServiceName = new LinkedServiceReference
                           {
-                              ReferenceName = "ODSSQLLinkedService"
+                              ReferenceName = customer.LinkedService
                           },
-                          TableName = "Staging_IQVIA_NoContact"
+                          TableName = dsConfig.DestTable
 
                       }
                     );
@@ -1348,7 +1059,8 @@ namespace ODSDataConnector.Core.Services
                             }
                     }
                 };
-
+                // Create or update the pipeline
+                dataFactoryManagementClient.Pipelines.CreateOrUpdate(resourceGroupName, dataFactoryName, pipelineName, pipeline);
                 Console.WriteLine("Pipeline created successfully.");
                 #endregion
 
@@ -1356,8 +1068,53 @@ namespace ODSDataConnector.Core.Services
             }
             catch (Exception ex)
             {
-                return false;
+                throw ex;
             }
         }
+
+        private Entities.LinkedService CreateFSLinkedServiceProperties(string resourceGroupName, string dataFactoryName, CustomerConfiguration dsConfig)
+        {
+            return new Entities.LinkedService
+            {
+                ResourceGroupName = resourceGroupName,
+                DataFactoryName = dataFactoryName,
+                LinkedServiceName = dsConfig.LinkedService,
+                Runtime = dsConfig.Server,
+                Host = dsConfig.Host,
+                Username = dsConfig.Username,
+                Password = dsConfig.Password,
+                Type = "FTP"
+            };
+        }
+
+        private Entities.LinkedService createSQLLinkedServiceProperties(string resourceGroupName, string dataFactoryName, Customer customer)
+        {
+            return new Entities.LinkedService
+            {
+                ResourceGroupName = resourceGroupName,
+                DataFactoryName = dataFactoryName,
+                LinkedServiceName = customer.LinkedService,
+                Dbserver = customer.Dbserver,
+                Dbname = customer.Dbname,
+                Username = customer.Username,
+                Password = customer.Password,
+                Type = "SQL"
+            };
+        }
+
+        private Entities.LinkedService CreateBlobLinkedServiceProperties(string resourceGroupName, string dataFactoryName, CustomerConfiguration dsConfig)
+        {
+            return new Entities.LinkedService
+            {
+                ResourceGroupName = resourceGroupName,
+                DataFactoryName = dataFactoryName,
+                LinkedServiceName = dsConfig.LinkedService,
+                Username = dsConfig.Username,
+                Password = dsConfig.Password,
+                Type = "STORAGE"
+            };
+        }
+
+
     }
 }

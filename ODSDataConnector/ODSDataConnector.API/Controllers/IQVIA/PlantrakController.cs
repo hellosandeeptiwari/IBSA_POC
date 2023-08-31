@@ -20,77 +20,132 @@ namespace ODSDataConnector.Controllers.IQVIA
             PlantrakAdfService = plantrakAdfService;
         }
 
-
         [HttpPost("SetupPrescriberSalesData")]
         public async Task<IActionResult> SetupPrescriberSalesDataAsync(DataRequest request)
         {
-            var res = await this.StorageService.ExcecuteSQLScripts(request);
-            var result = await this.PlantrakAdfService.CreatePrescriberSalesPipeline(request);
-           
-            return this.Ok();
+            try
+            {
+                var res = await this.StorageService.ExcecuteSQLScripts(request);
+                var result = await this.PlantrakAdfService.CreatePrescriberSalesPipeline(request);
+
+                return this.Ok();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         [HttpPost("SetupControlData")]
         public async Task<IActionResult> SetupControlDataAsync(DataRequest request)
         {
-            var res = await this.StorageService.ExcecuteSQLScripts(request);
-            var result = await this.PlantrakAdfService.CreateControlDataPipeline(request);
-           
-            return this.Ok();
+            try
+            {
+                var res = await this.StorageService.ExcecuteSQLScripts(request);
+                var result = await this.PlantrakAdfService.CreateControlDataPipeline(request);
+
+                return this.Ok();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         [HttpPost("SetupPBMPlansData")]
         public async Task<IActionResult> SetupPBMPlansDataAsync(DataRequest request)
         {
-            var res = await this.StorageService.ExcecuteSQLScripts(request);
-            var result = await this.PlantrakAdfService.CreatePBMPlansDataPipeline(request);
+            try
+            {
+                var res = await this.StorageService.ExcecuteSQLScripts(request);
+                var result = await this.PlantrakAdfService.CreatePBMPlansDataPipeline(request);
 
-            return this.Ok();
+                return this.Ok();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         [HttpPost("SetupPayerPlansData")]
         public async Task<IActionResult> SetupPayerPlansDataAsync(DataRequest request)
         {
-            var res = await this.StorageService.ExcecuteSQLScripts(request);
-            var result = await this.PlantrakAdfService.CreatePayerPlansDataPipeline(request);
+            try
+            {
+                var res = await this.StorageService.ExcecuteSQLScripts(request);
+                var result = await this.PlantrakAdfService.CreatePayerPlansDataPipeline(request);
 
-            return this.Ok();
+                return this.Ok();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         [HttpPost("SetupModelData")]
         public async Task<IActionResult> SetupModelDataAsync(DataRequest request)
         {
-            var res = await this.StorageService.ExcecuteSQLScripts(request);
-            var result = await this.PlantrakAdfService.CreateModelDataPipeline(request);
+            try
+            {
+                var res = await this.StorageService.ExcecuteSQLScripts(request);
+                var result = await this.PlantrakAdfService.CreateModelDataPipeline(request);
 
-            return this.Ok();
+                return this.Ok();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         [HttpPost("SetupMarketDefinitionData")]
         public async Task<IActionResult> SetupMarketDefinitionDataAsync(DataRequest request)
         {
-            var res = await this.StorageService.ExcecuteSQLScripts(request);
-            var result = await this.PlantrakAdfService.CreateMarketDefinitionDataPipeline(request);
+            try
+            {
+                var res = await this.StorageService.ExcecuteSQLScripts(request);
+                var result = await this.PlantrakAdfService.CreateMarketDefinitionDataPipeline(request);
 
-            return this.Ok();
+                return this.Ok();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         [HttpPost("SetupPDRPData")]
         public async Task<IActionResult> SetupPDRPDataAsync(DataRequest request)
         {
-            var res = await this.StorageService.ExcecuteSQLScripts(request);
-            var result = await this.PlantrakAdfService.CreatePDRPDataPipeline(request);
+            try
+            {
+                var res = await this.StorageService.ExcecuteSQLScripts(request);
+                var result = await this.PlantrakAdfService.CreatePDRPDataPipeline(request);
 
-            return this.Ok();
+                return this.Ok();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         [HttpPost("SetupNoContactData")]
         public async Task<IActionResult> SetupNoContactDataAsync(DataRequest request)
         {
-            var res = await this.StorageService.ExcecuteSQLScripts(request);
-            var result = await this.PlantrakAdfService.CreateNoContactDataPipeline(request);
+            try
+            {
+                var res = await this.StorageService.ExcecuteSQLScripts(request);
+                var result = await this.PlantrakAdfService.CreateNoContactDataPipeline(request);
 
-            return this.Ok();
+                return this.Ok();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
     }
