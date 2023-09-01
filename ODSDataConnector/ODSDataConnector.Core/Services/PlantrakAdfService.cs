@@ -71,7 +71,7 @@ namespace ODSDataConnector.Core.Services
                            Location = new FtpServerLocation
                            {
                                FolderPath = dsConfig.Url,
-                               FileName = "@concat('NEW_GW5620H_C144R01_W',activity('GetWeekNumberAndYearLookupActivity').output.firstRow.WeeknumberAndYear,'_D3.001.GZ')"
+                               FileName = "PTFullData.001.GZ')"
                            },
                            //CompressionLevel = new DatasetCompression { Type = "ZipDeflate (.zip)", Level = "Fastest" },
                            CompressionCodec = "ZipDeflate (.zip)",
@@ -80,7 +80,7 @@ namespace ODSDataConnector.Core.Services
                            RowDelimiter = "Default (\r,\n, or \r\n)",
                            EncodingName = "Default(UTF-8)",
                            QuoteChar = '"',
-                           EscapeChar = "Backslash(\\)"
+                           EscapeChar = "Backslash (\\)"
                        }
                    );
                 dataFactoryManagementClient.Datasets.CreateOrUpdate(resourceGroupName, dataFactoryName, datasetName, fileSystemDataset);
@@ -228,7 +228,7 @@ namespace ODSDataConnector.Core.Services
                            Location = new FtpServerLocation
                            {
                                FolderPath = dsConfig.Url,
-                               FileName = "@concat('NEW_PROD_GW561652_CLI144U_WK',activity('GetWeekNumberLookupActivity').output.firstRow.Weeknumber,'.001.GZ')"
+                               FileName = "PTControl.001.GZ')"
                            }
                        }
                    );
@@ -334,23 +334,21 @@ namespace ODSDataConnector.Core.Services
                 string datasetName = "PTPBMPlandBlobDataset";
                 var blobDataset = new DatasetResource
                    (
-                       new AzureBlobDataset
-                       {
-
-                           LinkedServiceName = new LinkedServiceReference
-                           {
-                               ReferenceName = dsConfig.LinkedService
-                           },
-                           FolderPath = dsConfig.Url,
-                           FileName = "FEB_22_Workbook.xls",
-                           //AdditionalProperties = new ExcelDataset { SheetName = "", FirstRowAsHeader = "Yes" },
-
-                           Structure = new ExcelDataset
-                           {
-                               SheetName = "PBM Plans", // Specify the sheet name
-                               FirstRowAsHeader = true // Number of rows to skip (optional)
-                           }
-                       }
+                     new ExcelDataset
+                     {
+                         LinkedServiceName = new LinkedServiceReference
+                         {
+                             ReferenceName = dsConfig.LinkedService
+                         },
+                         Location = new AzureBlobStorageLocation
+                         {
+                             Container = dsConfig.Url.Split('/').First(),
+                             FolderPath = dsConfig.Url.Split('/')[1] + "/" + dsConfig.Url.Split('/')[2],
+                             FileName = "PBMPlans.xls",
+                         },
+                         SheetName = "PBM Plans",
+                         FirstRowAsHeader = true,
+                     }
                    );
                 dataFactoryManagementClient.Datasets.CreateOrUpdate(resourceGroupName, dataFactoryName, datasetName, blobDataset);
 
@@ -469,7 +467,7 @@ namespace ODSDataConnector.Core.Services
                            Location = new FtpServerLocation
                            {
                                FolderPath = dsConfig.Url,
-                               FileName = "@concat('MCWB_NEWVIEW_M',startOfMonth(addToTime(utcnow(), -1, 'Month'), 'MM'),'.001')"
+                               FileName = "MCWB.001"
                            },
                            //CompressionLevel = new DatasetCompression { Type = "ZipDeflate (.zip)", Level = "Fastest" },
                            //CompressionCodec = "ZipDeflate (.zip)",
@@ -478,7 +476,7 @@ namespace ODSDataConnector.Core.Services
                            RowDelimiter = "Default (\r,\n, or \r\n)",
                            EncodingName = "Default(UTF-8)",
                            QuoteChar = '"',
-                           EscapeChar = "Backslash(\\)",
+                           EscapeChar = "Backslash (\\)",
                            FirstRowAsHeader = true
                        }
                    );
@@ -599,8 +597,8 @@ namespace ODSDataConnector.Core.Services
                           Location = new AzureBlobStorageLocation
                           {
                               Container = dsConfig.Url.Split('/').First(),
-                              FolderPath = dsConfig.Url.Split('/')[1] + " /" + dsConfig.Url.Split('/')[2],
-                              FileName = "Plan Model Type Listing_Final - FROM PAUL.xlsx",
+                              FolderPath = dsConfig.Url.Split('/')[1] + "/" + dsConfig.Url.Split('/')[2],
+                              FileName = "ModelData.xlsx",
                           },
                           SheetName = "Table 1",
                           FirstRowAsHeader = true,
@@ -725,7 +723,7 @@ namespace ODSDataConnector.Core.Services
                            Location = new FtpServerLocation
                            {
                                FolderPath = dsConfig.Url,
-                               FileName = "@concat('NRX_NRXMM45A_CSVFILE_CLI144_M',startOfMonth(addToTime(utcnow(), 0, 'Month'), 'MM'),'.001')"
+                               FileName = "MarketDefinition.001"
                            },
                            //CompressionLevel = new DatasetCompression { Type = "ZipDeflate (.zip)", Level = "Fastest" },
                            //CompressionCodec = "ZipDeflate (.zip)",
@@ -734,7 +732,7 @@ namespace ODSDataConnector.Core.Services
                            RowDelimiter = "Default (\r,\n, or \r\n)",
                            EncodingName = "Default(UTF-8)",
                            QuoteChar = '"',
-                           EscapeChar = "Backslash(\\)"
+                           EscapeChar = "Backslash (\\)"
                        }
                    );
                 dataFactoryManagementClient.Datasets.CreateOrUpdate(resourceGroupName, dataFactoryName, datasetName, fileSystemDataset);
@@ -854,7 +852,7 @@ namespace ODSDataConnector.Core.Services
                            Location = new FtpServerLocation
                            {
                                FolderPath = dsConfig.Url,
-                               FileName = "RXD_US_C01_UM21401_Y23M01_R01.CSV.001"
+                               FileName = "PDRP.CSV.001"
                            },
                            //CompressionLevel = new DatasetCompression { Type = "ZipDeflate (.zip)", Level = "Fastest" },
                            //CompressionCodec = "ZipDeflate (.zip)",
@@ -863,7 +861,7 @@ namespace ODSDataConnector.Core.Services
                            RowDelimiter = "Default (\r,\n, or \r\n)",
                            EncodingName = "Default(UTF-8)",
                            QuoteChar = '"',
-                           EscapeChar = "Backslash(\\)"
+                           EscapeChar = "Backslash (\\)"
                        }
                    );
                 dataFactoryManagementClient.Datasets.CreateOrUpdate(resourceGroupName, dataFactoryName, datasetName, fileSystemDataset);
@@ -983,7 +981,7 @@ namespace ODSDataConnector.Core.Services
                            Location = new FtpServerLocation
                            {
                                FolderPath = dsConfig.Url,
-                               FileName = "HCR_PROD_AMA_NO_CONTACTS_APR23.001"
+                               FileName = "NO_CONTACTS.001"
                            },
                            //CompressionLevel = new DatasetCompression { Type = "ZipDeflate (.zip)", Level = "Fastest" },
                            //CompressionCodec = "ZipDeflate (.zip)",
@@ -992,7 +990,7 @@ namespace ODSDataConnector.Core.Services
                            RowDelimiter = "Default (\r,\n, or \r\n)",
                            EncodingName = "Default(UTF-8)",
                            QuoteChar = '"',
-                           EscapeChar = "Backslash(\\)"
+                           EscapeChar = "Backslash (\\)"
                        }
                    );
                 dataFactoryManagementClient.Datasets.CreateOrUpdate(resourceGroupName, dataFactoryName, datasetName, fileSystemDataset);
@@ -1054,7 +1052,7 @@ namespace ODSDataConnector.Core.Services
                                       ReferenceName = "ODSSQLLinkedService"
                                   },
                                  StoredProcedureName = "sp_iqvia_nocontact_transform",
-                                 DependsOn = new List<ActivityDependency>{ new ActivityDependency("CopyPrdpDetailsActvity", new List<string> { "Succeeded" })}
+                                 DependsOn = new List<ActivityDependency>{ new ActivityDependency("CopyNoContactctvity", new List<string> { "Succeeded" })}
                             }
                     }
                 };
