@@ -16,4 +16,6 @@ public partial class DataSource
     public string Entity { get; set; }
 
     public string StoragePath { get; set; }
+
+    public string Apiname { get; set; }
 }

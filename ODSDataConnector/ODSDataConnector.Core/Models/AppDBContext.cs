@@ -65,9 +65,11 @@ public partial class AppDBContext : DbContext
             entity.Property(e => e.LinkedService).HasMaxLength(100);
             entity.Property(e => e.Password).HasMaxLength(100);
             entity.Property(e => e.Server).HasMaxLength(100);
+            entity.Property(e => e.SheetName).HasMaxLength(50);
             entity.Property(e => e.SourceType)
                 .IsRequired()
                 .HasMaxLength(100);
+            entity.Property(e => e.SrcFileName).HasMaxLength(200);
             entity.Property(e => e.Url)
                 .HasMaxLength(500)
                 .HasColumnName("URL");
@@ -80,6 +82,9 @@ public partial class AppDBContext : DbContext
                 .HasNoKey()
                 .ToTable("DataSource");
 
+            entity.Property(e => e.Apiname)
+                .HasMaxLength(100)
+                .HasColumnName("APIName");
             entity.Property(e => e.Entity)
                 .IsRequired()
                 .HasMaxLength(100);

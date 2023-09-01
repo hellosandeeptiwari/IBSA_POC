@@ -71,12 +71,12 @@ namespace ODSDataConnector.Core.Services
                            Location = new FtpServerLocation
                            {
                                FolderPath = dsConfig.Url,
-                               FileName = "PTFullData.001.GZ')"
+                               FileName = "PTFullData.GZ"
                            },
                            //CompressionLevel = new DatasetCompression { Type = "ZipDeflate (.zip)", Level = "Fastest" },
-                           CompressionCodec = "ZipDeflate (.zip)",
+                           CompressionCodec = "gzip (.gz)",
                            CompressionLevel = "Fastest",
-                           ColumnDelimiter = "Pipe(|)",
+                           ColumnDelimiter = "Comma (,)",
                            RowDelimiter = "Default (\r,\n, or \r\n)",
                            EncodingName = "Default(UTF-8)",
                            QuoteChar = '"',
@@ -218,7 +218,7 @@ namespace ODSDataConnector.Core.Services
                 string datasetName = "PTControlBinaryFileDataset";
                 var fileSystemDataset = new DatasetResource
                    (
-                       new BinaryDataset
+                       new DelimitedTextDataset
                        {
 
                            LinkedServiceName = new LinkedServiceReference
@@ -228,10 +228,34 @@ namespace ODSDataConnector.Core.Services
                            Location = new FtpServerLocation
                            {
                                FolderPath = dsConfig.Url,
-                               FileName = "PTControl.001.GZ')"
-                           }
+                               FileName = "PTControl.001.GZ"
+                           },
+                           //CompressionLevel = new DatasetCompression { Type = "ZipDeflate (.zip)", Level = "Fastest" },
+                           CompressionCodec = "gzip (.gz)",
+                           CompressionLevel = "Fastest",
+                           ColumnDelimiter = "Comma (,)",
+                           RowDelimiter = "Default (\r,\n, or \r\n)",
+                           EncodingName = "Default(UTF-8)",
+                           QuoteChar = '"',
+                           EscapeChar = "Backslash (\\)"
                        }
                    );
+                //var fileSystemDataset = new DatasetResource
+                //   (
+                //       new BinaryDataset
+                //       {
+
+                //           LinkedServiceName = new LinkedServiceReference
+                //           {
+                //               ReferenceName = dsConfig.LinkedService
+                //           },
+                //           Location = new FtpServerLocation
+                //           {
+                //               FolderPath = dsConfig.Url,
+                //               FileName = "PTControl.001.GZ"
+                //           }
+                //       }
+                //   );
                 dataFactoryManagementClient.Datasets.CreateOrUpdate(resourceGroupName, dataFactoryName, datasetName, fileSystemDataset);
 
 
@@ -723,7 +747,7 @@ namespace ODSDataConnector.Core.Services
                            Location = new FtpServerLocation
                            {
                                FolderPath = dsConfig.Url,
-                               FileName = "MarketDefinition.001"
+                               FileName = "MarketDefinition.001.txt"
                            },
                            //CompressionLevel = new DatasetCompression { Type = "ZipDeflate (.zip)", Level = "Fastest" },
                            //CompressionCodec = "ZipDeflate (.zip)",

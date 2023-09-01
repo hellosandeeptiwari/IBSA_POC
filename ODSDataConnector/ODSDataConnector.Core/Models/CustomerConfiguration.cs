@@ -28,4 +28,8 @@ public partial class CustomerConfiguration
     public bool IsLoaded { get; set; }
 
     public string LinkedService { get; set; }
+
+    public string SrcFileName { get; set; }
+
+    public string SheetName { get; set; }
 }

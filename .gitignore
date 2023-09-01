@@ -18,3 +18,8 @@
 /DWHPackages/DWHPackages/DWHPackages.API/bin/Debug/net6.0
 /DWHPackages/DWHPackages/DWHPackages.Core/bin/Debug/net6.0
 /DWHPackages/DWHPackages/DWHPackages.Core/obj
+/ODSDataConnector/ODSDataConnector.API/bin/Release/net6.0
+/ODSDataConnector/ODSDataConnector.API/.vs/ProjectEvaluation
+/ODSDataConnector/ODSDataConnector.API/Properties
+/ODSDataConnector/ODSDataConnector.API/ODSDataConnector.API.csproj.user
+/ODSDataConnector/ODSDataConnector.Core/bin/Release/net6.0
