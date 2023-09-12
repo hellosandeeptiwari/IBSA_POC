@@ -22,6 +22,7 @@ using Microsoft.Rest.Azure.Authentication;
 using Microsoft.Azure.Management.ResourceManager.Fluent;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using System.Security.Cryptography;
+using static System.Reflection.Metadata.BlobBuilder;
 
 namespace ODSDataConnector.Core.Services
 {
@@ -29,10 +30,11 @@ namespace ODSDataConnector.Core.Services
     {
         private readonly ICustomerRepository customerRepository;
 
-        
+        private readonly IConfiguration Configuration;
 
-        public StorageService(ICustomerRepository customerRepository)
+        public StorageService(ICustomerRepository customerRepository, IConfiguration configuration)
         {
+            this.Configuration = configuration;
             this.customerRepository = customerRepository;
         }
 
@@ -45,16 +47,23 @@ namespace ODSDataConnector.Core.Services
                 var dataSource = await this.customerRepository.GetDataSourceByIdAsync(request);
                 
 
-                string connectionString = "DefaultEndpointsProtocol=https;AccountName=odsblobcontainer;AccountKey=EJSJZS/kQFUamEp0w70nJ6yP4CQOwiLjC8abIUtRwdD/EBsxeM3u3nmdTgqA6xrelOX1JLh3Q71WUN7wifzfYA==;EndpointSuffix=core.windows.net";
+                string connectionString = Configuration["ConnectionStrings:ODSAzureStorage"];
                 BlobServiceClient blobServiceClient = new BlobServiceClient(connectionString);
 
-                string containerName = "odsdataconnector";
+                string containerName = Configuration["SQLScriptsContainerName"];
                 BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerName);
 
+
+                List<string> MiscTables = containerClient.GetBlobs(prefix: "Miscellaneous" + "/Tables").Select(b => b.Name).ToList();
                 List<string> tables = containerClient.GetBlobs(prefix: dataSource.StoragePath + "/Tables").Select(b => b.Name).ToList();
                 List<string> storeprocedures = containerClient.GetBlobs(prefix: dataSource.StoragePath + "/Storedprocedures").Select(b => b.Name).ToList();
 
                 List<string> scripts = new List<string>();
+
+                foreach (var blob in MiscTables)
+                {
+                    scripts.Add(await GetBlobContent(blob, containerClient));
+                }
 
                 foreach (var blob in tables)
                 {

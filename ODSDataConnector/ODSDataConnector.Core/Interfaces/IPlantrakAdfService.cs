@@ -24,5 +24,7 @@ namespace ODSDataConnector.Core.Interfaces
         Task<bool> CreatePDRPDataPipeline(DataRequest request);
 
         Task<bool> CreateNoContactDataPipeline(DataRequest request);
+
+        Task<bool> CreateIQVIACalenderDataPipeline(DataRequest request);
     }
 }

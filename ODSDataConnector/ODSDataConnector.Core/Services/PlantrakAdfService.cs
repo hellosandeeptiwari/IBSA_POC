@@ -63,7 +63,6 @@ namespace ODSDataConnector.Core.Services
                    (
                        new DelimitedTextDataset
                        {
-
                            LinkedServiceName = new LinkedServiceReference
                            {
                                ReferenceName = dsConfig.LinkedService
@@ -71,7 +70,7 @@ namespace ODSDataConnector.Core.Services
                            Location = new FtpServerLocation
                            {
                                FolderPath = dsConfig.Url,
-                               FileName = "PTFullData.GZ"
+                               FileName = dsConfig.SrcFileName
                            },
                            //CompressionLevel = new DatasetCompression { Type = "ZipDeflate (.zip)", Level = "Fastest" },
                            CompressionCodec = "gzip (.gz)",
@@ -80,7 +79,8 @@ namespace ODSDataConnector.Core.Services
                            RowDelimiter = "Default (\r,\n, or \r\n)",
                            EncodingName = "Default(UTF-8)",
                            QuoteChar = '"',
-                           EscapeChar = "Backslash (\\)"
+                           EscapeChar = "Backslash (\\)",
+                           Folder = new DatasetFolder { Name = "Plantrak" }
                        }
                    );
                 dataFactoryManagementClient.Datasets.CreateOrUpdate(resourceGroupName, dataFactoryName, datasetName, fileSystemDataset);
@@ -95,8 +95,8 @@ namespace ODSDataConnector.Core.Services
                           {
                               ReferenceName = customer.LinkedService
                           },
-                          TableName = dsConfig.DestTable
-
+                          TableName = dsConfig.DestTable,
+                          Folder = new DatasetFolder { Name = "Plantrak" }
                       }
                     );
                 dataFactoryManagementClient.Datasets.CreateOrUpdate(resourceGroupName, dataFactoryName, datasetName1, StagingDDDDemographicDataset);
@@ -109,6 +109,7 @@ namespace ODSDataConnector.Core.Services
 
                 var pipeline = new PipelineResource()
                 {
+                    Folder = new PipelineFolder { Name = "Plantrak" },
                     Activities = new List<Activity>()
                     {
                          new CopyActivity
@@ -169,6 +170,8 @@ namespace ODSDataConnector.Core.Services
                     }
                 };
 
+
+
                 // Create or update the pipeline
                 dataFactoryManagementClient.Pipelines.CreateOrUpdate(resourceGroupName, dataFactoryName, pipelineName, pipeline);
 
@@ -228,7 +231,7 @@ namespace ODSDataConnector.Core.Services
                            Location = new FtpServerLocation
                            {
                                FolderPath = dsConfig.Url,
-                               FileName = "PTControl.001.GZ"
+                               FileName = dsConfig.SrcFileName
                            },
                            //CompressionLevel = new DatasetCompression { Type = "ZipDeflate (.zip)", Level = "Fastest" },
                            CompressionCodec = "gzip (.gz)",
@@ -237,7 +240,8 @@ namespace ODSDataConnector.Core.Services
                            RowDelimiter = "Default (\r,\n, or \r\n)",
                            EncodingName = "Default(UTF-8)",
                            QuoteChar = '"',
-                           EscapeChar = "Backslash (\\)"
+                           EscapeChar = "Backslash (\\)",
+                           Folder = new DatasetFolder { Name = "Plantrak" }
                        }
                    );
                 //var fileSystemDataset = new DatasetResource
@@ -268,8 +272,8 @@ namespace ODSDataConnector.Core.Services
                           {
                               ReferenceName = customer.LinkedService
                           },
-                          TableName = dsConfig.DestTable
-
+                          TableName = dsConfig.DestTable,
+                          Folder = new DatasetFolder { Name = "Plantrak" }
                       }
                     );
                 dataFactoryManagementClient.Datasets.CreateOrUpdate(resourceGroupName, dataFactoryName, datasetName1, StagingDDDDemographicDataset);
@@ -282,6 +286,7 @@ namespace ODSDataConnector.Core.Services
 
                 var pipeline = new PipelineResource()
                 {
+                    Folder = new PipelineFolder { Name = "Plantrak" },
                     Activities = new List<Activity>()
                     {
                          new CopyActivity
@@ -368,10 +373,11 @@ namespace ODSDataConnector.Core.Services
                          {
                              Container = dsConfig.Url.Split('/').First(),
                              FolderPath = dsConfig.Url.Split('/')[1] + "/" + dsConfig.Url.Split('/')[2],
-                             FileName = "PBMPlans.xls",
+                             FileName = dsConfig.SrcFileName,
                          },
-                         SheetName = "PBM Plans",
+                         SheetName = dsConfig.SheetName,
                          FirstRowAsHeader = true,
+                         Folder = new DatasetFolder { Name = "Plantrak" }
                      }
                    );
                 dataFactoryManagementClient.Datasets.CreateOrUpdate(resourceGroupName, dataFactoryName, datasetName, blobDataset);
@@ -386,8 +392,8 @@ namespace ODSDataConnector.Core.Services
                           {
                               ReferenceName = customer.LinkedService
                           },
-                          TableName = dsConfig.DestTable
-
+                          TableName = dsConfig.DestTable,
+                          Folder = new DatasetFolder { Name = "Plantrak" }
                       }
                     );
                 dataFactoryManagementClient.Datasets.CreateOrUpdate(resourceGroupName, dataFactoryName, datasetName1, StagingPBMPlansDataset);
@@ -400,6 +406,7 @@ namespace ODSDataConnector.Core.Services
 
                 var pipeline = new PipelineResource()
                 {
+                    Folder = new PipelineFolder { Name = "Plantrak" },
                     Activities = new List<Activity>()
                     {
                          new CopyActivity
@@ -491,7 +498,7 @@ namespace ODSDataConnector.Core.Services
                            Location = new FtpServerLocation
                            {
                                FolderPath = dsConfig.Url,
-                               FileName = "MCWB.001"
+                               FileName = dsConfig.SrcFileName
                            },
                            //CompressionLevel = new DatasetCompression { Type = "ZipDeflate (.zip)", Level = "Fastest" },
                            //CompressionCodec = "ZipDeflate (.zip)",
@@ -501,7 +508,8 @@ namespace ODSDataConnector.Core.Services
                            EncodingName = "Default(UTF-8)",
                            QuoteChar = '"',
                            EscapeChar = "Backslash (\\)",
-                           FirstRowAsHeader = true
+                           FirstRowAsHeader = true,
+                           Folder = new DatasetFolder { Name = "Plantrak" }
                        }
                    );
                 dataFactoryManagementClient.Datasets.CreateOrUpdate(resourceGroupName, dataFactoryName, datasetName, fileSystemDataset);
@@ -516,8 +524,8 @@ namespace ODSDataConnector.Core.Services
                           {
                               ReferenceName = customer.LinkedService
                           },
-                          TableName = dsConfig.DestTable
-
+                          TableName = dsConfig.DestTable,
+                          Folder = new DatasetFolder { Name = "Plantrak" }
                       }
                     );
                 dataFactoryManagementClient.Datasets.CreateOrUpdate(resourceGroupName, dataFactoryName, datasetName1, StagingPBMPlansDataset);
@@ -530,6 +538,7 @@ namespace ODSDataConnector.Core.Services
 
                 var pipeline = new PipelineResource()
                 {
+                    Folder = new PipelineFolder { Name = "Plantrak" },
                     Activities = new List<Activity>()
                     {
                          new CopyActivity
@@ -622,10 +631,11 @@ namespace ODSDataConnector.Core.Services
                           {
                               Container = dsConfig.Url.Split('/').First(),
                               FolderPath = dsConfig.Url.Split('/')[1] + "/" + dsConfig.Url.Split('/')[2],
-                              FileName = "ModelData.xlsx",
+                              FileName = dsConfig.SrcFileName,
                           },
-                          SheetName = "Table 1",
+                          SheetName = dsConfig.SheetName,
                           FirstRowAsHeader = true,
+                          Folder = new DatasetFolder { Name = "Plantrak" }
                       }
                    );
 
@@ -641,8 +651,8 @@ namespace ODSDataConnector.Core.Services
                           {
                               ReferenceName = customer.LinkedService
                           },
-                          TableName = dsConfig.DestTable
-
+                          TableName = dsConfig.DestTable,
+                          Folder = new DatasetFolder { Name = "Plantrak" }
                       }
                     );
                 dataFactoryManagementClient.Datasets.CreateOrUpdate(resourceGroupName, dataFactoryName, datasetName1, StagingPBMPlansDataset);
@@ -655,6 +665,7 @@ namespace ODSDataConnector.Core.Services
 
                 var pipeline = new PipelineResource()
                 {
+                    Folder = new PipelineFolder { Name = "Plantrak" },
                     Activities = new List<Activity>()
                     {
                          new CopyActivity
@@ -747,7 +758,7 @@ namespace ODSDataConnector.Core.Services
                            Location = new FtpServerLocation
                            {
                                FolderPath = dsConfig.Url,
-                               FileName = "MarketDefinition.001.txt"
+                               FileName = dsConfig.SrcFileName
                            },
                            //CompressionLevel = new DatasetCompression { Type = "ZipDeflate (.zip)", Level = "Fastest" },
                            //CompressionCodec = "ZipDeflate (.zip)",
@@ -756,7 +767,8 @@ namespace ODSDataConnector.Core.Services
                            RowDelimiter = "Default (\r,\n, or \r\n)",
                            EncodingName = "Default(UTF-8)",
                            QuoteChar = '"',
-                           EscapeChar = "Backslash (\\)"
+                           EscapeChar = "Backslash (\\)",
+                           Folder = new DatasetFolder { Name = "Plantrak" }
                        }
                    );
                 dataFactoryManagementClient.Datasets.CreateOrUpdate(resourceGroupName, dataFactoryName, datasetName, fileSystemDataset);
@@ -771,8 +783,8 @@ namespace ODSDataConnector.Core.Services
                           {
                               ReferenceName = customer.LinkedService
                           },
-                          TableName = dsConfig.DestTable
-
+                          TableName = dsConfig.DestTable,
+                          Folder = new DatasetFolder { Name = "Plantrak" }
                       }
                     );
                 dataFactoryManagementClient.Datasets.CreateOrUpdate(resourceGroupName, dataFactoryName, datasetName1, StagingPBMPlansDataset);
@@ -785,6 +797,7 @@ namespace ODSDataConnector.Core.Services
 
                 var pipeline = new PipelineResource()
                 {
+                    Folder = new PipelineFolder { Name = "Plantrak" },
                     Activities = new List<Activity>()
                     {
                          new CopyActivity
@@ -876,7 +889,7 @@ namespace ODSDataConnector.Core.Services
                            Location = new FtpServerLocation
                            {
                                FolderPath = dsConfig.Url,
-                               FileName = "PDRP.CSV.001"
+                               FileName = dsConfig.SrcFileName
                            },
                            //CompressionLevel = new DatasetCompression { Type = "ZipDeflate (.zip)", Level = "Fastest" },
                            //CompressionCodec = "ZipDeflate (.zip)",
@@ -885,7 +898,8 @@ namespace ODSDataConnector.Core.Services
                            RowDelimiter = "Default (\r,\n, or \r\n)",
                            EncodingName = "Default(UTF-8)",
                            QuoteChar = '"',
-                           EscapeChar = "Backslash (\\)"
+                           EscapeChar = "Backslash (\\)",
+                           Folder = new DatasetFolder { Name = "Plantrak" }
                        }
                    );
                 dataFactoryManagementClient.Datasets.CreateOrUpdate(resourceGroupName, dataFactoryName, datasetName, fileSystemDataset);
@@ -900,8 +914,8 @@ namespace ODSDataConnector.Core.Services
                           {
                               ReferenceName = customer.LinkedService
                           },
-                          TableName = dsConfig.DestTable
-
+                          TableName = dsConfig.DestTable,
+                          Folder = new DatasetFolder { Name = "Plantrak" }
                       }
                     );
                 dataFactoryManagementClient.Datasets.CreateOrUpdate(resourceGroupName, dataFactoryName, datasetName1, StagingPBMPlansDataset);
@@ -914,6 +928,7 @@ namespace ODSDataConnector.Core.Services
 
                 var pipeline = new PipelineResource()
                 {
+                    Folder = new PipelineFolder { Name = "Plantrak" },
                     Activities = new List<Activity>()
                     {
                          new CopyActivity
@@ -1005,7 +1020,7 @@ namespace ODSDataConnector.Core.Services
                            Location = new FtpServerLocation
                            {
                                FolderPath = dsConfig.Url,
-                               FileName = "NO_CONTACTS.001"
+                               FileName = dsConfig.SrcFileName
                            },
                            //CompressionLevel = new DatasetCompression { Type = "ZipDeflate (.zip)", Level = "Fastest" },
                            //CompressionCodec = "ZipDeflate (.zip)",
@@ -1014,7 +1029,8 @@ namespace ODSDataConnector.Core.Services
                            RowDelimiter = "Default (\r,\n, or \r\n)",
                            EncodingName = "Default(UTF-8)",
                            QuoteChar = '"',
-                           EscapeChar = "Backslash (\\)"
+                           EscapeChar = "Backslash (\\)",
+                           Folder = new DatasetFolder { Name = "Plantrak" }
                        }
                    );
                 dataFactoryManagementClient.Datasets.CreateOrUpdate(resourceGroupName, dataFactoryName, datasetName, fileSystemDataset);
@@ -1029,8 +1045,8 @@ namespace ODSDataConnector.Core.Services
                           {
                               ReferenceName = customer.LinkedService
                           },
-                          TableName = dsConfig.DestTable
-
+                          TableName = dsConfig.DestTable,
+                          Folder = new DatasetFolder { Name = "Plantrak" }
                       }
                     );
                 dataFactoryManagementClient.Datasets.CreateOrUpdate(resourceGroupName, dataFactoryName, datasetName1, StagingPBMPlansDataset);
@@ -1043,6 +1059,7 @@ namespace ODSDataConnector.Core.Services
 
                 var pipeline = new PipelineResource()
                 {
+                    Folder = new PipelineFolder { Name = "Plantrak" },
                     Activities = new List<Activity>()
                     {
                          new CopyActivity
@@ -1077,6 +1094,119 @@ namespace ODSDataConnector.Core.Services
                                   },
                                  StoredProcedureName = "sp_iqvia_nocontact_transform",
                                  DependsOn = new List<ActivityDependency>{ new ActivityDependency("CopyNoContactctvity", new List<string> { "Succeeded" })}
+                            }
+                    }
+                };
+                // Create or update the pipeline
+                dataFactoryManagementClient.Pipelines.CreateOrUpdate(resourceGroupName, dataFactoryName, pipelineName, pipeline);
+                Console.WriteLine("Pipeline created successfully.");
+                #endregion
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<bool> CreateIQVIACalenderDataPipeline(DataRequest request)
+        {
+            try
+            {
+                // Authenticate and Create a data factory management client
+                var dataFactoryManagementClient = this.aDFService.GetADFClient();
+
+                var customer = await this.customerRepository.GetCustomerByIdAsync(request.customerId);
+                var dsConfig = await this.customerRepository.GetDataSourceConfigAsync(request);
+
+                string resourceGroupName = "ODSDev";
+                string dataFactoryName = customer.Adfname;
+
+                #region Linked Servcie Creation Section
+                // Define the SQL Linked Service name and its properties
+                var sQLlsProperties = createSQLLinkedServiceProperties(resourceGroupName, dataFactoryName, customer);
+
+                dataFactoryManagementClient = this.aDFService.CreateLinkedService(sQLlsProperties, dataFactoryManagementClient);
+                Console.WriteLine("SQL Linked Service created successfully.");
+
+                // Define the Storage Blob Linked Service name and its properties
+                var blobLsProperties = CreateBlobLinkedServiceProperties(resourceGroupName, dataFactoryName, dsConfig);
+
+                dataFactoryManagementClient = this.aDFService.CreateLinkedService(blobLsProperties, dataFactoryManagementClient);
+                Console.WriteLine("Blob Linked Service created successfully.");
+                #endregion
+
+                #region Dataset
+                string datasetName = "IqviaCalendarBlobDataset";
+                var blobDataset = new DatasetResource
+                   (
+                      new ExcelDataset
+                      {
+                          LinkedServiceName = new LinkedServiceReference
+                          {
+                              ReferenceName = dsConfig.LinkedService
+                          },
+                          Location = new AzureBlobStorageLocation
+                          {
+                              Container = dsConfig.Url.Split('/').First(),
+                              FolderPath = dsConfig.Url.Split('/')[1] + "/" + dsConfig.Url.Split('/')[2],
+                              FileName = dsConfig.SrcFileName,
+                          },
+                          SheetName = dsConfig.SheetName,
+                          FirstRowAsHeader = true,
+                          Folder = new DatasetFolder { Name = "Plantrak" }
+                      }
+                   );
+
+                dataFactoryManagementClient.Datasets.CreateOrUpdate(resourceGroupName, dataFactoryName, datasetName, blobDataset);
+
+
+                string datasetName1 = "IqviaCalendarDbDataset";
+                var StagingPBMPlansDataset = new DatasetResource
+                    (
+                      new AzureSqlTableDataset
+                      {
+                          LinkedServiceName = new LinkedServiceReference
+                          {
+                              ReferenceName = customer.LinkedService
+                          },
+                          TableName = dsConfig.DestTable,
+                          Folder = new DatasetFolder { Name = "Plantrak" }
+                      }
+                    );
+                dataFactoryManagementClient.Datasets.CreateOrUpdate(resourceGroupName, dataFactoryName, datasetName1, StagingPBMPlansDataset);
+
+                #endregion
+
+                #region Pipeline
+                // Define the pipeline name and its properties
+                string pipelineName = "IQVIACalendarPipeline";
+
+                var pipeline = new PipelineResource()
+                {
+                    Folder = new PipelineFolder { Name = "Plantrak" },
+                    Activities = new List<Activity>()
+                    {
+                         new CopyActivity
+                            {
+                                Name = "CopyCalendarActivity",
+                                Inputs = new List<DatasetReference>()
+                                {
+                                    new DatasetReference()
+                                    {
+                                        ReferenceName = "IqviaCalendarBlobDataset",
+                                    }
+                                },
+                                Outputs = new List<DatasetReference>()
+                                {
+                                    new DatasetReference()
+                                    {
+                                        ReferenceName = "IqviaCalendarDbDataset",
+                                    }
+                                },
+                                Source = new  DelimitedTextSource(),
+                                Sink = new SqlSink { PreCopyScript = $"TRUNCATE TABLE IQVIA_Calendar"}
                             }
                     }
                 };

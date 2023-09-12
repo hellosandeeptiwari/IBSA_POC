@@ -50,6 +50,7 @@ public partial class AppDBContext : DbContext
         });
 
         modelBuilder.Entity<CustomerConfiguration>(entity =>
+
         {
             entity
                 .HasNoKey()

@@ -41,6 +41,7 @@ public partial class AppDBContext : DbContext
                 .HasMaxLength(100)
                 .HasColumnName("DBServer");
             entity.Property(e => e.Id).ValueGeneratedOnAdd();
+            entity.Property(e => e.IsMdm).HasColumnName("IsMDM");
             entity.Property(e => e.LinkedService).HasMaxLength(100);
             entity.Property(e => e.Name)
                 .IsRequired()
@@ -48,6 +49,7 @@ public partial class AppDBContext : DbContext
             entity.Property(e => e.Password)
                 .IsRequired()
                 .HasMaxLength(100);
+            entity.Property(e => e.ResourceGroup).HasMaxLength(50);
             entity.Property(e => e.Username)
                 .IsRequired()
                 .HasMaxLength(100);

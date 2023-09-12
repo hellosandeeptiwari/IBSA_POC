@@ -151,5 +151,21 @@ namespace ODSDataConnector.Controllers.IQVIA
             }
         }
 
+        [HttpPost("SetupIQVIACalenderData")]
+        public async Task<IActionResult> SetupIQVIACalenderDataAsync(DataRequest request)
+        {
+            try
+            {
+                var res = await this.StorageService.ExcecuteSQLScripts(request);
+                var result = await this.PlantrakAdfService.CreateIQVIACalenderDataPipeline(request);
+
+                return this.Ok();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
     }
 }

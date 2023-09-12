@@ -96,9 +96,25 @@ namespace ODSDataConnector.Core.Services
                         // Create or update the File system Linked Service
                         adfClient.LinkedServices.CreateOrUpdate(ls.ResourceGroupName, ls.DataFactoryName, ls.LinkedServiceName, azureBlobStorageLinkedService);
                         break;
+                    case "Batch":
+                        var azureBatchLinkedService = new LinkedServiceResource(
+                             new AzureBatchLinkedService
+                             {
+
+                                 ConnectVia = new IntegrationRuntimeReference(ls.Runtime),
+                                 AccountName = "odstoveevabatch",
+                                 BatchUri = "https://odstoveevabatch.eastus.batch.azure.com",
+                                 PoolName = "odstoveevapool",
+                                 AccessKey = new SecureString("J5woJ9JRy/N0PB+3Ke8NieufE9p9Aw65tqxxOLHiLMPh7ZaAEQ1uDb8BoYvaelRRl790P2bXekiNfhn1aOe2Hw=="),
+                                 LinkedServiceName = new LinkedServiceReference 
+                                 { 
+                                     ReferenceName = "CNXStorageBlobLinkedService"
+                                 }
+                             }
+                            );
+                        adfClient.LinkedServices.CreateOrUpdate(ls.ResourceGroupName, ls.DataFactoryName, ls.LinkedServiceName, azureBatchLinkedService);
+                        break;
                 }
-
-
                 // Create or update the SQL Linked Service
 
                 Console.WriteLine("SQL Linked Service created successfully.");

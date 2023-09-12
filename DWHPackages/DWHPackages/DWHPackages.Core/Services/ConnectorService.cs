@@ -66,7 +66,7 @@ namespace DWHPackages.Core.Services
                 };
 
                 var postData = new StringContent(JsonConvert.SerializeObject(requestJSON), Encoding.UTF8, "application/json");
-                var addressResponse = await httpClient.PostAsync($"{httpClient.BaseAddress}{dataSource.Apiname}", postData);
+                var addressResponse = httpClient.PostAsync($"{httpClient.BaseAddress}{dataSource.Apiname}", postData).GetAwaiter().GetResult();
 
                 return true;
             }

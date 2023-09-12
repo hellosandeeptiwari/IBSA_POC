@@ -22,6 +22,7 @@ namespace ODSDataConnector.API.Configuration
             services.AddScoped <ICustomerRepository, CustomerRepository>();
             services.AddScoped<IADFService, ADFService>();
             services.AddScoped<IAppLogger,AppInsightsLogger>();
+            services.AddScoped<IMDMService, MDMService>();
 
             return services;
         }

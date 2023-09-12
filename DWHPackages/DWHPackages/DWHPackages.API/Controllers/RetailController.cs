@@ -22,7 +22,7 @@ namespace DWHPackages.API.Controllers
             //var res = await this.StorageService.ExcecuteSQLScripts(request);
             //var result = await this.PlantrakAdfService.CreatePrescriberSalesPipeline(request);
             var res = this.connectorService.CreateDataForDWH(request);
-
+           
             return this.Ok();
         }
     }

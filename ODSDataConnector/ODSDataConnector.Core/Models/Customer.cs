@@ -20,4 +20,8 @@ public partial class Customer
     public string LinkedService { get; set; }
 
     public string Adfname { get; set; }
+
+    public string ResourceGroup { get; set; }
+
+    public bool IsMdm { get; set; }
 }
