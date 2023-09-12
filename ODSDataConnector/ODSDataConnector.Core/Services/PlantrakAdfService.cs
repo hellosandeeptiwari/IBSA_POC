@@ -38,7 +38,7 @@ namespace ODSDataConnector.Core.Services
                 var dsConfig = await this.customerRepository.GetDataSourceConfigAsync(request);
 
                 #region Linked Servcie Creation Section
-                string resourceGroupName = "ODSDev";
+                string resourceGroupName = customer.ResourceGroup;
                 string dataFactoryName = customer.Adfname;
 
 
@@ -198,7 +198,7 @@ namespace ODSDataConnector.Core.Services
                 var customer = await this.customerRepository.GetCustomerByIdAsync(request.customerId);
                 var dsConfig = await this.customerRepository.GetDataSourceConfigAsync(request);
 
-                string resourceGroupName = "ODSDev";
+                string resourceGroupName = customer.ResourceGroup;
                 string dataFactoryName = customer.Adfname;
 
 
@@ -339,7 +339,7 @@ namespace ODSDataConnector.Core.Services
                 var customer = await this.customerRepository.GetCustomerByIdAsync(request.customerId);
                 var dsConfig = await this.customerRepository.GetDataSourceConfigAsync(request);
 
-                string resourceGroupName = "ODSDev";
+                string resourceGroupName = customer.ResourceGroup;
                 string dataFactoryName = customer.Adfname;
 
                 #region Linked Servcie Creation Section
@@ -467,7 +467,7 @@ namespace ODSDataConnector.Core.Services
                 var customer = await this.customerRepository.GetCustomerByIdAsync(request.customerId);
                 var dsConfig = await this.customerRepository.GetDataSourceConfigAsync(request);
 
-                string resourceGroupName = "ODSDev";
+                string resourceGroupName = customer.ResourceGroup;
                 string dataFactoryName = customer.Adfname;
 
                 #region Linked Servcie Creation Section
@@ -599,7 +599,7 @@ namespace ODSDataConnector.Core.Services
                 var customer = await this.customerRepository.GetCustomerByIdAsync(request.customerId);
                 var dsConfig = await this.customerRepository.GetDataSourceConfigAsync(request);
 
-                string resourceGroupName = "ODSDev";
+                string resourceGroupName = customer.ResourceGroup;
                 string dataFactoryName = customer.Adfname;
 
                 #region Linked Servcie Creation Section
@@ -726,7 +726,7 @@ namespace ODSDataConnector.Core.Services
                 var customer = await this.customerRepository.GetCustomerByIdAsync(request.customerId);
                 var dsConfig = await this.customerRepository.GetDataSourceConfigAsync(request);
 
-                string resourceGroupName = "ODSDev";
+                string resourceGroupName = customer.ResourceGroup   ;
                 string dataFactoryName = customer.Adfname;
 
                 #region Linked Servcie Creation Section
@@ -857,7 +857,7 @@ namespace ODSDataConnector.Core.Services
                 var customer = await this.customerRepository.GetCustomerByIdAsync(request.customerId);
                 var dsConfig = await this.customerRepository.GetDataSourceConfigAsync(request);
 
-                string resourceGroupName = "ODSDev";
+                string resourceGroupName = customer.ResourceGroup;
                 string dataFactoryName = customer.Adfname;
 
                 #region Linked Servcie Creation Section
@@ -989,7 +989,7 @@ namespace ODSDataConnector.Core.Services
                 var customer = await this.customerRepository.GetCustomerByIdAsync(request.customerId);
                 var dsConfig = await this.customerRepository.GetDataSourceConfigAsync(request);
 
-                string resourceGroupName = "ODSDev";
+                string resourceGroupName = customer.ResourceGroup;
                 string dataFactoryName = customer.Adfname;
 
                 #region Linked Servcie Creation Section
@@ -1120,7 +1120,7 @@ namespace ODSDataConnector.Core.Services
                 var customer = await this.customerRepository.GetCustomerByIdAsync(request.customerId);
                 var dsConfig = await this.customerRepository.GetDataSourceConfigAsync(request);
 
-                string resourceGroupName = "ODSDev";
+                string resourceGroupName = customer.ResourceGroup;
                 string dataFactoryName = customer.Adfname;
 
                 #region Linked Servcie Creation Section

@@ -34,7 +34,7 @@ namespace ODSDataConnector.Core.Services
                 var dsConfig = await this.customerRepository.GetDataSourceConfigAsync(request);
 
                 #region Linked Servcie Creation Section
-                string resourceGroupName = "ODSDev";
+                string resourceGroupName = customer.ResourceGroup;
                 string dataFactoryName = customer.Adfname;
 
 

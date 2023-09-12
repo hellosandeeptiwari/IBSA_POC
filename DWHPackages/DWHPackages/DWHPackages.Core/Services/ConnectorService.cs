@@ -41,6 +41,12 @@ namespace DWHPackages.Core.Services
                             }
                         }
                     }
+
+
+                    //MDM API Call
+                    var mdmDataSource = await this.CustomerRepository.GetDataSourceListByModuleAsync("MDM");
+                    if (mdmDataSource.Any())
+                        CreateHttpRequest(mdmDataSource.First(), cust.Id);
                 }
             }
 
@@ -70,7 +76,7 @@ namespace DWHPackages.Core.Services
 
                 return true;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return false;
             }
