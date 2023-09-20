@@ -1,5 +1,6 @@
 ﻿using Microsoft.Azure.Management.DataFactory;
 using Microsoft.Azure.Management.DataFactory.Models;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ODSDataConnector.Core.Entities;
 using ODSDataConnector.Core.Interfaces;
 using ODSDataConnector.Core.Models;
@@ -57,12 +58,20 @@ namespace ODSDataConnector.Core.Services
                 Console.WriteLine("Batch Linked Service created successfully.");
 
                 #endregion
-
+                string pipelineFolderName = "MDM";
                 string pipelineName = "VeevaToCMSPipeline";
+                string pipelineName1 = "PlantrakToCMSPipeline";
+
+                if(!customer.IsMdm)
+                {
+                    pipelineFolderName = "No_MDM";
+                    pipelineName = "VeevaToCMSPipeline_NoMDM";
+                    pipelineName1 = "PlantrakToCMSPipeline_NoMDM";
+                }
 
                 var pipeline = new PipelineResource()
                 {
-                    Folder = new PipelineFolder { Name = "MDM" },
+                    Folder = new PipelineFolder { Name = pipelineFolderName },
                     Activities = new List<Activity>()
                     {
                           new SqlServerStoredProcedureActivity
@@ -85,15 +94,23 @@ namespace ODSDataConnector.Core.Services
                                   },
                                  StoredProcedureName = "sp_cms_goldenrecord_dataload_transform",
                                  DependsOn = new List<ActivityDependency>{ new ActivityDependency("CopyOdsToCmsActivity", new List<string> { "Succeeded" })}
+                            },
+                           new SqlServerStoredProcedureActivity
+                            {
+                                Name = "CreateIdentifierMatchesActivity",
+                                 LinkedServiceName= new LinkedServiceReference
+                                  {
+                                      ReferenceName = customer.LinkedService
+                                  },
+                                 StoredProcedureName = "sp_cms_create_identifier_matches",
+                                 DependsOn = new List<ActivityDependency>{ new ActivityDependency("TransformGoldenRecordForVeevaActivity", new List<string> { "Succeeded" })}
                             }
                     }
                 };
 
-                string pipelineName1 = "PlantrakToCMSPipeline";
-
                 var pipeline1 = new PipelineResource()
                 {
-                    Folder = new PipelineFolder { Name = "MDM" },
+                    Folder = new PipelineFolder { Name = pipelineFolderName },
                     Activities = new List<Activity>()
                     {
                           new SqlServerStoredProcedureActivity
@@ -116,44 +133,8 @@ namespace ODSDataConnector.Core.Services
                                   },
                                  StoredProcedureName = "sp_cms_goldenrecord_dataload_transform",
                                  DependsOn = new List<ActivityDependency>{ new ActivityDependency("CopyPlanTrakToCmsActivity", new List<string> { "Succeeded" })}
-                            }
-                    }
-                };
-
-                if (customer.IsMdm)
-                {
-                    var veevaToCMSActivity = new List<Activity>()
-                    {  new SqlServerStoredProcedureActivity
-                            {
-                                Name = "CreateIdentifierMatchesActivity",
-                                 LinkedServiceName= new LinkedServiceReference
-                                  {
-                                      ReferenceName = customer.LinkedService
-                                  },
-                                 StoredProcedureName = "sp_cms_create_identifier_matches",
-                                 DependsOn = new List<ActivityDependency>{ new ActivityDependency("TransformGoldenRecordForVeevaActivity", new List<string> { "Succeeded" })}
                             },
-                     new CustomActivity
-                        {
-                          Name = "FuzzyMatchingActivity",
-                          Command = "FuzzyMatchingActivity.exe -s \"VEEVA\"",
-                          FolderPath="turnkey/CustomActivity/MDM/FuzzyMatch",
-                          ResourceLinkedService = new LinkedServiceReference
-                          {
-                              ReferenceName = dsConfig.LinkedService
-                          },
-                          LinkedServiceName = new LinkedServiceReference
-                          {
-                            ReferenceName = "BatchLinkedService"
-                          },
-
-                          DependsOn = new List<ActivityDependency>{ new ActivityDependency("CreateIdentifierMatchesActivity", new List<string> { "Succeeded" })}
-
-                        }
-                    };
-
-                    var plantrakToCMSActivity = new List<Activity>()
-                    { new SqlServerStoredProcedureActivity
+                            new SqlServerStoredProcedureActivity
                             {
                                 Name = "CreateIdentifierMatchesActivity",
                                  LinkedServiceName= new LinkedServiceReference
@@ -162,28 +143,66 @@ namespace ODSDataConnector.Core.Services
                                   },
                                  StoredProcedureName = "sp_cms_create_identifier_matches",
                                  DependsOn = new List<ActivityDependency>{ new ActivityDependency("TransformGoldenRecordForPlanTrakActivity", new List<string> { "Succeeded" })}
-                            },
-                    new CustomActivity
+                            }
+                    }
+                };
+
+
+                var veevaToCMSActivity = new List<Activity>();
+                var plantrakToCMSActivity = new List<Activity>();
+                var prevActivityName = string.Empty;
+
+                if (customer.IsMdm)
+                {
+                    veevaToCMSActivity.Add(
+                        new CustomActivity
                         {
-                          Name = "FuzzyMatchingActivity",
-                          Command = "FuzzyMatchingActivity.exe -s \"PLANTRAK\"",
-                          FolderPath="turnkey/CustomActivity/MDM/FuzzyMatch",
-                          ResourceLinkedService = new LinkedServiceReference
-                          {
-                              ReferenceName = dsConfig.LinkedService
-                          },
-                          LinkedServiceName = new LinkedServiceReference
-                          {
+                            Name = "FuzzyMatchingActivity",
+                            Command = "FuzzyMatchingActivity.exe -s \"VEEVA\"",
+                            FolderPath = "turnkey/CustomActivity/MDM/FuzzyMatch",
+                            ResourceLinkedService = new LinkedServiceReference
+                            {
+                                ReferenceName = dsConfig.LinkedService
+                            },
+                            LinkedServiceName = new LinkedServiceReference
+                            {
+                                ReferenceName = "BatchLinkedService"
+                            },
+
+                            DependsOn = new List<ActivityDependency> { new ActivityDependency("CreateIdentifierMatchesActivity", new List<string> { "Succeeded" }) }
+
+                        });
+
+
+                    plantrakToCMSActivity.Add(
+                    new CustomActivity
+                    {
+                        Name = "FuzzyMatchingActivity",
+                        Command = "FuzzyMatchingActivity.exe -s \"PLANTRAK\"",
+                        FolderPath = "turnkey/CustomActivity/MDM/FuzzyMatch",
+                        ResourceLinkedService = new LinkedServiceReference
+                        {
+                            ReferenceName = dsConfig.LinkedService
+                        },
+                        LinkedServiceName = new LinkedServiceReference
+                        {
                             ReferenceName = "BatchLinkedService"
-                          },
+                        },
 
-                          DependsOn = new List<ActivityDependency>{ new ActivityDependency("CreateIdentifierMatchesActivity", new List<string> { "Succeeded" })}
+                        DependsOn = new List<ActivityDependency> { new ActivityDependency("CreateIdentifierMatchesActivity", new List<string> { "Succeeded" }) }
 
-                        }
-                    };
+                    });
+
+                    prevActivityName = "FuzzyMatchingActivity";
+                }
+                else
+                {
+                    prevActivityName = "CreateIdentifierMatchesActivity";
+                }
 
 
-                    var activities = new List<Activity>()
+
+                var activities = new List<Activity>()
                     {
                         new SqlServerStoredProcedureActivity
                             {
@@ -193,7 +212,7 @@ namespace ODSDataConnector.Core.Services
                                       ReferenceName = customer.LinkedService
                                   },
                                  StoredProcedureName = "sp_cms_automerge_transform",
-                                 DependsOn = new List<ActivityDependency>{ new ActivityDependency("FuzzyMatchingActivity", new List<string> { "Succeeded" })}
+                                 DependsOn = new List<ActivityDependency>{ new ActivityDependency(prevActivityName, new List<string> { "Succeeded" })}
                             },
                         new SqlServerStoredProcedureActivity
                             {
@@ -217,33 +236,25 @@ namespace ODSDataConnector.Core.Services
                             }
                     };
 
-                    foreach (var act in veevaToCMSActivity)
-                    {
-                        pipeline.Activities.Add(act);
-                    }
-
-                    foreach (var act in plantrakToCMSActivity)
-                    {
-                        pipeline1.Activities.Add(act);
-                    }
-
-                    foreach (var act in activities)
-                    {
-                        pipeline.Activities.Add(act);
-                        pipeline1.Activities.Add(act);
-                    }
-                    dataFactoryManagementClient.Pipelines.CreateOrUpdate(resourceGroupName, dataFactoryName, pipelineName, pipeline);
-                    dataFactoryManagementClient.Pipelines.CreateOrUpdate(resourceGroupName, dataFactoryName, pipelineName1, pipeline1);
-
-                    Console.WriteLine("Pipeline created successfully.");
-                }
-                else
+                foreach (var act in veevaToCMSActivity)
                 {
-                    dataFactoryManagementClient.Pipelines.CreateOrUpdate(resourceGroupName, dataFactoryName, pipelineName, pipeline);
-                    dataFactoryManagementClient.Pipelines.CreateOrUpdate(resourceGroupName, dataFactoryName, pipelineName1, pipeline1);
-
-                    Console.WriteLine("Pipeline created successfully.");
+                    pipeline.Activities.Add(act);
                 }
+
+                foreach (var act in plantrakToCMSActivity)
+                {
+                    pipeline1.Activities.Add(act);
+                }
+
+                foreach (var act in activities)
+                {
+                    pipeline.Activities.Add(act);
+                    pipeline1.Activities.Add(act);
+                }
+                dataFactoryManagementClient.Pipelines.CreateOrUpdate(resourceGroupName, dataFactoryName, pipelineName, pipeline);
+                dataFactoryManagementClient.Pipelines.CreateOrUpdate(resourceGroupName, dataFactoryName, pipelineName1, pipeline1);
+
+                Console.WriteLine("Pipeline created successfully.");
 
                 return true;
             }

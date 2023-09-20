@@ -726,7 +726,7 @@ namespace ODSDataConnector.Core.Services
                 var customer = await this.customerRepository.GetCustomerByIdAsync(request.customerId);
                 var dsConfig = await this.customerRepository.GetDataSourceConfigAsync(request);
 
-                string resourceGroupName = customer.ResourceGroup   ;
+                string resourceGroupName = customer.ResourceGroup;
                 string dataFactoryName = customer.Adfname;
 
                 #region Linked Servcie Creation Section
@@ -1163,7 +1163,7 @@ namespace ODSDataConnector.Core.Services
 
 
                 string datasetName1 = "IqviaCalendarDbDataset";
-                var StagingPBMPlansDataset = new DatasetResource
+                var StagingCalendarDataset = new DatasetResource
                     (
                       new AzureSqlTableDataset
                       {
@@ -1175,7 +1175,7 @@ namespace ODSDataConnector.Core.Services
                           Folder = new DatasetFolder { Name = "Plantrak" }
                       }
                     );
-                dataFactoryManagementClient.Datasets.CreateOrUpdate(resourceGroupName, dataFactoryName, datasetName1, StagingPBMPlansDataset);
+                dataFactoryManagementClient.Datasets.CreateOrUpdate(resourceGroupName, dataFactoryName, datasetName1, StagingCalendarDataset);
 
                 #endregion
 
@@ -1207,6 +1207,376 @@ namespace ODSDataConnector.Core.Services
                                 },
                                 Source = new  DelimitedTextSource(),
                                 Sink = new SqlSink { PreCopyScript = $"TRUNCATE TABLE IQVIA_Calendar"}
+                            }
+                    }
+                };
+                // Create or update the pipeline
+                dataFactoryManagementClient.Pipelines.CreateOrUpdate(resourceGroupName, dataFactoryName, pipelineName, pipeline);
+                Console.WriteLine("Pipeline created successfully.");
+                #endregion
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<bool> CreateIQVIAProductMarketDataPipeline(DataRequest request)
+        {
+            try
+            {
+                // Authenticate and Create a data factory management client
+                var dataFactoryManagementClient = this.aDFService.GetADFClient();
+
+                var customer = await this.customerRepository.GetCustomerByIdAsync(request.customerId);
+                var dsConfig = await this.customerRepository.GetDataSourceConfigAsync(request);
+
+                string resourceGroupName = customer.ResourceGroup;
+                string dataFactoryName = customer.Adfname;
+
+                #region Linked Servcie Creation Section
+                // Define the SQL Linked Service name and its properties
+                var sQLlsProperties = createSQLLinkedServiceProperties(resourceGroupName, dataFactoryName, customer);
+
+                dataFactoryManagementClient = this.aDFService.CreateLinkedService(sQLlsProperties, dataFactoryManagementClient);
+                Console.WriteLine("SQL Linked Service created successfully.");
+
+                // Define the Storage Blob Linked Service name and its properties
+                var blobLsProperties = CreateBlobLinkedServiceProperties(resourceGroupName, dataFactoryName, dsConfig);
+
+                dataFactoryManagementClient = this.aDFService.CreateLinkedService(blobLsProperties, dataFactoryManagementClient);
+                Console.WriteLine("Blob Linked Service created successfully.");
+                #endregion
+
+                #region Dataset
+                string datasetName = "IqviaProductMarketBlobDataset";
+                var blobDataset = new DatasetResource
+                   (
+                      new ExcelDataset
+                      {
+                          LinkedServiceName = new LinkedServiceReference
+                          {
+                              ReferenceName = dsConfig.LinkedService
+                          },
+                          Location = new AzureBlobStorageLocation
+                          {
+                              Container = dsConfig.Url.Split('/').First(),
+                              FolderPath = dsConfig.Url.Split('/')[1] + "/" + dsConfig.Url.Split('/')[2],
+                              FileName = dsConfig.SrcFileName,
+                          },
+                          SheetName = dsConfig.SheetName,
+                          FirstRowAsHeader = true,
+                          Folder = new DatasetFolder { Name = "IQVIA" }
+                      }
+                   );
+
+                dataFactoryManagementClient.Datasets.CreateOrUpdate(resourceGroupName, dataFactoryName, datasetName, blobDataset);
+
+
+                string datasetName1 = "StagingIqviaProductMarketDataset";
+                var StagingProductMarketDataset = new DatasetResource
+                    (
+                      new AzureSqlTableDataset
+                      {
+                          LinkedServiceName = new LinkedServiceReference
+                          {
+                              ReferenceName = customer.LinkedService
+                          },
+                          TableName = dsConfig.DestTable,
+                          Folder = new DatasetFolder { Name = "IQVIA" }
+                      }
+                    );
+                dataFactoryManagementClient.Datasets.CreateOrUpdate(resourceGroupName, dataFactoryName, datasetName1, StagingProductMarketDataset);
+
+                #endregion
+
+                #region Pipeline
+                // Define the pipeline name and its properties
+                string pipelineName = "IbsaProductMarketPipeline";
+
+                var pipeline = new PipelineResource()
+                {
+                    Folder = new PipelineFolder { Name = "IQVIA" },
+                    Activities = new List<Activity>()
+                    {
+                         new CopyActivity
+                            {
+                                Name = "CopyIBSAProductmarketActivity",
+                                Inputs = new List<DatasetReference>()
+                                {
+                                    new DatasetReference()
+                                    {
+                                        ReferenceName = "IqviaProductMarketBlobDataset",
+                                    }
+                                },
+                                Outputs = new List<DatasetReference>()
+                                {
+                                    new DatasetReference()
+                                    {
+                                        ReferenceName = "StagingIqviaProductMarketDataset",
+                                    }
+                                },
+                                Source = new  DelimitedTextSource(),
+                                Sink = new SqlSink { PreCopyScript = $"TRUNCATE TABLE Staging_IQVIA_ProductMarket"}
+                            },
+
+                          new SqlServerStoredProcedureActivity
+                            {
+                                Name = "IqviaProductMarketTransformActivity",
+                                 LinkedServiceName= new LinkedServiceReference
+                                  {
+                                      ReferenceName = "ODSSQLLinkedService"
+                                  },
+                                 StoredProcedureName = "sp_iqvia_productmarket_transform",
+                                 DependsOn = new List<ActivityDependency>{ new ActivityDependency("CopyIBSAProductmarketActivity", new List<string> { "Succeeded" })}
+                            }
+                    }
+                };
+                // Create or update the pipeline
+                dataFactoryManagementClient.Pipelines.CreateOrUpdate(resourceGroupName, dataFactoryName, pipelineName, pipeline);
+                Console.WriteLine("Pipeline created successfully.");
+                #endregion
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<bool> CreateIQVIASpecialtyDataPipeline(DataRequest request)
+        {
+            try
+            {
+                // Authenticate and Create a data factory management client
+                var dataFactoryManagementClient = this.aDFService.GetADFClient();
+
+                var customer = await this.customerRepository.GetCustomerByIdAsync(request.customerId);
+                var dsConfig = await this.customerRepository.GetDataSourceConfigAsync(request);
+
+                string resourceGroupName = customer.ResourceGroup;
+                string dataFactoryName = customer.Adfname;
+
+                #region Linked Servcie Creation Section
+                // Define the SQL Linked Service name and its properties
+                var sQLlsProperties = createSQLLinkedServiceProperties(resourceGroupName, dataFactoryName, customer);
+
+                dataFactoryManagementClient = this.aDFService.CreateLinkedService(sQLlsProperties, dataFactoryManagementClient);
+                Console.WriteLine("SQL Linked Service created successfully.");
+
+                // Define the File System Linked Service name and its properties
+                var fslsProperties = CreateFSLinkedServiceProperties(resourceGroupName, dataFactoryName, dsConfig);
+
+                dataFactoryManagementClient = this.aDFService.CreateLinkedService(fslsProperties, dataFactoryManagementClient);
+                Console.WriteLine("Blob Linked Service created successfully.");
+                #endregion
+
+                #region Dataset
+                string datasetName = "IqviaSpecialtyDataset";
+                var excelFSDataset = new DatasetResource
+                   (
+                      new ExcelDataset
+                      {
+                          Location = new FtpServerLocation
+                          {
+                              FolderPath = dsConfig.Url,
+                              FileName = dsConfig.SrcFileName
+                          },
+                          LinkedServiceName = new LinkedServiceReference
+                          {
+                              ReferenceName = dsConfig.LinkedService
+                          },
+                          SheetName = dsConfig.SheetName,
+                          FirstRowAsHeader = true,
+                          Folder = new DatasetFolder { Name = "IQVIA" }
+                      }
+                   );
+
+                dataFactoryManagementClient.Datasets.CreateOrUpdate(resourceGroupName, dataFactoryName, datasetName, excelFSDataset);
+
+
+                string datasetName1 = "StagingIqviaSpecialtyDataset";
+                var StagingPBMPlansDataset = new DatasetResource
+                    (
+                      new AzureSqlTableDataset
+                      {
+                          LinkedServiceName = new LinkedServiceReference
+                          {
+                              ReferenceName = customer.LinkedService
+                          },
+                          TableName = dsConfig.DestTable,
+                          Folder = new DatasetFolder { Name = "IQVIA" }
+                      }
+                    );
+                dataFactoryManagementClient.Datasets.CreateOrUpdate(resourceGroupName, dataFactoryName, datasetName1, StagingPBMPlansDataset);
+
+                #endregion
+
+                #region Pipeline
+                // Define the pipeline name and its properties
+                string pipelineName = "IqviaSpecialtyPipeline";
+
+                var pipeline = new PipelineResource()
+                {
+                    Folder = new PipelineFolder { Name = "IQVIA" },
+                    Activities = new List<Activity>()
+                    {
+                         new CopyActivity
+                            {
+                                Name = "CopySpecailtyActivity",
+                                Inputs = new List<DatasetReference>()
+                                {
+                                    new DatasetReference()
+                                    {
+                                        ReferenceName = "IqviaSpecialtyDataset",
+                                    }
+                                },
+                                Outputs = new List<DatasetReference>()
+                                {
+                                    new DatasetReference()
+                                    {
+                                        ReferenceName = "StagingIqviaSpecialtyDataset",
+                                    }
+                                },
+                                Source = new  DelimitedTextSource(),
+                                Sink = new SqlSink { PreCopyScript = $"TRUNCATE TABLE Staging_IQVIA_Specialty"}
+                            },
+
+                          new SqlServerStoredProcedureActivity
+                            {
+                                Name = "IqviaSpecialtyTransformActivity",
+                                 LinkedServiceName= new LinkedServiceReference
+                                  {
+                                      ReferenceName = "ODSSQLLinkedService"
+                                  },
+                                 StoredProcedureName = "sp_iqvia_specialty_transform",
+                                 DependsOn = new List<ActivityDependency>{ new ActivityDependency("CopySpecailtyActivity", new List<string> { "Succeeded" })}
+                            }
+                    }
+                };
+                // Create or update the pipeline
+                dataFactoryManagementClient.Pipelines.CreateOrUpdate(resourceGroupName, dataFactoryName, pipelineName, pipeline);
+                Console.WriteLine("Pipeline created successfully.");
+                #endregion
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<bool> CreateZipToTerrDataPipeline(DataRequest request)
+        {
+            try
+            {
+                // Authenticate and Create a data factory management client
+                var dataFactoryManagementClient = this.aDFService.GetADFClient();
+
+                var customer = await this.customerRepository.GetCustomerByIdAsync(request.customerId);
+                var dsConfig = await this.customerRepository.GetDataSourceConfigAsync(request);
+
+                string resourceGroupName = customer.ResourceGroup;
+                string dataFactoryName = customer.Adfname;
+
+                #region Linked Servcie Creation Section
+                // Define the SQL Linked Service name and its properties
+                var sQLlsProperties = createSQLLinkedServiceProperties(resourceGroupName, dataFactoryName, customer);
+
+                dataFactoryManagementClient = this.aDFService.CreateLinkedService(sQLlsProperties, dataFactoryManagementClient);
+                Console.WriteLine("SQL Linked Service created successfully.");
+
+                // Define the File System Linked Service name and its properties
+                var fslsProperties = CreateFSLinkedServiceProperties(resourceGroupName, dataFactoryName, dsConfig);
+
+                dataFactoryManagementClient = this.aDFService.CreateLinkedService(fslsProperties, dataFactoryManagementClient);
+                Console.WriteLine("Blob Linked Service created successfully.");
+                #endregion
+
+                #region Dataset
+                string datasetName = "ClientZTTFileDataset";
+                var excelFSDataset = new DatasetResource
+                   (
+                      new ExcelDataset
+                      {
+                          Location = new FtpServerLocation
+                          {
+                              FolderPath = dsConfig.Url,
+                              FileName = dsConfig.SrcFileName
+                          },
+                          LinkedServiceName = new LinkedServiceReference
+                          {
+                              ReferenceName = dsConfig.LinkedService
+                          },
+                          SheetName = dsConfig.SheetName,
+                          FirstRowAsHeader = true,
+                          Folder = new DatasetFolder { Name = "IQVIA" }
+                      }
+                   );
+
+                dataFactoryManagementClient.Datasets.CreateOrUpdate(resourceGroupName, dataFactoryName, datasetName, excelFSDataset);
+
+
+                string datasetName1 = "StagingClientZTTDataset";
+                var StagingPBMPlansDataset = new DatasetResource
+                    (
+                      new AzureSqlTableDataset
+                      {
+                          LinkedServiceName = new LinkedServiceReference
+                          {
+                              ReferenceName = customer.LinkedService
+                          },
+                          TableName = dsConfig.DestTable,
+                          Folder = new DatasetFolder { Name = "IQVIA" }
+                      }
+                    );
+                dataFactoryManagementClient.Datasets.CreateOrUpdate(resourceGroupName, dataFactoryName, datasetName1, StagingPBMPlansDataset);
+
+                #endregion
+
+                #region Pipeline
+                // Define the pipeline name and its properties
+                string pipelineName = "ClientZTTPipeline";
+
+                var pipeline = new PipelineResource()
+                {
+                    Folder = new PipelineFolder { Name = "IQVIA" },
+                    Activities = new List<Activity>()
+                    {
+                         new CopyActivity
+                            {
+                                Name = "CopyClientZTTActivity",
+                                Inputs = new List<DatasetReference>()
+                                {
+                                    new DatasetReference()
+                                    {
+                                        ReferenceName = "ClientZTTFileDataset",
+                                    }
+                                },
+                                Outputs = new List<DatasetReference>()
+                                {
+                                    new DatasetReference()
+                                    {
+                                        ReferenceName = "StagingClientZTTDataset",
+                                    }
+                                },
+                                Source = new  DelimitedTextSource(),
+                                Sink = new SqlSink { PreCopyScript = $"TRUNCATE TABLE Staging_Client_ZipToTerr"}
+                            },
+
+                          new SqlServerStoredProcedureActivity
+                            {
+                                Name = "ClientZTTTransformActivity",
+                                 LinkedServiceName= new LinkedServiceReference
+                                  {
+                                      ReferenceName = "ODSSQLLinkedService"
+                                  },
+                                 StoredProcedureName = "sp_Client_ziptoterr_transform",
+                                 DependsOn = new List<ActivityDependency>{ new ActivityDependency("CopyClientZTTActivity", new List<string> { "Succeeded" })}
                             }
                     }
                 };

@@ -167,5 +167,53 @@ namespace ODSDataConnector.Controllers.IQVIA
             }
         }
 
+        [HttpPost("SetupIQVIAProductMarketData")]
+        public async Task<IActionResult> SetupIQVIAProductMarketDataAsync(DataRequest request)
+        {
+            try
+            {
+                var res = await this.StorageService.ExcecuteSQLScripts(request);
+                var result = await this.PlantrakAdfService.CreateIQVIAProductMarketDataPipeline(request);
+
+                return this.Ok();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        [HttpPost("SetupIQVIASpecialtyData")]
+        public async Task<IActionResult> SetupIQVIASpecialtyDataAsync(DataRequest request)
+        {
+            try
+            {
+                var res = await this.StorageService.ExcecuteSQLScripts(request);
+                var result = await this.PlantrakAdfService.CreateIQVIASpecialtyDataPipeline(request);
+
+                return this.Ok();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        [HttpPost("SetupZipToTerrData")]
+        public async Task<IActionResult> SetupZipToTerrDataAsync(DataRequest request)
+        {
+            try
+            {
+                var res = await this.StorageService.ExcecuteSQLScripts(request);
+                var result = await this.PlantrakAdfService.CreateZipToTerrDataPipeline(request);
+
+                return this.Ok();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
     }
 }

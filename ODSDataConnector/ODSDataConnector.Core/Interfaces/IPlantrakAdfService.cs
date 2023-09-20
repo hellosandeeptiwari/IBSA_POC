@@ -10,21 +10,16 @@ namespace ODSDataConnector.Core.Interfaces
     public interface IPlantrakAdfService
     {
         Task<bool> CreatePrescriberSalesPipeline(DataRequest request);
-
         Task<bool> CreateControlDataPipeline(DataRequest request);
-
         Task<bool> CreatePBMPlansDataPipeline(DataRequest request);
-
         Task<bool> CreatePayerPlansDataPipeline(DataRequest request);
-
         Task<bool> CreateModelDataPipeline(DataRequest request);
-
         Task<bool> CreateMarketDefinitionDataPipeline(DataRequest request);
-
         Task<bool> CreatePDRPDataPipeline(DataRequest request);
-
         Task<bool> CreateNoContactDataPipeline(DataRequest request);
-
         Task<bool> CreateIQVIACalenderDataPipeline(DataRequest request);
+        Task<bool> CreateIQVIAProductMarketDataPipeline(DataRequest request);
+        Task<bool> CreateIQVIASpecialtyDataPipeline(DataRequest request);
+        Task<bool> CreateZipToTerrDataPipeline(DataRequest request);
     }
 }
