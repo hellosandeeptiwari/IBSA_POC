@@ -11,10 +11,10 @@ SET NOCOUNT ON
 DECLARE 
 	@iOdsTableCount INT, @iMaxColumnNameLength AS INT, 
 	@strTableType VARCHAR(20), @strOdsTableName VARCHAR(400), 
-	@strColumnListScript AS NVARCHAR(4000), @strOdsTableScript NVARCHAR(MAX), -- NVARCHAR datatype is mandatory if you want to execute the script.
+	@strColumnListScript AS NVARCHAR(MAX), @strOdsTableScript NVARCHAR(MAX), -- NVARCHAR datatype is mandatory if you want to execute the script.
 	@bSCDRequired BIT;
 
-DECLARE @tableColumnList TABLE (ColumnList VARCHAR(4000));
+DECLARE @tableColumnList TABLE (ColumnList VARCHAR(MAX));
 DECLARE @tableColumnMapping TABLE (Id INT IDENTITY(1, 1), StagingColumnName VARCHAR(400), ProductionColumnName VARCHAR(400));
 
 CREATE TABLE #temp_OdsTableDefinition
@@ -105,7 +105,7 @@ CREATE TABLE ' + CASE WHEN @strTableType = 'Staging' THEN 'Staging_' + @strOdsTa
 	SELECT ColumnList + '','' FROM 
 	(
 		SELECT
-			STRING_AGG(CHAR(13) + CHAR(9) + CAST(CASE WHEN OdsColumnName IN (''Primary'', ''User'') THEN ''['' + OdsColumnName + '']'' ELSE OdsColumnName END AS CHAR(' + CAST(@iMaxColumnNameLength AS VARCHAR) + ')) + CHAR(9) + CHAR(9) + OdsDataType, '','') AS ColumnList
+			STRING_AGG(cast(CHAR(13) + CHAR(9) + CAST(CASE WHEN OdsColumnName IN (''Primary'', ''User'') THEN ''['' + OdsColumnName + '']'' ELSE OdsColumnName END AS CHAR(' + CAST(@iMaxColumnNameLength AS VARCHAR) + ')) + CHAR(9) + CHAR(9) + OdsDataType as nvarchar(max)), '','') AS ColumnList
 		FROM VeevaOdsFieldMapping
 		WHERE OdsTableName = ''' + @strOdsTableName + '''
 		GROUP BY OdsTableName 
@@ -123,12 +123,12 @@ CREATE TABLE ' + CASE WHEN @strTableType = 'Staging' THEN 'Staging_' + @strOdsTa
 				CHAR(13) + CHAR(9) + CAST(''LastModifiedById'' AS CHAR(' + CAST(@iMaxColumnNameLength AS VARCHAR) + ')) + ''' + CHAR(9) + CHAR(9) + 'CHAR(18) NOT NULL,'' +
 				CHAR(13) + CHAR(9) + CAST(''LastModifiedDate'' AS CHAR(' + CAST(@iMaxColumnNameLength AS VARCHAR) + ')) + ''' + CHAR(9) + CHAR(9) + 'DATETIME NOT NULL,'' +
 				CHAR(13) + CHAR(9) + CAST(''SystemModstamp'' AS CHAR(' + CAST(@iMaxColumnNameLength AS VARCHAR) + ')) + ''' + CHAR(9) + CHAR(9) + 'DATETIME NOT NULL,''';
-		ELSE IF @strOdsTableName IN ('Territory', 'UserTerritory') -- IsDeleted, CreatedDate, CreatedById fields does not exist in these objects.
+		ELSE IF @strOdsTableName IN ('Territory', 'UserTerritory','ObjectTerritory') -- IsDeleted, CreatedDate, CreatedById fields does not exist in these objects.
 			SET @strColumnListScript =
 			'SELECT 
 				CHAR(13) + CHAR(9) + CAST(''LastModifiedById'' AS CHAR(' + CAST(@iMaxColumnNameLength AS VARCHAR) + ')) + ''' + CHAR(9) + CHAR(9) + 'CHAR(18) NOT NULL,'' +
 				CHAR(13) + CHAR(9) + CAST(''LastModifiedDate'' AS CHAR(' + CAST(@iMaxColumnNameLength AS VARCHAR) + ')) + ''' + CHAR(9) + CHAR(9) + 'DATETIME NOT NULL,'' +
-				CHAR(13) + CHAR(9) + CAST(''SystemModstamp'' AS CHAR(' + CAST(@iMaxColumnNameLength AS VARCHAR) + ')) + ''' + CHAR(9) + CHAR(9) + 'DATETIME NOT NULL,''';
+				CHAR(13) + CHAR(9) + CAST(''SystemModstamp'' AS CHAR(' + CAST(@iMaxColumnNameLength AS VARCHAR) + ')) + ''' + CHAR(9) + CHAR(9) + 'DATETIME NOT NULL,''';		
 		ELSE
 			SET @strColumnListScript =
 			'SELECT 
@@ -149,7 +149,7 @@ CREATE TABLE ' + CASE WHEN @strTableType = 'Staging' THEN 'Staging_' + @strOdsTa
 				CHAR(13) + CHAR(9) + CAST(''VeevaSystemModstamp'' AS CHAR(' + CAST(@iMaxColumnNameLength AS VARCHAR) + ')) + ''' + CHAR(9) + CHAR(9) + 'DATETIME NOT NULL,'' +
 				CHAR(13) + CHAR(9) + CAST(''CreatedDate'' AS CHAR(' + CAST(@iMaxColumnNameLength AS VARCHAR) + ')) + ''' + CHAR(9) + CHAR(9) + 'DATETIME NOT NULL,'' +
 				CHAR(13) + CHAR(9) + CAST(''UpdatedDate'' AS CHAR(' + CAST(@iMaxColumnNameLength AS VARCHAR) + ')) + ''' + CHAR(9) + CHAR(9) + 'DATETIME NOT NULL,''';
-		ELSE IF @strOdsTableName IN ('Territory', 'UserTerritory') -- IsDeleted, CreatedDate, CreatedById fields does not exist in these objects.
+		ELSE IF @strOdsTableName IN ('Territory', 'UserTerritory','ObjectTerritory') -- IsDeleted, CreatedDate, CreatedById fields does not exist in these objects.
 			SET @strColumnListScript =
 			'SELECT 
 				CHAR(13) + CHAR(9) + CAST(''VeevaLastModifiedById'' AS CHAR(' + CAST(@iMaxColumnNameLength AS VARCHAR) + ')) + ''' + CHAR(9) + CHAR(9) + 'CHAR(18) NOT NULL,'' +
@@ -362,12 +362,12 @@ BEGIN
 	('SystemModstamp', 'VeevaSystemModstamp');
 
 	-- Common columns - IsDeleted field does not exist in the below objects.
-	IF @strOdsTableName NOT IN ('User', 'RecordType', 'Territory', 'UserTerritory')
+	IF @strOdsTableName NOT IN ('User', 'RecordType', 'Territory', 'UserTerritory','ObjectTerritory')
 		INSERT INTO @tableColumnMapping
 		VALUES('IsDeleted', 'IsDeleted');
 
 	-- Common columns - CreatedDate, CreatedById fields do not exist in the below objects.
-	IF @strOdsTableName NOT IN ('Territory', 'UserTerritory')
+	IF @strOdsTableName NOT IN ('Territory', 'UserTerritory','ObjectTerritory')
 		INSERT INTO @tableColumnMapping
 		VALUES 
 		('CreatedById', 'VeevaCreatedById'), 
@@ -401,7 +401,7 @@ BEGIN
 	-- Step-2: Adding the SET column list for UPDATE statement.
 	SELECT 
 		@strOdsTableScript =	@strOdsTableScript + 
-								STRING_AGG(CHAR(9) + CHAR(9) + 'P.' + ProductionColumnName + ' = S.' + StagingColumnName, ', ' + CHAR(13)) + 
+								STRING_AGG(cast(CHAR(9) + CHAR(9) + 'P.' + ProductionColumnName + ' = S.' + StagingColumnName as nvarchar(max)), ', ' + CHAR(13)) + 
 								', ' + CHAR(13)
 	FROM @tableColumnMapping
 	WHERE ProductionColumnName NOT IN ('VeevaId', 'VeevaCreatedById', 'VeevaCreatedDate');
@@ -421,7 +421,7 @@ BEGIN
 	-- Step-4: Add the INSERT statement Production column list by adding five columns in each line.
 	SELECT 
 		@strOdsTableScript =	@strOdsTableScript + 
-								STRING_AGG(ProductionColumnName + ', ' + CASE WHEN Id % 5 = 0 THEN CHAR(13) + CHAR(9) + CHAR(9) ELSE '' END, '')
+								STRING_AGG(cast(ProductionColumnName  + ', ' + CASE WHEN Id % 5 = 0 THEN CHAR(13) + CHAR(9) + CHAR(9) ELSE '' END as nvarchar(max)), '')
 	FROM @tableColumnMapping;
 
 
@@ -435,7 +435,7 @@ BEGIN
 	-- Step-6: Add the SELECT statement Staging column list by adding five columns in each line.
 	SELECT 
 		@strOdsTableScript =	@strOdsTableScript + 
-								STRING_AGG(StagingColumnName + ', ' + CASE WHEN Id % 5 = 0 THEN CHAR(13) + CHAR(9) + CHAR(9) ELSE '' END, '')
+								STRING_AGG(cast(StagingColumnName + ', ' + CASE WHEN Id % 5 = 0 THEN CHAR(13) + CHAR(9) + CHAR(9) ELSE '' END as nvarchar(max)), '')
 	FROM @tableColumnMapping;
 
 
