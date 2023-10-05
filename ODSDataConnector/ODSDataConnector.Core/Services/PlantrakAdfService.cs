@@ -18,19 +18,21 @@ namespace ODSDataConnector.Core.Services
     public class PlantrakAdfService : IPlantrakAdfService
     {
         private readonly ICustomerRepository customerRepository;
-
         private readonly IADFService aDFService;
+        private readonly IAppLogger AppLogger;
 
-        public PlantrakAdfService(ICustomerRepository customerRepository, IADFService ADFService)
+        public PlantrakAdfService(ICustomerRepository customerRepository, IADFService ADFService, IAppLogger appLogger)
         {
             this.customerRepository = customerRepository;
             this.aDFService = ADFService;
+            this.AppLogger = appLogger;
         }
 
         public async Task<bool> CreatePrescriberSalesPipeline(DataRequest request)
         {
             try
             {
+                this.AppLogger.LogInformation($"CreatePrescriberSalesPipeline Method Started at {DateTime.UtcNow}");
                 var dataFactoryManagementClient = this.aDFService.GetADFClient();
 
                 var customer = await this.customerRepository.GetCustomerByIdAsync(request.customerId);
@@ -46,16 +48,15 @@ namespace ODSDataConnector.Core.Services
                 var sQLlsProperties = createSQLLinkedServiceProperties(resourceGroupName, dataFactoryName, customer);
 
                 dataFactoryManagementClient = this.aDFService.CreateLinkedService(sQLlsProperties, dataFactoryManagementClient);
-                Console.WriteLine("SQL Linked Service created successfully.");
+                this.AppLogger.LogInformation("SQL Linked Service created successfully.");
 
                 // Define the File System Linked Service name and its properties
                 var fslsProperties = CreateFSLinkedServiceProperties(resourceGroupName, dataFactoryName, dsConfig);
 
                 dataFactoryManagementClient = this.aDFService.CreateLinkedService(fslsProperties, dataFactoryManagementClient);
-                Console.WriteLine("FTP Linked Service created successfully.");
+                this.AppLogger.LogInformation("FTP Linked Service created successfully.");
 
                 #endregion
-
 
                 #region Dataset
                 string datasetName = "PTFullDataFileDataSet";
@@ -101,7 +102,6 @@ namespace ODSDataConnector.Core.Services
                     );
                 dataFactoryManagementClient.Datasets.CreateOrUpdate(resourceGroupName, dataFactoryName, datasetName1, StagingDDDDemographicDataset);
                 #endregion
-
 
                 #region Pipeline
                 // Define the pipeline name and its properties
@@ -175,10 +175,11 @@ namespace ODSDataConnector.Core.Services
                 // Create or update the pipeline
                 dataFactoryManagementClient.Pipelines.CreateOrUpdate(resourceGroupName, dataFactoryName, pipelineName, pipeline);
 
-                Console.WriteLine("Pipeline created successfully.");
+                this.AppLogger.LogInformation($"{pipelineName} Pipeline created successfully.");
 
                 #endregion
 
+                this.AppLogger.LogInformation($"CreatePrescriberSalesPipeline Method completed at {DateTime.UtcNow}");
                 return true;
             }
             catch (Exception ex)
@@ -191,9 +192,9 @@ namespace ODSDataConnector.Core.Services
         {
             try
             {
+                this.AppLogger.LogInformation($"CreateControlDataPipeline Method Started at {DateTime.UtcNow}");
                 // Authenticate and Create a data factory management client
                 var dataFactoryManagementClient = this.aDFService.GetADFClient();
-
 
                 var customer = await this.customerRepository.GetCustomerByIdAsync(request.customerId);
                 var dsConfig = await this.customerRepository.GetDataSourceConfigAsync(request);
@@ -201,19 +202,18 @@ namespace ODSDataConnector.Core.Services
                 string resourceGroupName = customer.ResourceGroup;
                 string dataFactoryName = customer.Adfname;
 
-
                 #region Linked Servcie Creation Section
                 // Define the SQL Linked Service name and its properties
                 var sQLlsProperties = createSQLLinkedServiceProperties(resourceGroupName, dataFactoryName, customer);
 
                 dataFactoryManagementClient = this.aDFService.CreateLinkedService(sQLlsProperties, dataFactoryManagementClient);
-                Console.WriteLine("SQL Linked Service created successfully.");
+                this.AppLogger.LogInformation("SQL Linked Service created successfully.");
 
                 // Define the File System Linked Service name and its properties
                 var fslsProperties = CreateFSLinkedServiceProperties(resourceGroupName, dataFactoryName, dsConfig);
 
                 dataFactoryManagementClient = this.aDFService.CreateLinkedService(fslsProperties, dataFactoryManagementClient);
-                Console.WriteLine("FTP Linked Service created successfully.");
+                this.AppLogger.LogInformation("File system Linked Service created successfully.");
                 #endregion
 
                 #region Dataset
@@ -317,14 +317,15 @@ namespace ODSDataConnector.Core.Services
                 // Create or update the pipeline
                 dataFactoryManagementClient.Pipelines.CreateOrUpdate(resourceGroupName, dataFactoryName, pipelineName, pipeline);
 
-                Console.WriteLine("Pipeline created successfully.");
-
+                this.AppLogger.LogInformation($"{pipelineName} Pipeline created successfully.");
                 #endregion
 
+                this.AppLogger.LogInformation($"CreateControlDataPipeline Method completed at {DateTime.UtcNow}");
                 return true;
             }
             catch (Exception ex)
             {
+                this.AppLogger.LogError(ex);
                 throw ex;
             }
         }
@@ -333,6 +334,7 @@ namespace ODSDataConnector.Core.Services
         {
             try
             {
+                this.AppLogger.LogInformation($"CreatePBMPlansDataPipeline Method Started at {DateTime.UtcNow}");
                 // Authenticate and Create a data factory management client
                 var dataFactoryManagementClient = this.aDFService.GetADFClient();
 
@@ -348,16 +350,15 @@ namespace ODSDataConnector.Core.Services
                 var sQLlsProperties = createSQLLinkedServiceProperties(resourceGroupName, dataFactoryName, customer);
 
                 dataFactoryManagementClient = this.aDFService.CreateLinkedService(sQLlsProperties, dataFactoryManagementClient);
-                Console.WriteLine("SQL Linked Service created successfully.");
+                this.AppLogger.LogInformation("SQL Linked Service created successfully.");
 
                 // Define the Storage Blob Linked Service name and its properties
                 var blobLsProperties = CreateBlobLinkedServiceProperties(resourceGroupName, dataFactoryName, dsConfig);
 
                 dataFactoryManagementClient = this.aDFService.CreateLinkedService(blobLsProperties, dataFactoryManagementClient);
-                Console.WriteLine("Blob Linked Service created successfully.");
+                this.AppLogger.LogInformation("Blob Linked Service created successfully.");
 
                 #endregion
-
 
                 #region Dataset
                 string datasetName = "PTPBMPlandBlobDataset";
@@ -441,18 +442,31 @@ namespace ODSDataConnector.Core.Services
                                   },
                                  StoredProcedureName = "sp_pt_pbmplans_transform",
                                  DependsOn = new List<ActivityDependency>{ new ActivityDependency("CopyPBMPlansActivity", new List<string> { "Succeeded" })}
+                            },
+
+                          new SqlServerStoredProcedureActivity
+                            {
+                                Name = "ReportingPBMPlansTransformActivty",
+                                 LinkedServiceName= new LinkedServiceReference
+                                  {
+                                      ReferenceName = "ODSSQLLinkedService"
+                                  },
+                                 StoredProcedureName = "sp_reporting_pt_pbmplans_transform",
+                                 DependsOn = new List<ActivityDependency>{ new ActivityDependency("PbmPlansTransformActivty", new List<string> { "Succeeded" })}
                             }
                     }
                 };
                 // Create or update the pipeline
                 dataFactoryManagementClient.Pipelines.CreateOrUpdate(resourceGroupName, dataFactoryName, pipelineName, pipeline);
-                Console.WriteLine("Pipeline created successfully.");
+                this.AppLogger.LogInformation($"{pipelineName} Pipeline created successfully.");
                 #endregion
 
+                this.AppLogger.LogInformation($"CreatePBMPlansDataPipeline Method completed at {DateTime.UtcNow}");
                 return true;
             }
             catch (Exception ex)
             {
+                this.AppLogger.LogError(ex);
                 throw ex;
             }
         }
@@ -461,6 +475,7 @@ namespace ODSDataConnector.Core.Services
         {
             try
             {
+                this.AppLogger.LogInformation($"CreatePayerPlansDataPipeline Method Started at {DateTime.UtcNow}");
                 // Authenticate and Create a data factory management client
                 var dataFactoryManagementClient = this.aDFService.GetADFClient();
 
@@ -475,13 +490,13 @@ namespace ODSDataConnector.Core.Services
                 var sQLlsProperties = createSQLLinkedServiceProperties(resourceGroupName, dataFactoryName, customer);
 
                 dataFactoryManagementClient = this.aDFService.CreateLinkedService(sQLlsProperties, dataFactoryManagementClient);
-                Console.WriteLine("SQL Linked Service created successfully.");
+                this.AppLogger.LogInformation("SQL Linked Service created successfully.");
 
                 // Define the File System Linked Service name and its properties
                 var fslsProperties = CreateFSLinkedServiceProperties(resourceGroupName, dataFactoryName, dsConfig);
 
                 dataFactoryManagementClient = this.aDFService.CreateLinkedService(fslsProperties, dataFactoryManagementClient);
-                Console.WriteLine("FTP Linked Service created successfully.");
+                this.AppLogger.LogInformation("File system Linked Service created successfully.");
                 #endregion
 
                 #region Dataset
@@ -573,19 +588,32 @@ namespace ODSDataConnector.Core.Services
                                   },
                                  StoredProcedureName = "sp_pt_payerplan_transform",
                                  DependsOn = new List<ActivityDependency>{ new ActivityDependency("CopyPayerPlanActivity", new List<string> { "Succeeded" })}
+                            },
+
+                          new SqlServerStoredProcedureActivity
+                            {
+                                Name = "ReportingPayerPlanTransformActivty",
+                                 LinkedServiceName= new LinkedServiceReference
+                                  {
+                                      ReferenceName = "ODSSQLLinkedService"
+                                  },
+                                 StoredProcedureName = "sp_reporting_pt_payerplan_transform",
+                                 DependsOn = new List<ActivityDependency>{ new ActivityDependency("PayerPlanTransformActivty", new List<string> { "Succeeded" })}
                             }
                     }
                 };
                 // Create or update the pipeline
                 dataFactoryManagementClient.Pipelines.CreateOrUpdate(resourceGroupName, dataFactoryName, pipelineName, pipeline);
-                Console.WriteLine("Pipeline created successfully.");
+                this.AppLogger.LogInformation($"{pipelineName} Pipeline created successfully.");
                 #endregion
 
+                this.AppLogger.LogInformation($"CreatePayerPlansDataPipeline Method completed at {DateTime.UtcNow}");
                 return true;
             }
             catch (Exception ex)
             {
-                return false;
+                this.AppLogger.LogError(ex);
+                throw ex;
             }
         }
 
@@ -593,6 +621,7 @@ namespace ODSDataConnector.Core.Services
         {
             try
             {
+                this.AppLogger.LogInformation($"CreateModelDataPipeline Method Started at {DateTime.UtcNow}");
                 // Authenticate and Create a data factory management client
                 var dataFactoryManagementClient = this.aDFService.GetADFClient();
 
@@ -607,15 +636,14 @@ namespace ODSDataConnector.Core.Services
                 var sQLlsProperties = createSQLLinkedServiceProperties(resourceGroupName, dataFactoryName, customer);
 
                 dataFactoryManagementClient = this.aDFService.CreateLinkedService(sQLlsProperties, dataFactoryManagementClient);
-                Console.WriteLine("SQL Linked Service created successfully.");
+                this.AppLogger.LogInformation("SQL Linked Service created successfully.");
 
                 // Define the Storage Blob Linked Service name and its properties
                 var blobLsProperties = CreateBlobLinkedServiceProperties(resourceGroupName, dataFactoryName, dsConfig);
 
                 dataFactoryManagementClient = this.aDFService.CreateLinkedService(blobLsProperties, dataFactoryManagementClient);
-                Console.WriteLine("Blob Linked Service created successfully.");
+                this.AppLogger.LogInformation("Blob Linked Service created successfully.");
                 #endregion
-
 
                 #region Dataset
                 string datasetName = "PlanModelDataset";
@@ -700,18 +728,31 @@ namespace ODSDataConnector.Core.Services
                                   },
                                  StoredProcedureName = "sp_pt_planmodel_transform",
                                  DependsOn = new List<ActivityDependency>{ new ActivityDependency("CopyPlanModelActivity", new List<string> { "Succeeded" })}
+                            },
+
+                          new SqlServerStoredProcedureActivity
+                            {
+                                Name = "ReportingPBMPlansTransformActivty",
+                                 LinkedServiceName= new LinkedServiceReference
+                                  {
+                                      ReferenceName = "ODSSQLLinkedService"
+                                  },
+                                 StoredProcedureName = "sp_reporting_pt_planmodel_transform",
+                                 DependsOn = new List<ActivityDependency>{ new ActivityDependency("PlanModelTransformActivty", new List<string> { "Succeeded" })}
                             }
                     }
                 };
                 // Create or update the pipeline
                 dataFactoryManagementClient.Pipelines.CreateOrUpdate(resourceGroupName, dataFactoryName, pipelineName, pipeline);
-                Console.WriteLine("Pipeline created successfully.");
+                this.AppLogger.LogInformation($"{pipelineName} Pipeline created successfully.");
                 #endregion
 
+                this.AppLogger.LogInformation($"CreateModelDataPipeline Method completed at {DateTime.UtcNow}");
                 return true;
             }
             catch (Exception ex)
             {
+                this.AppLogger.LogError(ex);
                 throw ex;
             }
         }
@@ -720,6 +761,7 @@ namespace ODSDataConnector.Core.Services
         {
             try
             {
+                this.AppLogger.LogInformation($"CreateMarketDefinitionDataPipeline Method Started at {DateTime.UtcNow}");
                 // Authenticate and Create a data factory management client
                 var dataFactoryManagementClient = this.aDFService.GetADFClient();
 
@@ -734,15 +776,14 @@ namespace ODSDataConnector.Core.Services
                 var sQLlsProperties = createSQLLinkedServiceProperties(resourceGroupName, dataFactoryName, customer);
 
                 dataFactoryManagementClient = this.aDFService.CreateLinkedService(sQLlsProperties, dataFactoryManagementClient);
-                Console.WriteLine("SQL Linked Service created successfully.");
+                this.AppLogger.LogInformation("SQL Linked Service created successfully.");
 
                 // Define the File System Linked Service name and its properties
                 var fslsProperties = CreateFSLinkedServiceProperties(resourceGroupName, dataFactoryName, dsConfig);
 
                 dataFactoryManagementClient = this.aDFService.CreateLinkedService(fslsProperties, dataFactoryManagementClient);
-                Console.WriteLine("FTP Linked Service created successfully.");
+                this.AppLogger.LogInformation("File system Linked Service created successfully.");
                 #endregion
-
 
                 #region Dataset
                 string datasetName = "IqviaMarketDeifnitionFileDataset";
@@ -832,18 +873,31 @@ namespace ODSDataConnector.Core.Services
                                   },
                                  StoredProcedureName = "sp_iqvia_product_transform",
                                  DependsOn = new List<ActivityDependency>{ new ActivityDependency("CopyIqviaMarketDerinitionActivity", new List<string> { "Succeeded" })}
+                            },
+
+                          new SqlServerStoredProcedureActivity
+                            {
+                                Name = "ReportingIqviaProductTransformActivity",
+                                 LinkedServiceName= new LinkedServiceReference
+                                  {
+                                      ReferenceName = "ODSSQLLinkedService"
+                                  },
+                                 StoredProcedureName = "sp_reporting_iqvia_product_transform",
+                                 DependsOn = new List<ActivityDependency>{ new ActivityDependency("IqviaProductTransformActivity", new List<string> { "Succeeded" })}
                             }
                     }
                 };
                 // Create or update the pipeline
                 dataFactoryManagementClient.Pipelines.CreateOrUpdate(resourceGroupName, dataFactoryName, pipelineName, pipeline);
-                Console.WriteLine("Pipeline created successfully.");
+                this.AppLogger.LogInformation($"{pipelineName} Pipeline created successfully.");
                 #endregion
 
+                this.AppLogger.LogInformation($"CreateMarketDefinitionDataPipeline Method completed at {DateTime.UtcNow}");
                 return true;
             }
             catch (Exception ex)
             {
+                this.AppLogger.LogError(ex);
                 throw ex;
             }
         }
@@ -852,6 +906,7 @@ namespace ODSDataConnector.Core.Services
         {
             try
             {
+                this.AppLogger.LogInformation($"CreatePDRPDataPipeline Method Started at {DateTime.UtcNow}");
                 var dataFactoryManagementClient = this.aDFService.GetADFClient();
 
                 var customer = await this.customerRepository.GetCustomerByIdAsync(request.customerId);
@@ -865,15 +920,14 @@ namespace ODSDataConnector.Core.Services
                 var sQLlsProperties = createSQLLinkedServiceProperties(resourceGroupName, dataFactoryName, customer);
 
                 dataFactoryManagementClient = this.aDFService.CreateLinkedService(sQLlsProperties, dataFactoryManagementClient);
-                Console.WriteLine("SQL Linked Service created successfully.");
+                this.AppLogger.LogInformation("SQL Linked Service created successfully.");
 
                 // Define the File System Linked Service name and its properties
                 var fslsProperties = CreateFSLinkedServiceProperties(resourceGroupName, dataFactoryName, dsConfig);
 
                 dataFactoryManagementClient = this.aDFService.CreateLinkedService(fslsProperties, dataFactoryManagementClient);
-                Console.WriteLine("FTP Linked Service created successfully.");
+                this.AppLogger.LogInformation("File system Linked Service created successfully.");
                 #endregion
-
 
                 #region Dataset
                 string datasetName = "PDRPSourceDataset";
@@ -963,18 +1017,31 @@ namespace ODSDataConnector.Core.Services
                                   },
                                  StoredProcedureName = "sp_iqvia_pdrpdetails_transform",
                                  DependsOn = new List<ActivityDependency>{ new ActivityDependency("CopyPrdpDetailsActvity", new List<string> { "Succeeded" })}
+                            },
+
+                          new SqlServerStoredProcedureActivity
+                            {
+                                Name = "ReportingPdrpDetailsTransformActivty",
+                                 LinkedServiceName= new LinkedServiceReference
+                                  {
+                                      ReferenceName = "ODSSQLLinkedService"
+                                  },
+                                 StoredProcedureName = "sp_Reporting_iqvia_pdrpdetails_transform",
+                                 DependsOn = new List<ActivityDependency>{ new ActivityDependency("PdrpDetailsTransformActivty", new List<string> { "Succeeded" })}
                             }
                     }
                 };
                 // Create or update the pipeline
                 dataFactoryManagementClient.Pipelines.CreateOrUpdate(resourceGroupName, dataFactoryName, pipelineName, pipeline);
-                Console.WriteLine("Pipeline created successfully.");
+                this.AppLogger.LogInformation($"{pipelineName} Pipeline created successfully.");
                 #endregion
 
+                this.AppLogger.LogInformation($"CreatePDRPDataPipeline Method completed at {DateTime.UtcNow}");
                 return true;
             }
             catch (Exception ex)
             {
+                this.AppLogger.LogError(ex);
                 throw ex;
             }
         }
@@ -983,6 +1050,7 @@ namespace ODSDataConnector.Core.Services
         {
             try
             {
+                this.AppLogger.LogInformation($"CreateNoContactDataPipeline Method Started at {DateTime.UtcNow}");
                 // Authenticate and Create a data factory management client
                 var dataFactoryManagementClient = this.aDFService.GetADFClient();
 
@@ -997,15 +1065,14 @@ namespace ODSDataConnector.Core.Services
                 var sQLlsProperties = createSQLLinkedServiceProperties(resourceGroupName, dataFactoryName, customer);
 
                 dataFactoryManagementClient = this.aDFService.CreateLinkedService(sQLlsProperties, dataFactoryManagementClient);
-                Console.WriteLine("SQL Linked Service created successfully.");
+                this.AppLogger.LogInformation("SQL Linked Service created successfully.");
 
                 // Define the File System Linked Service name and its properties
                 var fslsProperties = CreateFSLinkedServiceProperties(resourceGroupName, dataFactoryName, dsConfig);
 
                 dataFactoryManagementClient = this.aDFService.CreateLinkedService(fslsProperties, dataFactoryManagementClient);
-                Console.WriteLine("FTP Linked Service created successfully.");
+                this.AppLogger.LogInformation("File system Linked Service created successfully.");
                 #endregion
-
 
                 #region Dataset
                 string datasetName = "NoContactFileDataset";
@@ -1094,18 +1161,31 @@ namespace ODSDataConnector.Core.Services
                                   },
                                  StoredProcedureName = "sp_iqvia_nocontact_transform",
                                  DependsOn = new List<ActivityDependency>{ new ActivityDependency("CopyNoContactctvity", new List<string> { "Succeeded" })}
+                            },
+
+                          new SqlServerStoredProcedureActivity
+                            {
+                                Name = "ReportingNoContactTransformActivty",
+                                 LinkedServiceName= new LinkedServiceReference
+                                  {
+                                      ReferenceName = "ODSSQLLinkedService"
+                                  },
+                                 StoredProcedureName = "sp_reporting_iqvia_nocontact_transform",
+                                 DependsOn = new List<ActivityDependency>{ new ActivityDependency("NoContactTransformActivty", new List<string> { "Succeeded" })}
                             }
                     }
                 };
                 // Create or update the pipeline
                 dataFactoryManagementClient.Pipelines.CreateOrUpdate(resourceGroupName, dataFactoryName, pipelineName, pipeline);
-                Console.WriteLine("Pipeline created successfully.");
+                this.AppLogger.LogInformation($"{pipelineName} Pipeline created successfully.");
                 #endregion
 
+                this.AppLogger.LogInformation($"CreateNoContactDataPipeline Method completed at {DateTime.UtcNow}");
                 return true;
             }
             catch (Exception ex)
             {
+                this.AppLogger.LogError(ex);
                 throw ex;
             }
         }
@@ -1114,6 +1194,7 @@ namespace ODSDataConnector.Core.Services
         {
             try
             {
+                this.AppLogger.LogInformation($"CreateIQVIACalenderDataPipeline Method Started at {DateTime.UtcNow}");
                 // Authenticate and Create a data factory management client
                 var dataFactoryManagementClient = this.aDFService.GetADFClient();
 
@@ -1128,13 +1209,13 @@ namespace ODSDataConnector.Core.Services
                 var sQLlsProperties = createSQLLinkedServiceProperties(resourceGroupName, dataFactoryName, customer);
 
                 dataFactoryManagementClient = this.aDFService.CreateLinkedService(sQLlsProperties, dataFactoryManagementClient);
-                Console.WriteLine("SQL Linked Service created successfully.");
+                this.AppLogger.LogInformation("SQL Linked Service created successfully.");
 
                 // Define the Storage Blob Linked Service name and its properties
                 var blobLsProperties = CreateBlobLinkedServiceProperties(resourceGroupName, dataFactoryName, dsConfig);
 
                 dataFactoryManagementClient = this.aDFService.CreateLinkedService(blobLsProperties, dataFactoryManagementClient);
-                Console.WriteLine("Blob Linked Service created successfully.");
+                this.AppLogger.LogInformation("Blob Linked Service created successfully.");
                 #endregion
 
                 #region Dataset
@@ -1212,13 +1293,15 @@ namespace ODSDataConnector.Core.Services
                 };
                 // Create or update the pipeline
                 dataFactoryManagementClient.Pipelines.CreateOrUpdate(resourceGroupName, dataFactoryName, pipelineName, pipeline);
-                Console.WriteLine("Pipeline created successfully.");
+                this.AppLogger.LogInformation($"{pipelineName} Pipeline created successfully.");
                 #endregion
 
+                this.AppLogger.LogInformation($"CreateIQVIACalenderDataPipeline Method completed at {DateTime.UtcNow}");
                 return true;
             }
             catch (Exception ex)
             {
+                this.AppLogger.LogError(ex);
                 throw ex;
             }
         }
@@ -1227,6 +1310,7 @@ namespace ODSDataConnector.Core.Services
         {
             try
             {
+                this.AppLogger.LogInformation($"CreateIQVIAProductMarketDataPipeline Method Started at {DateTime.UtcNow}");
                 // Authenticate and Create a data factory management client
                 var dataFactoryManagementClient = this.aDFService.GetADFClient();
 
@@ -1241,13 +1325,13 @@ namespace ODSDataConnector.Core.Services
                 var sQLlsProperties = createSQLLinkedServiceProperties(resourceGroupName, dataFactoryName, customer);
 
                 dataFactoryManagementClient = this.aDFService.CreateLinkedService(sQLlsProperties, dataFactoryManagementClient);
-                Console.WriteLine("SQL Linked Service created successfully.");
+                this.AppLogger.LogInformation("SQL Linked Service created successfully.");
 
                 // Define the Storage Blob Linked Service name and its properties
                 var blobLsProperties = CreateBlobLinkedServiceProperties(resourceGroupName, dataFactoryName, dsConfig);
 
                 dataFactoryManagementClient = this.aDFService.CreateLinkedService(blobLsProperties, dataFactoryManagementClient);
-                Console.WriteLine("Blob Linked Service created successfully.");
+                this.AppLogger.LogInformation("Blob Linked Service created successfully.");
                 #endregion
 
                 #region Dataset
@@ -1331,18 +1415,31 @@ namespace ODSDataConnector.Core.Services
                                   },
                                  StoredProcedureName = "sp_iqvia_productmarket_transform",
                                  DependsOn = new List<ActivityDependency>{ new ActivityDependency("CopyIBSAProductmarketActivity", new List<string> { "Succeeded" })}
+                            },
+
+                          new SqlServerStoredProcedureActivity
+                            {
+                                Name = "ReportingIqviaProductMarketTransformActivity",
+                                 LinkedServiceName= new LinkedServiceReference
+                                  {
+                                      ReferenceName = "ODSSQLLinkedService"
+                                  },
+                                 StoredProcedureName = "sp_reporting_iqvia_productmarket_transform",
+                                 DependsOn = new List<ActivityDependency>{ new ActivityDependency("IqviaProductMarketTransformActivity", new List<string> { "Succeeded" })}
                             }
                     }
                 };
                 // Create or update the pipeline
                 dataFactoryManagementClient.Pipelines.CreateOrUpdate(resourceGroupName, dataFactoryName, pipelineName, pipeline);
-                Console.WriteLine("Pipeline created successfully.");
+                this.AppLogger.LogInformation($"{pipelineName} Pipeline created successfully.");
                 #endregion
 
+                this.AppLogger.LogInformation($"CreateIQVIAProductMarketDataPipeline Method completed at {DateTime.UtcNow}");
                 return true;
             }
             catch (Exception ex)
             {
+                this.AppLogger.LogError(ex);
                 throw ex;
             }
         }
@@ -1351,6 +1448,7 @@ namespace ODSDataConnector.Core.Services
         {
             try
             {
+                this.AppLogger.LogInformation($"CreateIQVIASpecialtyDataPipeline Method Started at {DateTime.UtcNow}");
                 // Authenticate and Create a data factory management client
                 var dataFactoryManagementClient = this.aDFService.GetADFClient();
 
@@ -1365,13 +1463,13 @@ namespace ODSDataConnector.Core.Services
                 var sQLlsProperties = createSQLLinkedServiceProperties(resourceGroupName, dataFactoryName, customer);
 
                 dataFactoryManagementClient = this.aDFService.CreateLinkedService(sQLlsProperties, dataFactoryManagementClient);
-                Console.WriteLine("SQL Linked Service created successfully.");
+                this.AppLogger.LogInformation("SQL Linked Service created successfully.");
 
                 // Define the File System Linked Service name and its properties
                 var fslsProperties = CreateFSLinkedServiceProperties(resourceGroupName, dataFactoryName, dsConfig);
 
                 dataFactoryManagementClient = this.aDFService.CreateLinkedService(fslsProperties, dataFactoryManagementClient);
-                Console.WriteLine("Blob Linked Service created successfully.");
+                this.AppLogger.LogInformation("File system Linked Service created successfully.");
                 #endregion
 
                 #region Dataset
@@ -1454,18 +1552,31 @@ namespace ODSDataConnector.Core.Services
                                   },
                                  StoredProcedureName = "sp_iqvia_specialty_transform",
                                  DependsOn = new List<ActivityDependency>{ new ActivityDependency("CopySpecailtyActivity", new List<string> { "Succeeded" })}
+                            },
+
+                          new SqlServerStoredProcedureActivity
+                            {
+                                Name = "ReportingSpecialtyTransformActivity",
+                                 LinkedServiceName= new LinkedServiceReference
+                                  {
+                                      ReferenceName = "ODSSQLLinkedService"
+                                  },
+                                 StoredProcedureName = "sp_reporting_iqvia_specialty_transform",
+                                 DependsOn = new List<ActivityDependency>{ new ActivityDependency("IqviaSpecialtyTransformActivity", new List<string> { "Succeeded" })}
                             }
                     }
                 };
                 // Create or update the pipeline
                 dataFactoryManagementClient.Pipelines.CreateOrUpdate(resourceGroupName, dataFactoryName, pipelineName, pipeline);
-                Console.WriteLine("Pipeline created successfully.");
+                this.AppLogger.LogInformation($"{pipelineName} Pipeline created successfully.");
                 #endregion
 
+                this.AppLogger.LogInformation($"CreateIQVIASpecialtyDataPipeline Method completed at {DateTime.UtcNow}");
                 return true;
             }
             catch (Exception ex)
             {
+                this.AppLogger.LogError(ex);
                 throw ex;
             }
         }
@@ -1474,6 +1585,7 @@ namespace ODSDataConnector.Core.Services
         {
             try
             {
+                this.AppLogger.LogInformation($"CreateZipToTerrDataPipeline Method Started at {DateTime.UtcNow}");
                 // Authenticate and Create a data factory management client
                 var dataFactoryManagementClient = this.aDFService.GetADFClient();
 
@@ -1488,13 +1600,13 @@ namespace ODSDataConnector.Core.Services
                 var sQLlsProperties = createSQLLinkedServiceProperties(resourceGroupName, dataFactoryName, customer);
 
                 dataFactoryManagementClient = this.aDFService.CreateLinkedService(sQLlsProperties, dataFactoryManagementClient);
-                Console.WriteLine("SQL Linked Service created successfully.");
+                this.AppLogger.LogInformation("SQL Linked Service created successfully.");
 
                 // Define the File System Linked Service name and its properties
                 var fslsProperties = CreateFSLinkedServiceProperties(resourceGroupName, dataFactoryName, dsConfig);
 
                 dataFactoryManagementClient = this.aDFService.CreateLinkedService(fslsProperties, dataFactoryManagementClient);
-                Console.WriteLine("Blob Linked Service created successfully.");
+                this.AppLogger.LogInformation("File system Linked Service created successfully.");
                 #endregion
 
                 #region Dataset
@@ -1582,13 +1694,15 @@ namespace ODSDataConnector.Core.Services
                 };
                 // Create or update the pipeline
                 dataFactoryManagementClient.Pipelines.CreateOrUpdate(resourceGroupName, dataFactoryName, pipelineName, pipeline);
-                Console.WriteLine("Pipeline created successfully.");
+                this.AppLogger.LogInformation($"{pipelineName} Pipeline created successfully.");
                 #endregion
 
+                this.AppLogger.LogInformation($"CreateZipToTerrDataPipeline Method completed at {DateTime.UtcNow}");
                 return true;
             }
             catch (Exception ex)
             {
+                this.AppLogger.LogError(ex);
                 throw ex;
             }
         }

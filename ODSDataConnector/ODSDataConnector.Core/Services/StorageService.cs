@@ -29,23 +29,25 @@ namespace ODSDataConnector.Core.Services
     public class StorageService : IStorageService
     {
         private readonly ICustomerRepository customerRepository;
-
         private readonly IConfiguration Configuration;
+        private readonly IAppLogger AppLogger;
 
-        public StorageService(ICustomerRepository customerRepository, IConfiguration configuration)
+        public StorageService(ICustomerRepository customerRepository, IConfiguration configuration, IAppLogger appLogger)
         {
             this.Configuration = configuration;
             this.customerRepository = customerRepository;
+            this.AppLogger = appLogger;
         }
 
         public async Task<bool> ExcecuteSQLScripts(DataRequest request)
         {
             try
             {
+                this.AppLogger.LogInformation($"ExcecuteSQLScripts Method Started at {DateTime.UtcNow}");
                 var customer = await this.customerRepository.GetCustomerByIdAsync(request.customerId);
-                
+
                 var dataSource = await this.customerRepository.GetDataSourceByIdAsync(request);
-                
+
 
                 string connectionString = Configuration["ConnectionStrings:ODSAzureStorage"];
                 BlobServiceClient blobServiceClient = new BlobServiceClient(connectionString);
@@ -89,10 +91,12 @@ namespace ODSDataConnector.Core.Services
                     }
 
                 }
+                this.AppLogger.LogInformation($"ExcecuteSQLScripts Method completed at {DateTime.UtcNow}");
                 return true;
             }
             catch (Exception ex)
             {
+                this.AppLogger.LogError(ex);
                 throw ex;
             }
         }

@@ -15,19 +15,21 @@ namespace ODSDataConnector.Core.Services
     public class MDMService : IMDMService
     {
         private readonly ICustomerRepository customerRepository;
-
         private readonly IADFService aDFService;
+        private readonly IAppLogger AppLogger;
 
-        public MDMService(ICustomerRepository customerRepository, IADFService ADFService)
+        public MDMService(ICustomerRepository customerRepository, IADFService ADFService, IAppLogger appLogger)
         {
             this.customerRepository = customerRepository;
             this.aDFService = ADFService;
+            this.AppLogger = appLogger;
         }
 
         public async Task<bool> CreateMDMPipeline(DataRequest request)
         {
             try
             {
+                this.AppLogger.LogInformation($"CreateMDMPipeline Method Started at {DateTime.UtcNow}");
                 var dataFactoryManagementClient = this.aDFService.GetADFClient();
 
                 var customer = await this.customerRepository.GetCustomerByIdAsync(request.customerId);
@@ -43,26 +45,26 @@ namespace ODSDataConnector.Core.Services
                 var sQLlsProperties = createSQLLinkedServiceProperties(resourceGroupName, dataFactoryName, customer);
 
                 dataFactoryManagementClient = this.aDFService.CreateLinkedService(sQLlsProperties, dataFactoryManagementClient);
-                Console.WriteLine("SQL Linked Service created successfully.");
+                this.AppLogger.LogInformation("SQL Linked Service created successfully.");
 
                 // Define the File System Linked Service name and its properties
                 var fslsProperties = CreateBlobLinkedServiceProperties(resourceGroupName, dataFactoryName, dsConfig);
 
                 dataFactoryManagementClient = this.aDFService.CreateLinkedService(fslsProperties, dataFactoryManagementClient);
-                Console.WriteLine("Blob Linked Service created successfully.");
+                this.AppLogger.LogInformation("Blob Linked Service created successfully.");
 
                 // Define the Azure Batch Linked Service name and its properties
                 var batchlsProperties = CreateAzureBatchLinkedServiceProperties(resourceGroupName, dataFactoryName, dsConfig);
 
                 dataFactoryManagementClient = this.aDFService.CreateLinkedService(batchlsProperties, dataFactoryManagementClient);
-                Console.WriteLine("Batch Linked Service created successfully.");
+                this.AppLogger.LogInformation("Batch Linked Service created successfully.");
 
                 #endregion
                 string pipelineFolderName = "MDM";
                 string pipelineName = "VeevaToCMSPipeline";
                 string pipelineName1 = "PlantrakToCMSPipeline";
 
-                if(!customer.IsMdm)
+                if (!customer.IsMdm)
                 {
                     pipelineFolderName = "No_MDM";
                     pipelineName = "VeevaToCMSPipeline_NoMDM";
@@ -152,6 +154,7 @@ namespace ODSDataConnector.Core.Services
                 var plantrakToCMSActivity = new List<Activity>();
                 var prevActivityName = string.Empty;
 
+                this.AppLogger.LogInformation($"Is MDM required : {customer.IsMdm}");
                 if (customer.IsMdm)
                 {
                     veevaToCMSActivity.Add(
@@ -200,8 +203,6 @@ namespace ODSDataConnector.Core.Services
                     prevActivityName = "CreateIdentifierMatchesActivity";
                 }
 
-
-
                 var activities = new List<Activity>()
                     {
                         new SqlServerStoredProcedureActivity
@@ -233,6 +234,16 @@ namespace ODSDataConnector.Core.Services
                                   },
                                  StoredProcedureName = "sp_cms_goldenrecord_dataload_transform",
                                  DependsOn = new List<ActivityDependency>{ new ActivityDependency("TransformCmsMatchesActivity", new List<string> { "Succeeded" })}
+                            },
+                        new SqlServerStoredProcedureActivity
+                            {
+                                Name = "TransformVeevaCallforActionActivity",
+                                 LinkedServiceName= new LinkedServiceReference
+                                  {
+                                      ReferenceName = customer.LinkedService
+                                  },
+                                 StoredProcedureName = "sp_Veeva_CallforAction_transform",
+                                 DependsOn = new List<ActivityDependency>{ new ActivityDependency("TransformGoldenRecordActivity", new List<string> { "Succeeded" })}
                             }
                     };
 
@@ -254,12 +265,14 @@ namespace ODSDataConnector.Core.Services
                 dataFactoryManagementClient.Pipelines.CreateOrUpdate(resourceGroupName, dataFactoryName, pipelineName, pipeline);
                 dataFactoryManagementClient.Pipelines.CreateOrUpdate(resourceGroupName, dataFactoryName, pipelineName1, pipeline1);
 
-                Console.WriteLine("Pipeline created successfully.");
+                this.AppLogger.LogInformation($" {pipelineName} and {pipelineName1} Pipeline created successfully.");
 
+                this.AppLogger.LogInformation($"CreateMDMPipeline Method completed at {DateTime.UtcNow}");
                 return true;
             }
             catch (Exception ex)
             {
+                this.AppLogger.LogError(ex);
                 throw ex;
             }
         }

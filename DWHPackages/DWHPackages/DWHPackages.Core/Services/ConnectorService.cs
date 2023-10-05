@@ -28,6 +28,8 @@ namespace DWHPackages.Core.Services
             if (request != null && !string.IsNullOrEmpty(request.customerName))
             {
                 var cust = await this.CustomerRepository.GetCustomerByNameAsync(request.customerName);
+
+                //Data connector API call
                 if (cust != null && request.modules.Count > 0)
                 {
                     foreach (var module in request.modules)
@@ -47,6 +49,9 @@ namespace DWHPackages.Core.Services
                     var mdmDataSource = await this.CustomerRepository.GetDataSourceListByModuleAsync("MDM");
                     if (mdmDataSource.Any())
                         CreateHttpRequest(mdmDataSource.First(), cust.Id);
+
+
+                    //Reporting API calls
                 }
             }
 

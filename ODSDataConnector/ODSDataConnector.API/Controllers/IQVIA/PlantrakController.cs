@@ -39,29 +39,33 @@ namespace ODSDataConnector.Controllers.IQVIA
             }
         }
 
-        [HttpPost("SetupControlData")]
-        public async Task<IActionResult> SetupControlDataAsync(DataRequest request)
-        {
-            try
-            {
-                var res = await this.StorageService.ExcecuteSQLScripts(request);
-                var result = await this.PlantrakAdfService.CreateControlDataPipeline(request);
+        //[HttpPost("SetupControlData")]
+        //public async Task<IActionResult> SetupControlDataAsync(DataRequest request)
+        //{
+        //    try
+        //    {
+        //        this.AppLogger.LogInformation($"SetupControlDataAsync Method Started at {DateTime.UtcNow}");
+        //        var res = await this.StorageService.ExcecuteSQLScripts(request);
+        //        var result = await this.PlantrakAdfService.CreateControlDataPipeline(request);
+        //        this.AppLogger.LogInformation($"SetupControlDataAsync Method completed at {DateTime.UtcNow}");
 
-                return this.Ok();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
+        //        return this.Ok();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception(ex.Message);
+        //    }
+        //}
 
         [HttpPost("SetupPBMPlansData")]
         public async Task<IActionResult> SetupPBMPlansDataAsync(DataRequest request)
         {
             try
             {
+                this.AppLogger.LogInformation($"SetupPBMPlansDataAsync Method Started at {DateTime.UtcNow}");
                 var res = await this.StorageService.ExcecuteSQLScripts(request);
                 var result = await this.PlantrakAdfService.CreatePBMPlansDataPipeline(request);
+                this.AppLogger.LogInformation($"SetupPBMPlansDataAsync Method completed at {DateTime.UtcNow}");
 
                 return this.Ok();
             }
@@ -76,8 +80,10 @@ namespace ODSDataConnector.Controllers.IQVIA
         {
             try
             {
+                this.AppLogger.LogInformation($"SetupPayerPlansDataAsync Method Started at {DateTime.UtcNow}");
                 var res = await this.StorageService.ExcecuteSQLScripts(request);
                 var result = await this.PlantrakAdfService.CreatePayerPlansDataPipeline(request);
+                this.AppLogger.LogInformation($"SetupPayerPlansDataAsync Method completed at {DateTime.UtcNow}");
 
                 return this.Ok();
             }
@@ -92,8 +98,10 @@ namespace ODSDataConnector.Controllers.IQVIA
         {
             try
             {
+                this.AppLogger.LogInformation($"SetupModelDataAsync Method Started at {DateTime.UtcNow}");
                 var res = await this.StorageService.ExcecuteSQLScripts(request);
                 var result = await this.PlantrakAdfService.CreateModelDataPipeline(request);
+                this.AppLogger.LogInformation($"SetupModelDataAsync Method completed at {DateTime.UtcNow}");
 
                 return this.Ok();
             }
@@ -108,8 +116,10 @@ namespace ODSDataConnector.Controllers.IQVIA
         {
             try
             {
+                this.AppLogger.LogInformation($"SetupMarketDefinitionDataAsync Method Started at {DateTime.UtcNow}");
                 var res = await this.StorageService.ExcecuteSQLScripts(request);
                 var result = await this.PlantrakAdfService.CreateMarketDefinitionDataPipeline(request);
+                this.AppLogger.LogInformation($"SetupMarketDefinitionDataAsync Method completed at {DateTime.UtcNow}");
 
                 return this.Ok();
             }
@@ -124,8 +134,10 @@ namespace ODSDataConnector.Controllers.IQVIA
         {
             try
             {
+                this.AppLogger.LogInformation($"SetupPDRPDataAsync Method Started at {DateTime.UtcNow}");
                 var res = await this.StorageService.ExcecuteSQLScripts(request);
                 var result = await this.PlantrakAdfService.CreatePDRPDataPipeline(request);
+                this.AppLogger.LogInformation($"SetupPDRPDataAsync Method completed at {DateTime.UtcNow}");
 
                 return this.Ok();
             }
@@ -140,8 +152,10 @@ namespace ODSDataConnector.Controllers.IQVIA
         {
             try
             {
+                this.AppLogger.LogInformation($"SetupNoContactDataAsync Method Started at {DateTime.UtcNow}");
                 var res = await this.StorageService.ExcecuteSQLScripts(request);
                 var result = await this.PlantrakAdfService.CreateNoContactDataPipeline(request);
+                this.AppLogger.LogInformation($"SetupNoContactDataAsync Method completed at {DateTime.UtcNow}");
 
                 return this.Ok();
             }
@@ -156,8 +170,10 @@ namespace ODSDataConnector.Controllers.IQVIA
         {
             try
             {
+                this.AppLogger.LogInformation($"SetupIQVIACalenderDataAsync Method Started at {DateTime.UtcNow}");
                 var res = await this.StorageService.ExcecuteSQLScripts(request);
                 var result = await this.PlantrakAdfService.CreateIQVIACalenderDataPipeline(request);
+                this.AppLogger.LogInformation($"SetupIQVIACalenderDataAsync Method completed at {DateTime.UtcNow}");
 
                 return this.Ok();
             }
@@ -172,8 +188,10 @@ namespace ODSDataConnector.Controllers.IQVIA
         {
             try
             {
+                this.AppLogger.LogInformation($"SetupIQVIAProductMarketDataAsync Method Started at {DateTime.UtcNow}");
                 var res = await this.StorageService.ExcecuteSQLScripts(request);
                 var result = await this.PlantrakAdfService.CreateIQVIAProductMarketDataPipeline(request);
+                this.AppLogger.LogInformation($"SetupIQVIAProductMarketDataAsync Method completed at {DateTime.UtcNow}");
 
                 return this.Ok();
             }
@@ -188,8 +206,10 @@ namespace ODSDataConnector.Controllers.IQVIA
         {
             try
             {
+                this.AppLogger.LogInformation($"SetupIQVIASpecialtyDataAsync Method Started at {DateTime.UtcNow}");
                 var res = await this.StorageService.ExcecuteSQLScripts(request);
                 var result = await this.PlantrakAdfService.CreateIQVIASpecialtyDataPipeline(request);
+                this.AppLogger.LogInformation($"SetupIQVIASpecialtyDataAsync Method completed at {DateTime.UtcNow}");
 
                 return this.Ok();
             }
@@ -204,8 +224,10 @@ namespace ODSDataConnector.Controllers.IQVIA
         {
             try
             {
+                this.AppLogger.LogInformation($"SetupZipToTerrDataAsync Method Started at {DateTime.UtcNow}");
                 var res = await this.StorageService.ExcecuteSQLScripts(request);
                 var result = await this.PlantrakAdfService.CreateZipToTerrDataPipeline(request);
+                this.AppLogger.LogInformation($"SetupZipToTerrDataAsync Method completed at {DateTime.UtcNow}");
 
                 return this.Ok();
             }
