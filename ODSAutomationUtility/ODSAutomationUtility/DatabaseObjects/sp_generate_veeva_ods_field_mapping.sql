@@ -10,7 +10,7 @@ BEGIN
 	INSERT INTO VeevaOdsDataTypeMapping
 	VALUES 
 	-- Text Types
-	('Email', 'VARCHAR', 1), ('Fax', 'VARCHAR', 1), ('Hierarchy', 'VEEVAID', 1), ('Long Text Area', 'VARCHAR', 0), 
+	('Email', 'VARCHAR', 1), ('Fax', 'VARCHAR', 1), ('Hierarchy', 'VEEVAID', 1), ('Long Text Area', 'VARCHAR', 0), ('Address', 'VARCHAR', 0), ('Content(20)', 'VARCHAR', 0), 
 	('Lookup', 'VEEVAID', 0), ('Master-Detail', 'VEEVAID', 0), ('Name', 'VARCHAR', 1), ('Phone', 'VARCHAR', 1), 
 	('Picklist', 'VARCHAR', 0), ('Picklist (Multi-Select)', 'VARCHAR', 1), 
 	('Record Type', 'VEEVAID', 0), ('RecordType', 'VEEVAID', 0), ('Rich Text Area', 'VARCHAR', 0), 
@@ -21,10 +21,11 @@ BEGIN
 	('<Check box>', 'BIT', 1), ('Checkbox', 'BIT', 1), ('Check Box', 'BIT', 1), ('Formula (Checkbox)', 'BIT', 1),
 
 	-- Number Types
-	('Numeric', 'DECIMAL', 0), ('Percent', 'DECIMAL', 0), ('Formula (Number)', 'INT', 0), ('Number', 'INT', 1), ('Number', 'DECIMAL', 0), ('Currency', 'DECIMAL', 0), 
+	('Numeric', 'DECIMAL', 0), ('Percent', 'DECIMAL', 0), ('Formula (Number)', 'INT', 0), ('Number', 'INT', 1), ('Number', 'DECIMAL', 0), ('Currency', 'DECIMAL', 0), ('Roll-Up Summary (COUNT CLM Presentation Slide)', 'INT', 0),
+	('Roll-Up Summary (COUNT Email Activity)', 'INT', 0), ('Roll-Up Summary (MAX Email Activity)', 'DATE', 0),
 
 	-- Date Types
-	('Date', 'DATE', 1), ('Date/Time', 'DATETIME', 1), ('Formula (Date)', 'DATE', 1);
+	('Date', 'DATE', 1), ('Date/Time', 'DATETIME', 1), ('Formula (Date)', 'DATE', 1) , ('DateTime', 'DATETIME', 1);
 
 
 	TRUNCATE TABLE VeevaOdsFieldMapping;

@@ -215,58 +215,84 @@ namespace ODSAutomationUtility
 
             // Create a pipeline with copy and transformation activities
             LogHelper.WriteDebugLog("Creating pipeline " + "VeevaToODSPipeline" + "...");
-            PipelineResource objPipeline = new PipelineResource();
-            objPipeline.Activities = new List<Activity>();
 
-            string[] arrVeevaObjectsDataLoadOrder = strVeevaObjectsDataLoadOrder.Split(',');
+            int loopLimit = 18;
+            int pipelineNum = 1;
+
+            string[] tempArrVeevaObjects = strVeevaObjectsDataLoadOrder.Split(',');
             string[] arrObjectsWithDeleteSupport = strObjectsWithDeleteSupport.Split(',');
-            for (int iObjectIndex = 0; iObjectIndex < arrVeevaObjectsDataLoadOrder.Length; iObjectIndex++)
+
+            for (int i = 0; i < tempArrVeevaObjects.Length; i = i + loopLimit)
             {
-                var objModel = lstVeevaOdsFieldMappingModel.Where(item => item.OdsTableName == "Staging_" + arrVeevaObjectsDataLoadOrder[iObjectIndex]).Select(item => new { item.VeevaObjectAPIName, item.OdsTableName }).Distinct().First();
-                string strVeevaFieldList = lstVeevaOdsFieldMappingModel.Where(item => item.OdsTableName == objModel.OdsTableName).Select(item => item.VeevaFieldAPIName.Replace(" ", "")).CommaSeparate(item => item);
-                string strSOQLWhereClase = $" WHERE SystemModstamp >= LAST_N_DAYS:{iVeevaDataLoadForLastNDays} ";
-                string strAdditionalSOQLWhereClase = string.Empty;
+                PipelineResource objPipeline = new PipelineResource();
+                objPipeline.Activities = new List<Activity>();
 
-                // If the Delete support is needed for an object, then we need to load full data everyday.
-                if (strPipelineDataLoadMode == "FULL" || arrObjectsWithDeleteSupport.Contains(objModel.OdsTableName.Replace("Staging_", "")))
+                var arrVeevaObjectsDataLoadOrder = tempArrVeevaObjects.Skip(i).Take(loopLimit).ToList();
+                for (int iObjectIndex = 0; iObjectIndex < arrVeevaObjectsDataLoadOrder.Count; iObjectIndex++)
                 {
-                    strSOQLWhereClase = string.Empty;
-                }
 
-                // Additional filter for call specific tables.
-                // Load only submitted calls into ODS.
-                switch (objModel.OdsTableName.Replace("Staging_", ""))
-                {
-                    case "Call":
-                        strAdditionalSOQLWhereClase = " Status_vod__c = 'Submitted_vod' ";
-                        break;
-                    case "CallDetail":
-                    case "CallSample":
-                    case "CallDiscussion":
-                    case "CallKeyMessage":
-                        strAdditionalSOQLWhereClase = " Call2_vod__r.Status_vod__c = 'Submitted_vod' ";
-                        break;
-                }
+                    var objModel = lstVeevaOdsFieldMappingModel.Where(item => item.OdsTableName == "Staging_" + arrVeevaObjectsDataLoadOrder[iObjectIndex]).Select(item => new { item.VeevaObjectAPIName, item.OdsTableName }).Distinct().First();
+                    string strVeevaFieldList = lstVeevaOdsFieldMappingModel.Where(item => item.OdsTableName == objModel.OdsTableName).Select(item => item.VeevaFieldAPIName.Replace(" ", "")).CommaSeparate(item => item);
+                    string strSOQLWhereClase = $" WHERE SystemModstamp >= LAST_N_DAYS:{iVeevaDataLoadForLastNDays} ";
+                    string strAdditionalSOQLWhereClase = string.Empty;
 
-                // If there are any additional WHERE clauses, append them to the main WHERE clause string.
-                if (!string.IsNullOrWhiteSpace(strAdditionalSOQLWhereClase))
-                {
-                    if (string.IsNullOrWhiteSpace(strSOQLWhereClase))
+                    // If the Delete support is needed for an object, then we need to load full data everyday.
+                    if (strPipelineDataLoadMode == "FULL" || arrObjectsWithDeleteSupport.Contains(objModel.OdsTableName.Replace("Staging_", "")))
                     {
-                        strSOQLWhereClase = $" WHERE {strAdditionalSOQLWhereClase}";
+                        strSOQLWhereClase = string.Empty;
+                    }
+
+                    // Additional filter for call specific tables.
+                    // Load only submitted calls into ODS.
+                    switch (objModel.OdsTableName.Replace("Staging_", ""))
+                    {
+                        case "Call":
+                            strAdditionalSOQLWhereClase = " Status_vod__c = 'Submitted_vod' ";
+                            break;
+                        case "CallDetail":
+                        case "CallSample":
+                        case "CallDiscussion":
+                        case "CallKeyMessage":
+                            strAdditionalSOQLWhereClase = " Call2_vod__r.Status_vod__c = 'Submitted_vod' ";
+                            break;
+                    }
+
+                    // If there are any additional WHERE clauses, append them to the main WHERE clause string.
+                    if (!string.IsNullOrWhiteSpace(strAdditionalSOQLWhereClase))
+                    {
+                        if (string.IsNullOrWhiteSpace(strSOQLWhereClase))
+                        {
+                            strSOQLWhereClase = $" WHERE {strAdditionalSOQLWhereClase}";
+                        }
+                        else
+                        {
+                            strSOQLWhereClase = $"{strSOQLWhereClase} AND {strAdditionalSOQLWhereClase}";
+                        }
+                    }
+
+                    if (iObjectIndex < 3)
+                    {
+                        objPipeline.Activities.Add(new CopyActivity()
+                        {
+                            Name = $"Copy{objModel.OdsTableName.Replace("Staging_", "").Replace("_", "")}Activity",
+                            Inputs = new List<DatasetReference>
+                        {
+                            new DatasetReference() { ReferenceName = objModel.OdsTableName.Replace("Staging_", "Veeva").Replace("_", "") + "Dataset" }
+                        },
+                            Outputs = new List<DatasetReference>
+                        {
+                            new DatasetReference { ReferenceName = objModel.OdsTableName.Replace("_", "") + "Dataset" }
+                        },
+                            Source = new SalesforceSource { Query = $"SELECT {strVeevaFieldList} FROM {objModel.VeevaObjectAPIName} {strSOQLWhereClase}", ReadBehavior = "query" },
+                            Sink = new SqlSink { PreCopyScript = $"TRUNCATE TABLE {objModel.OdsTableName}" }
+                        });
                     }
                     else
                     {
-                        strSOQLWhereClase = $"{strSOQLWhereClase} AND {strAdditionalSOQLWhereClase}";
-                    }
-                }
-
-                if (iObjectIndex < 3)
-                {
-                    objPipeline.Activities.Add(new CopyActivity()
-                    {
-                        Name = $"Copy{objModel.OdsTableName.Replace("Staging_", "").Replace("_", "")}Activity",
-                        Inputs = new List<DatasetReference>
+                        objPipeline.Activities.Add(new CopyActivity()
+                        {
+                            Name = $"Copy{objModel.OdsTableName.Replace("Staging_", "").Replace("_", "")}Activity",
+                            Inputs = new List<DatasetReference>
                         {
                             new DatasetReference() { ReferenceName = objModel.OdsTableName.Replace("Staging_", "Veeva").Replace("_", "") + "Dataset" }
                         },
@@ -274,26 +300,9 @@ namespace ODSAutomationUtility
                         {
                             new DatasetReference { ReferenceName = objModel.OdsTableName.Replace("_", "") + "Dataset" }
                         },
-                        Source = new SalesforceSource { Query = $"SELECT {strVeevaFieldList} FROM {objModel.VeevaObjectAPIName} {strSOQLWhereClase}", ReadBehavior = "query" },
-                        Sink = new SqlSink { PreCopyScript = $"TRUNCATE TABLE {objModel.OdsTableName}" }
-                    });
-                }
-                else
-                {
-                    objPipeline.Activities.Add(new CopyActivity()
-                    {
-                        Name = $"Copy{objModel.OdsTableName.Replace("Staging_", "").Replace("_", "")}Activity",
-                        Inputs = new List<DatasetReference>
-                        {
-                            new DatasetReference() { ReferenceName = objModel.OdsTableName.Replace("Staging_", "Veeva").Replace("_", "") + "Dataset" }
-                        },
-                            Outputs = new List<DatasetReference>
-                        {
-                            new DatasetReference { ReferenceName = objModel.OdsTableName.Replace("_", "") + "Dataset" }
-                        },
-                        Source = new SalesforceSource { Query = $"SELECT {strVeevaFieldList} FROM {objModel.VeevaObjectAPIName} {strSOQLWhereClase}", ReadBehavior = "query" },
-                        Sink = new SqlSink { PreCopyScript = $"TRUNCATE TABLE {objModel.OdsTableName}" },
-                        DependsOn = new List<ActivityDependency> 
+                            Source = new SalesforceSource { Query = $"SELECT {strVeevaFieldList} FROM {objModel.VeevaObjectAPIName} {strSOQLWhereClase}", ReadBehavior = "query" },
+                            Sink = new SqlSink { PreCopyScript = $"TRUNCATE TABLE {objModel.OdsTableName}" },
+                            DependsOn = new List<ActivityDependency>
                         {
                             /* Three activities are chained together to run in parallel.
                              * This is because Salesforce throws an error if there are too many activities running in parallel.
@@ -317,66 +326,77 @@ namespace ODSAutomationUtility
                             new ActivityDependency($"Transform{arrVeevaObjectsDataLoadOrder[iObjectIndex - 2 - (iObjectIndex % 3)]}Activity", new List<string> { "Succeeded" }),
                             new ActivityDependency($"Transform{arrVeevaObjectsDataLoadOrder[iObjectIndex - 1 - (iObjectIndex % 3)]}Activity", new List<string> { "Succeeded" })
                         }
+                        });
+                    }
+
+                    objPipeline.Activities.Add(new SqlServerStoredProcedureActivity
+                    {
+                        Name = $"Transform{objModel.OdsTableName.Replace("Staging_", "").Replace("_", "")}Activity",
+                        StoredProcedureName = $"sp_{objModel.OdsTableName.Replace("Staging_", "").Replace("_", "").ToLower()}_transform",
+                        LinkedServiceName = new LinkedServiceReference
+                        {
+                            ReferenceName = "OdsSqlLinkedService"
+                        },
+                        DependsOn = new List<ActivityDependency> { new ActivityDependency($"Copy{objModel.OdsTableName.Replace("Staging_", "").Replace("_", "")}Activity", new List<string> { "Succeeded" }) }
                     });
                 }
 
+                // Add the Veeva Data Health Activity to the pipeline.
                 objPipeline.Activities.Add(new SqlServerStoredProcedureActivity
                 {
-                    Name = $"Transform{objModel.OdsTableName.Replace("Staging_", "").Replace("_", "")}Activity",
-                    StoredProcedureName = $"sp_{objModel.OdsTableName.Replace("Staging_", "").Replace("_", "").ToLower()}_transform",
+                    Name = $"VeevaDataHealthCheckActivity",
+                    StoredProcedureName = $"sp_veeva_datahealthcheck",
                     LinkedServiceName = new LinkedServiceReference
                     {
                         ReferenceName = "OdsSqlLinkedService"
                     },
-                    DependsOn = new List<ActivityDependency> { new ActivityDependency($"Copy{objModel.OdsTableName.Replace("Staging_", "").Replace("_", "")}Activity", new List<string> { "Succeeded" }) }
+                    DependsOn = new List<ActivityDependency> { new ActivityDependency(objPipeline.Activities.Last().Name, new List<string> { "Succeeded" }) }
                 });
+
+                objClient.Pipelines.CreateOrUpdate(strResourceGroupName, strAzureDataFactoryName, "VeevaToODSPipline" + pipelineNum, objPipeline);
+
+                pipelineNum = pipelineNum + 1;
             }
 
-            // Add the Veeva Data Health Activity to the pipeline.
-            objPipeline.Activities.Add(new SqlServerStoredProcedureActivity
-            {
-                Name = $"VeevaDataHealthCheckActivity",
-                StoredProcedureName = $"sp_veeva_datahealthcheck",
-                LinkedServiceName = new LinkedServiceReference
-                {
-                    ReferenceName = "OdsSqlLinkedService"
-                },
-                DependsOn = new List<ActivityDependency> { new ActivityDependency(objPipeline.Activities.Last().Name, new List<string> { "Succeeded" }) }
-            });
 
-            objClient.Pipelines.CreateOrUpdate(strResourceGroupName, strAzureDataFactoryName, "VeevaToODSPipline", objPipeline);
 
             //Console.WriteLine(SafeJsonConvert.SerializeObject(objPipeline, objClient.SerializationSettings));
 
             #endregion
 
-            var objList = objClient.Pipelines.Get(strResourceGroupName, strAzureDataFactoryName, "VeevaToODSPipline");
-            //Console.WriteLine(SafeJsonConvert.SerializeObject(objList, objClient.SerializationSettings));
+            for (int i = 1; i <= pipelineNum - 1; i++)
+            {
+                var objList = objClient.Pipelines.Get(strResourceGroupName, strAzureDataFactoryName, "VeevaToODSPipline" + i);
+                //Console.WriteLine(SafeJsonConvert.SerializeObject(objList, objClient.SerializationSettings));
 
-            string strPipelineJSON = SafeJsonConvert.SerializeObject(objList, objClient.SerializationSettings);
-            strPipelineJSON = @"{
+                string strPipelineJSON = SafeJsonConvert.SerializeObject(objList, objClient.SerializationSettings);
+                strPipelineJSON = @"{
     ""name"": ""VeevaToODSPipline"",
     ""type"": ""Microsoft.DataFactory/factories/pipelines""," + strPipelineJSON.Substring(2);
 
-            foreach (var objModel in lstVeevaOdsFieldMappingModel.Select(item => new { item.VeevaObjectAPIName, item.OdsTableName }).Distinct())
-            {
-                //var objModel = lstVeevaOdsFieldMappingModel.Where(item => item.OdsTableName == "Staging_Address").Select(item => new { item.VeevaObjectAPIName, item.OdsTableName }).Distinct().First();
+                foreach (var objModel in lstVeevaOdsFieldMappingModel.Select(item => new { item.VeevaObjectAPIName, item.OdsTableName }).Distinct())
+                {
+                    //var objModel = lstVeevaOdsFieldMappingModel.Where(item => item.OdsTableName == "Staging_Address").Select(item => new { item.VeevaObjectAPIName, item.OdsTableName }).Distinct().First();
 
-                string strVeevaFieldList = @",
+                    string strVeevaFieldList = @",
                     ""translator"": {
 	                    ""type"": ""TabularTranslator"",
 	                    ""columnMappings"": {" +
-                        lstVeevaOdsFieldMappingModel.Where(item => item.OdsTableName == objModel.OdsTableName).Select(item => "\r\n\"" + item.VeevaFieldAPIName.Replace(" ", "") + "\": \"" + item.OdsColumnName + "\"").CommaSeparate(item => item) +
-                        @"
+                            lstVeevaOdsFieldMappingModel.Where(item => item.OdsTableName == objModel.OdsTableName).Select(item => "\r\n\"" + item.VeevaFieldAPIName.Replace(" ", "") + "\": \"" + item.OdsColumnName + "\"").CommaSeparate(item => item) +
+                            @"
 	                    }
                     }";
 
-                int iPreCopyScriptIndex = strPipelineJSON.IndexOf(@"""preCopyScript"": ""TRUNCATE TABLE " + objModel.OdsTableName);
-                strPipelineJSON = strPipelineJSON.Insert(strPipelineJSON.IndexOf("}", iPreCopyScriptIndex) + 1, strVeevaFieldList);
+                    int iPreCopyScriptIndex = strPipelineJSON.IndexOf(@"""preCopyScript"": ""TRUNCATE TABLE " + objModel.OdsTableName);
+
+                    if (iPreCopyScriptIndex > 0)
+                        strPipelineJSON = strPipelineJSON.Insert(strPipelineJSON.IndexOf("}", iPreCopyScriptIndex) + 1, strVeevaFieldList);
+                }
+
+                File.WriteAllText(@"C:\Users\ManjuH\Turnkey\Pipeline.json", strPipelineJSON);
             }
 
-                //LogHelper.WriteDebugLog(strPipelineJSON);
-            File.WriteAllText(@"C:\ZZZ_STUFF\Project\ADCT\Requirement Documents\Pipeline.json", strPipelineJSON);
+            //LogHelper.WriteDebugLog(strPipelineJSON);
         }
 
         public static bool LoadDIIDetails()
@@ -398,7 +418,7 @@ namespace ODSAutomationUtility
                     xlWorksheet = xlWorkbook.Sheets[iSheet];
                     xlRange = xlWorksheet.UsedRange;
 
-                    if(xlWorksheet.Name.Contains("LOV"))
+                    if (xlWorksheet.Name.Contains("LOV"))
                     {
 
                         continue;
@@ -429,7 +449,7 @@ namespace ODSAutomationUtility
 
                     if (iObjectNameIndex > 0 && iObjectAPINameIndex > 0 && iFieldNameIndex > 0 && iFieldAPINameIndex > 0 && iDataTypeIndex > 0)
                     {
-                        for (int row = 3; row <= xlRange.Rows.Count; row++)
+                        for (int row = 2; row <= xlRange.Rows.Count; row++)
                         {
                             // Check if there is value for each of the following fields, ObjectName, FieldLabel, FieldName, DataType
                             // If the value is not present, then throw an error.
@@ -442,7 +462,7 @@ namespace ODSAutomationUtility
                                 // SCD field is optional since some Veeva objects may not need SCD completely, 
                                 // in which case DII dcoument may not contain this column altogether.
                                 if (iSCDRequiredIndex > 0 &&
-                                    xlRange.Cells[row, iSCDRequiredIndex] != null && 
+                                    xlRange.Cells[row, iSCDRequiredIndex] != null &&
                                     xlRange.Cells[row, iSCDRequiredIndex].Value2 != null)
                                 {
                                     lstFieldDefinitions.Add(new FieldDefinitionModel
@@ -515,11 +535,11 @@ namespace ODSAutomationUtility
         private static void InsertFieldDefinitions(List<FieldDefinitionModel> lstFieldDefinitions)
         {
             StringBuilder sbInsertQueries = new StringBuilder();
-            foreach(FieldDefinitionModel item in lstFieldDefinitions)
+            foreach (FieldDefinitionModel item in lstFieldDefinitions)
             {
                 sbInsertQueries.AppendLine($"INSERT INTO FieldDefinition VALUES('{item.ObjectName}', '{item.ObjectAPIName}', '{item.FieldName}', '{item.FieldAPIName}', '{item.DataType}', {(item.SCDRequired == true ? "1" : "0")});");
             }
-            
+
             ExecuteQuery(sbInsertQueries.ToString());
         }
 
@@ -586,11 +606,11 @@ namespace ODSAutomationUtility
                     {
                         sqlConn.Open();
                         SqlDataReader drSchema = cmd.ExecuteReader();
-                        while(drSchema.Read())
+                        while (drSchema.Read())
                         {
                             // Staging Table Schema
-                            lstSchemas.Add(new OdsObjectSchemaModel 
-                            { 
+                            lstSchemas.Add(new OdsObjectSchemaModel
+                            {
                                 ObjectName = "Staging_" + drSchema.GetString(0),
                                 ObjectScript = drSchema.GetString(1),
                                 ObjectType = OdsObjectTypeEnum.Table,
@@ -658,13 +678,12 @@ namespace ODSAutomationUtility
                     string strQuery = @"
 WITH cte_VeevaOdsFieldMapping AS
 (
-	SELECT 
-		t.name AS OdsTableName, c.name AS OdsColumnName, M.VeevaObjectAPIName, 
-		CASE 
+	SELECT CASE 
 			WHEN M.VeevaFieldAPIName IS NULL AND c.name = 'VeevaId' THEN 'Id'
 			WHEN M.VeevaFieldAPIName IS NULL THEN c.name
 			ELSE M.VeevaFieldAPIName
-		END AS VeevaFieldAPIName
+		END AS VeevaFieldAPIName,
+		t.name AS OdsTableName, c.name AS OdsColumnName, M.VeevaObjectAPIName
 	FROM sys.tables t
 	INNER JOIN sys.columns c on t.object_id = c.object_id
 	LEFT OUTER JOIN VeevaOdsFieldMapping M ON t.name = 'Staging_' + M.OdsTableName AND c.name = M.OdsColumnName
