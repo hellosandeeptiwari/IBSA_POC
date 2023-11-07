@@ -24,6 +24,7 @@ namespace ODSDataConnector.API.Configuration
             services.AddScoped<IAppLogger,AppInsightsLogger>();
             services.AddScoped<IMDMService, MDMService>();
             services.AddScoped<IVeevaService, VeevaService>();
+            services.AddScoped<IVeevaPTReportingService, VeevaPTReportingService>();
 
             return services;
         }
