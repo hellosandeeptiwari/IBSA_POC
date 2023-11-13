@@ -6,14 +6,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Office.Interop.Excel;
 using Microsoft.Azure.Management.DataFactory.Models;
 using Microsoft.Azure.Management.DataFactory;
 using Microsoft.Rest.Serialization;
 using Microsoft.WindowsAzure.Storage.Blob;
+using OfficeOpenXml;
 
 namespace ODSDataConnector.Core.Services
 {
@@ -207,6 +206,8 @@ namespace ODSDataConnector.Core.Services
             {
                 PipelineResource objPipeline = new PipelineResource();
                 objPipeline.Activities = new List<Activity>();
+
+                objPipeline.Folder = new PipelineFolder { Name = "Veeva" };
 
                 var arrVeevaObjectsDataLoadOrder = tempArrVeevaObjects.Skip(i).Take(loopLimit).ToList();
                 for (int iObjectIndex = 0; iObjectIndex < arrVeevaObjectsDataLoadOrder.Count; iObjectIndex++)
@@ -450,10 +451,9 @@ namespace ODSDataConnector.Core.Services
 
         private async Task<bool> LoadDIIDetails()
         {
-            Application xlApp = null;
-            Workbook xlWorkbook = null;
-            _Worksheet xlWorksheet = null;
-            Microsoft.Office.Interop.Excel.Range xlRange = null;
+            ExcelWorkbook xlWorkbook = null;
+            ExcelWorksheet xlWorksheet = null;
+
             try
             {
                 string connectionString = Configuration["ConnectionStrings:ODSAzureStorage"];
@@ -473,18 +473,18 @@ namespace ODSDataConnector.Core.Services
                     ms.WriteTo(fs);
                 }
 
-                //Create COM Objects. Create a COM object for everything that is referenced
-                xlApp = new Application();
-                xlWorkbook = xlApp.Workbooks.Open(path, ReadOnly: true);
+                ExcelPackage myExcel = new ExcelPackage(ms);
+
+                xlWorkbook = myExcel.Workbook;
+
                 List<FieldDefinitionModel> lstFieldDefinitions = new List<FieldDefinitionModel>();
-
+                
                 // Loop through all the excel sheets
-                for (int iSheet = 1; iSheet <= xlWorkbook.Sheets.Count; iSheet++)
+                for (int iSheet = 0; iSheet < xlWorkbook.Worksheets.Count; iSheet++)
                 {
-                    xlWorksheet = (_Worksheet)xlWorkbook.Sheets[iSheet];
-                    xlRange = xlWorksheet.UsedRange;
+                    xlWorksheet = xlWorkbook.Worksheets[iSheet];
 
-                    if (xlWorksheet.Name.Contains("LOV"))
+                    if (xlWorksheet.Name.Contains("LOV") || xlWorksheet.Hidden == eWorkSheetHidden.Hidden)
                     {
                         continue;
                     }
@@ -492,11 +492,11 @@ namespace ODSDataConnector.Core.Services
                     // We are not exactly sure as to which column is present in which index. 
                     // Hence finding the index of each column that we are interested in.
                     int iObjectNameIndex = -1, iObjectAPINameIndex = -1, iFieldNameIndex = -1, iFieldAPINameIndex = -1, iDataTypeIndex = -1, iSCDRequiredIndex = -1;
-                    for (int column = 1; column <= xlRange.Columns.Count; column++)
+                    for (int column = 1; column <= xlWorksheet.Dimension.End.Column; column++)
                     {
-                        if (xlRange.Cells[1, column] != null && xlRange.Cells[1, column].Value2 != null)
+                        if (xlWorksheet.Cells[1, column] != null && xlWorksheet.Cells[1, column].Value != null)
                         {
-                            string strColumnName = (xlRange.Cells[1, column].Value2.ToString()).ToUpper();
+                            string strColumnName = (xlWorksheet.Cells[1, column].Value.ToString()).ToUpper();
                             if (strColumnName.Contains("OBJECT") && !strColumnName.Contains("API"))
                                 iObjectNameIndex = column;
                             else if (strColumnName.Contains("OBJECT") && strColumnName.Contains("API"))
@@ -514,48 +514,48 @@ namespace ODSDataConnector.Core.Services
 
                     if (iObjectNameIndex > 0 && iObjectAPINameIndex > 0 && iFieldNameIndex > 0 && iFieldAPINameIndex > 0 && iDataTypeIndex > 0)
                     {
-                        for (int row = 2; row <= xlRange.Rows.Count; row++)
+                        for (int row = 2; row <= xlWorksheet.Dimension.End.Row; row++)
                         {
                             // Check if there is value for each of the following fields, ObjectName, FieldLabel, FieldName, DataType
                             // If the value is not present, then throw an error.
-                            if ((xlRange.Cells[row, iObjectNameIndex] != null && xlRange.Cells[row, iObjectNameIndex].Value2 != null) &&
-                                (xlRange.Cells[row, iObjectAPINameIndex] != null && xlRange.Cells[row, iObjectAPINameIndex].Value2 != null) &&
-                                (xlRange.Cells[row, iFieldNameIndex] != null && xlRange.Cells[row, iFieldNameIndex].Value2 != null) &&
-                                (xlRange.Cells[row, iFieldAPINameIndex] != null && xlRange.Cells[row, iFieldAPINameIndex].Value2 != null) &&
-                                (xlRange.Cells[row, iDataTypeIndex] != null && xlRange.Cells[row, iDataTypeIndex].Value2 != null))
+                            if ((xlWorksheet.Cells[row, iObjectNameIndex] != null && xlWorksheet.Cells[row, iObjectNameIndex].Value != null) &&
+                                (xlWorksheet.Cells[row, iObjectAPINameIndex] != null && xlWorksheet.Cells[row, iObjectAPINameIndex].Value != null) &&
+                                (xlWorksheet.Cells[row, iFieldNameIndex] != null && xlWorksheet.Cells[row, iFieldNameIndex].Value != null) &&
+                                (xlWorksheet.Cells[row, iFieldAPINameIndex] != null && xlWorksheet.Cells[row, iFieldAPINameIndex].Value != null) &&
+                                (xlWorksheet.Cells[row, iDataTypeIndex] != null && xlWorksheet.Cells[row, iDataTypeIndex].Value != null))
                             {
                                 // SCD field is optional since some Veeva objects may not need SCD completely, 
                                 // in which case DII dcoument may not contain this column altogether.
                                 if (iSCDRequiredIndex > 0 &&
-                                    xlRange.Cells[row, iSCDRequiredIndex] != null &&
-                                    xlRange.Cells[row, iSCDRequiredIndex].Value2 != null)
+                                    xlWorksheet.Cells[row, iSCDRequiredIndex] != null &&
+                                    xlWorksheet.Cells[row, iSCDRequiredIndex].Value != null)
                                 {
                                     lstFieldDefinitions.Add(new FieldDefinitionModel
                                     {
-                                        ObjectName = ((string)xlRange.Cells[row, iObjectNameIndex].Value2).Trim(),
-                                        ObjectAPIName = ((string)xlRange.Cells[row, iObjectAPINameIndex].Value2).Trim(),
-                                        FieldName = ((string)xlRange.Cells[row, iFieldNameIndex].Value2).Trim(),
-                                        FieldAPIName = ((string)xlRange.Cells[row, iFieldAPINameIndex].Value2).Trim(),
-                                        DataType = ((string)xlRange.Cells[row, iDataTypeIndex].Value2).Trim(),
-                                        SCDRequired = (((string)xlRange.Cells[row, iSCDRequiredIndex].Value2).Trim()).ToUpper() == "YES" ? true : false
+                                        ObjectName = ((string)xlWorksheet.Cells[row, iObjectNameIndex].Value).Trim(),
+                                        ObjectAPIName = ((string)xlWorksheet.Cells[row, iObjectAPINameIndex].Value).Trim(),
+                                        FieldName = ((string)xlWorksheet.Cells[row, iFieldNameIndex].Value).Trim(),
+                                        FieldAPIName = ((string)xlWorksheet.Cells[row, iFieldAPINameIndex].Value).Trim(),
+                                        DataType = ((string)xlWorksheet.Cells[row, iDataTypeIndex].Value).Trim(),
+                                        SCDRequired = (((string)xlWorksheet.Cells[row, iSCDRequiredIndex].Value).Trim()).ToUpper() == "YES" ? true : false
                                     });
                                 }
                                 else
                                 {
                                     lstFieldDefinitions.Add(new FieldDefinitionModel
                                     {
-                                        ObjectName = ((string)xlRange.Cells[row, iObjectNameIndex].Value2).Trim(),
-                                        ObjectAPIName = ((string)xlRange.Cells[row, iObjectAPINameIndex].Value2).Trim(),
-                                        FieldName = ((string)xlRange.Cells[row, iFieldNameIndex].Value2).Trim(),
-                                        FieldAPIName = ((string)xlRange.Cells[row, iFieldAPINameIndex].Value2).Trim(),
-                                        DataType = ((string)xlRange.Cells[row, iDataTypeIndex].Value2).Trim(),
+                                        ObjectName = ((string)xlWorksheet.Cells[row, iObjectNameIndex].Value).Trim(),
+                                        ObjectAPIName = ((string)xlWorksheet.Cells[row, iObjectAPINameIndex].Value).Trim(),
+                                        FieldName = ((string)xlWorksheet.Cells[row, iFieldNameIndex].Value).Trim(),
+                                        FieldAPIName = ((string)xlWorksheet.Cells[row, iFieldAPINameIndex].Value).Trim(),
+                                        DataType = ((string)xlWorksheet.Cells[row, iDataTypeIndex].Value).Trim(),
                                         SCDRequired = false
                                     });
                                 }
                             }
-                            else if (xlRange.Cells[row, iObjectNameIndex] != null && xlRange.Cells[row, iObjectNameIndex].Value2 != null)
+                            else if (xlWorksheet.Cells[row, iObjectNameIndex] != null && xlWorksheet.Cells[row, iObjectNameIndex].Value != null)
                             {
-                                AppLogger.LogInformation($"Missing data for few fields in Object: {(string)xlRange.Cells[row, iObjectNameIndex].Value2}");
+                                AppLogger.LogInformation($"Missing data for few fields in Object: {(string)xlWorksheet.Cells[row, iObjectNameIndex].Value}");
                             }
                         }
                     }
@@ -578,22 +578,6 @@ namespace ODSDataConnector.Core.Services
                 //cleanup
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
-
-                //rule of thumb for releasing com objects:
-                //  never use two dots, all COM objects must be referenced and released individually
-                //  ex: [somthing].[something].[something] is bad
-
-                //release com objects to fully kill excel process from running in the background
-                Marshal.ReleaseComObject(xlRange);
-                Marshal.ReleaseComObject(xlWorksheet);
-
-                //close and release
-                xlWorkbook.Close();
-                Marshal.ReleaseComObject(xlWorkbook);
-
-                //quit and release
-                xlApp.Quit();
-                Marshal.ReleaseComObject(xlApp);
             }
         }
 

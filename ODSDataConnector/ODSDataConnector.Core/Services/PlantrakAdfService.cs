@@ -435,7 +435,7 @@ namespace ODSDataConnector.Core.Services
 
                           new SqlServerStoredProcedureActivity
                             {
-                                Name = "PbmPlansTransformActivty",
+                                Name = "PbmPlansTransformActivity",
                                  LinkedServiceName= new LinkedServiceReference
                                   {
                                       ReferenceName = "ODSSQLLinkedService"
@@ -446,13 +446,13 @@ namespace ODSDataConnector.Core.Services
 
                           new SqlServerStoredProcedureActivity
                             {
-                                Name = "ReportingPBMPlansTransformActivty",
+                                Name = "ReportingPBMPlansTransformActivity",
                                  LinkedServiceName= new LinkedServiceReference
                                   {
                                       ReferenceName = "ODSSQLLinkedService"
                                   },
                                  StoredProcedureName = "sp_reporting_pt_pbmplans_transform",
-                                 DependsOn = new List<ActivityDependency>{ new ActivityDependency("PbmPlansTransformActivty", new List<string> { "Succeeded" })}
+                                 DependsOn = new List<ActivityDependency>{ new ActivityDependency("PbmPlansTransformActivity", new List<string> { "Succeeded" })}
                             }
                     }
                 };
@@ -581,7 +581,7 @@ namespace ODSDataConnector.Core.Services
 
                           new SqlServerStoredProcedureActivity
                             {
-                                Name = "PayerPlanTransformActivty",
+                                Name = "PayerPlanTransformActivity",
                                  LinkedServiceName= new LinkedServiceReference
                                   {
                                       ReferenceName = "ODSSQLLinkedService"
@@ -592,13 +592,13 @@ namespace ODSDataConnector.Core.Services
 
                           new SqlServerStoredProcedureActivity
                             {
-                                Name = "ReportingPayerPlanTransformActivty",
+                                Name = "ReportingPayerPlanTransformActivity",
                                  LinkedServiceName= new LinkedServiceReference
                                   {
                                       ReferenceName = "ODSSQLLinkedService"
                                   },
                                  StoredProcedureName = "sp_reporting_pt_payerplan_transform",
-                                 DependsOn = new List<ActivityDependency>{ new ActivityDependency("PayerPlanTransformActivty", new List<string> { "Succeeded" })}
+                                 DependsOn = new List<ActivityDependency>{ new ActivityDependency("PayerPlanTransformActivity", new List<string> { "Succeeded" })}
                             }
                     }
                 };
@@ -721,7 +721,7 @@ namespace ODSDataConnector.Core.Services
 
                           new SqlServerStoredProcedureActivity
                             {
-                                Name = "PlanModelTransformActivty",
+                                Name = "PlanModelTransformActivity",
                                  LinkedServiceName= new LinkedServiceReference
                                   {
                                       ReferenceName = "ODSSQLLinkedService"
@@ -732,13 +732,13 @@ namespace ODSDataConnector.Core.Services
 
                           new SqlServerStoredProcedureActivity
                             {
-                                Name = "ReportingPBMPlansTransformActivty",
+                                Name = "ReportingPlanModelTransformActivity",
                                  LinkedServiceName= new LinkedServiceReference
                                   {
                                       ReferenceName = "ODSSQLLinkedService"
                                   },
                                  StoredProcedureName = "sp_reporting_pt_planmodel_transform",
-                                 DependsOn = new List<ActivityDependency>{ new ActivityDependency("PlanModelTransformActivty", new List<string> { "Succeeded" })}
+                                 DependsOn = new List<ActivityDependency>{ new ActivityDependency("PlanModelTransformActivity", new List<string> { "Succeeded" })}
                             }
                     }
                 };
@@ -1010,7 +1010,7 @@ namespace ODSDataConnector.Core.Services
 
                           new SqlServerStoredProcedureActivity
                             {
-                                Name = "PdrpDetailsTransformActivty",
+                                Name = "PdrpDetailsTransformActivity",
                                  LinkedServiceName= new LinkedServiceReference
                                   {
                                       ReferenceName = "ODSSQLLinkedService"
@@ -1021,13 +1021,13 @@ namespace ODSDataConnector.Core.Services
 
                           new SqlServerStoredProcedureActivity
                             {
-                                Name = "ReportingPdrpDetailsTransformActivty",
+                                Name = "ReportingPdrpDetailsTransformActivity",
                                  LinkedServiceName= new LinkedServiceReference
                                   {
                                       ReferenceName = "ODSSQLLinkedService"
                                   },
                                  StoredProcedureName = "sp_Reporting_iqvia_pdrpdetails_transform",
-                                 DependsOn = new List<ActivityDependency>{ new ActivityDependency("PdrpDetailsTransformActivty", new List<string> { "Succeeded" })}
+                                 DependsOn = new List<ActivityDependency>{ new ActivityDependency("PdrpDetailsTransformActivity", new List<string> { "Succeeded" })}
                             }
                     }
                 };
@@ -1154,7 +1154,7 @@ namespace ODSDataConnector.Core.Services
 
                           new SqlServerStoredProcedureActivity
                             {
-                                Name = "NoContactTransformActivty",
+                                Name = "NoContactTransformActivity",
                                  LinkedServiceName= new LinkedServiceReference
                                   {
                                       ReferenceName = "ODSSQLLinkedService"
@@ -1165,13 +1165,13 @@ namespace ODSDataConnector.Core.Services
 
                           new SqlServerStoredProcedureActivity
                             {
-                                Name = "ReportingNoContactTransformActivty",
+                                Name = "ReportingNoContactTransformActivity",
                                  LinkedServiceName= new LinkedServiceReference
                                   {
                                       ReferenceName = "ODSSQLLinkedService"
                                   },
                                  StoredProcedureName = "sp_reporting_iqvia_nocontact_transform",
-                                 DependsOn = new List<ActivityDependency>{ new ActivityDependency("NoContactTransformActivty", new List<string> { "Succeeded" })}
+                                 DependsOn = new List<ActivityDependency>{ new ActivityDependency("NoContactTransformActivity", new List<string> { "Succeeded" })}
                             }
                     }
                 };

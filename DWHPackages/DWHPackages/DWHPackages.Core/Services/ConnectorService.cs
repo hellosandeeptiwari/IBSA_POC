@@ -39,16 +39,20 @@ namespace DWHPackages.Core.Services
                         {
                             foreach (var dataSource in lstDataSources)
                             {
-                                CreateHttpRequest(dataSource, cust.Id);
+                               var resp = await CreateHttpRequest(dataSource, cust.Id);
                             }
+                        }
+                        else
+                        {
+
                         }
                     }
 
 
                     //MDM API Call
-                    var mdmDataSource = await this.CustomerRepository.GetDataSourceListByModuleAsync("MDM");
-                    if (mdmDataSource.Any())
-                        CreateHttpRequest(mdmDataSource.First(), cust.Id);
+                    //var mdmDataSource = await this.CustomerRepository.GetDataSourceListByModuleAsync("MDM");
+                    //if (mdmDataSource.Any())
+                    //    CreateHttpRequest(mdmDataSource.First(), cust.Id);
 
 
                     //Reporting API calls
@@ -77,7 +81,7 @@ namespace DWHPackages.Core.Services
                 };
 
                 var postData = new StringContent(JsonConvert.SerializeObject(requestJSON), Encoding.UTF8, "application/json");
-                var addressResponse = httpClient.PostAsync($"{httpClient.BaseAddress}{dataSource.Apiname}", postData).GetAwaiter().GetResult();
+                var response = await httpClient.PostAsync($"{httpClient.BaseAddress}{dataSource.Apiname}", postData);
 
                 return true;
             }
