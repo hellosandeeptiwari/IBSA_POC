@@ -20,5 +20,6 @@ namespace JobMonitor.DatabaseModels
         public string ScheduledTimeZone { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
+        public string PipelineDescription { get; set; }
     }
 }
