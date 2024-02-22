@@ -46,15 +46,14 @@ namespace JobMonitor
             ["OdsProdINDCallPlanningDatafactory"] = -1,
             ["OdsProdSONOMADataFactory"] = -1,
             ["OPTIDatafactory"] = -1,
-            ["THVProdDataFactory"] = 29,
             ["URGNProdDataFactory"] = 34,
             ["PSProdDataFactory"] = 32,
             ["IBSADWHProdDataFactory"] = 1000044,
             ["BrfProdNeurostarDF"] = 1000062,
-            ["SageProdDatafactory"] = -1
+            ["SageProdDatafactory"] = -1,
+            ["TIAPDataFactory"] = -1,
+            ["ODSProdVerricaDataFactory"] = 1000071
 
-            //For Staging
-            //,["TIAPDataFactory"] = 37
         };
 
         #endregion
@@ -77,12 +76,12 @@ namespace JobMonitor
             string[] arrResourceGroupList = strResourceGroupList.Split(',');
             string[] arrAzureDataFactoryList = strAzureDataFactoryList.Split(',');
             List<PipelineModel> lstPipelines = new List<PipelineModel>();
-
+            
             for (int iRGIndex = 0; iRGIndex < arrResourceGroupList.Length; iRGIndex++)
             {
                 foreach (var objDataFactory in objClient.Factories.ListByResourceGroup(arrResourceGroupList[iRGIndex]))
                 {
-                    if (strAzureDataFactoryList.Contains(objDataFactory.Name) || strAzureDataFactoryList.ToUpper() == "ALL" && objDataFactory.Name != "ADCTProdDataFactoryTest" && objDataFactory.Name != "BIPIProdDataFactoryTest")
+                    if (strAzureDataFactoryList.Contains(objDataFactory.Name) || strAzureDataFactoryList.ToUpper() == "ALL"  && objDataFactory.Name != "ADCTProdDataFactoryTest" && objDataFactory.Name != "BIPIProdDataFactoryTest")
                     {
                         // ListByFactory method is returning a maximum of 50 pipelines in one single call.
                         var lstPages = objClient.Pipelines.ListByFactory(arrResourceGroupList[iRGIndex], objDataFactory.Name);
@@ -132,7 +131,7 @@ namespace JobMonitor
                                                                                 (objTriggerJSON.recurrence.schedule.weekDays == null ? "" : "WeekDays=" + string.Join(",", objTriggerJSON.recurrence.schedule.weekDays) + ";") +
                                                                                 (objTriggerJSON.recurrence.schedule.hours == null ? "" : "Hours=" + objTriggerJSON.recurrence.schedule.hours[0] + ";") +
                                                                                 (objTriggerJSON.recurrence.schedule.minutes == null ? "" : "Minutes=" + objTriggerJSON.recurrence.schedule.minutes[0] + ";");
-
+                                    
                                     objPipeline.ScheduledTimeZone = objTriggerJSON.recurrence.timeZone;
                                     objPipeline.StartTime = objTriggerJSON.recurrence.startTime;
                                     objPipeline.EndTime = objTriggerJSON.recurrence.endTime;
@@ -153,7 +152,7 @@ namespace JobMonitor
                 {
                     if (strAzureDataFactoryList.Contains(objDataFactory.Name) || strAzureDataFactoryList.ToUpper() == "ALL")
                     {
-                        foreach (string strPipeline in lstPipelines.Where(p => p.DataFactoryName == objDataFactory.Name).Select(p => p.PipelineName))
+                        foreach(string strPipeline in lstPipelines.Where(p => p.DataFactoryName == objDataFactory.Name).Select(p => p.PipelineName))
                         {
                             //var runParams = new RunFilterParameters() { LastUpdatedAfter = DateTime.Now.AddDays(-10), LastUpdatedBefore = DateTime.Now };
                             var runParams = new RunFilterParameters()
@@ -218,13 +217,13 @@ namespace JobMonitor
 
         private static void InsertPipelineDetails(List<PipelineModel> lstPipelineDetails)
         {
-            if (lstPipelineDetails.Count > 0)
+            if(lstPipelineDetails.Count > 0)
             {
                 StringBuilder sbInsertQueries = new StringBuilder("TRUNCATE TABLE ADF_Pipeline;");
-                // sbInsertQueries.AppendLine($"SET IDENTITY_INSERT [dbo].[ADF_Pipeline] ON;");
+               // sbInsertQueries.AppendLine($"SET IDENTITY_INSERT [dbo].[ADF_Pipeline] ON;");
                 foreach (PipelineModel item in lstPipelineDetails)
                 {
-                    sbInsertQueries.AppendLine($"INSERT INTO ADF_Pipeline VALUES({item.CustomerId}, '{item.ResourceGroupName}', '{item.DataFactoryName}', '{item.PipelineName}', {(string.IsNullOrWhiteSpace(item.TriggerName) ? "NULL" : "'" + item.TriggerName + "'")}, {(string.IsNullOrWhiteSpace(item.TriggerStatus) ? "NULL" : "'" + item.TriggerStatus + "'")}, {(string.IsNullOrWhiteSpace(item.ScheduledFrequency) ? "NULL" : "'" + item.ScheduledFrequency + "'")}, {(string.IsNullOrWhiteSpace(item.ScheduledTime) ? "NULL" : "'" + item.ScheduledTime + "'")}, {(string.IsNullOrWhiteSpace(item.ScheduledTimeZone) ? "NULL" : "'" + item.ScheduledTimeZone + "'")}, {(item.StartTime.Year == 1 ? "NULL" : "'" + item.StartTime.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'")}, {(item.EndTime.Year == 1 ? "NULL" : "'" + item.EndTime.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'")},{(string.IsNullOrWhiteSpace(item.PipelineDescription) ? "NULL" : "'" + item.PipelineDescription.Replace("'", "''") + "'")});");
+                    sbInsertQueries.AppendLine($"INSERT INTO ADF_Pipeline VALUES({item.CustomerId}, '{item.ResourceGroupName}', '{item.DataFactoryName}', '{item.PipelineName}', {(string.IsNullOrWhiteSpace(item.TriggerName) ? "NULL" : "'" + item.TriggerName + "'")}, {(string.IsNullOrWhiteSpace(item.TriggerStatus) ? "NULL" : "'" + item.TriggerStatus + "'")}, {(string.IsNullOrWhiteSpace(item.ScheduledFrequency) ? "NULL" : "'" + item.ScheduledFrequency + "'")}, {(string.IsNullOrWhiteSpace(item.ScheduledTime) ? "NULL" : "'" + item.ScheduledTime + "'")}, {(string.IsNullOrWhiteSpace(item.ScheduledTimeZone) ? "NULL" : "'" + item.ScheduledTimeZone + "'")}, {(item.StartTime.Year == 1 ? "NULL" : "'" + item.StartTime.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'")}, {(item.EndTime.Year == 1 ? "NULL" : "'" + item.EndTime.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'")},{(string.IsNullOrWhiteSpace(item.PipelineDescription) ? "NULL" : "'" + item.PipelineDescription.Replace("'","''") + "'")});");
                 }
                 //sbInsertQueries.AppendLine($"SET IDENTITY_INSERT [dbo].[ADF_Pipeline] OFF;");
                 ExecuteQuery(sbInsertQueries.ToString());
