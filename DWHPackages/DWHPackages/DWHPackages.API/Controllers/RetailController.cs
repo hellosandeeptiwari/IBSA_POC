@@ -19,7 +19,7 @@ namespace DWHPackages.API.Controllers
         [HttpPost("SetupRetailDWH")]
         public async Task<IActionResult> SetupRetailDWHAsync(Request request)
         {
-            var res = this.connectorService.CreateDataForDWH(request);
+            var res = await this.connectorService.CreateDataForDWH(request);
            
             return this.Ok();
         }

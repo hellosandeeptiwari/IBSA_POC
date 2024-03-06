@@ -18,14 +18,16 @@ namespace ODSDataConnector.Core.Services
         private readonly IConfiguration Configuration;
 
         private readonly string subscriptionId;
-
         private readonly string clientId;
-
         private readonly string clientSecret;
-
         private readonly string tenantId;
-
         private readonly string strAzureAuthenticationKey;
+        private readonly string azureManagementUri;
+        private readonly string azureADUri;
+        private readonly string batchAccountName;
+        private readonly string batchAccountUri;
+        private readonly string batchPoolName;
+        private readonly string batchAccessKey;
         public ADFService(IConfiguration configuration)
         {
             this.Configuration = configuration;
@@ -34,13 +36,19 @@ namespace ODSDataConnector.Core.Services
             this.clientSecret = configuration["ADFKeys:clientSecret"];
             this.tenantId = configuration["ADFKeys:tenantId"];
             this.strAzureAuthenticationKey = configuration["ADFKeys:strAzureAuthenticationKey"];
+            this.batchAccountName = configuration["AzureBatchAccountKeys:accountName"];
+            this.batchAccountUri = configuration["AzureBatchAccountKeys:batchUri"];
+            this.batchPoolName = configuration["AzureBatchAccountKeys:poolName"];
+            this.batchAccessKey = configuration["AzureBatchAccountKeys:accessKey"];
+            this.azureManagementUri = configuration["ADFKeys:azureManagementUri"];
+            this.azureADUri = configuration["ADFKeys:azureADUri"];
         }
 
         public DataFactoryManagementClient GetADFClient()
         {
-            AuthenticationContext objAuthenticationContext = new AuthenticationContext("https://login.windows.net/" + tenantId);
+            AuthenticationContext objAuthenticationContext = new AuthenticationContext(azureADUri + tenantId);
             ClientCredential objClientCredential = new ClientCredential(clientId, strAzureAuthenticationKey);
-            AuthenticationResult objAuthenticationResult = objAuthenticationContext.AcquireTokenAsync("https://management.azure.com/", objClientCredential).Result;
+            AuthenticationResult objAuthenticationResult = objAuthenticationContext.AcquireTokenAsync(azureManagementUri, objClientCredential).Result;
             ServiceClientCredentials objTokenCredentials = new TokenCredentials(objAuthenticationResult.AccessToken);
             var dataFactoryManagementClient = new DataFactoryManagementClient(objTokenCredentials)
             {
@@ -102,10 +110,10 @@ namespace ODSDataConnector.Core.Services
                              {
 
                                  ConnectVia = new IntegrationRuntimeReference(ls.Runtime),
-                                 AccountName = "odstoveevabatch",
-                                 BatchUri = "https://odstoveevabatch.eastus.batch.azure.com",
-                                 PoolName = "odstoveevapool",
-                                 AccessKey = new SecureString("J5woJ9JRy/N0PB+3Ke8NieufE9p9Aw65tqxxOLHiLMPh7ZaAEQ1uDb8BoYvaelRRl790P2bXekiNfhn1aOe2Hw=="),
+                                 AccountName = batchAccountName,
+                                 BatchUri = batchAccountUri,
+                                 PoolName = batchPoolName,
+                                 AccessKey = new SecureString(batchAccessKey),
                                  LinkedServiceName = new LinkedServiceReference 
                                  { 
                                      ReferenceName = "CNXStorageBlobLinkedService"

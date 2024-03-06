@@ -1,4 +1,5 @@
-﻿using Microsoft.Azure.Management.DataFactory;
+﻿using DocumentFormat.OpenXml.Office2019.Excel.RichData;
+using Microsoft.Azure.Management.DataFactory;
 using Microsoft.Azure.Management.DataFactory.Models;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ODSDataConnector.Core.Entities;
@@ -95,7 +96,13 @@ namespace ODSDataConnector.Core.Services
                                       ReferenceName = customer.LinkedService
                                   },
                                  StoredProcedureName = "sp_cms_goldenrecord_dataload_transform",
-                                 DependsOn = new List<ActivityDependency>{ new ActivityDependency("CopyOdsToCmsActivity", new List<string> { "Succeeded" })}
+                                 DependsOn = new List<ActivityDependency>{ new ActivityDependency("CopyOdsToCmsActivity", new List<string> { "Succeeded" })},
+                                 StoredProcedureParameters = new List<StoredProcedureParameter>{ new StoredProcedureParameter
+                                                                                                    {
+                                                                                                        Type = "String",
+                                                                                                        Value = "Veeva"
+                                                                                                    }
+                                                                                                }
                             },
                            new SqlServerStoredProcedureActivity
                             {
@@ -134,7 +141,13 @@ namespace ODSDataConnector.Core.Services
                                       ReferenceName = customer.LinkedService
                                   },
                                  StoredProcedureName = "sp_cms_goldenrecord_dataload_transform",
-                                 DependsOn = new List<ActivityDependency>{ new ActivityDependency("CopyPlanTrakToCmsActivity", new List<string> { "Succeeded" })}
+                                 DependsOn = new List<ActivityDependency>{ new ActivityDependency("CopyPlanTrakToCmsActivity", new List<string> { "Succeeded" })},
+                                 StoredProcedureParameters = new List<StoredProcedureParameter>{ new StoredProcedureParameter
+                                                                                                    {
+                                                                                                        Type = "String",
+                                                                                                        Value = "Plantrak"
+                                                                                                    }
+                                                                                                }
                             },
                             new SqlServerStoredProcedureActivity
                             {
@@ -162,7 +175,7 @@ namespace ODSDataConnector.Core.Services
                         {
                             Name = "FuzzyMatchingActivity",
                             Command = "FuzzyMatchingActivity.exe -s \"VEEVA\"",
-                            FolderPath = "turnkey/CustomActivity/MDM/FuzzyMatch",
+                            FolderPath = dsConfig.Url,
                             ResourceLinkedService = new LinkedServiceReference
                             {
                                 ReferenceName = dsConfig.LinkedService
@@ -182,7 +195,7 @@ namespace ODSDataConnector.Core.Services
                     {
                         Name = "FuzzyMatchingActivity",
                         Command = "FuzzyMatchingActivity.exe -s \"PLANTRAK\"",
-                        FolderPath = "turnkey/CustomActivity/MDM/FuzzyMatch",
+                        FolderPath = dsConfig.Url,
                         ResourceLinkedService = new LinkedServiceReference
                         {
                             ReferenceName = dsConfig.LinkedService
@@ -285,10 +298,6 @@ namespace ODSDataConnector.Core.Services
                 DataFactoryName = dataFactoryName,
                 LinkedServiceName = "BatchLinkedService",
                 Runtime = "CNXIntegrationRuntime",
-                //Dbserver = customer.Dbserver,
-                //Dbname = customer.Dbname,
-                //Username = customer.Username,
-                //Password = customer.Password,
                 Type = "Batch"
             };
         }

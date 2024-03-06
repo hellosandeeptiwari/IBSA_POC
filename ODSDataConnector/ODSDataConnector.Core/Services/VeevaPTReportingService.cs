@@ -167,7 +167,7 @@ namespace ODSDataConnector.Core.Services
 
             var spVeevaCommonList = new List<string>() { "sp_reporting_bi_transform",
                 "sp_reporting_userterritorydetails_transform",
-                "sp_timeoffterritory_transform" };
+                "sp_reporting_tot_transform" };
 
             var pipeline_Veeva = new PipelineResource()
             {
