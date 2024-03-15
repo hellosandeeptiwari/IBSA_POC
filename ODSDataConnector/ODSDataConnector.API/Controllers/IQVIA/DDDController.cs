@@ -25,6 +25,7 @@ namespace ODSDataConnector.Controllers.IQVIA
         public async Task<IActionResult> SetupDemographicDataAsync(DataRequest request)
         {
             var res = this.storageService.ExcecuteSQLScripts(request);
+            //var res = this.storageService.ExcecuteSQLScripts(request);
             var result = this.DDDAdfService.CreateDemographicPipeline(request);
            
             return this.Ok();
