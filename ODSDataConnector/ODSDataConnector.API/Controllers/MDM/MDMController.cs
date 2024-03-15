@@ -25,7 +25,8 @@ namespace ODSDataConnector.API.Controllers.MDM
         {
             try
             {
-                this.AppLogger.LogInformation($"SetupMDMAsync Method Started at {DateTime.UtcNow}");
+                this.AppLogger.LogInformation($"SetupMDMAsync Method Started at {DateTime.UtcNow}");  //test 
+                //this.AppLogger.LogInformation($"SetupMDMAsync Method Started at {DateTime.UtcNow}");
                 var res = await this.StorageService.ExcecuteSQLScripts(request);
                 var result = await this.MDMService.CreateMDMPipeline(request);
                 this.AppLogger.LogInformation($"SetupMDMAsync Method completed at {DateTime.UtcNow}");
