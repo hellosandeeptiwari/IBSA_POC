@@ -51,7 +51,7 @@ namespace JobMonitor
             ["IBSADWHProdDataFactory"] = 1000044,
             ["BrfProdNeurostarDF"] = 1000062,
             ["SageProdDatafactory"] = -1,
-            ["TIAPDataFactory"] = -1,
+            //["TIAPDataFactory"] = -1,
             ["ODSProdVerricaDataFactory"] = 1000071
 
         };
@@ -81,7 +81,7 @@ namespace JobMonitor
             {
                 foreach (var objDataFactory in objClient.Factories.ListByResourceGroup(arrResourceGroupList[iRGIndex]))
                 {
-                    if (strAzureDataFactoryList.Contains(objDataFactory.Name) || strAzureDataFactoryList.ToUpper() == "ALL"  && objDataFactory.Name != "ADCTProdDataFactoryTest" && objDataFactory.Name != "BIPIProdDataFactoryTest")
+                    if (dicDataFactoryCustomerIdMapping.ContainsKey(objDataFactory.Name) && (strAzureDataFactoryList.Contains(objDataFactory.Name) || strAzureDataFactoryList.ToUpper() == "ALL"))//  && objDataFactory.Name != "ADCTProdDataFactoryTest" && objDataFactory.Name != "BIPIProdDataFactoryTest")
                     {
                         // ListByFactory method is returning a maximum of 50 pipelines in one single call.
                         var lstPages = objClient.Pipelines.ListByFactory(arrResourceGroupList[iRGIndex], objDataFactory.Name);
