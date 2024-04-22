@@ -280,19 +280,31 @@ def Get_Histories(apiConfig):
             data.extend(moreData)
 
         for item in data:
-            title = "'" + item['title'] + "'" if item['title'] is not None else "null"
-            status = "'" + item['status'] + "'" if item['status'] is not None else "null"
+            if 'title' in item:
+                title = "'" + item['title'] + "'" if item['title'] is not None else "null"
+            else: 
+                title= "null"
+            
+            if 'status' in item:
+                status = "'" + item['status'] + "'" if item['status'] is not None else "null"
+            else: 
+                status= "null"
+            
             createdBy = item['created_by'] if item['created_by'] is not None else "null"
             createdDate = "'" + item['created_date'] + "'" if item['created_date'] is not None else "null"
             modifiedBy = item['modified_by']  if item['modified_by'] is not None else "null"
             modifiedDate = "'" + item['modified_date'] + "'" if item['modified_date'] is not None else "null"
-            runStartDate = "'" + item['run_start_date'] + "'" if item['run_start_date'] is not None else "null"
-
-
+            
+            if 'run_start_date' in item:
+                runStartDate = "'" + item['run_start_date'] + "'" if item['run_start_date'] is not None else "null"
+            else: 
+                runStartDate= "null"
+ 
             if 'run_end_date' in item:
                 runEndDate = "'" + item['run_end_date'] + "'" if item['run_end_date'] is not None else "null"
             else:
                 runEndDate = "null"
+            
             sql = "Insert into Vault_JobsHistory Values(" + "{}".format(item['job_id']) + "," + title + ","  + status + ","  + "{}".format(createdBy) + "," + createdDate + "," + "{}".format(modifiedBy) + "," + modifiedDate + "," + runStartDate + "," + runEndDate +  ","+ customerId + "," + vaultId + ",null)"
             cursor.execute(sql)
         cursor.commit()
