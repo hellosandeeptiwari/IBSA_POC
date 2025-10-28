@@ -20,6 +20,10 @@ export default function DashboardPage() {
   const [currentPage, setCurrentPage] = useState(0)
   const [pageSize, setPageSize] = useState(10)
   
+  // Sorting states
+  const [sortColumn, setSortColumn] = useState<string>('priority')
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc')
+  
   // Filter states
   const [selectedTiers, setSelectedTiers] = useState<string[]>([])
   const [selectedSpecialties, setSelectedSpecialties] = useState<string[]>([])
@@ -46,7 +50,7 @@ export default function DashboardPage() {
   }
 
   const filteredData = useMemo(() => {
-    return data.filter(hcp => {
+    let filtered = data.filter(hcp => {
       // Apply tier filter
       if (selectedTiers.length > 0 && !selectedTiers.includes(hcp.tier)) return false
       
@@ -74,7 +78,44 @@ export default function DashboardPage() {
       
       return true
     })
-  }, [data, selectedTiers, selectedSpecialties, selectedTerritories, minTrx, globalFilter])
+
+    // Apply sorting
+    if (sortColumn) {
+      filtered = [...filtered].sort((a, b) => {
+        let aVal: any = a[sortColumn as keyof HCP]
+        let bVal: any = b[sortColumn as keyof HCP]
+        
+        // Handle special cases
+        if (sortColumn === 'value_score') {
+          aVal = a.value_score || 0
+          bVal = b.value_score || 0
+        } else if (sortColumn === 'call_success_score') {
+          aVal = (a.call_success_score || 0) * 100
+          bVal = (b.call_success_score || 0) * 100
+        }
+        
+        // Convert to numbers if possible
+        const aNum = typeof aVal === 'number' ? aVal : parseFloat(aVal as string)
+        const bNum = typeof bVal === 'number' ? bVal : parseFloat(bVal as string)
+        
+        if (!isNaN(aNum) && !isNaN(bNum)) {
+          return sortDirection === 'asc' ? aNum - bNum : bNum - aNum
+        }
+        
+        // String comparison
+        const aStr = String(aVal || '').toLowerCase()
+        const bStr = String(bVal || '').toLowerCase()
+        
+        if (sortDirection === 'asc') {
+          return aStr < bStr ? -1 : aStr > bStr ? 1 : 0
+        } else {
+          return bStr < aStr ? -1 : bStr > aStr ? 1 : 0
+        }
+      })
+    }
+    
+    return filtered
+  }, [data, selectedTiers, selectedSpecialties, selectedTerritories, minTrx, globalFilter, sortColumn, sortDirection])
 
   const handleTierToggle = (tier: string) => {
     setSelectedTiers(prev =>
@@ -94,6 +135,22 @@ export default function DashboardPage() {
     setSelectedTerritories([])
     setMinTrx(0)
     setGlobalFilter('')
+  }
+
+  const handleSort = (column: string) => {
+    if (sortColumn === column) {
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')
+    } else {
+      setSortColumn(column)
+      setSortDirection('asc')
+    }
+  }
+
+  const SortIcon = ({ column }: { column: string }) => {
+    if (sortColumn !== column) {
+      return <span className="text-gray-400 ml-1">⇅</span>
+    }
+    return sortDirection === 'asc' ? <span className="text-blue-600 ml-1">↑</span> : <span className="text-blue-600 ml-1">↓</span>
   }
 
   if (loading) {
@@ -438,22 +495,25 @@ export default function DashboardPage() {
           <table className="w-full border-collapse">
             <thead className="bg-gray-50 dark:bg-gray-800">
               <tr>
-                <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b">
+                <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100" onClick={() => handleSort('npi')}>
                   <div className="flex items-center">
                     NPI
+                    <SortIcon column="npi" />
                     <Tooltip content="Unique healthcare provider ID" />
                   </div>
                 </th>
-                <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b">
+                <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100" onClick={() => handleSort('name')}>
                   <div className="flex items-center">
                     Prescriber
+                    <SortIcon column="name" />
                     <Tooltip content="Healthcare provider name" />
                   </div>
                 </th>
-                <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b">
+                <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100" onClick={() => handleSort('specialty')}>
                   <div className="flex items-center">
                     Specialty
-                    <Tooltip content="Medical specialty (e.g., Endocrinology)" />
+                    <SortIcon column="specialty" />
+                    <Tooltip content="Medical specialty" />
                   </div>
                 </th>
                 <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b">
