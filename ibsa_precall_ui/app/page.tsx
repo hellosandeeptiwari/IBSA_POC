@@ -495,35 +495,35 @@ export default function DashboardPage() {
           <table className="w-full border-collapse">
             <thead className="bg-gray-50 dark:bg-gray-800">
               <tr>
-                <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100" onClick={() => handleSort('npi')}>
+                <th className="px-2 py-2 text-left text-[11px] font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100" onClick={() => handleSort('npi')}>
                   <div className="flex items-center">
                     NPI
                     <SortIcon column="npi" />
                     <Tooltip content="Unique healthcare provider ID" />
                   </div>
                 </th>
-                <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100" onClick={() => handleSort('name')}>
+                <th className="px-2 py-2 text-left text-[11px] font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100" onClick={() => handleSort('name')}>
                   <div className="flex items-center">
                     Prescriber
                     <SortIcon column="name" />
                     <Tooltip content="Healthcare provider name" />
                   </div>
                 </th>
-                <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100" onClick={() => handleSort('specialty')}>
+                <th className="px-2 py-2 text-left text-[11px] font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100" onClick={() => handleSort('specialty')}>
                   <div className="flex items-center">
                     Specialty
                     <SortIcon column="specialty" />
                     <Tooltip content="Medical specialty" />
                   </div>
                 </th>
-                <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100" onClick={() => handleSort('territory')}>
+                <th className="px-2 py-2 text-left text-[11px] font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100" onClick={() => handleSort('territory')}>
                   <div className="flex items-center">
                     Territory
                     <SortIcon column="territory" />
                     <Tooltip content="Sales territory assignment" />
                   </div>
                 </th>
-                <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b bg-purple-50 cursor-pointer hover:bg-gray-100" onClick={() => handleSort('ngd_decile')}>
+                <th className="px-2 py-2 text-left text-[11px] font-medium text-gray-500 uppercase border-b bg-purple-50 cursor-pointer hover:bg-gray-100" onClick={() => handleSort('ngd_decile')}>
                   <div className="flex items-center gap-1">
                     <Bot className="h-3 w-3 text-purple-600" />
                     <span className="flex items-center gap-1">
@@ -534,14 +534,14 @@ export default function DashboardPage() {
                     <Tooltip content="AI Classification: New (0-10% decile), Grower (11-40%), Stable (41-70%), Decliner (71-100%)" />
                   </div>
                 </th>
-                <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100" onClick={() => handleSort('tier')}>
+                <th className="px-2 py-2 text-left text-[11px] font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100" onClick={() => handleSort('tier')}>
                   <div className="flex items-center">
                     Tier
                     <SortIcon column="tier" />
                     <Tooltip content="Rule: Platinum (TRx≥100), Gold (50-99), Silver (20-49), Bronze (<20)" />
                   </div>
                 </th>
-                <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b bg-purple-50 cursor-pointer hover:bg-gray-100" onClick={() => handleSort('value_score')}>
+                <th className="px-2 py-2 text-left text-[11px] font-medium text-gray-500 uppercase border-b bg-purple-50 cursor-pointer hover:bg-gray-100" onClick={() => handleSort('value_score')}>
                   <div className="flex items-center gap-1">
                     <Sparkles className="h-3 w-3 text-purple-600" />
                     <span className="flex items-center gap-1">
@@ -552,7 +552,7 @@ export default function DashboardPage() {
                     <Tooltip content="AI Prediction: ML model call success probability × 100 (higher = better engagement likelihood)" />
                   </div>
                 </th>
-                <th className="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase border-b bg-purple-50 cursor-pointer hover:bg-gray-100" onClick={() => handleSort('priority')}>
+                <th className="px-2 py-2 text-right text-[11px] font-medium text-gray-500 uppercase border-b bg-purple-50 cursor-pointer hover:bg-gray-100" onClick={() => handleSort('priority')}>
                   <div className="flex items-center justify-end gap-1">
                     <Bot className="h-3 w-3 text-purple-600" />
                     <span className="flex items-center gap-1">
@@ -563,56 +563,56 @@ export default function DashboardPage() {
                     <Tooltip content="AI Ranking: 60% Call Success + 30% Rx Lift + 10% (Tier & NGD) mapped to 1-5" />
                   </div>
                 </th>
-                <th className="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100" onClick={() => handleSort('trx_current')}>
+                <th className="px-2 py-2 text-right text-[11px] font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100" onClick={() => handleSort('trx_current')}>
                   <div className="flex items-center justify-end">
                     Current TRx
                     <SortIcon column="trx_current" />
                     <Tooltip content="Total Rx written this quarter (QTD)" />
                   </div>
                 </th>
-                <th className="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100" onClick={() => handleSort('trx_prior')}>
+                <th className="px-2 py-2 text-right text-[11px] font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100" onClick={() => handleSort('trx_prior')}>
                   <div className="flex items-center justify-end">
                     Prior TRx
                     <SortIcon column="trx_prior" />
                     <Tooltip content="Total Rx previous quarter (for comparison)" />
                   </div>
                 </th>
-                <th className="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100" onClick={() => handleSort('trx_growth')}>
+                <th className="px-2 py-2 text-right text-[11px] font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100" onClick={() => handleSort('trx_growth')}>
                   <div className="flex items-center justify-end">
                     Growth %
                     <SortIcon column="trx_growth" />
                     <Tooltip content="Rule: ((Current - Prior) / Prior) × 100" />
                   </div>
                 </th>
-                <th className="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100" onClick={() => handleSort('nrx_count')}>
+                <th className="px-2 py-2 text-right text-[11px] font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100" onClick={() => handleSort('nrx_count')}>
                   <div className="flex items-center justify-end">
                     NRx
                     <SortIcon column="nrx_count" />
                     <Tooltip content="New Rx (first-time prescriptions for new patients)" />
                   </div>
                 </th>
-                <th className="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100" onClick={() => handleSort('ibsa_share')}>
+                <th className="px-2 py-2 text-right text-[11px] font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100" onClick={() => handleSort('ibsa_share')}>
                   <div className="flex items-center justify-end">
                     Market Share
                     <SortIcon column="ibsa_share" />
                     <Tooltip content="Rule: (Your TRx / Total TRx) × 100" />
                   </div>
                 </th>
-                <th className="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100" onClick={() => handleSort('rx_lift')}>
+                <th className="px-2 py-2 text-right text-[11px] font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100" onClick={() => handleSort('rx_lift')}>
                   <div className="flex items-center justify-end">
                     Rx Lift
                     <SortIcon column="rx_lift" />
                     <Tooltip content="Predicted incremental TRx lift (higher = more revenue impact)" />
                   </div>
                 </th>
-                <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100" onClick={() => handleSort('call_success_score')}>
+                <th className="px-2 py-2 text-left text-[11px] font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100" onClick={() => handleSort('call_success_score')}>
                   <div className="flex items-center">
                     Call Success
                     <SortIcon column="call_success_score" />
                     <Tooltip content="Likelihood of prescription after sales call (ML prediction 0-100%)" />
                   </div>
                 </th>
-                <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b">Actions</th>
+                <th className="px-2 py-2 text-left text-[11px] font-medium text-gray-500 uppercase border-b">Actions</th>
               </tr>
             </thead>
             <tbody className="bg-white dark:bg-gray-900">
@@ -632,17 +632,17 @@ export default function DashboardPage() {
                     className="border-b hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer"
                     onClick={() => router.push(`/hcp/${hcp.npi}`)}
                   >
-                    <td className="px-3 py-3 text-sm font-mono">{hcp.npi}</td>
-                    <td className="px-3 py-3 text-sm font-semibold">{hcp.name}</td>
-                    <td className="px-3 py-3 text-sm">
+                    <td className="px-2 py-2 text-xs font-mono">{hcp.npi}</td>
+                    <td className="px-2 py-2 text-xs font-semibold">{hcp.name}</td>
+                    <td className="px-2 py-2 text-xs">
                       <Tooltip content={hcp.specialty}>
                         <span className="block max-w-[150px] truncate">
                           {hcp.specialty}
                         </span>
                       </Tooltip>
                     </td>
-                    <td className="px-3 py-3 text-sm">{hcp.territory}</td>
-                    <td className="px-3 py-3 bg-purple-50 border-l-2 border-r-2 border-purple-300">
+                    <td className="px-2 py-2 text-xs">{hcp.territory}</td>
+                    <td className="px-2 py-2 bg-purple-50 border-l-2 border-r-2 border-purple-300">
                       <div className="flex items-center gap-1">
                         <Bot className="h-3 w-3 text-purple-600 flex-shrink-0" />
                         <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border ${colors[hcp.ngd_classification as keyof typeof colors]}`}>
@@ -650,13 +650,13 @@ export default function DashboardPage() {
                         </span>
                       </div>
                     </td>
-                    <td className="px-3 py-3">
+                    <td className="px-2 py-2">
                       <TierBadge tier={hcp.tier} size="sm" />
                     </td>
-                    <td className="px-3 py-3 text-center bg-purple-50 border-l-2 border-r-2 border-purple-300">
+                    <td className="px-2 py-2 text-center bg-purple-50 border-l-2 border-r-2 border-purple-300">
                       <div className="flex items-center justify-center gap-1">
                         <Sparkles className="h-3 w-3 text-purple-600 flex-shrink-0" />
-                        <span className={`inline-flex items-center justify-center w-10 h-10 rounded-full text-sm font-bold ${
+                        <span className={`inline-flex items-center justify-center w-9 h-9 rounded-full text-xs font-bold ${
                           powerScore >= 75 ? 'bg-green-100 text-green-700' :
                           powerScore >= 50 ? 'bg-blue-100 text-blue-700' :
                           powerScore >= 25 ? 'bg-yellow-100 text-yellow-700' :
@@ -666,10 +666,10 @@ export default function DashboardPage() {
                         </span>
                       </div>
                     </td>
-                    <td className="px-3 py-3 text-right bg-purple-50 border-l-2 border-r-2 border-purple-300">
+                    <td className="px-2 py-2 text-right bg-purple-50 border-l-2 border-r-2 border-purple-300">
                       <div className="flex items-center justify-end gap-1">
                         <Bot className="h-3 w-3 text-purple-600 flex-shrink-0" />
-                        <span className={`inline-flex items-center justify-center w-8 h-8 rounded-full text-sm font-bold ${
+                        <span className={`inline-flex items-center justify-center w-7 h-7 rounded-full text-xs font-bold ${
                           hcp.priority <= 1 ? 'bg-red-100 text-red-700' :
                           hcp.priority <= 3 ? 'bg-orange-100 text-orange-700' :
                           'bg-blue-100 text-blue-700'
@@ -678,15 +678,15 @@ export default function DashboardPage() {
                         </span>
                       </div>
                     </td>
-                    <td className="px-3 py-3 text-right font-mono">{formatNumber(hcp.trx_current)}</td>
-                    <td className="px-3 py-3 text-right font-mono text-muted-foreground">{formatNumber(hcp.trx_prior)}</td>
-                    <td className="px-3 py-3 text-right font-mono">
+                    <td className="px-2 py-2 text-right text-xs font-mono">{formatNumber(hcp.trx_current)}</td>
+                    <td className="px-2 py-2 text-right text-xs font-mono text-muted-foreground">{formatNumber(hcp.trx_prior)}</td>
+                    <td className="px-2 py-2 text-right text-xs font-mono">
                       <span className={hcp.trx_growth > 0 ? 'text-green-600' : hcp.trx_growth < 0 ? 'text-red-600' : ''}>
                         {hcp.trx_growth > 0 ? '↑' : hcp.trx_growth < 0 ? '↓' : '→'} {formatPercent(Math.abs(hcp.trx_growth), 1)}
                       </span>
                     </td>
-                    <td className="px-3 py-3 text-right font-mono">{formatNumber(hcp.nrx_count)}</td>
-                    <td className="px-3 py-3 text-right">
+                    <td className="px-2 py-2 text-right text-xs font-mono">{formatNumber(hcp.nrx_count)}</td>
+                    <td className="px-2 py-2 text-right">
                       <span className={`inline-flex items-center px-2 py-1 rounded text-xs font-semibold ${
                         hcp.ibsa_share >= 50 ? 'bg-green-100 text-green-700' :
                         hcp.ibsa_share >= 30 ? 'bg-blue-100 text-blue-700' :
@@ -695,12 +695,12 @@ export default function DashboardPage() {
                         {formatPercent(hcp.ibsa_share, 0)}
                       </span>
                     </td>
-                    <td className="px-3 py-3 text-right font-mono">{formatNumber(hcp.rx_lift || 0)}</td>
-                    <td className="px-3 py-3">
-                      <div className="w-20">
-                        <div className="w-full bg-gray-200 rounded-full h-2">
+                    <td className="px-2 py-2 text-right text-xs font-mono">{formatNumber(hcp.rx_lift || 0)}</td>
+                    <td className="px-2 py-2">
+                      <div className="w-16">
+                        <div className="w-full bg-gray-200 rounded-full h-1.5">
                           <div
-                            className={`h-2 rounded-full ${
+                            className={`h-1.5 rounded-full ${
                               callSuccess >= 70 ? 'bg-green-500' :
                               callSuccess >= 40 ? 'bg-blue-500' :
                               'bg-gray-400'
@@ -708,13 +708,14 @@ export default function DashboardPage() {
                             style={{ width: `${callSuccess}%` }}
                           />
                         </div>
-                        <span className="text-xs text-muted-foreground">{callSuccess}%</span>
+                        <span className="text-[10px] text-muted-foreground">{callSuccess}%</span>
                       </div>
                     </td>
-                    <td className="px-3 py-3">
+                    <td className="px-2 py-2">
                       <Button
                         size="sm"
                         variant="outline"
+                        className="h-7 px-2 text-xs"
                         onClick={(e) => {
                           e.stopPropagation()
                           router.push(`/hcp/${hcp.npi}`)
