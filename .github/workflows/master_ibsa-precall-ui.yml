@@ -26,7 +26,7 @@ jobs:
       - name: npm install, build, and test
         working-directory: ./ibsa_precall_ui
         run: |
-          npm ci
+          npm ci --omit=dev
           npm run build
         env:
           NODE_OPTIONS: --max-old-space-size=8192
@@ -35,7 +35,13 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: node-app
-          path: ./ibsa_precall_ui
+          path: |
+            ./ibsa_precall_ui/.next
+            ./ibsa_precall_ui/node_modules
+            ./ibsa_precall_ui/public
+            ./ibsa_precall_ui/package.json
+            ./ibsa_precall_ui/package-lock.json
+            ./ibsa_precall_ui/next.config.ts
 
   deploy:
     runs-on: ubuntu-latest
@@ -55,3 +61,5 @@ jobs:
           slot-name: 'Production'
           package: .
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_D5ABF022118F4BD5B6A1A3048985150C }}
+        env:
+          SCM_DO_BUILD_DURING_DEPLOYMENT: false
