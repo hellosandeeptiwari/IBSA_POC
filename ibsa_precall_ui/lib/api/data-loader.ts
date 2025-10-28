@@ -168,13 +168,29 @@ export async function loadModelReadyDataset(): Promise<ModelReadyRow[]> {
 
     // Load from Azure Blob Storage (for production) or local fallback (for dev)
     const BLOB_URL = process.env.NEXT_PUBLIC_BLOB_URL || 'https://ibsangdpocdata.blob.core.windows.net/ngddatasets/IBSA_ModelReady_Enhanced.csv'
-    const CSV_URL = BLOB_URL || '/data/IBSA_ModelReady_Enhanced.csv'
+    const LOCAL_URL = '/data/IBSA_ModelReady_Enhanced.csv'
     
-    console.log(`📥 Loading HCP data from: ${CSV_URL}`)
-    const modelResponse = await fetch(CSV_URL)
-
-    if (!modelResponse.ok) {
-      throw new Error(`Failed to fetch ML-enhanced data CSV from ${CSV_URL}`)
+    let modelResponse: Response
+    let CSV_URL = BLOB_URL
+    
+    try {
+      console.log(`📥 Attempting to load HCP data from Azure Blob: ${BLOB_URL}`)
+      modelResponse = await fetch(BLOB_URL)
+      
+      if (!modelResponse.ok) {
+        throw new Error(`Blob fetch failed with status: ${modelResponse.status}`)
+      }
+      console.log(`✅ Successfully loaded from Azure Blob Storage`)
+    } catch (blobError) {
+      console.warn(`⚠️ Failed to load from blob, falling back to local:`, blobError)
+      CSV_URL = LOCAL_URL
+      console.log(`📥 Loading HCP data from local: ${LOCAL_URL}`)
+      modelResponse = await fetch(LOCAL_URL)
+      
+      if (!modelResponse.ok) {
+        throw new Error(`Failed to fetch CSV from both blob and local sources`)
+      }
+      console.log(`✅ Successfully loaded from local file`)
     }
 
     const csvText = await modelResponse.text()
