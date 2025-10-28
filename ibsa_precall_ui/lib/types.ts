@@ -1,0 +1,185 @@
+// HCP Data Types
+export interface HCP {
+  npi: string
+  name: string
+  specialty: string
+  city: string
+  state: string
+  territory: string
+  region: string
+  tier: 'Platinum' | 'Gold' | 'Silver' | 'Bronze'
+  trx_current: number
+  trx_prior: number
+  trx_growth: number
+  last_call_date: string | null
+  days_since_call: number | null
+  next_call_date: string | null
+  priority: number
+  ibsa_share: number
+  nrx_count: number
+  call_success_score: number
+  value_score: number
+  ngd_classification: 'New' | 'Grower' | 'Stable' | 'Decliner'
+  ngd_decile: number
+}
+
+export interface HCPDetail extends HCP {
+  address: string
+  phone: string
+  trx_ytd: number
+  product_mix: ProductMix[]
+  call_history: CallHistory[]
+  predictions: Predictions
+  competitive_intel: CompetitiveIntel
+}
+
+export interface ProductMix {
+  product: string
+  trx: number
+  percentage: number
+}
+
+export interface CallHistory {
+  id: string
+  date: string
+  type: 'Detail' | 'Sample Drop' | 'Virtual'
+  rep_name: string
+  products: string[]
+  samples: number
+  notes: string
+}
+
+export interface Predictions {
+  // ============================================================================
+  // REAL ML MODEL PREDICTIONS - Phase 6 Trained Models (9 total)
+  // 3 Products × 3 Outcomes = 9 Models
+  // ============================================================================
+  
+  // TIROSINT MODELS (3)
+  tirosint_call_success: number  // Probability 0-1
+  tirosint_call_success_prediction: boolean
+  tirosint_prescription_lift: number  // Forecasted TRx increase
+  tirosint_ngd_category: 'New' | 'Grower' | 'Stable' | 'Decliner'
+  
+  // FLECTOR MODELS (3)
+  flector_call_success: number
+  flector_call_success_prediction: boolean
+  flector_prescription_lift: number
+  flector_ngd_category: 'New' | 'Grower' | 'Stable' | 'Decliner'
+  
+  // LICART MODELS (3)
+  licart_call_success: number
+  licart_call_success_prediction: boolean
+  licart_prescription_lift: number
+  licart_ngd_category: 'New' | 'Grower' | 'Stable' | 'Decliner'
+  
+  // ============================================================================
+  // DERIVED FIELDS (computed from real model outputs for UI convenience)
+  // ============================================================================
+  
+  // Primary product (highest call success probability)
+  product_focus: 'Tirosint' | 'Flector' | 'Licart'
+  
+  // Best performing model metrics
+  call_success_prob: number  // Max of 3 products
+  forecasted_lift: number  // Sum of positive lifts
+  ngd_classification: 'New' | 'Grower' | 'Stable' | 'Decliner'  // From product_focus
+  
+  // Tactical recommendations
+  next_best_action: string
+  sample_allocation: number
+  best_day: string
+  best_time: string
+}
+
+export interface CompetitiveIntel {
+  competitor_rx: { brand: string; trx: number; share: number }[]
+  brand_switching: { from: string; to: string; count: number }[]
+  opportunity_score: number
+  // NEW: From prescriber pattern analysis
+  ta_category?: string
+  competitive_pressure_score?: number
+  competitor_strength?: 'Weak' | 'Moderate' | 'Strong' | 'Dominant'
+  competitive_situation?: string
+  competitor_trx_est?: number
+  growth_opportunity_score?: number
+  inferred_competitors?: string[]
+  // NEW: From Model 10 - Competitive Conversion Predictions
+  competitive_conversion_target?: boolean
+  competitive_conversion_probability?: number
+  conversion_likelihood?: 'Low' | 'Medium' | 'High'
+  competitive_priority_score?: number
+  priority_level?: 'Low' | 'Medium' | 'High'
+}
+
+// Call Planning Types
+export interface CallPlan {
+  id: string
+  hcp_npi: string
+  hcp_name: string
+  territory_id: string
+  scheduled_date: string
+  priority: number
+  action: string
+  status: 'scheduled' | 'completed' | 'cancelled'
+  tier: string
+}
+
+export interface CalendarDay {
+  date: string
+  calls: CallPlan[]
+  capacity: number
+  isToday: boolean
+}
+
+// Territory Types
+export interface Territory {
+  id: string
+  name: string
+  region: string
+  rep_name: string
+}
+
+export interface TerritoryMetrics {
+  total_trx: number
+  trx_trend: number
+  trx_vs_target: number
+  total_calls: number
+  call_target: number
+  call_attainment: number
+  sample_drops: number
+  trx_per_call: number
+}
+
+export interface TerritoryRanking {
+  rank: number
+  territory_name: string
+  trx: number
+  vs_target: number
+  vs_prior: number
+  sparkline: number[]
+}
+
+// Filter Types
+export interface HCPFilters {
+  territory?: string
+  specialty?: string[]
+  tier?: string[]
+  trx_min?: number
+  trx_max?: number
+  last_call_from?: string
+  last_call_to?: string
+  search?: string
+}
+
+// Chart Data Types
+export interface ChartDataPoint {
+  label: string
+  value: number
+  color?: string
+}
+
+export interface TimeSeriesDataPoint {
+  date: string
+  [key: string]: string | number
+}
