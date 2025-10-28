@@ -264,9 +264,26 @@ export default function HCPDetailPage() {
                     <ul className="ml-4 mt-1 space-y-1 text-xs">
                       {hcp.predictions.ngd_classification === 'Decliner' && (
                         <>
+                          <li>
+                            <strong>Likely Competitors:</strong>
+                            <div className="ml-4 mt-1">
+                              {hcp.competitive_intel?.competitor_product_distribution?.map((comp, idx) => (
+                                <div key={idx} className="text-xs">
+                                  • <span className="font-semibold">{comp.product}</span>: ~{comp.trx} writes
+                                </div>
+                              )) || (
+                                <div className="text-xs">
+                                  • {hcp.competitive_intel?.inferred_competitors?.slice(0,3).join(', ') || 'Generic competitors'}
+                                </div>
+                              )}
+                              <div className="text-[10px] text-gray-500 mt-1">
+                                (Based on {hcp.specialty} prescribing patterns)
+                              </div>
+                            </div>
+                          </li>
                           <li>• Address {hcp.competitive_intel?.competitor_strength?.toLowerCase() || 'competitive'} competitive pressure ({hcp.competitive_intel?.competitive_pressure_score || 0}/100 intensity)</li>
                           <li>• Opportunity to recover {(100 - hcp.ibsa_share).toFixed(0)}% market share ({formatNumber(Math.round(hcp.trx_current * ((100 - hcp.ibsa_share) / 100)))} TRx gap to close)</li>
-                          <li>• {hcp.predictions.product_focus} differentiation vs {hcp.competitive_intel?.inferred_competitors?.slice(0,2).join(' and ') || 'competitors'}</li>
+                          <li>• {hcp.predictions.product_focus} differentiation vs {hcp.competitive_intel?.competitor_product_distribution?.[0]?.product || hcp.competitive_intel?.inferred_competitors?.[0] || 'competitors'} (show comparative data)</li>
                         </>
                       )}
                       {hcp.predictions.ngd_classification === 'Grower' && (

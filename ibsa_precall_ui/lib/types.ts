@@ -19,6 +19,7 @@ export interface HCP {
   nrx_count: number
   call_success_score: number
   value_score: number
+  rx_lift?: number
   ngd_classification: 'New' | 'Grower' | 'Stable' | 'Decliner'
   ngd_decile: number
 }
@@ -104,6 +105,7 @@ export interface CompetitiveIntel {
   competitor_trx_est?: number
   growth_opportunity_score?: number
   inferred_competitors?: string[]
+  competitor_product_distribution?: { product: string; trx: number }[]
   // NEW: From Model 10 - Competitive Conversion Predictions
   competitive_conversion_target?: boolean
   competitive_conversion_probability?: number
