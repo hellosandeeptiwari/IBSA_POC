@@ -26,9 +26,8 @@ jobs:
       - name: npm install, build, and test
         working-directory: ./ibsa_precall_ui
         run: |
-          npm install
-          npm run build --if-present
-          npm run test --if-present
+          npm ci
+          npm run build
         env:
           NODE_OPTIONS: --max-old-space-size=8192
 
