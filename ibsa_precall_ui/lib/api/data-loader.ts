@@ -171,7 +171,6 @@ export async function loadModelReadyDataset(): Promise<ModelReadyRow[]> {
     const LOCAL_URL = '/data/IBSA_ModelReady_Enhanced.csv'
     
     let modelResponse: Response
-    let CSV_URL = BLOB_URL
     
     try {
       console.log(`📥 Attempting to load HCP data from Azure Blob: ${BLOB_URL}`)
@@ -183,7 +182,6 @@ export async function loadModelReadyDataset(): Promise<ModelReadyRow[]> {
       console.log(`✅ Successfully loaded from Azure Blob Storage`)
     } catch (blobError) {
       console.warn(`⚠️ Failed to load from blob, falling back to local:`, blobError)
-      CSV_URL = LOCAL_URL
       console.log(`📥 Loading HCP data from local: ${LOCAL_URL}`)
       modelResponse = await fetch(LOCAL_URL)
       
