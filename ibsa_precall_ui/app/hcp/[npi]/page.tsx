@@ -16,6 +16,13 @@ import { CallScriptGenerator } from '@/components/call-script-generator'
 import { HCPEDAInsights } from '@/components/hcp-eda-insights'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
+// Generate static params for build (empty array = client-side only routing)
+export function generateStaticParams() {
+  return []
+}
+
+export const dynamicParams = true
+
 export default function HCPDetailPage({ params }: { params: Promise<{ npi: string }> }) {
   const router = useRouter()
   const resolvedParams = useParams()
