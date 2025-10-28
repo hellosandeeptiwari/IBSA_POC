@@ -156,67 +156,40 @@ async function loadCompetitiveConversionPredictions(): Promise<void> {
 }
 
 export async function loadModelReadyDataset(): Promise<ModelReadyRow[]> {
+  // For browser-side calls, return empty (use API routes instead)
+  // This function is kept for backward compatibility but data should be fetched via /api/hcps
+  if (typeof window !== 'undefined') {
+    console.log('⚠️ Use /api/hcps endpoint for browser-side data fetching')
+    return []
+  }
+
   if (modelReadyData.length > 0) return modelReadyData
 
-  // Load optimized sample dataset (50 active HCPs) for fast UI performance
+  // Server-side only: Load full dataset for API routes
   try {
-    // Load prescriber profiles and competitive predictions in parallel
-    await Promise.all([
-      loadPrescriberProfiles(),
-      loadCompetitiveConversionPredictions()
-    ])
-
-    // Load from Azure Blob Storage (for production) or local fallback (for dev)
     const BLOB_URL = process.env.NEXT_PUBLIC_BLOB_URL || 'https://ibsangdpocdata.blob.core.windows.net/ngddatasets/IBSA_ModelReady_Enhanced.csv'
-    const LOCAL_URL = '/data/IBSA_ModelReady_Enhanced.csv'
     
-    let modelResponse: Response
+    console.log(`📥 [Server] Loading HCP data from Azure Blob: ${BLOB_URL}`)
+    const modelResponse = await fetch(BLOB_URL)
     
-    try {
-      console.log(`📥 Attempting to load HCP data from Azure Blob: ${BLOB_URL}`)
-      modelResponse = await fetch(BLOB_URL)
-      
-      if (!modelResponse.ok) {
-        throw new Error(`Blob fetch failed with status: ${modelResponse.status}`)
-      }
-      console.log(`✅ Successfully loaded from Azure Blob Storage`)
-    } catch (blobError) {
-      console.warn(`⚠️ Failed to load from blob, falling back to local:`, blobError)
-      console.log(`📥 Loading HCP data from local: ${LOCAL_URL}`)
-      modelResponse = await fetch(LOCAL_URL)
-      
-      if (!modelResponse.ok) {
-        throw new Error(`Failed to fetch CSV from both blob and local sources`)
-      }
-      console.log(`✅ Successfully loaded from local file`)
+    if (!modelResponse.ok) {
+      throw new Error(`Blob fetch failed with status: ${modelResponse.status}`)
     }
 
     const csvText = await modelResponse.text()
-
     const parsed = Papa.parse<ModelReadyRow>(csvText, {
       header: true,
       dynamicTyping: true,
       skipEmptyLines: true,
-      worker: false // Disable web workers for faster small file parsing
+      worker: false
     })
 
     modelReadyData = parsed.data
-    console.log(`✅ Loaded ${modelReadyData.length} HCPs with ML predictions`)
-    
-    // Debug: Check if PrescriberName exists
-    if (modelReadyData.length > 0) {
-      const firstRow = modelReadyData[0]
-      console.log('📋 First row sample:', {
-        PrescriberId: firstRow.PrescriberId,
-        PrescriberName: firstRow.PrescriberName,
-        TerritoryName: firstRow.TerritoryName,
-        RegionName: firstRow.RegionName
-      })
-    }
+    console.log(`✅ [Server] Loaded ${modelReadyData.length} HCPs with ML predictions`)
     
     return modelReadyData
   } catch (error) {
-    console.error('❌ Error loading ML-enhanced CSV:', error)
+    console.error('❌ [Server] Error loading ML-enhanced CSV:', error)
     return []
   }
 }
@@ -229,15 +202,26 @@ export async function getHCPs(filters?: {
   trx_max?: number
   search?: string
 }): Promise<HCP[]> {
-  const data = await loadModelReadyDataset()
+  // Use API route for data fetching
+  const params = new URLSearchParams()
+  params.set('limit', '100')
+  params.set('offset', '0')
   
-  // Transform dataset to HCP format with enriched prescriber profile data
-  let hcps: HCP[] = data.map((row) => {
+  if (filters?.search) params.set('search', filters.search)
+  if (filters?.territory) params.set('territory', filters.territory)
+  
+  const response = await fetch(`/api/hcps?${params}`)
+  if (!response.ok) {
+    console.error('Failed to fetch HCPs from API')
+    return []
+  }
+  
+  const { data } = await response.json()
+  
+  // Transform to HCP format
+  return data.map((row: ModelReadyRow) => {
     const npi = String(row.PrescriberId || '').replace('.0', '')
-    const profile = prescriberProfileData.get(npi)
-    
-    // Prioritize prescriber profile data for specialty, then fall back to model data
-    const specialty = profile?.Specialty || row.Specialty || 
+    const specialty = row.Specialty || 
                      (row.is_endocrinology ? 'Endocrinology' : 
                       row.is_family_medicine ? 'Family Medicine' : 
                       row.is_internal_medicine ? 'Internal Medicine' : 
@@ -245,24 +229,24 @@ export async function getHCPs(filters?: {
     
     return {
       npi,
-      name: String(row.PrescriberName || profile?.PrescriberName || npi), // Use real name if available, fallback to NPI
+      name: String(row.PrescriberName || npi),
       specialty: String(specialty),
-      city: row.City || profile?.City || '', // City from PrescriberOverview
-      state: row.State || profile?.State || '',
-      territory: row.TerritoryName || profile?.TerritoryName || 'Unknown',
+      city: row.City || '',
+      state: row.State || '',
+      territory: row.TerritoryName || 'Unknown',
       region: row.RegionName ? String(row.RegionName) : 'Unknown',
       tier: getTierFromRow(row),
       trx_current: Number(row.trx_current_qtd) || 0,
       trx_prior: Number(row.trx_prior_qtd) || 0,
       trx_growth: Number(row.trx_qtd_growth) || 0,
-      last_call_date: null, // No call date data in main dataset
-      days_since_call: null, // No days since call data in main dataset
+      last_call_date: null,
+      days_since_call: null,
       next_call_date: null,
       priority: Number(row.priority_tier1) || 0,
       ibsa_share: Number(row.ibsa_share) || 0,
       nrx_count: Number(row.nrx_current_qtd) || 0,
       call_success_score: Number(row.call_success_score) || 0,
-      value_score: Number(row.hcp_power_score) || Number(row.hcp_value_score) || 0, // Use NEW hcp_power_score
+      value_score: Number(row.hcp_power_score) || Number(row.hcp_value_score) || 0,
       ngd_decile: Number(row.ngd_decile) || 0,
       ngd_classification: getNGDClassification(
         Number(row.ngd_decile) || 0,
@@ -270,45 +254,17 @@ export async function getHCPs(filters?: {
       )
     }
   })
-
-  // Apply filters
-  if (filters) {
-    if (filters.territory) {
-      hcps = hcps.filter(h => h.state === filters.territory)
-    }
-    if (filters.specialty && filters.specialty.length > 0) {
-      hcps = hcps.filter(h => filters.specialty!.includes(h.specialty))
-    }
-    if (filters.tier && filters.tier.length > 0) {
-      hcps = hcps.filter(h => filters.tier!.includes(h.tier))
-    }
-    if (filters.trx_min !== undefined) {
-      hcps = hcps.filter(h => h.trx_current >= filters.trx_min!)
-    }
-    if (filters.trx_max !== undefined) {
-      hcps = hcps.filter(h => h.trx_current <= filters.trx_max!)
-    }
-    if (filters.search) {
-      const search = filters.search.toLowerCase()
-      hcps = hcps.filter(h => 
-        h.name.toLowerCase().includes(search) || 
-        h.npi.includes(search)
-      )
-    }
-  }
-
-  return hcps.slice(0, 10000) // Limit to 10k for performance
 }
 
 export async function getHCPDetail(npiParam: string): Promise<HCPDetail | null> {
-  const data = await loadModelReadyDataset()
-  // Handle both "7269747" and "7269747.0" formats
-  const row = data.find((r) => {
-    const prescriberId = String(r.PrescriberId).replace('.0', '')
-    return prescriberId === npiParam || r.PrescriberId === npiParam
-  })
+  // Use API route for single HCP lookup
+  const response = await fetch(`/api/hcps/${npiParam}`)
+  if (!response.ok) {
+    console.error(`Failed to fetch HCP ${npiParam} from API`)
+    return null
+  }
   
-  if (!row) return null
+  const row: ModelReadyRow = await response.json()
 
   // Look up competitive conversion predictions
   const cleanNpi = String(row.PrescriberId).replace('.0', '')
