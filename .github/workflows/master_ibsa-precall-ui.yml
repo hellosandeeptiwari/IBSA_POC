@@ -32,17 +32,16 @@ jobs:
         env:
           NODE_OPTIONS: --max-old-space-size=8192
 
+      - name: Zip artifact for deployment
+        run: |
+          cd ibsa_precall_ui
+          zip -r ../node-app.zip .
+
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: node-app
-          path: |
-            ./ibsa_precall_ui/.next
-            ./ibsa_precall_ui/node_modules
-            ./ibsa_precall_ui/public
-            ./ibsa_precall_ui/package.json
-            ./ibsa_precall_ui/package-lock.json
-            ./ibsa_precall_ui/next.config.ts
+          path: node-app.zip
 
   deploy:
     runs-on: ubuntu-latest
@@ -54,6 +53,9 @@ jobs:
         with:
           name: node-app
       
+      - name: Unzip artifact for deployment
+        run: unzip node-app.zip
+      
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
@@ -62,5 +64,3 @@ jobs:
           slot-name: 'Production'
           package: .
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_D5ABF022118F4BD5B6A1A3048985150C }}
-        env:
-          SCM_DO_BUILD_DURING_DEPLOYMENT: false
