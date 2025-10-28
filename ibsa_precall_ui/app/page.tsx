@@ -552,12 +552,12 @@ export default function DashboardPage() {
                     <Tooltip content="AI Prediction: ML model call success probability × 100 (higher = better engagement likelihood)" />
                   </div>
                 </th>
-                <th className="px-2 py-2 text-right text-[11px] font-medium text-gray-500 uppercase border-b bg-purple-50 cursor-pointer hover:bg-gray-100" onClick={() => handleSort('priority')}>
-                  <div className="flex items-center justify-end gap-1">
+                <th className="px-1 py-2 text-center text-[11px] font-medium text-gray-500 uppercase border-b bg-purple-50 cursor-pointer hover:bg-gray-100 w-20" onClick={() => handleSort('priority')}>
+                  <div className="flex items-center justify-center gap-0.5">
                     <Bot className="h-3 w-3 text-purple-600" />
-                    <span className="flex items-center gap-1">
-                      Priority
-                      <span className="px-1.5 py-0.5 bg-purple-200 text-purple-700 rounded text-[10px] font-bold">AI</span>
+                    <span className="flex items-center gap-0.5">
+                      Pri
+                      <span className="px-1 py-0.5 bg-purple-200 text-purple-700 rounded text-[10px] font-bold">AI</span>
                     </span>
                     <SortIcon column="priority" />
                     <Tooltip content="AI Ranking: 60% Call Success + 30% Rx Lift + 10% (Tier & NGD) mapped to 1-5" />
@@ -666,10 +666,9 @@ export default function DashboardPage() {
                         </span>
                       </div>
                     </td>
-                    <td className="px-2 py-2 text-right bg-purple-50 border-l-2 border-r-2 border-purple-300">
-                      <div className="flex items-center justify-end gap-1">
-                        <Bot className="h-3 w-3 text-purple-600 flex-shrink-0" />
-                        <span className={`inline-flex items-center justify-center w-7 h-7 rounded-full text-xs font-bold ${
+                    <td className="px-1 py-2 text-center bg-purple-50 border-l-2 border-r-2 border-purple-300">
+                      <div className="flex items-center justify-center">
+                        <span className={`inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold ${
                           hcp.priority <= 1 ? 'bg-red-100 text-red-700' :
                           hcp.priority <= 3 ? 'bg-orange-100 text-orange-700' :
                           'bg-blue-100 text-blue-700'
