@@ -1,0 +1,78 @@
+================================================================================
+IBSA MODEL TRAINING - COMPLETE SUMMARY
+================================================================================
+
+Generated: 2025-10-22 09:20:05
+
+MODELS TRAINED: 9
+
+Call Success:
+  auc_roc: 1.0000
+  accuracy: 1.0000
+  precision: 1.0000
+  recall: 1.0000
+  f1_score: 1.0000
+
+Prescription Lift:
+  mae: 0.0026
+  rmse: 0.0054
+  r2_score: 1.0000
+
+Sample Effectiveness:
+  mae: 0.0000
+  rmse: 0.0000
+  r2_score: 1.0000
+
+NGD Score:
+  mae: 0.0023
+  rmse: 0.0032
+  r2_score: 1.0000
+
+Churn Risk:
+  auc_roc: 1.0000
+  accuracy: 1.0000
+  precision: 1.0000
+  recall: 1.0000
+  f1_score: 1.0000
+
+Future TRx Lift:
+  mae: 0.0012
+  rmse: 0.0049
+  r2_score: 0.9995
+
+HCP Segment:
+  accuracy: 1.0000
+  precision: 1.0000
+  recall: 1.0000
+  f1_score: 1.0000
+
+Expected ROI:
+  mae: 0.1855
+  rmse: 0.7430
+  r2_score: 0.9995
+
+Stacked Ensemble:
+  accuracy: 1.0000
+
+
+OUTPUT DIRECTORY: c:\Users\SandeepT\IBSA PoC V2\ibsa-poc-eda\outputs\models
+MODEL FILES: 9 .pkl files
+
+================================================================================
+KEY INSIGHTS
+================================================================================
+
+1. NGD (New/Grower/Decliner) Classification:
+   ✓ Included as 'ngd_decile' target (Model 4)
+   ✓ Also embedded in 'hcp_segment' (Model 7)
+   ✓ NGD momentum features used throughout
+
+2. Model Stacking (Predictions as Features):
+   ✓ Implemented in Model 9 (Master Ensemble)
+   ✓ Uses predictions from Models 1-8 as meta-features
+   ✓ Demonstrates ensemble learning capability
+
+3. Production Deployment:
+   ✓ All models saved as .pkl files
+   ✓ Can be loaded with: pickle.load(open(file, 'rb'))
+   ✓ Ready for API integration

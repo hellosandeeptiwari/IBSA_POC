@@ -1,0 +1,112 @@
+# IBSA Pharmaceutical Pipeline Configuration
+
+# Spark Configuration
+spark:
+  app_name: "IBSA_Pharmaceutical_Pipeline"
+  driver_memory: "4g"
+  driver_max_result_size: "2g"
+  executor_memory: "4g"
+  executor_cores: 2
+  shuffle_partitions: 200
+  adaptive_enabled: true
+  arrow_enabled: true
+
+# Database Configuration (override with environment variables)
+database:
+  host: "localhost"
+  port: 5432
+  database: "ibsa_pharma"
+  username: "ibsa_user"
+  password: "password"  # Use DB_PASSWORD environment variable
+  driver: "postgresql"
+
+# Data Configuration
+data:
+  raw_data_path: "../data/raw"
+  processed_data_path: "../data/processed"
+  output_path: "../data/output"
+  models_path: "../models"
+  reports_path: "../reports"
+  
+  # File formats
+  default_format: "parquet"
+  compression: "snappy"
+  
+  # Sampling for analysis
+  sample_size_small: 1000
+  sample_size_medium: 5000
+  sample_size_large: 10000
+
+# Machine Learning Configuration
+ml:
+  test_size: 0.2
+  random_state: 42
+  cv_folds: 5
+  model_registry: "mlflow"
+  experiment_name: "ibsa_pharmaceutical_models"
+  
+  # Model types to evaluate
+  models:
+    - "random_forest"
+    - "gradient_boosting"
+    - "logistic_regression"
+    - "xgboost"
+
+# Pharmaceutical Domain Configuration
+pharmaceutical:
+  # HCP segmentation tiers
+  hcp_segments:
+    - "Tier 1"
+    - "Tier 2" 
+    - "Tier 3"
+    - "Unassigned"
+  
+  # Territory types
+  territory_types:
+    - "Primary Care"
+    - "Specialty"
+    - "Hospital"
+    - "Mixed"
+  
+  # Product categories
+  product_categories:
+    - "Branded"
+    - "Generic"
+    - "Biosimilar"
+  
+  # Call types
+  call_types:
+    - "Detail"
+    - "Sample Drop"
+    - "Clinical Discussion"
+    - "Lunch & Learn"
+    - "Advisory Board"
+
+# Logging Configuration
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "../logs/ibsa_pipeline.log"
+
+# Analysis Configuration
+analysis:
+  # EDA settings
+  eda:
+    max_categorical_unique: 50
+    correlation_threshold: 0.7
+    missing_threshold: 0.5
+    outlier_method: "iqr"
+  
+  # Feature engineering settings
+  features:
+    categorical_encoding: "target_encoding"
+    numeric_scaling: "standard"
+    feature_selection_method: "mutual_info"
+    max_features: 100
+  
+  # Visualization settings
+  visualization:
+    figure_size: [12, 8]
+    color_palette: "husl"
+    max_categories_plot: 20
+    sample_size_plot: 5000

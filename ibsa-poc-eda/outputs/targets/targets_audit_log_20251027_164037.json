@@ -1,0 +1,138 @@
+{
+  "created_at": "2025-10-27T16:40:20.131001",
+  "transformations": [
+    {
+      "step": "data_loading",
+      "timestamp": "2025-10-27T16:40:36.212384",
+      "prescriber_rows": 887561,
+      "ngd_rows": 24823
+    },
+    {
+      "step": "call_success_targets",
+      "timestamp": "2025-10-27T16:40:36.513946",
+      "targets_created": [
+        "Tirosint_call_success",
+        "Flector_call_success",
+        "Licart_call_success"
+      ],
+      "source": "official_ngd_table"
+    },
+    {
+      "step": "prescription_lift_targets",
+      "timestamp": "2025-10-27T16:40:36.581165",
+      "targets_created": [
+        "Tirosint_prescription_lift",
+        "Flector_prescription_lift",
+        "Licart_prescription_lift"
+      ]
+    },
+    {
+      "step": "ngd_category_targets",
+      "timestamp": "2025-10-27T16:40:36.845572",
+      "targets_created": [
+        "Tirosint_ngd_category",
+        "Flector_ngd_category",
+        "Licart_ngd_category"
+      ]
+    }
+  ],
+  "validation_results": {
+    "Tirosint_call_success_missing_pct": 0.0,
+    "Flector_call_success_missing_pct": 0.0,
+    "Licart_call_success_missing_pct": 0.0,
+    "Tirosint_prescription_lift_missing_pct": 0.0,
+    "Flector_prescription_lift_missing_pct": 0.0,
+    "Licart_prescription_lift_missing_pct": 0.0,
+    "Tirosint_ngd_category_missing_pct": 0.0,
+    "Flector_ngd_category_missing_pct": 0.0,
+    "Licart_ngd_category_missing_pct": 0.0,
+    "Tirosint_success_rate": 2.27,
+    "Flector_success_rate": 0.13,
+    "Licart_success_rate": 0.19,
+    "lift_correlations": {
+      "Tirosint_prescription_lift": {
+        "Tirosint_prescription_lift": 1.0,
+        "Flector_prescription_lift": NaN,
+        "Licart_prescription_lift": NaN
+      },
+      "Flector_prescription_lift": {
+        "Tirosint_prescription_lift": NaN,
+        "Flector_prescription_lift": NaN,
+        "Licart_prescription_lift": NaN
+      },
+      "Licart_prescription_lift": {
+        "Tirosint_prescription_lift": NaN,
+        "Flector_prescription_lift": NaN,
+        "Licart_prescription_lift": NaN
+      }
+    }
+  },
+  "quality_metrics": {
+    "total_records": 887561,
+    "targets_created": 12,
+    "products": [
+      "Tirosint",
+      "Flector",
+      "Licart"
+    ],
+    "target_types": [
+      "call_success",
+      "prescription_lift",
+      "ngd_category"
+    ],
+    "call_success": {
+      "Tirosint_call_success": {
+        "success_rate": 2.27,
+        "missing_pct": 0.0
+      },
+      "Flector_call_success": {
+        "success_rate": 0.13,
+        "missing_pct": 0.0
+      },
+      "Licart_call_success": {
+        "success_rate": 0.19,
+        "missing_pct": 0.0
+      }
+    },
+    "prescription_lift": {
+      "Tirosint_prescription_lift": {
+        "mean": -9.68,
+        "median": 0.0,
+        "std": 52.3,
+        "min": -100.0,
+        "max": 200.0
+      },
+      "Flector_prescription_lift": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "Licart_prescription_lift": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      }
+    },
+    "ngd_category": {
+      "Tirosint_ngd_category": {
+        "NEW": 849728,
+        "DECLINER": 21802,
+        "GROWER": 16031
+      },
+      "Flector_ngd_category": {
+        "NEW": 884931,
+        "DECLINER": 1825,
+        "GROWER": 805
+      },
+      "Licart_ngd_category": {
+        "NEW": 884096,
+        "DECLINER": 2200,
+        "GROWER": 1265
+      }
+    }
+  }
+}

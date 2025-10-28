@@ -1,0 +1,892 @@
+{
+  "table_name": "Reporting_BI_PrescriberProfile",
+  "file_info": {
+    "size_mb": 0.01,
+    "modified": "2025-10-13 20:54:13"
+  },
+  "row_count": "35",
+  "column_count": 65,
+  "memory_usage_mb": 0.06,
+  "columns": [
+    {
+      "column_name": "RegionId",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 3,
+      "sample_values": [
+        100060,
+        100060,
+        100020
+      ],
+      "potential_key": false,
+      "data_category": "identifier"
+    },
+    {
+      "column_name": "RegionName",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 3,
+      "sample_values": [
+        "Midatlantic",
+        "Midatlantic",
+        "Southeast"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "TerritoryId",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 3,
+      "sample_values": [
+        10006009,
+        10006009,
+        10002012
+      ],
+      "potential_key": false,
+      "data_category": "identifier"
+    },
+    {
+      "column_name": "TerritoryName",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 3,
+      "sample_values": [
+        "Washington DC",
+        "Washington DC",
+        "Jackson MS"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "PrescriberId",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 3,
+      "sample_values": [
+        7315165,
+        7315165,
+        6215085
+      ],
+      "potential_key": false,
+      "data_category": "identifier"
+    },
+    {
+      "column_name": "PrescriberName",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 3,
+      "sample_values": [
+        "DAN PHAM",
+        "DAN PHAM",
+        "MARGARET KRUEGER"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "Address",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 3,
+      "sample_values": [
+        "2946 SLEEPY HOLLOW RD",
+        "2946 SLEEPY HOLLOW RD",
+        "3715 DAUPHIN ST"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "City",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 3,
+      "sample_values": [
+        "FALLS CHURCH",
+        "FALLS CHURCH",
+        "MOBILE"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "State",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 3,
+      "sample_values": [
+        "VA",
+        "VA",
+        "AL"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "Zipcode",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 3,
+      "sample_values": [
+        22044,
+        22044,
+        36608
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "Credentials",
+      "data_type": "float64",
+      "null_count": 35,
+      "null_percentage": 100.0,
+      "unique_values": 0,
+      "sample_values": [],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "Specialty",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 2,
+      "sample_values": [
+        "INTERNAL MEDICINE",
+        "INTERNAL MEDICINE",
+        "OBSTETRICS & GYNECOLOGY"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "NPINumber",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 3,
+      "sample_values": [
+        1518313659,
+        1518313659,
+        1043506660
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "MeNumber",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 3,
+      "sample_values": [
+        120116216,
+        120116216,
+        487811012
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "PDRPFlag",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 1,
+      "sample_values": [
+        "YES",
+        "YES",
+        "YES"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "PDRPDate",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 3,
+      "sample_values": [
+        "2025-05-13",
+        "2025-05-13",
+        "2025-03-20"
+      ],
+      "potential_key": false,
+      "data_category": "temporal"
+    },
+    {
+      "column_name": "AMANoContact",
+      "data_type": "float64",
+      "null_count": 35,
+      "null_percentage": 100.0,
+      "unique_values": 0,
+      "sample_values": [],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "ProductPriority",
+      "data_type": "float64",
+      "null_count": 35,
+      "null_percentage": 100.0,
+      "unique_values": 0,
+      "sample_values": [],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "FlectorTargetFlag",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 1,
+      "sample_values": [
+        "N",
+        "N",
+        "N"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "FlectorTargetTier",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 1,
+      "sample_values": [
+        "NON-TARGET",
+        "NON-TARGET",
+        "NON-TARGET"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "LicartTargetFlag",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 1,
+      "sample_values": [
+        "N",
+        "N",
+        "N"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "LicartTargetTier",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 1,
+      "sample_values": [
+        "NON-TARGET",
+        "NON-TARGET",
+        "NON-TARGET"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "TirosintTargetFlag",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 1,
+      "sample_values": [
+        "N",
+        "N",
+        "N"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "TirosintTargetTier",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 1,
+      "sample_values": [
+        "NON-TARGET",
+        "NON-TARGET",
+        "NON-TARGET"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "Market",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 2,
+      "sample_values": [
+        "Diclofen",
+        "Levo",
+        "Levo"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "ProductFamily",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 6,
+      "sample_values": [
+        "Diclofenac AG",
+        "Synthroid",
+        "Synthroid"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "ProductGroupName",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 7,
+      "sample_values": [
+        "Diclofenac AG TEVA",
+        "Synthroid",
+        "Synthroid"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "TimePeriod",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 6,
+      "sample_values": [
+        "Q2 2025",
+        "Q1 2025",
+        "Q2 2025"
+      ],
+      "potential_key": false,
+      "data_category": "temporal"
+    },
+    {
+      "column_name": "TRX",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 6,
+      "sample_values": [
+        7,
+        2,
+        2
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "NRX",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 6,
+      "sample_values": [
+        7,
+        1,
+        0
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "NQTY",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 7,
+      "sample_values": [
+        7,
+        1,
+        0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "TQTY",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 7,
+      "sample_values": [
+        7,
+        4,
+        2
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "Calls",
+      "data_type": "float64",
+      "null_count": 35,
+      "null_percentage": 100.0,
+      "unique_values": 0,
+      "sample_values": [],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "LunchLearn",
+      "data_type": "float64",
+      "null_count": 35,
+      "null_percentage": 100.0,
+      "unique_values": 0,
+      "sample_values": [],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "Samples",
+      "data_type": "float64",
+      "null_count": 35,
+      "null_percentage": 100.0,
+      "unique_values": 0,
+      "sample_values": [],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "LastCallDate",
+      "data_type": "float64",
+      "null_count": 35,
+      "null_percentage": 100.0,
+      "unique_values": 0,
+      "sample_values": [],
+      "potential_key": false,
+      "data_category": "temporal"
+    },
+    {
+      "column_name": "PreviousTRX",
+      "data_type": "float64",
+      "null_count": 9,
+      "null_percentage": 25.71,
+      "unique_values": 6,
+      "sample_values": [
+        2.0,
+        3.0,
+        0.0
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "PreviousNRX",
+      "data_type": "float64",
+      "null_count": 9,
+      "null_percentage": 25.71,
+      "unique_values": 5,
+      "sample_values": [
+        2.0,
+        0.0,
+        0.0
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "TRXShare",
+      "data_type": "float64",
+      "null_count": 7,
+      "null_percentage": 20.0,
+      "unique_values": 1,
+      "sample_values": [
+        100.0,
+        100.0,
+        100.0
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "NRXShare",
+      "data_type": "float64",
+      "null_count": 19,
+      "null_percentage": 54.29,
+      "unique_values": 1,
+      "sample_values": [
+        100.0,
+        100.0,
+        100.0
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "PrescriberAtSameAddress",
+      "data_type": "float64",
+      "null_count": 35,
+      "null_percentage": 100.0,
+      "unique_values": 0,
+      "sample_values": [],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "PrescriberAtSameAddressSpeciality",
+      "data_type": "float64",
+      "null_count": 35,
+      "null_percentage": 100.0,
+      "unique_values": 0,
+      "sample_values": [],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "PreviousTRXShare",
+      "data_type": "float64",
+      "null_count": 9,
+      "null_percentage": 25.71,
+      "unique_values": 1,
+      "sample_values": [
+        100.0,
+        100.0,
+        100.0
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "PreviousNRXShare",
+      "data_type": "float64",
+      "null_count": 13,
+      "null_percentage": 37.14,
+      "unique_values": 1,
+      "sample_values": [
+        100.0,
+        100.0,
+        100.0
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "PreviousCalls",
+      "data_type": "float64",
+      "null_count": 35,
+      "null_percentage": 100.0,
+      "unique_values": 0,
+      "sample_values": [],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "PreviousLunchLearn",
+      "data_type": "float64",
+      "null_count": 35,
+      "null_percentage": 100.0,
+      "unique_values": 0,
+      "sample_values": [],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "PreviouSamples",
+      "data_type": "float64",
+      "null_count": 35,
+      "null_percentage": 100.0,
+      "unique_values": 0,
+      "sample_values": [],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "STLYTRX",
+      "data_type": "float64",
+      "null_count": 14,
+      "null_percentage": 40.0,
+      "unique_values": 4,
+      "sample_values": [
+        4.0,
+        3.0,
+        1.0
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "STLYNRX",
+      "data_type": "float64",
+      "null_count": 14,
+      "null_percentage": 40.0,
+      "unique_values": 3,
+      "sample_values": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "STLYTRXShare",
+      "data_type": "float64",
+      "null_count": 14,
+      "null_percentage": 40.0,
+      "unique_values": 1,
+      "sample_values": [
+        100.0,
+        100.0,
+        100.0
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "STLYNRXShare",
+      "data_type": "float64",
+      "null_count": 15,
+      "null_percentage": 42.86,
+      "unique_values": 1,
+      "sample_values": [
+        100.0,
+        100.0,
+        100.0
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "IbsaDesiccatedTarget",
+      "data_type": "float64",
+      "null_count": 35,
+      "null_percentage": 100.0,
+      "unique_values": 0,
+      "sample_values": [],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "PreviousTQTY",
+      "data_type": "float64",
+      "null_count": 9,
+      "null_percentage": 25.71,
+      "unique_values": 8,
+      "sample_values": [
+        2.0,
+        3.0,
+        0.0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "PreviousNQTY",
+      "data_type": "float64",
+      "null_count": 9,
+      "null_percentage": 25.71,
+      "unique_values": 6,
+      "sample_values": [
+        2.0,
+        0.0,
+        0.0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "TQTYShare",
+      "data_type": "float64",
+      "null_count": 7,
+      "null_percentage": 20.0,
+      "unique_values": 1,
+      "sample_values": [
+        100.0,
+        100.0,
+        100.0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "NQTYShare",
+      "data_type": "float64",
+      "null_count": 19,
+      "null_percentage": 54.29,
+      "unique_values": 1,
+      "sample_values": [
+        100.0,
+        100.0,
+        100.0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "PreviousTQTYShare",
+      "data_type": "float64",
+      "null_count": 9,
+      "null_percentage": 25.71,
+      "unique_values": 1,
+      "sample_values": [
+        100.0,
+        100.0,
+        100.0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "PreviousNQTYShare",
+      "data_type": "float64",
+      "null_count": 13,
+      "null_percentage": 37.14,
+      "unique_values": 1,
+      "sample_values": [
+        100.0,
+        100.0,
+        100.0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "STLYTQTY",
+      "data_type": "float64",
+      "null_count": 14,
+      "null_percentage": 40.0,
+      "unique_values": 6,
+      "sample_values": [
+        4.0,
+        5.0,
+        3.0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "STLYNQTY",
+      "data_type": "float64",
+      "null_count": 14,
+      "null_percentage": 40.0,
+      "unique_values": 6,
+      "sample_values": [
+        0.0,
+        3.0,
+        0.0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "STLYTQTYShare",
+      "data_type": "float64",
+      "null_count": 14,
+      "null_percentage": 40.0,
+      "unique_values": 1,
+      "sample_values": [
+        100.0,
+        100.0,
+        100.0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "STLYNQTYShare",
+      "data_type": "float64",
+      "null_count": 15,
+      "null_percentage": 42.86,
+      "unique_values": 1,
+      "sample_values": [
+        100.0,
+        100.0,
+        100.0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "MyTarget",
+      "data_type": "float64",
+      "null_count": 35,
+      "null_percentage": 100.0,
+      "unique_values": 0,
+      "sample_values": [],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "CNXTerritoryRole",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 1,
+      "sample_values": [
+        "Core",
+        "Core",
+        "Core"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "BiInclude",
+      "data_type": "bool",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 1,
+      "sample_values": [
+        true,
+        true,
+        true
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    }
+  ],
+  "potential_primary_keys": [],
+  "identifier_columns": [
+    "RegionId",
+    "TerritoryId",
+    "PrescriberId",
+    "NPINumber"
+  ],
+  "date_columns": [
+    "PDRPDate",
+    "TimePeriod",
+    "LastCallDate"
+  ],
+  "measure_columns": [
+    "TRX",
+    "NRX",
+    "PreviousTRX",
+    "PreviousNRX",
+    "TRXShare",
+    "NRXShare",
+    "PreviousTRXShare",
+    "PreviousNRXShare",
+    "STLYTRX",
+    "STLYNRX",
+    "STLYTRXShare",
+    "STLYNRXShare"
+  ]
+}

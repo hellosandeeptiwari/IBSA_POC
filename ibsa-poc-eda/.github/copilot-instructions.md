@@ -1,0 +1,8 @@
+- [x] Clarify Project Requirements - IBSA Pharmaceutical Spark ML Pipeline for EDA, Feature Engineering, and Model Training
+- [x] Scaffold the Project - Complete modular Python package structure created
+- [x] Customize the Project - Pharmaceutical-specific modules and IBSA table configurations implemented
+- [x] Install Required Extensions - No specific extensions required
+- [ ] Compile the Project
+- [ ] Create and Run Task
+- [ ] Launch the Project
+- [ ] Ensure Documentation is Complete

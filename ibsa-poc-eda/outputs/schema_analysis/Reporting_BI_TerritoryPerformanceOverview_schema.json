@@ -1,0 +1,651 @@
+{
+  "table_name": "Reporting_BI_TerritoryPerformanceOverview",
+  "file_info": {
+    "size_mb": 161.96,
+    "modified": "2025-10-13 22:00:41"
+  },
+  "row_count": "809599",
+  "column_count": 44,
+  "memory_usage_mb": 11.82,
+  "columns": [
+    {
+      "column_name": "RegionId",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 8,
+      "sample_values": [
+        "100060",
+        "100020",
+        "100050"
+      ],
+      "potential_key": false,
+      "data_category": "identifier"
+    },
+    {
+      "column_name": "RegionName",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 8,
+      "sample_values": [
+        "Midatlantic",
+        "Southeast",
+        "West"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "TerritoryId",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 90,
+      "sample_values": [
+        "10006002",
+        "10002008",
+        "10005015"
+      ],
+      "potential_key": false,
+      "data_category": "identifier"
+    },
+    {
+      "column_name": "TerritoryName",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 92,
+      "sample_values": [
+        "Raleigh NC",
+        "Atlanta N GA",
+        "W Phoenix AZ"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "PrescriberId",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 9836,
+      "sample_values": [
+        7854327,
+        2135160,
+        1573350
+      ],
+      "potential_key": false,
+      "data_category": "identifier"
+    },
+    {
+      "column_name": "FlectorTargetFlag",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 1,
+      "sample_values": [
+        "N",
+        "N",
+        "N"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "FlectorTargetTier",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 1,
+      "sample_values": [
+        "NON-TARGET",
+        "NON-TARGET",
+        "NON-TARGET"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "LicartTargetFlag",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 2,
+      "sample_values": [
+        "N",
+        "N",
+        "N"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "LicartTargetTier",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 5,
+      "sample_values": [
+        "NON-TARGET",
+        "NON-TARGET",
+        "NON-TARGET"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "TirosintTargetFlag",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 2,
+      "sample_values": [
+        "N",
+        "Y",
+        "N"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "TirosintTargetTier",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 5,
+      "sample_values": [
+        "NON-TARGET",
+        "Tier 2",
+        "NON-TARGET"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "Market",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 2,
+      "sample_values": [
+        "Levo",
+        "Levo",
+        "Levo"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "ProductFamily",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 13,
+      "sample_values": [
+        "NP Thyroid",
+        "Tirosint",
+        "NP Thyroid"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "ProductGroupName",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 17,
+      "sample_values": [
+        "NP Thyroid",
+        "Tirosint Caps",
+        "NP Thyroid"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "PDRPFlag",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 2,
+      "sample_values": [
+        "NO",
+        "NO",
+        "NO"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "TRX(C4 Wk)",
+      "data_type": "float64",
+      "null_count": 5124,
+      "null_percentage": 51.24,
+      "unique_values": 58,
+      "sample_values": [
+        1.0,
+        4.0,
+        13.0
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "TRX(C13 Wk)",
+      "data_type": "float64",
+      "null_count": 2428,
+      "null_percentage": 24.28,
+      "unique_values": 130,
+      "sample_values": [
+        1.0,
+        15.0,
+        1.0
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "TRX(C QTD)",
+      "data_type": "float64",
+      "null_count": 2490,
+      "null_percentage": 24.9,
+      "unique_values": 131,
+      "sample_values": [
+        1.0,
+        14.0,
+        1.0
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "TRX(C YTD)",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 258,
+      "sample_values": [
+        3,
+        51,
+        1
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "TRX(C Wk)",
+      "data_type": "float64",
+      "null_count": 7913,
+      "null_percentage": 79.13,
+      "unique_values": 23,
+      "sample_values": [
+        1.0,
+        4.0,
+        1.0
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "TRX(P4 Wk)",
+      "data_type": "float64",
+      "null_count": 5143,
+      "null_percentage": 51.43,
+      "unique_values": 75,
+      "sample_values": [
+        10.0,
+        3.0,
+        13.0
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "TRX(P13 Wk)",
+      "data_type": "float64",
+      "null_count": 2439,
+      "null_percentage": 24.39,
+      "unique_values": 156,
+      "sample_values": [
+        23.0,
+        11.0,
+        14.0
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "TRX(P QTD)",
+      "data_type": "float64",
+      "null_count": 2503,
+      "null_percentage": 25.03,
+      "unique_values": 147,
+      "sample_values": [
+        2.0,
+        5.0,
+        1.0
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "TRX(P YTD)",
+      "data_type": "float64",
+      "null_count": 26,
+      "null_percentage": 0.26,
+      "unique_values": 223,
+      "sample_values": [
+        63.0,
+        19.0,
+        244.0
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "STLYTRX4",
+      "data_type": "float64",
+      "null_count": 5142,
+      "null_percentage": 51.42,
+      "unique_values": 77,
+      "sample_values": [
+        15.0,
+        1.0,
+        5.0
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "STLYTRX13",
+      "data_type": "float64",
+      "null_count": 2450,
+      "null_percentage": 24.5,
+      "unique_values": 162,
+      "sample_values": [
+        9.0,
+        15.0,
+        61.0
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "STLYTRXQTD",
+      "data_type": "float64",
+      "null_count": 2514,
+      "null_percentage": 25.14,
+      "unique_values": 157,
+      "sample_values": [
+        4.0,
+        15.0,
+        217.0
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "TRXWriters(C4 Wk)",
+      "data_type": "float64",
+      "null_count": 5124,
+      "null_percentage": 51.24,
+      "unique_values": 1,
+      "sample_values": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "TRXWriters(C Wk)",
+      "data_type": "float64",
+      "null_count": 7913,
+      "null_percentage": 79.13,
+      "unique_values": 1,
+      "sample_values": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "TQTY(C4 Wk)",
+      "data_type": "float64",
+      "null_count": 5124,
+      "null_percentage": 51.24,
+      "unique_values": 107,
+      "sample_values": [
+        3.0,
+        6.0,
+        36.0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "TQTY(C13 Wk)",
+      "data_type": "float64",
+      "null_count": 2428,
+      "null_percentage": 24.28,
+      "unique_values": 212,
+      "sample_values": [
+        3.0,
+        23.0,
+        4.0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "TQTY(C QTD)",
+      "data_type": "float64",
+      "null_count": 2490,
+      "null_percentage": 24.9,
+      "unique_values": 211,
+      "sample_values": [
+        3.0,
+        22.0,
+        4.0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "TQTY(C YTD)",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 411,
+      "sample_values": [
+        9,
+        96,
+        4
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "TQTY(C Wk)",
+      "data_type": "float64",
+      "null_count": 7913,
+      "null_percentage": 79.13,
+      "unique_values": 43,
+      "sample_values": [
+        1.0,
+        12.0,
+        3.0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "TQTY(P4 Wk)",
+      "data_type": "float64",
+      "null_count": 5143,
+      "null_percentage": 51.43,
+      "unique_values": 126,
+      "sample_values": [
+        20.0,
+        3.0,
+        19.0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "TQTY(P13 Wk)",
+      "data_type": "float64",
+      "null_count": 2439,
+      "null_percentage": 24.39,
+      "unique_values": 244,
+      "sample_values": [
+        42.0,
+        17.0,
+        24.0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "TQTY(P QTD)",
+      "data_type": "float64",
+      "null_count": 2503,
+      "null_percentage": 25.03,
+      "unique_values": 246,
+      "sample_values": [
+        5.0,
+        13.0,
+        6.0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "TQTY(P YTD)",
+      "data_type": "float64",
+      "null_count": 26,
+      "null_percentage": 0.26,
+      "unique_values": 363,
+      "sample_values": [
+        161.0,
+        47.0,
+        577.0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "STLYTQTY4",
+      "data_type": "float64",
+      "null_count": 5142,
+      "null_percentage": 51.42,
+      "unique_values": 132,
+      "sample_values": [
+        38.0,
+        1.0,
+        13.0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "STLYTQTY13",
+      "data_type": "float64",
+      "null_count": 2450,
+      "null_percentage": 24.5,
+      "unique_values": 236,
+      "sample_values": [
+        9.0,
+        32.0,
+        108.0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "STLYTQTYQTD",
+      "data_type": "float64",
+      "null_count": 2514,
+      "null_percentage": 25.14,
+      "unique_values": 247,
+      "sample_values": [
+        6.0,
+        35.0,
+        439.0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "MyTarget",
+      "data_type": "object",
+      "null_count": 7300,
+      "null_percentage": 73.0,
+      "unique_values": 2,
+      "sample_values": [
+        true,
+        true,
+        true
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "CNXTerritoryRole",
+      "data_type": "object",
+      "null_count": 29,
+      "null_percentage": 0.29,
+      "unique_values": 2,
+      "sample_values": [
+        "Core",
+        "Core",
+        "Core"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "BiInclude",
+      "data_type": "object",
+      "null_count": 1049,
+      "null_percentage": 10.49,
+      "unique_values": 1,
+      "sample_values": [
+        true,
+        true,
+        true
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    }
+  ],
+  "potential_primary_keys": [],
+  "identifier_columns": [
+    "RegionId",
+    "TerritoryId",
+    "PrescriberId"
+  ],
+  "date_columns": [],
+  "measure_columns": [
+    "TRX(C4 Wk)",
+    "TRX(C13 Wk)",
+    "TRX(C QTD)",
+    "TRX(C YTD)",
+    "TRX(C Wk)",
+    "TRX(P4 Wk)",
+    "TRX(P13 Wk)",
+    "TRX(P QTD)",
+    "TRX(P YTD)",
+    "STLYTRX4",
+    "STLYTRX13",
+    "STLYTRXQTD",
+    "TRXWriters(C4 Wk)",
+    "TRXWriters(C Wk)"
+  ]
+}

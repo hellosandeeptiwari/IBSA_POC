@@ -1,0 +1,42 @@
+================================================================================
+IBSA TARGET VARIABLE DOCUMENTATION
+================================================================================
+
+Generated: 2025-10-13 23:07:57
+
+Total HCPs: 1,313,397
+
+TARGET VARIABLES:
+
+1. CALL_SUCCESS (Binary Classification)
+   Definition: Call resulted in positive outcome
+   Values: 0 (unsuccessful) or 1 (successful)
+   Success Rate: 0.00%
+   Successful Calls: 0
+
+2. PRESCRIPTION_LIFT (Regression)
+   Definition: TRx increase from prior to current QTD
+   Values: Continuous (can be negative)
+   Mean: 0.00 TRx
+   Median: 0.00 TRx
+   Std Dev: 0.00
+
+3. SAMPLE_EFFECTIVENESS (Regression)
+   Definition: TRx generated per sample dropped
+   Values: Continuous (0+)
+   Mean: 0.00
+   Median: 0.00
+
+4. NGD_SCORE (Next Generation Decile)
+   Definition: Composite targeting priority score
+   Values: Decile 1-10 (10 = highest priority)
+   Mean Decile: 1.26
+   Top Tier (8-10): 0 HCPs
+   Components: Volume, Growth, Specialty, Engagement Potential,
+               New Rx Potential, Sample Responsiveness, Whitespace
+
+MODELING DATASET:
+  File: IBSA_ModelReady_20251013_2307.csv
+  Shape: (1313397, 76)
+  Features: 65
+  Targets: 4

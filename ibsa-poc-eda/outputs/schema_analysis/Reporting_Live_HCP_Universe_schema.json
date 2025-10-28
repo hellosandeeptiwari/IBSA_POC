@@ -1,0 +1,195 @@
+{
+  "table_name": "Reporting_Live_HCP_Universe",
+  "file_info": {
+    "size_mb": 145.84,
+    "modified": "2025-10-13 21:41:08"
+  },
+  "row_count": "1315043",
+  "column_count": 13,
+  "memory_usage_mb": 5.28,
+  "columns": [
+    {
+      "column_name": "Source",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 1,
+      "sample_values": [
+        "PLANTRAK",
+        "PLANTRAK",
+        "PLANTRAK"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "PrescriberId",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 10000,
+      "sample_values": [
+        7269747,
+        7269750,
+        7269753
+      ],
+      "potential_key": true,
+      "data_category": "identifier"
+    },
+    {
+      "column_name": "NPI",
+      "data_type": "float64",
+      "null_count": 403,
+      "null_percentage": 4.03,
+      "unique_values": 9597,
+      "sample_values": [
+        1144795683.0,
+        1841769213.0,
+        1447729165.0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "Name",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 9990,
+      "sample_values": [
+        "VANARSDALE,LEAH B",
+        "LAUGHERY,KYLIE L",
+        "MAASZ,KIMBERLY"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "ProfessionalDesignation",
+      "data_type": "float64",
+      "null_count": 10000,
+      "null_percentage": 100.0,
+      "unique_values": 0,
+      "sample_values": [],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "SpecialtyCode",
+      "data_type": "object",
+      "null_count": 16,
+      "null_percentage": 0.16,
+      "unique_values": 98,
+      "sample_values": [
+        "PHA",
+        "PHA",
+        "PHA"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "Specialty",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 99,
+      "sample_values": [
+        "PHYSICIAN ASSISTANT",
+        "PHYSICIAN ASSISTANT",
+        "PHYSICIAN ASSISTANT"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "AddressLine1",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 8356,
+      "sample_values": [
+        "232 W 25TH ST",
+        "8702 UNIVERSITY BLVD",
+        "5501 OLD YORK RD"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "AddressLine2",
+      "data_type": "object",
+      "null_count": 6638,
+      "null_percentage": 66.38,
+      "unique_values": 903,
+      "sample_values": [
+        "STE A",
+        "STE 100",
+        "# 57"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "City",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 2675,
+      "sample_values": [
+        "ERIE",
+        "CORAOPOLIS",
+        "PHILADELPHIA"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "State",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 57,
+      "sample_values": [
+        "PA",
+        "PA",
+        "PA"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "Zipcode",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 4946,
+      "sample_values": [
+        16544,
+        15108,
+        19141
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "Primary",
+      "data_type": "float64",
+      "null_count": 10000,
+      "null_percentage": 100.0,
+      "unique_values": 0,
+      "sample_values": [],
+      "potential_key": false,
+      "data_category": "other"
+    }
+  ],
+  "potential_primary_keys": [
+    "PrescriberId"
+  ],
+  "identifier_columns": [
+    "PrescriberId",
+    "NPI"
+  ],
+  "date_columns": [],
+  "measure_columns": []
+}

@@ -1,0 +1,16 @@
+================================================================================
+IBSA PRE-CALL PLANNING - EXECUTIVE SUMMARY
+2025 YTD Analysis
+================================================================================
+
+Generated: 2025-10-13 22:36:36
+
+Analysis Modules Completed:
+  1. HCP Universe Profiling
+  2. Territory Performance Analysis
+  3. Call Activity Analysis
+  4. Product Performance Analysis
+
+Charts Generated: 4
+Output Directory: c:\Users\SandeepT\IBSA PoC V2\ibsa-poc-eda\outputs\eda
+Charts Directory: c:\Users\SandeepT\IBSA PoC V2\ibsa-poc-eda\outputs\eda\charts

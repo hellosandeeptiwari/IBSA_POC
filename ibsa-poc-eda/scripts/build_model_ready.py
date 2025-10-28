@@ -1,0 +1,3 @@
+I don't have the capability to view or access files directly, including Jupyter notebooks. However, I can help you replicate the modules and functionality from your notebook if you provide me with the code snippets or describe the specific modules and analyses you want to replicate.
+
+Please share the relevant sections of your notebook or describe the tasks you want to accomplish, and I'll do my best to assist you!

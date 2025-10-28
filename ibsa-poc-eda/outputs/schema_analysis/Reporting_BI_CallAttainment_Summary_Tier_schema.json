@@ -1,0 +1,276 @@
+{
+  "table_name": "Reporting_BI_CallAttainment_Summary_Tier",
+  "file_info": {
+    "size_mb": 0.07,
+    "modified": "2025-10-13 17:45:39"
+  },
+  "row_count": "603",
+  "column_count": 18,
+  "memory_usage_mb": 0.33,
+  "columns": [
+    {
+      "column_name": "TerritoryId",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 89,
+      "sample_values": [
+        10001001,
+        10001018,
+        10001019
+      ],
+      "potential_key": false,
+      "data_category": "identifier"
+    },
+    {
+      "column_name": "TerritoryName",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 89,
+      "sample_values": [
+        "Boston MA",
+        "E Hartford CT",
+        "N Manhattan NY"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "RegionId",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 7,
+      "sample_values": [
+        100010,
+        100010,
+        100010
+      ],
+      "potential_key": false,
+      "data_category": "identifier"
+    },
+    {
+      "column_name": "RegionName",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 7,
+      "sample_values": [
+        "Northeast",
+        "Northeast",
+        "Northeast"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "RepName",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 84,
+      "sample_values": [
+        "Nicholas Soares",
+        "Andrew Johnson",
+        "Jason Gamble"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "TirosintTier",
+      "data_type": "object",
+      "null_count": 252,
+      "null_percentage": 41.79,
+      "unique_values": 4,
+      "sample_values": [
+        "Tier 4",
+        "Tier 1",
+        "Tier 2"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "LicartTier",
+      "data_type": "object",
+      "null_count": 351,
+      "null_percentage": 58.21,
+      "unique_values": 4,
+      "sample_values": [
+        "Tier 2",
+        "Tier 3",
+        "Tier 4"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "NoAccount",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 176,
+      "sample_values": [
+        181,
+        7,
+        23
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "PlannedCalls",
+      "data_type": "float64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 226,
+      "sample_values": [
+        183.0,
+        42.0,
+        92.0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "ActualCalls",
+      "data_type": "float64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 44,
+      "sample_values": [
+        26.0,
+        6.0,
+        12.0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "Attainment",
+      "data_type": "float64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 35,
+      "sample_values": [
+        0.14,
+        0.14,
+        0.13
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "Reached",
+      "data_type": "float64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 48,
+      "sample_values": [
+        26.0,
+        6.0,
+        11.0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "Tiers",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 2,
+      "sample_values": [
+        "Tirosint Tier",
+        "Tirosint Tier",
+        "Tirosint Tier"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "PercentageAttainment",
+      "data_type": "float64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 304,
+      "sample_values": [
+        14.21,
+        14.29,
+        13.04
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "PercentageReached",
+      "data_type": "float64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 287,
+      "sample_values": [
+        14.36,
+        85.71,
+        47.83
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "TotalCount",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 176,
+      "sample_values": [
+        181,
+        7,
+        23
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "TimePeriod",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 1,
+      "sample_values": [
+        "Q4 2025",
+        "Q4 2025",
+        "Q4 2025"
+      ],
+      "potential_key": false,
+      "data_category": "temporal"
+    },
+    {
+      "column_name": "CNXTerritoryRole",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 2,
+      "sample_values": [
+        "Core",
+        "Core",
+        "Core"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    }
+  ],
+  "potential_primary_keys": [],
+  "identifier_columns": [
+    "TerritoryId",
+    "RegionId"
+  ],
+  "date_columns": [
+    "TimePeriod"
+  ],
+  "measure_columns": [
+    "NoAccount",
+    "TotalCount"
+  ]
+}

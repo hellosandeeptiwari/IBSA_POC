@@ -1,0 +1,37 @@
+{
+  "analysis_summary": {
+    "tables_analyzed": 14,
+    "total_potential_features": 200,
+    "recommended_feature_count": "80-100",
+    "redundancy_reduction": "~50%"
+  },
+  "keep_features": {
+    "payer_intelligence": "KEEP - Statistically significant in ANOVA test",
+    "sample_roi": "KEEP - Black holes identified, optimization opportunity",
+    "territory_benchmarks": "KEEP - Significant territory variation found",
+    "temporal_lags": "KEEP - 63.7% coverage, good temporal patterns",
+    "product_specific": "KEEP - Essential for product-specific models"
+  },
+  "remove_candidates": {
+    "highly_correlated": "Remove one from each pair (correlation > 0.90)",
+    "low_variance": "Remove features with CV < 0.01",
+    "high_missing": "Remove features with >80% missing values"
+  },
+  "next_steps": [
+    "1. Load Phase 5 targets (call_success, prescription_lift, ngd_category)",
+    "2. Train baseline model with ALL 200+ features",
+    "3. Compute permutation importance on holdout set",
+    "4. Rank features by importance score",
+    "5. Select top 80-100 features (or top N that explain 95% variance)",
+    "6. Rebuild Phase 4B/4C with selected features only",
+    "7. Re-train models with optimized feature set",
+    "8. Compare performance (200+ features vs 80-100 features)"
+  ],
+  "expected_outcomes": {
+    "feature_reduction": "200+ \u2192 80-100 (50% reduction)",
+    "training_speed": "2x faster (fewer features)",
+    "model_interpretability": "Much better (fewer features to explain)",
+    "accuracy_loss": "Minimal (<1% expected)",
+    "production_benefits": "Faster inference, easier maintenance"
+  }
+}

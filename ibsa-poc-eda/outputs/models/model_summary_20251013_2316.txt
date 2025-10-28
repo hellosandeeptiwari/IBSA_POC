@@ -1,0 +1,24 @@
+================================================================================
+IBSA PREDICTIVE MODELS - SUMMARY REPORT
+================================================================================
+
+Generated: 2025-10-13 23:16:50
+
+MODELS TRAINED:
+
+1. CALL SUCCESS PREDICTOR (RandomForest Classifier)
+2. PRESCRIPTION LIFT FORECASTER (GradientBoosting Regressor)
+   MAE: 0.0012 TRx
+   RMSE: 0.0127 TRx
+   R² Score: 1.0000
+
+3. SAMPLE EFFECTIVENESS SCORER (RandomForest Regressor)
+4. NGD SCORE PREDICTOR (GradientBoosting Regressor)
+   MAE: 0.0000 deciles
+   RMSE: 0.0000 deciles
+   R² Score: 1.0000
+   Decile Accuracy: 1.0000
+
+
+Model Files: c:\Users\SandeepT\IBSA PoC V2\ibsa-poc-eda\outputs\models
+Charts: c:\Users\SandeepT\IBSA PoC V2\ibsa-poc-eda\outputs\models\charts

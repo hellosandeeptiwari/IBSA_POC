@@ -1,0 +1,81 @@
+================================================================================
+IBSA FEATURE ENGINEERING DOCUMENTATION
+================================================================================
+
+Generated: 2025-10-13 22:58:17
+
+Total HCPs: 1,313,397
+Total Features: 65
+
+FEATURE CATEGORIES:
+  1. HCP Demographic Features (20)
+  2. Prescribing Behavior Features (30)
+  3. Engagement & Call Activity Features (25)
+  4. Advanced Derived Features (25)
+
+FEATURE LIST:
+  2. Specialty
+  3. is_endocrinology
+  4. is_family_medicine
+  5. is_internal_medicine
+  6. is_pain_management
+  7. is_target_specialty
+  8. State
+  9. is_california
+  10. is_texas
+  11. is_florida
+  12. is_newyork
+  13. region_northeast
+  14. is_np_pa
+  15. is_md_do
+  16. is_specialist
+  17. is_primary_care
+  18. is_mid_level
+  19. has_specialty
+  20. has_state
+  21. profile_completeness_score
+  22. is_active_profile
+  23. is_complete_profile
+  24. trx_current_qtd
+  25. trx_prior_qtd
+  26. trx_qtd_growth
+  27. nrx_current_qtd
+  28. nrx_prior_qtd
+  29. nrx_qtd_growth
+  30. is_active_prescriber
+  31. is_new_patient_acquirer
+  32. total_calls
+  33. call_frequency_low
+  34. call_frequency_medium
+  35. call_frequency_high
+  36. has_been_called
+  37. calls_per_month
+  38. call_frequency_quintile
+  39. is_over_serviced
+  40. is_under_serviced
+  41. total_samples_received
+  42. calls_with_samples
+  43. sample_acceptance_rate
+  44. avg_samples_per_call
+  45. accepts_samples
+  46. high_sample_acceptor
+  47. low_sample_acceptor
+  48. sample_volume_quintile
+  49. engagement_score
+  50. high_engagement
+  51. medium_engagement
+  52. low_engagement
+  53. is_engaged
+  54. hcp_value_score
+  55. hcp_value_quintile
+  56. is_high_value
+  57. is_medium_value
+  58. is_low_value
+  59. potential_score
+  60. high_potential
+  61. untapped_opportunity
+  62. engagement_x_value
+  63. optimal_target
+  64. sample_acceptance_x_target
+  65. priority_tier1
+  66. priority_tier2

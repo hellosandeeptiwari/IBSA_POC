@@ -1,0 +1,447 @@
+{
+  "created_at": "2025-10-27T14:54:42.197160",
+  "source": "IBSA Official Websites",
+  "total_content": 17,
+  "content": [
+    {
+      "content_id": "TIR-MSG-001-WEB",
+      "category": "PRODUCT_MESSAGE",
+      "product": "Tirosint",
+      "title": "Tirosint Primary Indication",
+      "content": "TIROSINT (levothyroxine sodium) Capsules is a prescription medicine that contains a man-made hormone called levothyroxine which replaces a hormone that is normally produced in your body by the thyroid gland. It is meant to replace the hormone to treat a condition called hypothyroidism.",
+      "tags": [
+        "hypothyroidism",
+        "levothyroxine",
+        "thyroid replacement",
+        "primary indication"
+      ],
+      "approval": {
+        "approval_id": "WEB-TIR-USE-2025",
+        "approved_by": "IBSA MLR Team",
+        "approval_date": "2025-01-01",
+        "expires_at": "2025-12-31",
+        "version": "1.0",
+        "reviewer_name": "Web Content",
+        "reviewer_email": "compliance@ibsapharma.com",
+        "source_url": "https://www.tirosint.com/"
+      },
+      "usage_count": 0,
+      "last_used": null
+    },
+    {
+      "content_id": "TIR-CLI-001-WEB",
+      "category": "CLINICAL_CLAIM",
+      "product": "Tirosint",
+      "title": "Persistent Symptoms with Normal TSH",
+      "content": "If you have hypothyroidism and persistent symptoms with normal TSH levels, it may be time to talk to your doctor. Many patients continue to experience symptoms even when their TSH levels appear normal with their current therapy.",
+      "tags": [
+        "persistent symptoms",
+        "TSH normal",
+        "symptom management",
+        "treatment optimization"
+      ],
+      "approval": {
+        "approval_id": "WEB-TIR-SYMPTOMS-2025",
+        "approved_by": "IBSA MLR Team",
+        "approval_date": "2025-01-01",
+        "expires_at": "2025-12-31",
+        "version": "1.0",
+        "reviewer_name": "Web Content",
+        "reviewer_email": "compliance@ibsapharma.com",
+        "source_url": "https://www.tirosint.com/talking-to-your-doctor/"
+      },
+      "usage_count": 0,
+      "last_used": null
+    },
+    {
+      "content_id": "TIR-SAF-001-WEB",
+      "category": "SAFETY_INFO",
+      "product": "Tirosint",
+      "title": "Boxed Warning: Not for Obesity or Weight Loss",
+      "content": "NOT FOR TREATMENT OF OBESITY OR FOR WEIGHT LOSS. Thyroid hormones, including TIROSINT, should not be used either alone or in combination with other medications for the treatment of obesity or for weight loss. In patients with normal thyroid levels, doses within the range of daily hormonal requirements are not helpful for weight loss. Larger doses may result in serious or even life threatening events.",
+      "tags": [
+        "boxed warning",
+        "weight loss",
+        "obesity",
+        "contraindication",
+        "safety"
+      ],
+      "approval": {
+        "approval_id": "WEB-TIR-BOXED-2025",
+        "approved_by": "IBSA MLR Team",
+        "approval_date": "2025-01-01",
+        "expires_at": "2025-12-31",
+        "version": "1.0",
+        "reviewer_name": "Web Content",
+        "reviewer_email": "compliance@ibsapharma.com",
+        "source_url": "https://www.tirosint.com/"
+      },
+      "usage_count": 0,
+      "last_used": null
+    },
+    {
+      "content_id": "TIR-OBJ-001-WEB",
+      "category": "OBJECTION_HANDLER",
+      "product": "Tirosint",
+      "title": "Price Objection - TIROSINT Direct Program",
+      "content": "Get a low out-of-pocket price for your prescription for TIROSINT Capsules with TIROSINT Direct. Patients can get their medication delivered directly to their home from a network of participating mail-order pharmacies, often at a lower cost than retail pharmacies.",
+      "tags": [
+        "price objection",
+        "cost",
+        "savings",
+        "patient assistance",
+        "tirosint direct"
+      ],
+      "approval": {
+        "approval_id": "WEB-TIR-SAVINGS-2025",
+        "approved_by": "IBSA MLR Team",
+        "approval_date": "2025-01-01",
+        "expires_at": "2025-12-31",
+        "version": "1.0",
+        "reviewer_name": "Web Content",
+        "reviewer_email": "compliance@ibsapharma.com",
+        "source_url": "https://www.tirosint.com/savings-and-support/"
+      },
+      "usage_count": 0,
+      "last_used": null
+    },
+    {
+      "content_id": "TIR-CLI-002-WEB",
+      "category": "CLINICAL_CLAIM",
+      "product": "Tirosint",
+      "title": "TIROSINT Administration Instructions",
+      "content": "Take TIROSINT once each day, on an empty stomach, approximately 30 minutes to 1 hour before breakfast. TIROSINT should be taken at least 4 hours before or after medicines or supplements that contain calcium or iron, and at least 4 hours before medicines that contain bile acid sequestrants or ion exchange resins.",
+      "tags": [
+        "dosing",
+        "administration",
+        "empty stomach",
+        "drug interactions",
+        "timing"
+      ],
+      "approval": {
+        "approval_id": "WEB-TIR-DOSING-2025",
+        "approved_by": "IBSA MLR Team",
+        "approval_date": "2025-01-01",
+        "expires_at": "2025-12-31",
+        "version": "1.0",
+        "reviewer_name": "Web Content",
+        "reviewer_email": "compliance@ibsapharma.com",
+        "source_url": "https://www.tirosint.com/"
+      },
+      "usage_count": 0,
+      "last_used": null
+    },
+    {
+      "content_id": "TIR-SAF-002-WEB",
+      "category": "SAFETY_INFO",
+      "product": "Tirosint",
+      "title": "Food Interactions with TIROSINT",
+      "content": "Certain foods may affect the way that your body absorbs TIROSINT. These include: Soybean flour, Cottonseed meal, Walnuts, Dietary fiber, and Grapefruits or grapefruit juice. Tell your healthcare provider if you regularly eat these foods, as they may require your dose of TIROSINT to be adjusted.",
+      "tags": [
+        "food interactions",
+        "absorption",
+        "soybean",
+        "grapefruit",
+        "dietary considerations"
+      ],
+      "approval": {
+        "approval_id": "WEB-TIR-FOOD-2025",
+        "approved_by": "IBSA MLR Team",
+        "approval_date": "2025-01-01",
+        "expires_at": "2025-12-31",
+        "version": "1.0",
+        "reviewer_name": "Web Content",
+        "reviewer_email": "compliance@ibsapharma.com",
+        "source_url": "https://www.tirosint.com/"
+      },
+      "usage_count": 0,
+      "last_used": null
+    },
+    {
+      "content_id": "FLE-MSG-001-WEB",
+      "category": "PRODUCT_MESSAGE",
+      "product": "Flector",
+      "title": "Flector - The Original Topical NSAID System",
+      "content": "There's Only ONE Flector! FLECTOR is a topical prescription therapy that contains diclofenac epolamine, which is a nonsteroidal anti-inflammatory drug (NSAID), and is indicated for the topical treatment of acute pain due to minor strains, sprains, and contusions in adults and pediatric patients 6 years and older. Flector has been the original nonsteroidal anti-inflammatory topical system (NSAID) - trusted relief for decades.",
+      "tags": [
+        "original",
+        "topical NSAID",
+        "acute pain",
+        "brand differentiation",
+        "heritage"
+      ],
+      "approval": {
+        "approval_id": "WEB-FLE-BRAND-2025",
+        "approved_by": "IBSA MLR Team",
+        "approval_date": "2025-01-01",
+        "expires_at": "2025-12-31",
+        "version": "1.0",
+        "reviewer_name": "Web Content",
+        "reviewer_email": "compliance@ibsapharma.com",
+        "source_url": "https://www.flector.com/"
+      },
+      "usage_count": 0,
+      "last_used": null
+    },
+    {
+      "content_id": "FLE-CLI-001-WEB",
+      "category": "CLINICAL_CLAIM",
+      "product": "Flector",
+      "title": "Flector Onset and Duration of Action",
+      "content": "Flector medicated topical system, when applied to the area where pain is felt, has a confirmed up to 4-6 hours onset of pain relief and targeted action against acute pain and inflammation, thanks to a gradual and constant release of the active ingredient for up to 12 hours. Its user-friendly application is less messy and odor free compared to other pain relief gels.",
+      "tags": [
+        "onset 4-6 hours",
+        "duration 12 hours",
+        "targeted relief",
+        "convenience",
+        "non-messy"
+      ],
+      "approval": {
+        "approval_id": "WEB-FLE-ONSET-2025",
+        "approved_by": "IBSA MLR Team",
+        "approval_date": "2025-01-01",
+        "expires_at": "2025-12-31",
+        "version": "1.0",
+        "reviewer_name": "Web Content",
+        "reviewer_email": "compliance@ibsapharma.com",
+        "source_url": "https://www.flector.com/"
+      },
+      "usage_count": 0,
+      "last_used": null
+    },
+    {
+      "content_id": "FLE-MSG-002-WEB",
+      "category": "PRODUCT_MESSAGE",
+      "product": "Flector",
+      "title": "Flector Hydrogel Technology - Gentle on Skin",
+      "content": "Flector is a self-adhesive medicated topical system. Thanks to the Hydrogel technology, the Flector topical system does not use organic solvents (such as toluene, hexane, isopropanol) to be adhesive. In addition, thanks to a high water content in the Hydrogel, the Flector topical system allows a cooling effect on application and continuous hydration of the skin.",
+      "tags": [
+        "hydrogel",
+        "gentle",
+        "skin-friendly",
+        "no solvents",
+        "cooling effect",
+        "hydration"
+      ],
+      "approval": {
+        "approval_id": "WEB-FLE-HYDROGEL-2025",
+        "approved_by": "IBSA MLR Team",
+        "approval_date": "2025-01-01",
+        "expires_at": "2025-12-31",
+        "version": "1.0",
+        "reviewer_name": "Web Content",
+        "reviewer_email": "compliance@ibsapharma.com",
+        "source_url": "https://www.flector.com/"
+      },
+      "usage_count": 0,
+      "last_used": null
+    },
+    {
+      "content_id": "FLE-MSG-003-WEB",
+      "category": "PRODUCT_MESSAGE",
+      "product": "Flector",
+      "title": "Flector - Non-Opioid Pain Relief",
+      "content": "Flector is a non-opioid topical treatment that provides the prescription strength needed to help patients with their acute pain due to minor strains, sprains, and contusions. Flector transdermal action releases pain relief ingredients continuously and consistently throughout the day (up to 12 hours). Not habit-forming.",
+      "tags": [
+        "non-opioid",
+        "prescription strength",
+        "not habit forming",
+        "transdermal",
+        "acute pain"
+      ],
+      "approval": {
+        "approval_id": "WEB-FLE-NONOPIOID-2025",
+        "approved_by": "IBSA MLR Team",
+        "approval_date": "2025-01-01",
+        "expires_at": "2025-12-31",
+        "version": "1.0",
+        "reviewer_name": "Web Content",
+        "reviewer_email": "compliance@ibsapharma.com",
+        "source_url": "https://www.flector.com/"
+      },
+      "usage_count": 0,
+      "last_used": null
+    },
+    {
+      "content_id": "FLE-SAF-001-WEB",
+      "category": "SAFETY_INFO",
+      "product": "Flector",
+      "title": "Flector NSAID Boxed Warning",
+      "content": "WARNING: RISK OF SERIOUS CARDIOVASCULAR and GASTROINTESTINAL EVENTS. Nonsteroidal anti-inflammatory drugs (NSAIDs) cause an increased risk of serious cardiovascular thrombotic events, including myocardial infarction and stroke, which can be fatal. This risk may occur early in the treatment and may increase with duration of use. FLECTOR is contraindicated in the setting of coronary artery bypass graft (CABG) surgery. NSAIDs cause an increased risk of serious gastrointestinal (GI) adverse events including bleeding, ulceration, and perforation of the stomach or intestines, which can be fatal.",
+      "tags": [
+        "boxed warning",
+        "NSAID",
+        "CV risk",
+        "GI risk",
+        "contraindication",
+        "CABG"
+      ],
+      "approval": {
+        "approval_id": "WEB-FLE-BOXED-2025",
+        "approved_by": "IBSA MLR Team",
+        "approval_date": "2025-01-25",
+        "expires_at": "2025-12-31",
+        "version": "1.0",
+        "reviewer_name": "Web Content",
+        "reviewer_email": "compliance@ibsapharma.com",
+        "source_url": "https://www.flector.com/"
+      },
+      "usage_count": 0,
+      "last_used": null
+    },
+    {
+      "content_id": "FLE-OBJ-001-WEB",
+      "category": "OBJECTION_HANDLER",
+      "product": "Flector",
+      "title": "Securing Brand-Name Flector - Dispense as Written",
+      "content": "If your doctor has determined that Flector is right for you and that it's important you receive brand-name Flector, make sure they add 'dispense as written' (or your state's legal language) to your prescription. When dropping off your prescription at the pharmacy, make it clear that you specifically want the brand name medication, Flector, and not a generic substitute. When you receive your medication, review the prescription label and packaging to ensure that it clearly states 'Flector'.",
+      "tags": [
+        "DAW",
+        "dispense as written",
+        "brand substitution",
+        "pharmacy guidance",
+        "generic"
+      ],
+      "approval": {
+        "approval_id": "WEB-FLE-DAW-2025",
+        "approved_by": "IBSA MLR Team",
+        "approval_date": "2025-01-01",
+        "expires_at": "2025-12-31",
+        "version": "1.0",
+        "reviewer_name": "Web Content",
+        "reviewer_email": "compliance@ibsapharma.com",
+        "source_url": "https://www.flector.com/"
+      },
+      "usage_count": 0,
+      "last_used": null
+    },
+    {
+      "content_id": "FLE-OBJ-002-WEB",
+      "category": "OBJECTION_HANDLER",
+      "product": "Flector",
+      "title": "Flector Copay Savings Card",
+      "content": "Costs should not be a barrier to getting Flector. Patients with commercial insurance can pay as little as $4 at any retail pharmacy with the Flector Copay Savings Card. Maximum value of $360. Offer not valid for patients enrolled in government health plans (Medicare, Medicaid, VA/DOD, etc.).",
+      "tags": [
+        "copay card",
+        "savings",
+        "commercial insurance",
+        "$4 copay",
+        "price objection"
+      ],
+      "approval": {
+        "approval_id": "WEB-FLE-COPAY-2025",
+        "approved_by": "IBSA MLR Team",
+        "approval_date": "2025-01-01",
+        "expires_at": "2025-12-31",
+        "version": "1.0",
+        "reviewer_name": "Web Content",
+        "reviewer_email": "compliance@ibsapharma.com",
+        "source_url": "https://www.flector.com/"
+      },
+      "usage_count": 0,
+      "last_used": null
+    },
+    {
+      "content_id": "FLE-OBJ-003-WEB",
+      "category": "OBJECTION_HANDLER",
+      "product": "Flector",
+      "title": "Flector Direct Mail Order Program",
+      "content": "Get low out-of-pocket price available for your prescription and have it delivered directly to your home by ordering from a network of participating mail-order pharmacies. Patients could pay less for Flector than for generic topical diclofenac systems.",
+      "tags": [
+        "flector direct",
+        "mail order",
+        "home delivery",
+        "savings",
+        "convenience"
+      ],
+      "approval": {
+        "approval_id": "WEB-FLE-DIRECT-2025",
+        "approved_by": "IBSA MLR Team",
+        "approval_date": "2025-01-01",
+        "expires_at": "2025-12-31",
+        "version": "1.0",
+        "reviewer_name": "Web Content",
+        "reviewer_email": "compliance@ibsapharma.com",
+        "source_url": "https://www.flector.com/flector-direct-program"
+      },
+      "usage_count": 0,
+      "last_used": null
+    },
+    {
+      "content_id": "LIC-MSG-001-WEB",
+      "category": "PRODUCT_MESSAGE",
+      "product": "Licart",
+      "title": "Licart - Next-Generation NSAID Patch Technology",
+      "content": "Discover the Next-Gen NSAID Patch Technology. Licart represents the evolution of topical NSAID delivery, building on decades of Flector experience with advanced patch technology for targeted pain relief.",
+      "tags": [
+        "next-gen",
+        "advanced technology",
+        "evolution",
+        "topical NSAID",
+        "innovation"
+      ],
+      "approval": {
+        "approval_id": "WEB-LIC-NEXTGEN-2025",
+        "approved_by": "IBSA MLR Team",
+        "approval_date": "2025-01-01",
+        "expires_at": "2025-12-31",
+        "version": "1.0",
+        "reviewer_name": "Web Content",
+        "reviewer_email": "compliance@ibsapharma.com",
+        "source_url": "https://licart.com/"
+      },
+      "usage_count": 0,
+      "last_used": null
+    },
+    {
+      "content_id": "GEN-OBJ-001-WEB",
+      "category": "OBJECTION_HANDLER",
+      "product": "Portfolio",
+      "title": "General Generic Objection Handler",
+      "content": "Generic medications may seem like the same as brand-name medications, but there can be important differences in formulation, delivery mechanism, and patient outcomes. IBSA brand-name products have undergone rigorous testing and clinical trials to ensure safety and efficacy. We stand behind our products with comprehensive patient support programs.",
+      "tags": [
+        "generic objection",
+        "brand value",
+        "quality",
+        "patient support"
+      ],
+      "approval": {
+        "approval_id": "WEB-GEN-GENERIC-2025",
+        "approved_by": "IBSA MLR Team",
+        "approval_date": "2025-01-01",
+        "expires_at": "2025-12-31",
+        "version": "1.0",
+        "reviewer_name": "Web Content",
+        "reviewer_email": "compliance@ibsapharma.com",
+        "source_url": "https://www.ibsapharma.us/"
+      },
+      "usage_count": 0,
+      "last_used": null
+    },
+    {
+      "content_id": "GEN-OBJ-002-WEB",
+      "category": "OBJECTION_HANDLER",
+      "product": "Portfolio",
+      "title": "Sample Request Response",
+      "content": "I understand you'd like samples for your patients. Due to regulatory requirements and our commitment to patient safety, samples are distributed through approved channels and require proper documentation. I can help you access our patient assistance programs and copay savings cards, which often provide greater value to your patients than samples. These programs can reduce out-of-pocket costs to as low as $4 for commercially insured patients.",
+      "tags": [
+        "samples",
+        "patient assistance",
+        "copay cards",
+        "regulatory compliance"
+      ],
+      "approval": {
+        "approval_id": "WEB-GEN-SAMPLES-2025",
+        "approved_by": "IBSA MLR Team",
+        "approval_date": "2025-01-01",
+        "expires_at": "2025-12-31",
+        "version": "1.0",
+        "reviewer_name": "Web Content",
+        "reviewer_email": "compliance@ibsapharma.com",
+        "source_url": "https://www.ibsapharma.us/"
+      },
+      "usage_count": 0,
+      "last_used": null
+    }
+  ]
+}

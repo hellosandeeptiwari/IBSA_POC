@@ -1,0 +1,33 @@
+================================================================================
+IBSA TARGET VARIABLE DOCUMENTATION - ENHANCED VERSION
+================================================================================
+
+Generated: 2025-10-22 10:34:25
+
+Total HCPs: 1,313,397
+Total Targets: 8 (4 original enhanced + 4 new)
+
+================================================================================
+TARGET VARIABLES
+================================================================================
+
+1. CALL_SUCCESS (Binary Classification) - ENHANCED
+   Definition: Call resulted in positive outcome
+   Type: Binary (0/1) + Continuous Score (0-1)
+   Method: Weighted scoring (Rx Growth 40%, RFM 25%, Engagement 20%, NGD 15%)
+   Success Rate: 33.93%
+   Successful: 117,557.0 HCPs
+   Mean Score: 0.045
+
+2. PRESCRIPTION_LIFT (Regression) - ENHANCED
+   Definition: TRx increase from prior to current QTD
+   Type: Continuous (can be negative)
+   Method: Winsorized outliers using IQR method
+   Mean: -0.04 TRx
+   Median: 0.00 TRx
+   Positive Lift: 117,557 HCPs
+
+3. SAMPLE_EFFECTIVENESS (Regression) - ENHANCED
+   Definition: TRx generated per sample dropped
+   Type: Continuous (0+)
+   Method: Enhanced with call intensity normalization

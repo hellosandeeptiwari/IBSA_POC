@@ -1,0 +1,114 @@
+{
+  "prescriber_overview": {
+    "rows": 88756,
+    "columns": 106,
+    "missing_columns": 92,
+    "high_missing_columns": 27,
+    "duplicate_rows": 0,
+    "zero_variance_columns": 0
+  },
+  "prescriber_profile": {
+    "rows": 35,
+    "columns": 65,
+    "missing_columns": 34,
+    "high_missing_columns": 16,
+    "duplicate_rows": 0,
+    "zero_variance_columns": 12
+  },
+  "payment_plan": {
+    "rows": 367280,
+    "columns": 47,
+    "missing_columns": 22,
+    "high_missing_columns": 5,
+    "duplicate_rows": 0,
+    "zero_variance_columns": 0
+  },
+  "trx_sample": {
+    "rows": 254872,
+    "columns": 61,
+    "missing_columns": 16,
+    "high_missing_columns": 0,
+    "duplicate_rows": 0,
+    "zero_variance_columns": 0
+  },
+  "nrx_sample": {
+    "rows": 254872,
+    "columns": 61,
+    "missing_columns": 16,
+    "high_missing_columns": 0,
+    "duplicate_rows": 0,
+    "zero_variance_columns": 0
+  },
+  "territory_performance": {
+    "rows": 383171,
+    "columns": 35,
+    "missing_columns": 14,
+    "high_missing_columns": 1,
+    "duplicate_rows": 0,
+    "zero_variance_columns": 3
+  },
+  "territory_overview": {
+    "rows": 80959,
+    "columns": 44,
+    "missing_columns": 27,
+    "high_missing_columns": 11,
+    "duplicate_rows": 0,
+    "zero_variance_columns": 2
+  },
+  "hcp_universe": {
+    "rows": 131504,
+    "columns": 13,
+    "missing_columns": 7,
+    "high_missing_columns": 3,
+    "duplicate_rows": 0,
+    "zero_variance_columns": 0
+  },
+  "call_activity": {
+    "rows": 225101,
+    "columns": 26,
+    "missing_columns": 13,
+    "high_missing_columns": 7,
+    "duplicate_rows": 0,
+    "zero_variance_columns": 0
+  },
+  "ngd_official": {
+    "rows": 24823,
+    "columns": 35,
+    "missing_columns": 5,
+    "high_missing_columns": 1,
+    "duplicate_rows": 0,
+    "zero_variance_columns": 0
+  },
+  "sample_ll_dtp": {
+    "rows": 58066,
+    "columns": 18,
+    "missing_columns": 2,
+    "high_missing_columns": 0,
+    "duplicate_rows": 0,
+    "zero_variance_columns": 0
+  },
+  "territory_call_summary": {
+    "rows": 19742,
+    "columns": 13,
+    "missing_columns": 4,
+    "high_missing_columns": 0,
+    "duplicate_rows": 0,
+    "zero_variance_columns": 0
+  },
+  "call_attainment_territory": {
+    "rows": 90,
+    "columns": 18,
+    "missing_columns": 0,
+    "high_missing_columns": 0,
+    "duplicate_rows": 0,
+    "zero_variance_columns": 0
+  },
+  "call_attainment_tier": {
+    "rows": 603,
+    "columns": 18,
+    "missing_columns": 2,
+    "high_missing_columns": 1,
+    "duplicate_rows": 0,
+    "zero_variance_columns": 0
+  }
+}

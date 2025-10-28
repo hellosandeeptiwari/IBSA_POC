@@ -1,0 +1,275 @@
+{
+  "table_name": "Reporting_BI_Sample_LL_DTP",
+  "file_info": {
+    "size_mb": 7.35,
+    "modified": "2025-10-13 17:46:32"
+  },
+  "row_count": "58066",
+  "column_count": 18,
+  "memory_usage_mb": 6.65,
+  "columns": [
+    {
+      "column_name": "TerritoryId",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 81,
+      "sample_values": [
+        10001001,
+        10001001,
+        10001001
+      ],
+      "potential_key": false,
+      "data_category": "identifier"
+    },
+    {
+      "column_name": "TerritoryName",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 82,
+      "sample_values": [
+        "Boston MA",
+        "Boston MA",
+        "Boston MA"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "RegionId",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 7,
+      "sample_values": [
+        100010,
+        100010,
+        100010
+      ],
+      "potential_key": false,
+      "data_category": "identifier"
+    },
+    {
+      "column_name": "RegionName",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 7,
+      "sample_values": [
+        "Northeast",
+        "Northeast",
+        "Northeast"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "RepName",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 77,
+      "sample_values": [
+        "Nicholas Soares",
+        "Nicholas Soares",
+        "Nicholas Soares"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "ProductName",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 5,
+      "sample_values": [
+        "Flector",
+        "Flector",
+        "Flector"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "Samples",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 1,
+      "sample_values": [
+        0,
+        0,
+        0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "LunchLearn",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 72,
+      "sample_values": [
+        0,
+        0,
+        3
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "DTPShipped",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 1,
+      "sample_values": [
+        0,
+        0,
+        0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "Value",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 72,
+      "sample_values": [
+        0,
+        0,
+        3
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "HCPStaffIPV",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 4,
+      "sample_values": [
+        "HCP In Person",
+        "HCP In Person",
+        "HCP In Person"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "HCPStaff",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 2,
+      "sample_values": [
+        "HCP Calls",
+        "HCP Calls",
+        "HCP Calls"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "TimePeriod",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 3,
+      "sample_values": [
+        "Q1 2025",
+        "Q1 2025",
+        "Q2 2025"
+      ],
+      "potential_key": false,
+      "data_category": "temporal"
+    },
+    {
+      "column_name": "Label",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 1,
+      "sample_values": [
+        "Lunch & Learn",
+        "Lunch & Learn",
+        "Lunch & Learn"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "SortingOrder",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 3,
+      "sample_values": [
+        4,
+        4,
+        5
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "CNXTerritoryRole",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 2,
+      "sample_values": [
+        "Core",
+        "Core",
+        "Core"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "MyTarget",
+      "data_type": "bool",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 2,
+      "sample_values": [
+        false,
+        true,
+        false
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "BiInclude",
+      "data_type": "object",
+      "null_count": 780,
+      "null_percentage": 7.8,
+      "unique_values": 1,
+      "sample_values": [
+        true,
+        true,
+        true
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    }
+  ],
+  "potential_primary_keys": [],
+  "identifier_columns": [
+    "TerritoryId",
+    "RegionId"
+  ],
+  "date_columns": [
+    "TimePeriod"
+  ],
+  "measure_columns": [
+    "Value"
+  ]
+}

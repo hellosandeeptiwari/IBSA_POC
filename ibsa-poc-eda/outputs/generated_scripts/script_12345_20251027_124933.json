@@ -1,0 +1,127 @@
+{
+  "hcp_id": "12345",
+  "scenario": "retention",
+  "priority": "HIGH",
+  "predictions": {
+    "tirosint_call_success_prob": 0.78,
+    "tirosint_prescription_lift": -5.2,
+    "tirosint_ngd": "DECLINER",
+    "flector_call_success_prob": 0.45,
+    "licart_call_success_prob": 0.62
+  },
+  "opening": {
+    "greeting": "Good {time_of_day}, Dr. {hcp_name}. Thank you for taking the time to meet with me today.",
+    "purpose": "I wanted to discuss {product_focus} and understand how we can better support your practice. I noticed your {product_focus} prescriptions have declined by approximately {trx_decline_pct}% recently, and I'd like to learn more about your current treatment approach.",
+    "tone": "Professional, data-driven, consultative"
+  },
+  "talking_points": [
+    {
+      "point_id": 1,
+      "topic": "Acknowledge Change & Seek Understanding",
+      "message": "I see that you've been prescribing {competitive_threat} more frequently. Could you share what's driving this change? Understanding your perspective helps me ensure we're addressing your patients' needs.",
+      "approved_content_refs": []
+    },
+    {
+      "point_id": 2,
+      "topic": "Reinforce Value Proposition",
+      "message": "Based on your specialty in {specialty}, {product_focus} may offer specific benefits for certain patient populations. [INSERT PRODUCT-SPECIFIC APPROVED MESSAGING FROM LIBRARY]",
+      "approved_content_refs": [
+        "TIR-MSG-001",
+        "TIR-MSG-002",
+        "FLE-MSG-001",
+        "LIC-MSG-001"
+      ]
+    },
+    {
+      "point_id": 3,
+      "topic": "Clinical Evidence",
+      "message": "Recent studies have demonstrated [INSERT CLINICAL CLAIMS FROM LIBRARY]. This may be relevant for patients who are not optimally controlled on current therapy.",
+      "approved_content_refs": [
+        "TIR-CLI-001",
+        "TIR-CLI-002",
+        "FLE-CLI-001",
+        "LIC-CLI-001"
+      ]
+    },
+    {
+      "point_id": 4,
+      "topic": "Address Competitive Positioning",
+      "message": "I understand {competitive_threat} may have certain advantages. However, {product_focus} offers [UNIQUE DIFFERENTIATORS]. For patients with [SPECIFIC NEEDS], this could make a meaningful difference.",
+      "approved_content_refs": []
+    }
+  ],
+  "objection_handlers": {
+    "price_objection": {
+      "objection": "Your product is more expensive than generics/competitors",
+      "response": "[USE APPROVED OBJECTION HANDLER: TIR-OBJ-001 or GEN-OBJ-001]",
+      "approved_content_refs": [
+        "TIR-OBJ-001",
+        "GEN-OBJ-001"
+      ]
+    },
+    "efficacy_question": {
+      "objection": "I'm not seeing better results with your product",
+      "response": "I appreciate that feedback. Could you tell me more about the patient population you're treating? [PRODUCT] may be particularly beneficial for patients with [SPECIFIC CHARACTERISTICS]. Let's discuss whether there might be select patients where [PRODUCT] could be a good fit.",
+      "approved_content_refs": [
+        "TIR-CLI-001",
+        "TIR-CLI-002"
+      ]
+    },
+    "satisfied_with_current": {
+      "objection": "I'm satisfied with current therapy options",
+      "response": "That's great to hear your patients are doing well. I'm not suggesting changing all patients, but rather keeping [PRODUCT] as an option for those who may not be optimally controlled or have specific needs. Would you be open to considering it for select cases?",
+      "approved_content_refs": []
+    }
+  },
+  "call_to_action": "",
+  "next_steps": [
+    "Leave product samples and dosing information",
+    "Send clinical study reprints via email",
+    "Schedule follow-up call/visit in 30 days",
+    "Provide direct contact for questions",
+    "Monitor TRx data for changes"
+  ],
+  "required_disclaimers": [
+    "prescribing_info",
+    "individual_results",
+    "adverse_events"
+  ],
+  "compliance_verified": false,
+  "approval_sources": [
+    "MLR-2024-TIR-004",
+    "MLR-2024-TIR-003",
+    "MLR-2024-TIR-006",
+    "MLR-2024-TIR-005",
+    "MLR-2024-TIR-001"
+  ],
+  "compliance_result": {
+    "is_compliant": false,
+    "violations": [
+      "Fair balance violation: benefits without risks"
+    ],
+    "severity": "LOW",
+    "prohibited_terms_found": [],
+    "missing_disclaimers": [],
+    "off_label_detected": false,
+    "fair_balance_issues": [
+      "Benefits mentioned without corresponding safety information"
+    ]
+  },
+  "template_used": "retention",
+  "rag_content_used": [
+    "TIR-CLI-002",
+    "TIR-CLI-001",
+    "TIR-OBJ-001",
+    "TIR-SAF-001",
+    "TIR-MSG-001"
+  ],
+  "gpt4_enhanced": true,
+  "generation_method": "template_rag_gpt4",
+  "generation_time": 17.788005,
+  "estimated_cost": 0.0004764,
+  "generated_at": "2025-10-27T12:49:33.447977",
+  "model_versions": {
+    "phase6_models": "20251027",
+    "gpt4": "gpt-4o-mini"
+  }
+}

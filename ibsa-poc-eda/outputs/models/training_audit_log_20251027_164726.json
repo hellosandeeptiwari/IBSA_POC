@@ -1,0 +1,117 @@
+{
+  "created_at": "2025-10-27T16:41:00.579977",
+  "random_seed": 42,
+  "library_versions": {
+    "optuna": true,
+    "xgboost": true,
+    "shap": false
+  },
+  "training_history": [
+    {
+      "step": "data_loading",
+      "timestamp": "2025-10-27T16:41:16.928390",
+      "features_loaded": 887561,
+      "targets_loaded": 887561,
+      "selected_features": 118
+    },
+    {
+      "model": "Tirosint_call_success",
+      "timestamp": "2025-10-27T16:42:15.409274",
+      "metrics": {
+        "accuracy": 0.3139094038183119,
+        "precision": 0.022557915136182667,
+        "recall": 0.6908368512540353,
+        "f1": 0.04368924415409017,
+        "roc_auc": 0.49856618282537446
+      },
+      "training_time": 58.400217
+    },
+    {
+      "model": "Tirosint_prescription_lift",
+      "timestamp": "2025-10-27T16:42:31.790091",
+      "metrics": {
+        "mae": 32.51522842921653,
+        "rmse": 52.50210352965508,
+        "r2": -0.001965873315719513
+      },
+      "training_time": 16.27861
+    },
+    {
+      "model": "Tirosint_ngd_category",
+      "timestamp": "2025-10-27T16:43:25.655775",
+      "metrics": {
+        "accuracy": 0.22114436689143893,
+        "precision_macro": 0.33375463588315224,
+        "recall_macro": 0.3328144205388673,
+        "f1_macro": 0.1415775273360165
+      },
+      "training_time": 53.775362
+    },
+    {
+      "model": "Flector_call_success",
+      "timestamp": "2025-10-27T16:44:18.260237",
+      "metrics": {
+        "accuracy": 0.8909600986969969,
+        "precision": 0.001251433934716863,
+        "recall": 0.10619469026548672,
+        "f1": 0.0024737167594310453,
+        "roc_auc": 0.4941541965527523
+      },
+      "training_time": 52.533531
+    },
+    {
+      "model": "Flector_prescription_lift",
+      "timestamp": "2025-10-27T16:44:32.389106",
+      "metrics": {
+        "mae": 0.0,
+        "rmse": 0.0,
+        "r2": 1.0
+      },
+      "training_time": 14.029961
+    },
+    {
+      "model": "Flector_ngd_category",
+      "timestamp": "2025-10-27T16:45:24.007056",
+      "metrics": {
+        "accuracy": 0.29551638471548564,
+        "precision_macro": 0.33327585240000235,
+        "recall_macro": 0.3398196148977665,
+        "f1_macro": 0.15389583193423037
+      },
+      "training_time": 51.534709
+    },
+    {
+      "model": "Licart_call_success",
+      "timestamp": "2025-10-27T16:46:20.122797",
+      "metrics": {
+        "accuracy": 0.8601736210869063,
+        "precision": 0.0022363178010896966,
+        "recall": 0.1632047477744807,
+        "f1": 0.004412177610204164,
+        "roc_auc": 0.5110852991456198
+      },
+      "training_time": 56.018236
+    },
+    {
+      "model": "Licart_prescription_lift",
+      "timestamp": "2025-10-27T16:46:35.570439",
+      "metrics": {
+        "mae": 0.0,
+        "rmse": 0.0,
+        "r2": 1.0
+      },
+      "training_time": 15.352218
+    },
+    {
+      "model": "Licart_ngd_category",
+      "timestamp": "2025-10-27T16:47:26.444740",
+      "metrics": {
+        "accuracy": 0.6109806042374362,
+        "precision_macro": 0.3331316050558925,
+        "recall_macro": 0.32145878981312215,
+        "f1_macro": 0.2551850500637325
+      },
+      "training_time": 50.779178
+    }
+  ]
+}

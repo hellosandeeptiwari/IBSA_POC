@@ -1,0 +1,688 @@
+{
+  "table_name": "Reporting_BI_PrescriberPaymentPlanSummary",
+  "file_info": {
+    "size_mb": 1188.53,
+    "modified": "2025-10-13 21:39:30"
+  },
+  "row_count": "~653,721",
+  "column_count": 47,
+  "memory_usage_mb": 18.18,
+  "columns": [
+    {
+      "column_name": "RegionId",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 7,
+      "sample_values": [
+        100030,
+        100030,
+        100030
+      ],
+      "potential_key": false,
+      "data_category": "identifier"
+    },
+    {
+      "column_name": "RegionName",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 7,
+      "sample_values": [
+        "Midwest",
+        "Midwest",
+        "Midwest"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "TerritoryId",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 88,
+      "sample_values": [
+        10003070,
+        10003070,
+        10003070
+      ],
+      "potential_key": false,
+      "data_category": "identifier"
+    },
+    {
+      "column_name": "TerritoryName",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 90,
+      "sample_values": [
+        "Tele-Sales 3 - Midwest",
+        "Tele-Sales 3 - Midwest",
+        "Tele-Sales 3 - Midwest"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "PrescriberId",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 849,
+      "sample_values": [
+        6220114,
+        6220114,
+        7146434
+      ],
+      "potential_key": false,
+      "data_category": "identifier"
+    },
+    {
+      "column_name": "PrescriberName",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 731,
+      "sample_values": [
+        "AMY HILL",
+        "AMY HILL",
+        "AMY HILL"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "Address",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 841,
+      "sample_values": [
+        "2580 MICHIGAN RD",
+        "2580 MICHIGAN RD",
+        "6 WESTPORT CT"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "City",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 643,
+      "sample_values": [
+        "MADISON",
+        "MADISON",
+        "BLOOMINGTON"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "State",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 51,
+      "sample_values": [
+        "IN",
+        "IN",
+        "IL"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "Zipcode",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 784,
+      "sample_values": [
+        47250,
+        47250,
+        61704
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "Specialty",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 38,
+      "sample_values": [
+        "PHYSICIAN ASSISTANT",
+        "PHYSICIAN ASSISTANT",
+        "NURSE PRACTITIONER"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "Title",
+      "data_type": "object",
+      "null_count": 6070,
+      "null_percentage": 60.7,
+      "unique_values": 5,
+      "sample_values": [
+        "MD",
+        "MD",
+        "MD"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "PrimaryProduct",
+      "data_type": "object",
+      "null_count": 7582,
+      "null_percentage": 75.82,
+      "unique_values": 2,
+      "sample_values": [
+        "P1 Tirosint",
+        "P1 Tirosint",
+        "P1 Tirosint"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "SecondaryProduct",
+      "data_type": "object",
+      "null_count": 8872,
+      "null_percentage": 88.72,
+      "unique_values": 3,
+      "sample_values": [
+        "P2 Flector;P3 Licart",
+        "P2 Flector;P3 Licart",
+        "P2 Flector;P3 Licart"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "LicartTargetFlag",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 2,
+      "sample_values": [
+        "N",
+        "N",
+        "N"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "LicartTargetTier",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 3,
+      "sample_values": [
+        "NON-TARGET",
+        "NON-TARGET",
+        "NON-TARGET"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "FlectorTargetFlag",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 1,
+      "sample_values": [
+        "N",
+        "N",
+        "N"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "FlectorTargetTier",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 1,
+      "sample_values": [
+        "NON-TARGET",
+        "NON-TARGET",
+        "NON-TARGET"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "TirosintTargetFlag",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 2,
+      "sample_values": [
+        "N",
+        "N",
+        "N"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "TirosintTargetTier",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 5,
+      "sample_values": [
+        "NON-TARGET",
+        "NON-TARGET",
+        "NON-TARGET"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "NPINumber",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 849,
+      "sample_values": [
+        1609848803,
+        1609848803,
+        1629513965
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "Market",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 2,
+      "sample_values": [
+        "Levo",
+        "Levo",
+        "Levo"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "ProductFamily",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 11,
+      "sample_values": [
+        "Armour Thyroid",
+        "Synthroid",
+        "Armour Thyroid"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "ProductGroupName",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 15,
+      "sample_values": [
+        "Armour Thyroid",
+        "Synthroid",
+        "Armour Thyroid"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "TimePeriod",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 3,
+      "sample_values": [
+        "Q2 2025",
+        "Q2 2025",
+        "Q2 2025"
+      ],
+      "potential_key": false,
+      "data_category": "temporal"
+    },
+    {
+      "column_name": "PayerName",
+      "data_type": "object",
+      "null_count": 6,
+      "null_percentage": 0.06,
+      "unique_values": 473,
+      "sample_values": [
+        "ALL OTHER THIRD PARTY",
+        "RXBENEFITS INC",
+        "HEALTH ALLIANCE MED PLAN"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "PaymentType",
+      "data_type": "object",
+      "null_count": 6,
+      "null_percentage": 0.06,
+      "unique_values": 4,
+      "sample_values": [
+        "COMMERCIAL",
+        "COMMERCIAL",
+        "COMMERCIAL"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "PlanName",
+      "data_type": "object",
+      "null_count": 6,
+      "null_percentage": 0.06,
+      "unique_values": 1343,
+      "sample_values": [
+        "ALL OTHER THIRD PARTY",
+        "RXBENEFITS INC-CAREMARK",
+        "HEALTH ALLIANCE MED PLAN"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "TRX",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 47,
+      "sample_values": [
+        2,
+        1,
+        1
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "NRX",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 24,
+      "sample_values": [
+        1,
+        1,
+        1
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "PDRPFlag",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 2,
+      "sample_values": [
+        "NO",
+        "NO",
+        "NO"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "TRXWithPDRP",
+      "data_type": "float64",
+      "null_count": 310,
+      "null_percentage": 3.1,
+      "unique_values": 47,
+      "sample_values": [
+        2.0,
+        1.0,
+        1.0
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "NRXWithPDRP",
+      "data_type": "float64",
+      "null_count": 310,
+      "null_percentage": 3.1,
+      "unique_values": 24,
+      "sample_values": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "TQTY",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 87,
+      "sample_values": [
+        6,
+        0,
+        2
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "NQTY",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 48,
+      "sample_values": [
+        3,
+        0,
+        2
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "TQTYWithPDRP",
+      "data_type": "float64",
+      "null_count": 310,
+      "null_percentage": 3.1,
+      "unique_values": 87,
+      "sample_values": [
+        6.0,
+        0.0,
+        2.0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "NQTYWithPDRP",
+      "data_type": "float64",
+      "null_count": 310,
+      "null_percentage": 3.1,
+      "unique_values": 48,
+      "sample_values": [
+        3.0,
+        0.0,
+        2.0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "MyTarget",
+      "data_type": "object",
+      "null_count": 6616,
+      "null_percentage": 66.16,
+      "unique_values": 2,
+      "sample_values": [
+        true,
+        true,
+        true
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "CNXTerritoryRole",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 2,
+      "sample_values": [
+        "Core",
+        "Core",
+        "Core"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "BiInclude",
+      "data_type": "object",
+      "null_count": 516,
+      "null_percentage": 5.16,
+      "unique_values": 1,
+      "sample_values": [
+        true,
+        true,
+        true
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "OverlayFlag",
+      "data_type": "bool",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 2,
+      "sample_values": [
+        true,
+        true,
+        true
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "OverlayTerritoryFlag",
+      "data_type": "bool",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 2,
+      "sample_values": [
+        false,
+        false,
+        false
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "CoreOverlayTerritoryTQTY",
+      "data_type": "float64",
+      "null_count": 9918,
+      "null_percentage": 99.18,
+      "unique_values": 22,
+      "sample_values": [
+        19.0,
+        24.0,
+        7.0
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "CoreSumTQTY",
+      "data_type": "float64",
+      "null_count": 516,
+      "null_percentage": 5.16,
+      "unique_values": 87,
+      "sample_values": [
+        6.0,
+        0.0,
+        2.0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "OverlaySumTQTY",
+      "data_type": "float64",
+      "null_count": 420,
+      "null_percentage": 4.2,
+      "unique_values": 87,
+      "sample_values": [
+        6.0,
+        0.0,
+        2.0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "FromDate",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 3,
+      "sample_values": [
+        "2025-04-01",
+        "2025-04-01",
+        "2025-04-01"
+      ],
+      "potential_key": false,
+      "data_category": "temporal"
+    },
+    {
+      "column_name": "ToDate",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 3,
+      "sample_values": [
+        "2025-06-30",
+        "2025-06-30",
+        "2025-06-30"
+      ],
+      "potential_key": false,
+      "data_category": "temporal"
+    }
+  ],
+  "potential_primary_keys": [],
+  "identifier_columns": [
+    "RegionId",
+    "TerritoryId",
+    "PrescriberId",
+    "NPINumber"
+  ],
+  "date_columns": [
+    "TimePeriod",
+    "FromDate",
+    "ToDate"
+  ],
+  "measure_columns": [
+    "TRX",
+    "NRX",
+    "TRXWithPDRP",
+    "NRXWithPDRP"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "coverage": {
+    "hcps_with_payer_data": 173854
+  },
+  "payer_distribution": {
+    "Commercial": {
+      "count": 367112,
+      "percentage": 99.95
+    },
+    "Medicare": {
+      "count": 168,
+      "percentage": 0.05
+    }
+  },
+  "trx_by_payer": {},
+  "statistical_tests": {},
+  "recommendations": []
+}

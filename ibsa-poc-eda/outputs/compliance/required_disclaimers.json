@@ -1,0 +1,13 @@
+{
+  "updated_at": "2025-10-27T11:43:16.542185",
+  "total_disclaimers": 6,
+  "disclaimers": {
+    "prescribing_info": "See full Prescribing Information for complete safety profile.",
+    "individual_results": "Individual results may vary. Not all patients will respond the same way.",
+    "contraindications": "Please review contraindications before prescribing.",
+    "adverse_events": "Report adverse events to IBSA Pharma at 1-800-XXX-XXXX or FDA at 1-800-FDA-1088.",
+    "indication": "This information is for healthcare professionals only and is not intended for patients.",
+    "fair_balance": "Like all medications, [PRODUCT] may cause side effects. Please review safety information."
+  },
+  "note": "All call scripts must include relevant disclaimers"
+}

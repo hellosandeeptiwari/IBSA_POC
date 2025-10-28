@@ -1,0 +1,125 @@
+================================================================================
+IBSA FEATURE ENGINEERING DOCUMENTATION
+================================================================================
+
+Generated: 2025-10-14 17:56:17
+
+Total HCPs: 1,313,397
+Total Features: 105
+
+FEATURE CATEGORIES:
+  1. HCP Demographic Features (20)
+  2. Prescribing Behavior Features (30)
+  3. Engagement & Call Activity Features (25)
+  4. EDA Module Insight Features (30) - NEW!
+     - NGD Momentum & Growth (Module 9)
+     - RFM Segmentation (Module 5)
+     - Churn Risk & Retention (Module 6)
+  5. Advanced Derived Features (25)
+
+FEATURE LIST:
+  2. Specialty
+  3. is_endocrinology
+  4. is_family_medicine
+  5. is_internal_medicine
+  6. is_pain_management
+  7. is_target_specialty
+  8. State
+  9. is_california
+  10. is_texas
+  11. is_florida
+  12. is_newyork
+  13. region_northeast
+  14. is_np_pa
+  15. is_md_do
+  16. is_specialist
+  17. is_primary_care
+  18. is_mid_level
+  19. has_specialty
+  20. has_state
+  21. profile_completeness_score
+  22. is_active_profile
+  23. is_complete_profile
+  24. trx_current_qtd
+  25. trx_prior_qtd
+  26. trx_qtd_growth
+  27. nrx_current_qtd
+  28. nrx_prior_qtd
+  29. nrx_qtd_growth
+  30. is_active_prescriber
+  31. is_new_patient_acquirer
+  32. total_calls
+  33. call_frequency_low
+  34. call_frequency_medium
+  35. call_frequency_high
+  36. has_been_called
+  37. calls_per_month
+  38. call_frequency_quintile
+  39. is_over_serviced
+  40. is_under_serviced
+  41. total_samples_received
+  42. calls_with_samples
+  43. sample_acceptance_rate
+  44. avg_samples_per_call
+  45. accepts_samples
+  46. high_sample_acceptor
+  47. low_sample_acceptor
+  48. sample_volume_quintile
+  49. engagement_score
+  50. high_engagement
+  51. medium_engagement
+  52. low_engagement
+  53. is_engaged
+  54. ngd_is_new
+  55. ngd_is_growth
+  56. ngd_is_decline
+  57. ngd_is_stable
+  58. ngd_momentum_score
+  59. is_new_growth_hcp
+  60. rfm_recency_score
+  61. rfm_frequency_score
+  62. rfm_monetary_score
+  63. rfm_composite_score
+  64. rfm_segment_champions
+  65. rfm_segment_loyal
+  66. rfm_segment_at_risk
+  67. rfm_segment_lost
+  68. rfm_segment_potential
+  69. churn_risk_score
+  70. churn_risk_high
+  71. churn_risk_medium
+  72. churn_risk_low
+  73. retention_probability
+  74. prescription_persistence_score
+  75. ibsa_share
+  76. ibsa_share_high
+  77. ibsa_share_medium
+  78. ibsa_share_low
+  79. ibsa_share_zero
+  80. competitive_pressure
+  81. comp_pressure_extreme
+  82. comp_pressure_high
+  83. comp_strength_dominant
+  84. comp_strength_strong
+  85. comp_strength_weak
+  86. ta_thyroid_endocrine
+  87. ta_primary_care
+  88. ta_pain_management
+  89. ta_mid_level
+  90. growth_opportunity
+  91. high_growth_opportunity
+  92. comp_sit_not_using_ibsa
+  93. comp_sit_competitor_dominant
+  94. hcp_value_score
+  95. hcp_value_quintile
+  96. is_high_value
+  97. is_medium_value
+  98. is_low_value
+  99. potential_score
+  100. high_potential
+  101. untapped_opportunity
+  102. engagement_x_value
+  103. optimal_target
+  104. sample_acceptance_x_target
+  105. priority_tier1
+  106. priority_tier2

@@ -1,0 +1,32 @@
+{
+  "created_at": "2025-10-27T11:47:05.448559",
+  "overview": "Guide for using call script templates",
+  "template_selection": {
+    "retention": "Use for HCPs with declining IBSA share (660 identified in EDA)",
+    "growth": "Use for high-volume HCPs with low IBSA share (264 identified)",
+    "optimization": "Use for HCPs receiving samples with low ROI (48.5% of HCPs)",
+    "introduction": "Use for new HCPs or first-time calls"
+  },
+  "dynamic_slot_filling": {
+    "description": "Replace placeholder slots with actual HCP data",
+    "example": "{hcp_name} → Dr. John Smith",
+    "required_data_sources": [
+      "HCP profile (name, specialty, practice)",
+      "Prescription data (current TRx, trends)",
+      "Sample data (quantity provided, ROI)",
+      "Market intelligence (IBSA share, competitive threats)",
+      "Model predictions (from Phase 6 ML models)"
+    ]
+  },
+  "compliance_integration": {
+    "approved_content": "Always use approved content from compliance library (Phase 6B)",
+    "required_disclaimers": "Include all relevant disclaimers at end of script",
+    "prohibited_terms": "Never use terms from prohibited_terms.json",
+    "approval_tracking": "Log content used for audit trail"
+  },
+  "personalization_options": {
+    "manual": "Rep manually fills slots with HCP data",
+    "semi_automated": "CRM system pre-fills known data fields",
+    "fully_automated": "RAG + GPT-4 system generates complete script (Phase 6D)"
+  }
+}

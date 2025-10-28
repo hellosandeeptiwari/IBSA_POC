@@ -1,0 +1,55 @@
+{
+  "market_share_distribution": {
+    "metric": "TRXMktShare4",
+    "mean": 92.24,
+    "median": 100.0,
+    "std": 22.86,
+    "min": 0.0,
+    "max": 100.0
+  },
+  "competitive_segments": {
+    "IBSA Dominant (>50%)": {
+      "count": 48246,
+      "percentage": 93.61
+    },
+    "Unknown": {
+      "count": 37217,
+      "percentage": 72.21
+    },
+    "Competitor Dominant (<25%)": {
+      "count": 1489,
+      "percentage": 2.89
+    },
+    "Zero IBSA Share": {
+      "count": 1305,
+      "percentage": 2.53
+    },
+    "Balanced (25-50%)": {
+      "count": 499,
+      "percentage": 0.97
+    }
+  },
+  "share_trends": {
+    "declining_hcps": 2376,
+    "declining_percentage": 2.68,
+    "growing_hcps": 2796,
+    "growing_percentage": 3.15,
+    "stable_hcps": 83584
+  },
+  "at_risk_hcps": {
+    "count": 660,
+    "avg_share_loss": -10.8,
+    "total_trx_at_risk": 2847
+  },
+  "opportunity_hcps": {
+    "count": 264,
+    "avg_current_share": 12.86,
+    "total_trx_opportunity": 1566,
+    "potential_share_gain": 87.14
+  },
+  "statistical_tests": {},
+  "recommendations": [
+    "URGENT: 660 high-value HCPs are losing share - competitive threat!",
+    "OPPORTUNITY: 264 high-volume HCPs with <25% IBSA share - growth targets!"
+  ]
+}

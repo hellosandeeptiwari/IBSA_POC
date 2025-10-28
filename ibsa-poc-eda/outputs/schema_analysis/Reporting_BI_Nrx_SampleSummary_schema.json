@@ -1,0 +1,900 @@
+{
+  "table_name": "Reporting_BI_Nrx_SampleSummary",
+  "file_info": {
+    "size_mb": 52.94,
+    "modified": "2025-10-13 17:46:29"
+  },
+  "row_count": "254872",
+  "column_count": 61,
+  "memory_usage_mb": 9.47,
+  "columns": [
+    {
+      "column_name": "AccountId",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 4754,
+      "sample_values": [
+        "                  ",
+        "                  ",
+        "001f200001pAErAAAW"
+      ],
+      "potential_key": false,
+      "data_category": "identifier"
+    },
+    {
+      "column_name": "RegionId",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 4,
+      "sample_values": [
+        100010,
+        100010,
+        100010
+      ],
+      "potential_key": false,
+      "data_category": "identifier"
+    },
+    {
+      "column_name": "RegionName",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 4,
+      "sample_values": [
+        "Northeast",
+        "Northeast",
+        "Northeast"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "TerritoryId",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 40,
+      "sample_values": [
+        10001001,
+        10001001,
+        10001001
+      ],
+      "potential_key": false,
+      "data_category": "identifier"
+    },
+    {
+      "column_name": "TerritoryName",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 40,
+      "sample_values": [
+        "Boston MA",
+        "Boston MA",
+        "Boston MA"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "HcpName",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 7731,
+      "sample_values": [
+        "ADNAN EL-AMINE",
+        "ALICIA YANAC",
+        "ALLISON KIMBALL"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "SpecialtyDescription",
+      "data_type": "object",
+      "null_count": 1,
+      "null_percentage": 0.01,
+      "unique_values": 85,
+      "sample_values": [
+        "INTERNAL MEDICINE",
+        "INTERNAL MEDICINE",
+        "ENDOCRINOLOGY, DIABETES & METABOLISM"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "HcpCalls",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 16,
+      "sample_values": [
+        0,
+        0,
+        0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "TimePeriod",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 3,
+      "sample_values": [
+        "Q1 2025",
+        "Q1 2025",
+        "Q2 2025"
+      ],
+      "potential_key": false,
+      "data_category": "temporal"
+    },
+    {
+      "column_name": "PDRPOptOut",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 2,
+      "sample_values": [
+        "NO",
+        "NO",
+        "NO"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "SampleCalls",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 11,
+      "sample_values": [
+        0,
+        0,
+        0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "Sample/NRX",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 59,
+      "sample_values": [
+        0,
+        0,
+        0
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "TotalSamples",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 139,
+      "sample_values": [
+        0,
+        0,
+        0
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "TotalNRX",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 63,
+      "sample_values": [
+        0,
+        2,
+        2
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "Samples/Call",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 63,
+      "sample_values": [
+        0,
+        0,
+        0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "Tirosint Caps NRX",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 54,
+      "sample_values": [
+        0,
+        2,
+        2
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "Tirosint Caps Samples",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 117,
+      "sample_values": [
+        0,
+        0,
+        0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "Tirosint Sol NRX",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 24,
+      "sample_values": [
+        0,
+        0,
+        0
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "Tirosint Sol Samples",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 56,
+      "sample_values": [
+        0,
+        0,
+        0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "Flector NRX",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 10,
+      "sample_values": [
+        0,
+        0,
+        0
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "Flector Samples",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 29,
+      "sample_values": [
+        0,
+        0,
+        0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "Licart NRX",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 16,
+      "sample_values": [
+        0,
+        0,
+        0
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "Licart Samples",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 46,
+      "sample_values": [
+        0,
+        0,
+        0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "Sample/NQTY",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 43,
+      "sample_values": [
+        0,
+        0,
+        0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "TotalNQTY",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 107,
+      "sample_values": [
+        0,
+        2,
+        4
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "Tirosint Caps NQTY",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 95,
+      "sample_values": [
+        0,
+        2,
+        4
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "Tirosint Sol NQTY",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 40,
+      "sample_values": [
+        0,
+        0,
+        0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "Flector NQTY",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 11,
+      "sample_values": [
+        0,
+        0,
+        0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "Licart NQTY",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 22,
+      "sample_values": [
+        0,
+        0,
+        0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "Sample/NRX PDRP",
+      "data_type": "float64",
+      "null_count": 344,
+      "null_percentage": 3.44,
+      "unique_values": 59,
+      "sample_values": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "Total NRX PDRP",
+      "data_type": "float64",
+      "null_count": 344,
+      "null_percentage": 3.44,
+      "unique_values": 63,
+      "sample_values": [
+        0.0,
+        2.0,
+        2.0
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "Tirosint Caps NRX PDRP",
+      "data_type": "float64",
+      "null_count": 344,
+      "null_percentage": 3.44,
+      "unique_values": 53,
+      "sample_values": [
+        0.0,
+        2.0,
+        2.0
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "Tirosint Sol NRX PDRP",
+      "data_type": "float64",
+      "null_count": 344,
+      "null_percentage": 3.44,
+      "unique_values": 23,
+      "sample_values": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "Flector NRX PDRP",
+      "data_type": "float64",
+      "null_count": 344,
+      "null_percentage": 3.44,
+      "unique_values": 9,
+      "sample_values": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "Licart NRX PDRP",
+      "data_type": "float64",
+      "null_count": 344,
+      "null_percentage": 3.44,
+      "unique_values": 15,
+      "sample_values": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "Sample/NQTY PDRP",
+      "data_type": "float64",
+      "null_count": 344,
+      "null_percentage": 3.44,
+      "unique_values": 43,
+      "sample_values": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "Total NQTY PDRP",
+      "data_type": "float64",
+      "null_count": 344,
+      "null_percentage": 3.44,
+      "unique_values": 105,
+      "sample_values": [
+        0.0,
+        2.0,
+        4.0
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "Tirosint Caps NQTY PDRP",
+      "data_type": "float64",
+      "null_count": 344,
+      "null_percentage": 3.44,
+      "unique_values": 94,
+      "sample_values": [
+        0.0,
+        2.0,
+        4.0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "Tirosint Sol NQTY PDRP",
+      "data_type": "float64",
+      "null_count": 344,
+      "null_percentage": 3.44,
+      "unique_values": 38,
+      "sample_values": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "Flector NQTY PDRP",
+      "data_type": "float64",
+      "null_count": 344,
+      "null_percentage": 3.44,
+      "unique_values": 11,
+      "sample_values": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "Licart NQTY PDRP",
+      "data_type": "float64",
+      "null_count": 344,
+      "null_percentage": 3.44,
+      "unique_values": 21,
+      "sample_values": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "Tirosint Caps Samples/Tirosint Caps NRX",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 54,
+      "sample_values": [
+        0,
+        0,
+        0
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "Tirosint Sol Samples/Tirosint Sol NRX",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 31,
+      "sample_values": [
+        0,
+        0,
+        0
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "Flector Samples/Flector NRX",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 13,
+      "sample_values": [
+        0,
+        0,
+        0
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "Licart Samples/Licart NRX",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 25,
+      "sample_values": [
+        0,
+        0,
+        0
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "Tirosint Caps Samples/Tirosint Caps NRX PDRP",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 54,
+      "sample_values": [
+        0,
+        0,
+        0
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "Tirosint Sol Samples/Tirosint Sol NRX PDRP",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 31,
+      "sample_values": [
+        0,
+        0,
+        0
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "Flector Samples/Flector NRX PDRP",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 13,
+      "sample_values": [
+        0,
+        0,
+        0
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "Licart Samples/Licart NRX PDRP",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 25,
+      "sample_values": [
+        0,
+        0,
+        0
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "Tirosint Caps Samples/Tirosint Caps NQTY",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 40,
+      "sample_values": [
+        0,
+        0,
+        0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "Tirosint Sol Samples/Tirosint Sol NQTY",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 22,
+      "sample_values": [
+        0,
+        0,
+        0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "Flector Samples/Flector NQTY",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 10,
+      "sample_values": [
+        0,
+        0,
+        0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "Licart Samples/Licart NQTY",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 20,
+      "sample_values": [
+        0,
+        0,
+        0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "Tirosint Caps Samples/Tirosint Caps NQTY PDRP",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 40,
+      "sample_values": [
+        0,
+        0,
+        0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "Tirosint Sol Samples/Tirosint Sol NQTY PDRP",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 21,
+      "sample_values": [
+        0,
+        0,
+        0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "Flector Samples/Flector NQTY PDRP",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 10,
+      "sample_values": [
+        0,
+        0,
+        0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "Licart Samples/Licart NQTY PDRP",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 20,
+      "sample_values": [
+        0,
+        0,
+        0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "SortingOrder",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 3,
+      "sample_values": [
+        4,
+        4,
+        5
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "MyTarget",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 2,
+      "sample_values": [
+        0,
+        0,
+        1
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "CNXTerritoryRole",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 2,
+      "sample_values": [
+        "Core",
+        "Core",
+        "Core"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "BiInclude",
+      "data_type": "object",
+      "null_count": 4029,
+      "null_percentage": 40.29,
+      "unique_values": 1,
+      "sample_values": [
+        true,
+        true,
+        true
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    }
+  ],
+  "potential_primary_keys": [],
+  "identifier_columns": [
+    "AccountId",
+    "RegionId",
+    "TerritoryId"
+  ],
+  "date_columns": [
+    "TimePeriod"
+  ],
+  "measure_columns": [
+    "Sample/NRX",
+    "TotalSamples",
+    "TotalNRX",
+    "Tirosint Caps NRX",
+    "Tirosint Sol NRX",
+    "Flector NRX",
+    "Licart NRX",
+    "TotalNQTY",
+    "Sample/NRX PDRP",
+    "Total NRX PDRP",
+    "Tirosint Caps NRX PDRP",
+    "Tirosint Sol NRX PDRP",
+    "Flector NRX PDRP",
+    "Licart NRX PDRP",
+    "Total NQTY PDRP",
+    "Tirosint Caps Samples/Tirosint Caps NRX",
+    "Tirosint Sol Samples/Tirosint Sol NRX",
+    "Flector Samples/Flector NRX",
+    "Licart Samples/Licart NRX",
+    "Tirosint Caps Samples/Tirosint Caps NRX PDRP",
+    "Tirosint Sol Samples/Tirosint Sol NRX PDRP",
+    "Flector Samples/Flector NRX PDRP",
+    "Licart Samples/Licart NRX PDRP"
+  ]
+}

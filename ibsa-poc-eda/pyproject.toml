@@ -1,0 +1,97 @@
+   [build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ibsa-poc-eda"
+version = "1.0.0"
+description = "IBSA Pharmaceutical ML Pipeline - EDA, Feature Engineering, and Model Training"
+readme = "README.md"
+authors = [{name = "IBSA Analytics Team"}]
+license = {text = "MIT"}
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Healthcare Industry",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+]
+requires-python = ">=3.8"
+dependencies = [
+    "pyspark>=3.4.0",
+    "pandas>=1.5.0",
+    "numpy>=1.21.0",
+    "scikit-learn>=1.1.0",
+    "matplotlib>=3.5.0",
+    "seaborn>=0.11.0",
+    "plotly>=5.10.0",
+    "jupyter>=1.0.0",
+    "jupyterlab>=3.4.0",
+    "click>=8.0.0",
+    "pyyaml>=6.0",
+    "python-dotenv>=0.19.0",
+    "sqlalchemy>=1.4.0",
+    "psycopg2-binary>=2.9.0",
+    "pymongo>=4.0.0",
+    "boto3>=1.24.0",
+    "mlflow>=2.0.0",
+    "pyarrow>=8.0.0",
+    "fastparquet>=0.8.0",
+    "openpyxl>=3.0.0",
+    "xlrd>=2.0.0",
+    "requests>=2.28.0",
+    "tqdm>=4.64.0",
+    "joblib>=1.1.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=3.0.0",
+    "pytest-spark>=0.6.0",
+    "black>=22.0.0",
+    "isort>=5.10.0",
+    "flake8>=4.0.0",
+    "mypy>=0.950",
+    "pre-commit>=2.20.0",
+]
+docs = [
+    "sphinx>=5.0.0",
+    "sphinx-rtd-theme>=1.0.0",
+    "myst-parser>=0.18.0",
+]
+
+[project.scripts]
+ibsa-eda = "ibsa_pipeline.cli.eda:main"
+ibsa-features = "ibsa_pipeline.cli.features:main" 
+ibsa-model = "ibsa_pipeline.cli.model:main"
+ibsa-pipeline = "ibsa_pipeline.cli.pipeline:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.black]
+line-length = 88
+target-version = ['py38']
+include = '\.pyi?$'
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 88
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short --strict-markers"
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "spark: marks tests that require Spark",
+]

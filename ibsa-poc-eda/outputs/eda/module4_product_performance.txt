@@ -1,0 +1,13 @@
+MODULE 4: PRODUCT PERFORMANCE RESULTS
+================================================================================
+
+Analysis Date: 2025-10-13 22:36:36
+
+TIROSINT Capsules_TRx: 696,600
+TIROSINT Solution_TRx: 97,143
+FLECTOR_TRx: 11,767
+LICART_TRx: 21,865
+TIROSINT Capsules_NRx: 295,369
+TIROSINT Solution_NRx: 43,069
+FLECTOR_NRx: 6,147
+LICART_NRx: 12,921

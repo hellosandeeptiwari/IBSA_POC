@@ -1,0 +1,522 @@
+{
+  "table_name": "Reporting_BI_TerritoryPerformanceSummary",
+  "file_info": {
+    "size_mb": 694.41,
+    "modified": "2025-10-13 21:59:13"
+  },
+  "row_count": "~572,133",
+  "column_count": 35,
+  "memory_usage_mb": 12.14,
+  "columns": [
+    {
+      "column_name": "RegionId",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 8,
+      "sample_values": [
+        "100060",
+        "100040",
+        "100010"
+      ],
+      "potential_key": false,
+      "data_category": "identifier"
+    },
+    {
+      "column_name": "RegionName",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 8,
+      "sample_values": [
+        "Midatlantic",
+        "Southwest",
+        "Northeast"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "TerritoryId",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 90,
+      "sample_values": [
+        "10006013",
+        "10004020",
+        "10001001"
+      ],
+      "potential_key": false,
+      "data_category": "identifier"
+    },
+    {
+      "column_name": "TerritoryName",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 92,
+      "sample_values": [
+        "Nashville TN",
+        "NE Houston TX",
+        "Boston MA"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "PrescriberId",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 9782,
+      "sample_values": [
+        4926370,
+        6995209,
+        2350551
+      ],
+      "potential_key": false,
+      "data_category": "identifier"
+    },
+    {
+      "column_name": "State",
+      "data_type": "object",
+      "null_count": 20,
+      "null_percentage": 0.2,
+      "unique_values": 52,
+      "sample_values": [
+        "TN",
+        "TX",
+        "MA"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "PDRPFlag",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 2,
+      "sample_values": [
+        "NO",
+        "NO",
+        "NO"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "FlectorTargetFlag",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 1,
+      "sample_values": [
+        "N",
+        "N",
+        "N"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "FlectorTargetTier",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 1,
+      "sample_values": [
+        "NON-TARGET",
+        "NON-TARGET",
+        "NON-TARGET"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "LicartTargetFlag",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 2,
+      "sample_values": [
+        "N",
+        "N",
+        "N"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "LicartTargetTier",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 5,
+      "sample_values": [
+        "NON-TARGET",
+        "NON-TARGET",
+        "NON-TARGET"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "TirosintTargetFlag",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 2,
+      "sample_values": [
+        "N",
+        "N",
+        "N"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "TirosintTargetTier",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 5,
+      "sample_values": [
+        "NON-TARGET",
+        "NON-TARGET",
+        "NON-TARGET"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "Market",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 2,
+      "sample_values": [
+        "Levo",
+        "Levo",
+        "Levo"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "ProductFamily",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 13,
+      "sample_values": [
+        "NP Thyroid",
+        "NP Thyroid",
+        "Tirosint"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "ProductGroupName",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 17,
+      "sample_values": [
+        "NP Thyroid",
+        "NP Thyroid",
+        "Tirosint Caps"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "TimePeriod",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 5,
+      "sample_values": [
+        "C4 WK",
+        "C4 WK",
+        "C4 WK"
+      ],
+      "potential_key": false,
+      "data_category": "temporal"
+    },
+    {
+      "column_name": "TRXWriters",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 1,
+      "sample_values": [
+        1,
+        1,
+        1
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "TRX",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 116,
+      "sample_values": [
+        1,
+        21,
+        1
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "NRX",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 78,
+      "sample_values": [
+        0,
+        14,
+        0
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "PreviousTRX",
+      "data_type": "float64",
+      "null_count": 29,
+      "null_percentage": 0.29,
+      "unique_values": 139,
+      "sample_values": [
+        4.0,
+        94.0,
+        5.0
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "PreviousNRX",
+      "data_type": "float64",
+      "null_count": 29,
+      "null_percentage": 0.29,
+      "unique_values": 86,
+      "sample_values": [
+        1.0,
+        44.0,
+        2.0
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "STLYTRX",
+      "data_type": "float64",
+      "null_count": 55,
+      "null_percentage": 0.55,
+      "unique_values": 140,
+      "sample_values": [
+        28.0,
+        1.0,
+        1.0
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "STLYNRX",
+      "data_type": "float64",
+      "null_count": 55,
+      "null_percentage": 0.55,
+      "unique_values": 84,
+      "sample_values": [
+        11.0,
+        1.0,
+        1.0
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "PreviousTRXWriters",
+      "data_type": "float64",
+      "null_count": 29,
+      "null_percentage": 0.29,
+      "unique_values": 1,
+      "sample_values": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "STLYTRXWriters",
+      "data_type": "float64",
+      "null_count": 55,
+      "null_percentage": 0.55,
+      "unique_values": 1,
+      "sample_values": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "TQTY",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 198,
+      "sample_values": [
+        1,
+        39,
+        1
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "NQTY",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 124,
+      "sample_values": [
+        0,
+        30,
+        0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "PreviousTQTY",
+      "data_type": "float64",
+      "null_count": 29,
+      "null_percentage": 0.29,
+      "unique_values": 220,
+      "sample_values": [
+        6.0,
+        185.0,
+        11.0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "PreviousNQTY",
+      "data_type": "float64",
+      "null_count": 29,
+      "null_percentage": 0.29,
+      "unique_values": 145,
+      "sample_values": [
+        3.0,
+        88.0,
+        4.0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "STLYTQTY",
+      "data_type": "float64",
+      "null_count": 55,
+      "null_percentage": 0.55,
+      "unique_values": 228,
+      "sample_values": [
+        41.0,
+        5.0,
+        2.0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "STLYNQTY",
+      "data_type": "float64",
+      "null_count": 55,
+      "null_percentage": 0.55,
+      "unique_values": 145,
+      "sample_values": [
+        18.0,
+        5.0,
+        2.0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "MyTarget",
+      "data_type": "object",
+      "null_count": 6905,
+      "null_percentage": 69.05,
+      "unique_values": 2,
+      "sample_values": [
+        false,
+        false,
+        true
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "CNXTerritoryRole",
+      "data_type": "object",
+      "null_count": 21,
+      "null_percentage": 0.21,
+      "unique_values": 2,
+      "sample_values": [
+        "Core",
+        "Core",
+        "Core"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "BiInclude",
+      "data_type": "object",
+      "null_count": 916,
+      "null_percentage": 9.16,
+      "unique_values": 1,
+      "sample_values": [
+        true,
+        true,
+        true
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    }
+  ],
+  "potential_primary_keys": [],
+  "identifier_columns": [
+    "RegionId",
+    "TerritoryId",
+    "PrescriberId"
+  ],
+  "date_columns": [
+    "TimePeriod"
+  ],
+  "measure_columns": [
+    "TRXWriters",
+    "TRX",
+    "NRX",
+    "PreviousTRX",
+    "PreviousNRX",
+    "STLYTRX",
+    "STLYNRX",
+    "PreviousTRXWriters",
+    "STLYTRXWriters"
+  ]
+}

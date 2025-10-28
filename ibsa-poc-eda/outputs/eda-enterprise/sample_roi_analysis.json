@@ -1,0 +1,28 @@
+{
+  "coverage": {
+    "sample_records": 254872
+  },
+  "roi_distribution": {
+    "count": 25416.0,
+    "mean": 0.4289909662724572,
+    "std": 1.3418686317597346,
+    "min": 0.0,
+    "25%": 0.0,
+    "50%": 0.05660377358490566,
+    "75%": 0.3333333333333333,
+    "max": 38.0
+  },
+  "black_holes": {
+    "count": 12324,
+    "percentage": 48.49,
+    "potential_waste_usd": 616200
+  },
+  "high_roi_hcps": {
+    "count": 4699,
+    "percentage": 18.49
+  },
+  "statistical_tests": {},
+  "recommendations": [
+    "Redirect samples from 12,324 black holes to high-ROI HCPs"
+  ]
+}

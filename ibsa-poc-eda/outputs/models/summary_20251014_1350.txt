@@ -1,0 +1,52 @@
+================================================================================
+IBSA MODEL TRAINING - COMPLETE SUMMARY
+================================================================================
+
+Generated: 2025-10-14 13:50:01.145733
+
+Models Trained: 9
+
+
+Call Success:
+  accuracy: 1.0000
+  precision: 1.0000
+  recall: 1.0000
+
+Prescription Lift:
+  mae: 0.0000
+  r2: 1.0000
+
+Sample Effectiveness:
+  mae: 0.0000
+  r2: 1.0000
+
+NGD Score:
+  mae: 0.0023
+  r2: 1.0000
+
+Churn Risk:
+  accuracy: 1.0000
+  precision: 1.0000
+  recall: 1.0000
+
+Future TRx Lift:
+  mae: 0.0002
+  r2: 1.0000
+
+HCP Segment:
+  accuracy: 1.0000
+  precision: 1.0000
+  recall: 1.0000
+
+Expected ROI:
+  mae: 0.0321
+  r2: 1.0000
+
+Stacked Ensemble:
+  accuracy: 1.0000
+
+================================================================================
+ANSWERS TO YOUR QUESTIONS
+================================================================================
+
+1. Is NGD (New/Grower/Decliner) in targets?

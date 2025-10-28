@@ -1,0 +1,71 @@
+================================================================================
+IBSA TARGET VARIABLE DOCUMENTATION - REAL OUTCOMES ONLY
+================================================================================
+
+Generated: 2025-10-22 11:05:17
+
+Total HCPs: 1,313,397
+Total Targets: 3 (ALL using REAL historical outcomes)
+
+HCPs with REAL data: 346,508
+HCPs without data: 966,889
+
+================================================================================
+TARGET VARIABLES (REAL OUTCOMES ONLY - NO SYNTHETIC)
+================================================================================
+
+1. CALL_SUCCESS (Binary Classification) - REAL OUTCOMES
+   Definition: HCP showed positive TRx growth
+   Type: Binary (0/1) + Continuous Score (0-1)
+   Data Source: Prescriber Overview - Real TRx(Current) > TRx(Previous)
+   Valid HCPs: 346,508
+   Success Rate: 33.93%
+   Successful: 117557 HCPs
+
+2. PRESCRIPTION_LIFT (Regression) - REAL OUTCOMES
+   Definition: Actual TRx change from previous to current quarter
+   Type: Continuous (can be negative)
+   Data Source: Prescriber Overview - TRx(Current) - TRx(Previous)
+   Valid HCPs: 346,508
+   Mean: -0.04 TRx
+   Median: 0.00 TRx
+   Range: [-4.25, 4.00]
+   Positive Lift: 117,557 HCPs (33.9%)
+
+3. NGD_CLASSIFICATION (Multi-class) - REAL OUTCOMES
+   Definition: Industry-standard New/Growth/Decline/Stable classification
+   Type: Multi-class (0=Stable, 1=New, 2=Growth, 3=Decline)
+   Data Source: Prescriber Overview - Real TRx changes with ±20% thresholds
+   Valid HCPs: 346,508
+   Distribution:
+     STABLE    :  170,541 ( 49.2%)
+     NEW       :   41,729 ( 12.0%)
+     GROWTH    :   43,970 ( 12.7%)
+     DECLINE   :   90,268 ( 26.1%)
+
+================================================================================
+MODELING DATASET
+================================================================================
+
+  Total Records: 1,313,396
+  Total Columns: 90
+  Clean Features: 81
+  Targets: 8
+
+WHY ONLY 3 TARGETS (NOT 8):
+  - REMOVED all synthetic/formula-based targets
+  - Sample Effectiveness: Calculated FROM trx_current = R-squared 1.0 (circular logic)
+  - Old NGD Score: Used same features it predicts = R-squared 1.0 (data leakage)
+  - Churn Risk: Used retention_probability feature = R-squared 1.0 (leakage)
+  - Future TRx: Formula-based = R-squared 0.9998 (no real prediction)
+  - HCP Segment: Rule-based bucketing = R-squared 1.0 (deterministic)
+  - Expected ROI: Formula from future_trx = R-squared 0.9998 (derivative)
+
+BENEFITS OF REAL OUTCOMES APPROACH:
+  1. NO data leakage - all targets independent of features
+  2. Realistic R² scores (0.30-0.60) instead of perfect 1.0
+  3. Defensible to regulators/leadership
+  4. Predictions based on REAL historical patterns
+  5. Trust from sales reps - not 'too good to be true'
+  6. NGD is PRIMARY model using predictions from Models 1-2 as features
+

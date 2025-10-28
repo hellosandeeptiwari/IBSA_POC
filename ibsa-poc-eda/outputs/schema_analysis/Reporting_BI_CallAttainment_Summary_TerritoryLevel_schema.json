@@ -1,0 +1,278 @@
+{
+  "table_name": "Reporting_BI_CallAttainment_Summary_TerritoryLevel",
+  "file_info": {
+    "size_mb": 0.01,
+    "modified": "2025-10-13 17:45:39"
+  },
+  "row_count": "90",
+  "column_count": 18,
+  "memory_usage_mb": 0.04,
+  "columns": [
+    {
+      "column_name": "TerritoryId",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 89,
+      "sample_values": [
+        10001001,
+        10002001,
+        10002081
+      ],
+      "potential_key": false,
+      "data_category": "identifier"
+    },
+    {
+      "column_name": "TerritoryName",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 89,
+      "sample_values": [
+        "Boston MA",
+        "Miami FL",
+        "Miami RSS"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "RegionId",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 7,
+      "sample_values": [
+        100010,
+        100020,
+        100020
+      ],
+      "potential_key": false,
+      "data_category": "identifier"
+    },
+    {
+      "column_name": "RegionName",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 7,
+      "sample_values": [
+        "Northeast",
+        "Southeast",
+        "Southeast"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "RepName",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 84,
+      "sample_values": [
+        "Nicholas Soares",
+        "Nicole Blanco",
+        "Vacant"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "NoAccount",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 83,
+      "sample_values": [
+        344,
+        243,
+        265
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "PlannedCalls",
+      "data_type": "float64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 81,
+      "sample_values": [
+        720.0,
+        564.0,
+        315.0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "ActualCalls",
+      "data_type": "float64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 59,
+      "sample_values": [
+        56.0,
+        69.0,
+        0.0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "Attainment",
+      "data_type": "float64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 16,
+      "sample_values": [
+        0.08,
+        0.12,
+        0.0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "TReached",
+      "data_type": "float64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 58,
+      "sample_values": [
+        56.0,
+        69.0,
+        0.0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "PercentageAttainment",
+      "data_type": "float64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 77,
+      "sample_values": [
+        7.78,
+        12.23,
+        0.0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "PercentageReached",
+      "data_type": "float64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 78,
+      "sample_values": [
+        16.28,
+        28.4,
+        0.0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "TimeIn",
+      "data_type": "float64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 7,
+      "sample_values": [
+        5.0,
+        5.0,
+        5.0
+      ],
+      "potential_key": false,
+      "data_category": "temporal"
+    },
+    {
+      "column_name": "TimeOff",
+      "data_type": "float64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 7,
+      "sample_values": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "potential_key": false,
+      "data_category": "temporal"
+    },
+    {
+      "column_name": "AvgCallsPerDay",
+      "data_type": "float64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 59,
+      "sample_values": [
+        11.2,
+        13.8,
+        0.0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "TotalCount",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 83,
+      "sample_values": [
+        344,
+        243,
+        265
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "TimePeriod",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 1,
+      "sample_values": [
+        "Q4 2025",
+        "Q4 2025",
+        "Q4 2025"
+      ],
+      "potential_key": false,
+      "data_category": "temporal"
+    },
+    {
+      "column_name": "CNXTerritoryRole",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 2,
+      "sample_values": [
+        "Core",
+        "Core",
+        "Overlay"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    }
+  ],
+  "potential_primary_keys": [],
+  "identifier_columns": [
+    "TerritoryId",
+    "RegionId"
+  ],
+  "date_columns": [
+    "TimeIn",
+    "TimeOff",
+    "TimePeriod"
+  ],
+  "measure_columns": [
+    "NoAccount",
+    "TotalCount"
+  ]
+}

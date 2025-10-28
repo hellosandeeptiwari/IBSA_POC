@@ -1,0 +1,3 @@
+I don't have the ability to view or access files directly, including Jupyter notebooks. However, I can help you replicate the modules and provide guidance based on the content you describe or share from the notebook. 
+
+If you can provide details about the specific modules, functions, or analyses included in `IBSA_PoC_EDA.ipynb`, I can help you write the equivalent Python code or provide explanations for each part. Please share the relevant sections or describe what you need assistance with!

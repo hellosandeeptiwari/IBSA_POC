@@ -1,0 +1,19 @@
+TRAINED MODELS INVENTORY
+================================================================================
+
+1. Call Success
+   File: call_success.pkl
+   Metrics: ['auc_roc', 'accuracy', 'precision', 'recall', 'f1_score', 'feature_importance']
+
+2. Prescription Lift
+   File: prescription_lift.pkl
+   Metrics: ['mae', 'rmse', 'r2_score', 'feature_importance']
+
+3. NGD Classification
+   File: ngd_classification.pkl
+   Metrics: ['accuracy', 'precision', 'recall', 'f1_score', 'feature_importance']
+
+4. Stacked Ensemble
+   File: stacked_ensemble.pkl
+   Metrics: ['accuracy']
+

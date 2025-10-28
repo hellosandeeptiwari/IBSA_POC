@@ -1,0 +1,204 @@
+{
+  "table_name": "Reporting_Bi_Territory_CallSummary",
+  "file_info": {
+    "size_mb": 2.08,
+    "modified": "2025-10-13 17:46:30"
+  },
+  "row_count": "19742",
+  "column_count": 13,
+  "memory_usage_mb": 6.72,
+  "columns": [
+    {
+      "column_name": "ProductName",
+      "data_type": "object",
+      "null_count": 1080,
+      "null_percentage": 10.8,
+      "unique_values": 4,
+      "sample_values": [
+        "Tirosint Caps",
+        "Tirosint Caps",
+        "Tirosint Caps"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "Calls",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 4,
+      "sample_values": [
+        "HCP Calls",
+        "HCP Calls",
+        "HCP Calls"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "Legends",
+      "data_type": "object",
+      "null_count": 534,
+      "null_percentage": 5.34,
+      "unique_values": 6,
+      "sample_values": [
+        "HCP In Person",
+        "HCP In Person",
+        "HCP In Person"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "TerritoryId",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 91,
+      "sample_values": [
+        "10001004",
+        "10001005",
+        "10001013"
+      ],
+      "potential_key": false,
+      "data_category": "identifier"
+    },
+    {
+      "column_name": "TerritoryName",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 93,
+      "sample_values": [
+        "Manhattan NY",
+        "N Brooklyn NY",
+        "Long Island NY"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "Region",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 9,
+      "sample_values": [
+        "100010",
+        "100010",
+        "100010"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "RegionName",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 9,
+      "sample_values": [
+        "Northeast",
+        "Northeast",
+        "Northeast"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "RepName",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 84,
+      "sample_values": [
+        "Sparkle Ivery",
+        "Isabella Jandreski",
+        "Bryan Kernaghan"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "Value",
+      "data_type": "float64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 574,
+      "sample_values": [
+        359.0,
+        204.0,
+        4.0
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "Sort",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 6,
+      "sample_values": [
+        1,
+        1,
+        1
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "TimePeriod",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 4,
+      "sample_values": [
+        "Q3 2025",
+        "Q2 2025",
+        "Q3 2025"
+      ],
+      "potential_key": false,
+      "data_category": "temporal"
+    },
+    {
+      "column_name": "MyTarget",
+      "data_type": "object",
+      "null_count": 546,
+      "null_percentage": 5.46,
+      "unique_values": 2,
+      "sample_values": [
+        true,
+        true,
+        false
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "CNXTerritoryRole",
+      "data_type": "object",
+      "null_count": 557,
+      "null_percentage": 5.57,
+      "unique_values": 2,
+      "sample_values": [
+        "Core",
+        "Core",
+        "Core"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    }
+  ],
+  "potential_primary_keys": [],
+  "identifier_columns": [
+    "TerritoryId"
+  ],
+  "date_columns": [
+    "TimePeriod"
+  ],
+  "measure_columns": [
+    "Value"
+  ]
+}

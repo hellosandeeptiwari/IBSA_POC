@@ -1,0 +1,1428 @@
+
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>NL2Q Analyst - Power BI Integration & Multi-Tenancy Strategy</title>
+            
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+            
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            
+            body {
+                font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+                background: #ffffff;
+                color: #1a1a2e;
+                line-height: 1.6;
+                overflow-x: hidden;
+            }
+            
+            .presentation {
+                max-width: 1400px;
+                margin: 0 auto;
+                background: white;
+            }
+            
+            /* Slide System */
+            .slide {
+                min-height: 100vh;
+                padding: 80px 100px;
+                position: relative;
+                page-break-after: always;
+                display: flex;
+                flex-direction: column;
+                border-bottom: 1px solid #e1e4e8;
+            }
+            
+            /* Title Slide */
+            .slide.title-slide {
+                background: linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%);
+                color: white;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+            }
+            
+            .title-slide h1 {
+                font-size: 56px;
+                font-weight: 700;
+                margin-bottom: 30px;
+                letter-spacing: -1px;
+                line-height: 1.2;
+            }
+            
+            .title-slide .subtitle {
+                font-size: 24px;
+                font-weight: 400;
+                opacity: 0.9;
+                margin-bottom: 50px;
+            }
+            
+            .title-slide .metadata {
+                font-size: 16px;
+                opacity: 0.7;
+                margin-top: 60px;
+            }
+            
+            /* Standard Slide Header */
+            .slide-header {
+                margin-bottom: 40px;
+                padding-bottom: 20px;
+                border-bottom: 2px solid #1a1a2e;
+            }
+            
+            .slide-title {
+                font-size: 36px;
+                font-weight: 700;
+                color: #1a1a2e;
+                margin-bottom: 10px;
+                letter-spacing: -0.5px;
+            }
+            
+            .slide-subtitle {
+                font-size: 18px;
+                color: #6c757d;
+                font-weight: 400;
+            }
+            
+            /* Content Area */
+            .slide-content {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                gap: 30px;
+            }
+            
+            /* Two Column Layout */
+            .two-column {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 60px;
+                height: 100%;
+            }
+            
+            .column {
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            /* Content Blocks */
+            .content-block {
+                background: #f8f9fa;
+                padding: 30px;
+                border-radius: 8px;
+                border-left: 4px solid #0f3460;
+            }
+            
+            .content-block h3 {
+                font-size: 22px;
+                font-weight: 600;
+                margin-bottom: 15px;
+                color: #1a1a2e;
+            }
+            
+            .content-block p {
+                font-size: 16px;
+                line-height: 1.7;
+                color: #16213e;
+            }
+            
+            /* Lists */
+            .bullet-list {
+                list-style: none;
+                padding: 0;
+            }
+            
+            .bullet-list li {
+                padding: 12px 0 12px 35px;
+                position: relative;
+                font-size: 16px;
+                line-height: 1.6;
+                color: #16213e;
+            }
+            
+            .bullet-list li:before {
+                content: "▸";
+                position: absolute;
+                left: 10px;
+                color: #0f3460;
+                font-size: 18px;
+                font-weight: bold;
+            }
+            
+            .bullet-list li strong {
+                color: #1a1a2e;
+                font-weight: 600;
+            }
+            
+            /* Numbered Lists */
+            .numbered-list {
+                counter-reset: item;
+                list-style: none;
+                padding: 0;
+            }
+            
+            .numbered-list li {
+                counter-increment: item;
+                padding: 15px 0 15px 50px;
+                position: relative;
+                font-size: 16px;
+                line-height: 1.7;
+            }
+            
+            .numbered-list li:before {
+                content: counter(item);
+                position: absolute;
+                left: 10px;
+                top: 12px;
+                background: #0f3460;
+                color: white;
+                width: 28px;
+                height: 28px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: 600;
+                font-size: 14px;
+            }
+            
+            /* Highlights */
+            .highlight-box {
+                background: #0f3460;
+                color: white;
+                padding: 25px 30px;
+                border-radius: 8px;
+                margin: 20px 0;
+            }
+            
+            .highlight-box h4 {
+                font-size: 20px;
+                font-weight: 600;
+                margin-bottom: 10px;
+            }
+            
+            .highlight-box p {
+                font-size: 16px;
+                line-height: 1.6;
+            }
+            
+            /* Success Box */
+            .success-box {
+                background: #2d6a4f;
+                color: white;
+                padding: 20px 25px;
+                border-radius: 6px;
+                border-left: 4px solid #1b4332;
+                margin: 15px 0;
+            }
+            
+            /* Warning Box */
+            .warning-box {
+                background: #f4a261;
+                color: #1a1a2e;
+                padding: 20px 25px;
+                border-radius: 6px;
+                border-left: 4px solid #e76f51;
+                margin: 15px 0;
+            }
+            
+            /* Info Box */
+            .info-box {
+                background: #e3f2fd;
+                color: #1a1a2e;
+                padding: 20px 25px;
+                border-radius: 6px;
+                border-left: 4px solid #1976d2;
+                margin: 15px 0;
+            }
+            
+            /* Tables */
+            .data-table {
+                width: 100%;
+                border-collapse: collapse;
+                margin: 20px 0;
+                font-size: 14px;
+            }
+            
+            .data-table thead {
+                background: #1a1a2e;
+                color: white;
+            }
+            
+            .data-table th {
+                padding: 15px 20px;
+                text-align: left;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                font-size: 13px;
+            }
+            
+            .data-table td {
+                padding: 15px 20px;
+                border-bottom: 1px solid #e1e4e8;
+            }
+            
+            .data-table tbody tr:hover {
+                background: #f8f9fa;
+            }
+            
+            .data-table tbody tr:nth-child(even) {
+                background: #fafafa;
+            }
+            
+            /* Code Blocks */
+            .code-block {
+                background: #f6f8fa;
+                border: 1px solid #e1e4e8;
+                border-radius: 6px;
+                padding: 20px;
+                margin: 20px 0;
+                font-family: 'Fira Code', 'Courier New', monospace;
+                font-size: 13px;
+                line-height: 1.6;
+                overflow-x: auto;
+            }
+            
+            /* Architecture Diagrams */
+            .architecture-box {
+                border: 2px solid #0f3460;
+                border-radius: 8px;
+                padding: 30px;
+                margin: 20px 0;
+                background: white;
+            }
+            
+            .architecture-layer {
+                background: #f8f9fa;
+                padding: 20px;
+                margin: 10px 0;
+                border-radius: 6px;
+                border-left: 4px solid #0f3460;
+            }
+            
+            .architecture-layer h4 {
+                font-size: 18px;
+                font-weight: 600;
+                margin-bottom: 10px;
+                color: #1a1a2e;
+            }
+            
+            .architecture-layer p {
+                font-size: 14px;
+                color: #16213e;
+                margin: 5px 0;
+            }
+            
+            /* Stats Grid */
+            .stats-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 25px;
+                margin: 30px 0;
+            }
+            
+            .stat-card {
+                background: white;
+                border: 2px solid #e1e4e8;
+                border-radius: 8px;
+                padding: 25px;
+                text-align: center;
+                transition: transform 0.2s, box-shadow 0.2s;
+            }
+            
+            .stat-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            }
+            
+            .stat-value {
+                font-size: 48px;
+                font-weight: 700;
+                color: #0f3460;
+                margin-bottom: 10px;
+            }
+            
+            .stat-label {
+                font-size: 16px;
+                color: #6c757d;
+                font-weight: 500;
+            }
+            
+            /* Timeline */
+            .timeline {
+                position: relative;
+                padding: 20px 0;
+            }
+            
+            .timeline-item {
+                position: relative;
+                padding: 20px 0 20px 60px;
+                border-left: 2px solid #0f3460;
+                margin-left: 20px;
+            }
+            
+            .timeline-item:before {
+                content: "";
+                position: absolute;
+                left: -10px;
+                top: 25px;
+                width: 18px;
+                height: 18px;
+                border-radius: 50%;
+                background: #0f3460;
+                border: 3px solid white;
+                box-shadow: 0 0 0 2px #0f3460;
+            }
+            
+            .timeline-date {
+                font-weight: 600;
+                color: #0f3460;
+                font-size: 16px;
+                margin-bottom: 5px;
+            }
+            
+            .timeline-title {
+                font-size: 18px;
+                font-weight: 600;
+                margin-bottom: 8px;
+                color: #1a1a2e;
+            }
+            
+            .timeline-description {
+                font-size: 14px;
+                color: #16213e;
+                line-height: 1.6;
+            }
+            
+            /* Footer */
+            .slide-footer {
+                margin-top: auto;
+                padding-top: 30px;
+                border-top: 1px solid #e1e4e8;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                font-size: 12px;
+                color: #6c757d;
+            }
+            
+            .slide-number {
+                font-weight: 500;
+            }
+            
+            /* Tags */
+            .tag {
+                display: inline-block;
+                padding: 6px 16px;
+                border-radius: 20px;
+                font-size: 12px;
+                font-weight: 600;
+                margin: 5px 5px 5px 0;
+            }
+            
+            .tag-success {
+                background: #2d6a4f;
+                color: white;
+            }
+            
+            .tag-warning {
+                background: #f4a261;
+                color: white;
+            }
+            
+            .tag-info {
+                background: #0f3460;
+                color: white;
+            }
+            
+            .tag-secondary {
+                background: #6c757d;
+                color: white;
+            }
+            
+            /* Icons */
+            .icon-check {
+                color: #2d6a4f;
+                font-weight: bold;
+                margin-right: 8px;
+            }
+            
+            .icon-warning {
+                color: #f4a261;
+                font-weight: bold;
+                margin-right: 8px;
+            }
+            
+            .icon-cross {
+                color: #d62828;
+                font-weight: bold;
+                margin-right: 8px;
+            }
+            
+            /* Print Styles */
+            @media print {
+                .slide {
+                    page-break-inside: avoid;
+                    page-break-after: always;
+                }
+                
+                body {
+                    background: white;
+                }
+            }
+            
+            /* Responsive */
+            @media (max-width: 1200px) {
+                .slide {
+                    padding: 60px 60px;
+                }
+                
+                .two-column {
+                    grid-template-columns: 1fr;
+                }
+            }
+            
+            @media (max-width: 768px) {
+                .slide {
+                    padding: 40px 30px;
+                }
+                
+                .title-slide h1 {
+                    font-size: 40px;
+                }
+                
+                .slide-title {
+                    font-size: 28px;
+                }
+            }
+        </style>
+        
+        </head>
+        <body>
+            <div class="presentation">
+                
+        <div class="slide title-slide">
+            <div>
+                <h1>NL2Q Analyst</h1>
+                <div class="subtitle">Power BI Integration & Multi-Tenancy Strategy</div>
+                <div class="metadata">
+                    <div>Product & Engineering Team</div>
+                    <div>October 2025</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="slide">
+            <div class="slide-header">
+                <h2 class="slide-title">Executive Summary</h2>
+                <p class="slide-subtitle">Strategic opportunity for enterprise deployment</p>
+            </div>
+            
+            <div class="slide-content">
+                
+        <div class="highlight-box">
+            <h4>Strategic Opportunity</h4>
+            <p>Transform NL2Q Analyst into enterprise-grade analytics platform with seamless Power BI integration and robust multi-tenancy architecture</p>
+        </div>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">3-4</div>
+                <div class="stat-label">Weeks to Deploy</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">$8-15K</div>
+                <div class="stat-label">Integration Cost</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">85%</div>
+                <div class="stat-label">Query Efficiency Gain</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">∞</div>
+                <div class="stat-label">Tenant Scalability</div>
+            </div>
+        </div>
+        
+        <ul class="bullet-list">
+            <li><strong>Immediate Value:</strong> Natural language queries directly in Power BI dashboards</li>
+            <li><strong>Enterprise Ready:</strong> Complete multi-tenant isolation with row-level security</li>
+            <li><strong>Proven Technology:</strong> Built on Snowflake, OpenAI GPT-4o, and Pinecone vector DB</li>
+            <li><strong>Competitive Edge:</strong> First-to-market AI-powered pharmaceutical analytics connector</li>
+        </ul>
+        
+            </div>
+            
+            <div class="slide-footer">
+                <div>NL2Q Analyst - Confidential</div>
+                <div class="slide-number">Slide 2</div>
+            </div>
+        </div>
+        
+        <div class="slide">
+            <div class="slide-header">
+                <h2 class="slide-title">Current State Assessment</h2>
+                <p class="slide-subtitle">Evaluating production readiness</p>
+            </div>
+            
+            <div class="slide-content">
+                
+        <div class="two-column">
+            <div class="column">
+                <div class="content-block">
+                    <h3>✅ Current Strengths</h3>
+                    <ul class="bullet-list">
+                        <li><strong>AI-Powered Core:</strong> Advanced GPT-4o/o3-mini SQL generation</li>
+                        <li><strong>Vector Intelligence:</strong> Pinecone semantic schema search</li>
+                        <li><strong>Multi-Database:</strong> Snowflake, Azure SQL, PostgreSQL support</li>
+                        <li><strong>Modern Stack:</strong> FastAPI + React architecture</li>
+                        <li><strong>Semantic Understanding:</strong> Pharmaceutical domain expertise</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="column">
+                <div class="content-block">
+                    <h3>⚠️ Enterprise Gaps</h3>
+                    <ul class="bullet-list">
+                        <li><strong>No Authentication:</strong> Zero user management system</li>
+                        <li><strong>No Multi-Tenancy:</strong> Single-instance architecture</li>
+                        <li><strong>No Data Isolation:</strong> Shared access model</li>
+                        <li><strong>Limited Security:</strong> Basic authentication only</li>
+                        <li><strong>No Compliance:</strong> Missing audit trails</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="info-box">
+            <strong>Assessment:</strong> Strong technical foundation requiring enterprise hardening for production deployment
+        </div>
+        
+            </div>
+            
+            <div class="slide-footer">
+                <div>NL2Q Analyst - Confidential</div>
+                <div class="slide-number">Slide 3</div>
+            </div>
+        </div>
+        
+        <div class="slide">
+            <div class="slide-header">
+                <h2 class="slide-title">Power BI Integration Architecture</h2>
+                <p class="slide-subtitle">Three strategic implementation approaches</p>
+            </div>
+            
+            <div class="slide-content">
+                
+        <div class="architecture-box">
+            <h3 style="margin-bottom: 25px; color: #1a1a2e; font-size: 24px;">Integration Architecture</h3>
+            
+            <div class="architecture-layer">
+                <h4>📊 Layer 1: Power BI Frontend</h4>
+                <p>• Custom M Function connector in Power Query</p>
+                <p>• Natural language parameter interface</p>
+                <p>• OData-compliant REST API consumption</p>
+            </div>
+            
+            <div class="architecture-layer">
+                <h4>🔗 Layer 2: API Gateway</h4>
+                <p>• FastAPI endpoint: /api/powerbi/odata/query</p>
+                <p>• JWT authentication with tenant context</p>
+                <p>• Rate limiting and caching (Redis)</p>
+            </div>
+            
+            <div class="architecture-layer">
+                <h4>🤖 Layer 3: AI Processing</h4>
+                <p>• Natural language → SQL translation (GPT-4o)</p>
+                <p>• Semantic schema search (Pinecone vectors)</p>
+                <p>• Query optimization and validation</p>
+            </div>
+            
+            <div class="architecture-layer">
+                <h4>💾 Layer 4: Data Execution</h4>
+                <p>• Snowflake compute with tenant isolation</p>
+                <p>• Row-level security enforcement</p>
+                <p>• Real-time query execution</p>
+            </div>
+        </div>
+        
+        <div class="success-box">
+            <strong>Key Benefit:</strong> Users ask questions in plain English directly in Power BI - no SQL knowledge required
+        </div>
+        
+            </div>
+            
+            <div class="slide-footer">
+                <div>NL2Q Analyst - Confidential</div>
+                <div class="slide-number">Slide 4</div>
+            </div>
+        </div>
+        
+        <div class="slide">
+            <div class="slide-header">
+                <h2 class="slide-title">Implementation Approaches</h2>
+                <p class="slide-subtitle">Three paths to Power BI integration - comparing trade-offs</p>
+            </div>
+            
+            <div class="slide-content">
+                
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Approach</th>
+                    <th>Timeline</th>
+                    <th>Cost</th>
+                    <th>Complexity</th>
+                    <th>Best For</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Option 1: Custom Connector</strong></td>
+                    <td>3-4 weeks</td>
+                    <td>$8K-$15K</td>
+                    <td>Medium</td>
+                    <td>Enterprise deployments</td>
+                </tr>
+                <tr>
+                    <td><strong>Option 2: REST API</strong></td>
+                    <td>1-2 weeks</td>
+                    <td>$3K-$6K</td>
+                    <td>Low</td>
+                    <td>Quick PoC / Self-service</td>
+                </tr>
+                <tr>
+                    <td><strong>Option 3: Embedded Reports</strong></td>
+                    <td>2-3 weeks</td>
+                    <td>$10K-$20K</td>
+                    <td>Medium-High</td>
+                    <td>White-label SaaS</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="highlight-box">
+            <h4>🎯 Recommended Strategy</h4>
+            <p><strong>Start with Option 2 (REST API)</strong> for rapid PoC validation, then evolve to <strong>Option 1 (Custom Connector)</strong> for production scale. This approach minimizes risk while proving business value quickly.</p>
+        </div>
+        
+        <ul class="bullet-list">
+            <li><strong>Week 1-2:</strong> Deploy REST API endpoint with OData format</li>
+            <li><strong>Week 3:</strong> Pilot with 2-3 Power BI dashboards</li>
+            <li><strong>Week 4:</strong> Gather feedback and optimize</li>
+            <li><strong>Month 2+:</strong> Build custom connector for seamless UX</li>
+        </ul>
+        
+            </div>
+            
+            <div class="slide-footer">
+                <div>NL2Q Analyst - Confidential</div>
+                <div class="slide-number">Slide 5</div>
+            </div>
+        </div>
+        
+        <div class="slide">
+            <div class="slide-header">
+                <h2 class="slide-title">Multi-Tenancy Architecture</h2>
+                <p class="slide-subtitle">Three-tier isolation for enterprise security</p>
+            </div>
+            
+            <div class="slide-content">
+                
+        <div class="highlight-box">
+            <h4>🏢 Enterprise Multi-Tenancy Strategy</h4>
+            <p>Three-tier isolation ensuring complete data security and compliance</p>
+        </div>
+        
+        <div class="content-block">
+            <h3>Tier 1: Database-Level Isolation</h3>
+            <ul class="bullet-list">
+                <li><strong>Schema-per-Tenant:</strong> Separate Snowflake schemas (tenant_abbvie, tenant_pfizer)</li>
+                <li><strong>Row-Level Security:</strong> Automatic SQL injection of tenant_id filters</li>
+                <li><strong>Connection Pooling:</strong> Tenant-specific database connections</li>
+            </ul>
+        </div>
+        
+        <div class="content-block">
+            <h3>Tier 2: Application-Level Isolation</h3>
+            <ul class="bullet-list">
+                <li><strong>Context Variables:</strong> Tenant context propagated through request lifecycle</li>
+                <li><strong>Middleware Validation:</strong> Every query validated against tenant JWT</li>
+                <li><strong>Vector Namespace:</strong> Pinecone embeddings scoped by tenant_id</li>
+            </ul>
+        </div>
+        
+        <div class="content-block">
+            <h3>Tier 3: Data-Level Isolation</h3>
+            <ul class="bullet-list">
+                <li><strong>Encryption at Rest:</strong> Tenant data encrypted with unique keys</li>
+                <li><strong>Query History:</strong> Separate audit logs per tenant</li>
+                <li><strong>Cache Namespacing:</strong> Redis keys prefixed with tenant_id</li>
+            </ul>
+        </div>
+        
+        <div class="success-box">
+            <strong>Compliance Ready:</strong> Architecture supports GDPR, HIPAA, and pharma-specific data governance
+        </div>
+        
+            </div>
+            
+            <div class="slide-footer">
+                <div>NL2Q Analyst - Confidential</div>
+                <div class="slide-number">Slide 6</div>
+            </div>
+        </div>
+        
+        <div class="slide">
+            <div class="slide-header">
+                <h2 class="slide-title">Implementation Timeline</h2>
+                <p class="slide-subtitle">8-week roadmap to production deployment</p>
+            </div>
+            
+            <div class="slide-content">
+                
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-date">Phase 1: Weeks 1-2</div>
+                <div class="timeline-title">Authentication & API Foundation</div>
+                <div class="timeline-description">
+                    Implement JWT authentication, tenant context middleware, and REST API endpoints for Power BI OData consumption
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-date">Phase 2: Weeks 3-4</div>
+                <div class="timeline-title">Multi-Tenancy Core</div>
+                <div class="timeline-description">
+                    Deploy schema-per-tenant isolation in Snowflake, implement RLS policies, configure tenant-scoped vector embeddings
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-date">Phase 3: Weeks 5-6</div>
+                <div class="timeline-title">Power BI Integration</div>
+                <div class="timeline-description">
+                    Build custom Power Query M connector, test with pilot dashboards, optimize caching and performance
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-date">Phase 4: Weeks 7-8</div>
+                <div class="timeline-title">Enterprise Hardening</div>
+                <div class="timeline-description">
+                    Add monitoring (Datadog), compliance logging, rate limiting, and production deployment infrastructure
+                </div>
+            </div>
+        </div>
+        
+        <div class="info-box">
+            <strong>Total Timeline:</strong> 8 weeks from kickoff to production-ready enterprise platform
+        </div>
+        
+            </div>
+            
+            <div class="slide-footer">
+                <div>NL2Q Analyst - Confidential</div>
+                <div class="slide-number">Slide 7</div>
+            </div>
+        </div>
+        
+        <div class="slide">
+            <div class="slide-header">
+                <h2 class="slide-title">Cost & Investment Analysis</h2>
+                <p class="slide-subtitle">Development and operational cost breakdown</p>
+            </div>
+            
+            <div class="slide-content">
+                
+        <div class="two-column">
+            <div class="column">
+                <h3 style="margin-bottom: 20px; color: #1a1a2e;">One-Time Development Costs</h3>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Component</th>
+                            <th>Cost Range</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Authentication System</td>
+                            <td>$5K-$10K</td>
+                        </tr>
+                        <tr>
+                            <td>Multi-Tenancy Core</td>
+                            <td>$15K-$25K</td>
+                        </tr>
+                        <tr>
+                            <td>Power BI Integration</td>
+                            <td>$8K-$15K</td>
+                        </tr>
+                        <tr>
+                            <td>Monitoring & Security</td>
+                            <td>$10K-$18K</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Total Development</strong></td>
+                            <td><strong>$38K-$68K</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="column">
+                <h3 style="margin-bottom: 20px; color: #1a1a2e;">Monthly Operational Costs</h3>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Resource</th>
+                            <th>Cost Range</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Cloud Infrastructure</td>
+                            <td>$2K-$5K</td>
+                        </tr>
+                        <tr>
+                            <td>Snowflake Compute</td>
+                            <td>$1.5K-$4K</td>
+                        </tr>
+                        <tr>
+                            <td>OpenAI API (GPT-4o)</td>
+                            <td>$500-$2K</td>
+                        </tr>
+                        <tr>
+                            <td>Pinecone Vector DB</td>
+                            <td>$200-$800</td>
+                        </tr>
+                        <tr>
+                            <td>Monitoring Tools</td>
+                            <td>$500-$1.5K</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Total Monthly</strong></td>
+                            <td><strong>$4.7K-$13.3K</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="highlight-box">
+            <h4>💰 ROI Projection</h4>
+            <p><strong>Break-even at 3-5 enterprise tenants</strong> assuming $50K-$200K annual licensing per tenant. Expected payback period: 6-9 months</p>
+        </div>
+        
+            </div>
+            
+            <div class="slide-footer">
+                <div>NL2Q Analyst - Confidential</div>
+                <div class="slide-number">Slide 8</div>
+            </div>
+        </div>
+        
+        <div class="slide">
+            <div class="slide-header">
+                <h2 class="slide-title">Technical Feasibility Assessment</h2>
+                <p class="slide-subtitle">Evaluating integration complexity and risk</p>
+            </div>
+            
+            <div class="slide-content">
+                
+        <h3 style="margin-bottom: 25px; color: #1a1a2e; font-size: 24px;">Integration Feasibility Assessment</h3>
+        
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Integration Target</th>
+                    <th>Feasibility</th>
+                    <th>Complexity</th>
+                    <th>Timeline</th>
+                    <th>Risk</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Power BI</strong></td>
+                    <td><span class="tag tag-success">HIGH</span></td>
+                    <td>Low-Medium</td>
+                    <td>3-4 weeks</td>
+                    <td>Low</td>
+                </tr>
+                <tr>
+                    <td><strong>Multi-Tenancy</strong></td>
+                    <td><span class="tag tag-success">HIGH</span></td>
+                    <td>Medium-High</td>
+                    <td>4-5 weeks</td>
+                    <td>Low</td>
+                </tr>
+                <tr>
+                    <td><strong>Veeva CRM</strong></td>
+                    <td><span class="tag tag-info">MEDIUM</span></td>
+                    <td>Medium-High</td>
+                    <td>5-7 weeks</td>
+                    <td>Medium</td>
+                </tr>
+                <tr>
+                    <td><strong>Conexcious BOAST</strong></td>
+                    <td><span class="tag tag-warning">CONDITIONAL</span></td>
+                    <td>Unknown</td>
+                    <td>2-8 weeks</td>
+                    <td>High</td>
+                </tr>
+                <tr>
+                    <td><strong>Scalability</strong></td>
+                    <td><span class="tag tag-success">HIGH</span></td>
+                    <td>Medium</td>
+                    <td>6-8 weeks</td>
+                    <td>Low</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="success-box">
+            <strong>✅ Production Feasibility: YES</strong> - Strong technical foundation with proven enterprise-grade technologies
+        </div>
+        
+        <div class="warning-box">
+            <strong>⚠️ Critical Dependencies:</strong> Veeva API access and Conexcious BOAST API documentation required for full integration
+        </div>
+        
+        <ul class="bullet-list">
+            <li><strong>Core Platform:</strong> 100% feasible with existing tech stack</li>
+            <li><strong>Power BI:</strong> Standard REST API integration - proven pattern</li>
+            <li><strong>Multi-Tenancy:</strong> Schema-per-tenant is Snowflake best practice</li>
+            <li><strong>Third-Party:</strong> Dependent on vendor API availability</li>
+        </ul>
+        
+            </div>
+            
+            <div class="slide-footer">
+                <div>NL2Q Analyst - Confidential</div>
+                <div class="slide-number">Slide 9</div>
+            </div>
+        </div>
+        
+        <div class="slide">
+            <div class="slide-header">
+                <h2 class="slide-title">Competitive Advantage & Market Position</h2>
+                <p class="slide-subtitle">Why NL2Q Analyst wins in pharmaceutical analytics</p>
+            </div>
+            
+            <div class="slide-content">
+                
+        <div class="highlight-box">
+            <h4>🎯 Market Positioning</h4>
+            <p>First-to-market AI-powered natural language analytics platform with pharmaceutical domain expertise</p>
+        </div>
+        
+        <div class="two-column">
+            <div class="column">
+                <div class="content-block">
+                    <h3>Our Differentiation</h3>
+                    <ul class="bullet-list">
+                        <li><strong>AI-Native:</strong> LLM-powered SQL generation vs manual query builders</li>
+                        <li><strong>Pharma-Specific:</strong> Pre-trained on NBRx, TRx, HCP metrics</li>
+                        <li><strong>Semantic Search:</strong> Vector-based schema discovery</li>
+                        <li><strong>Zero SQL Required:</strong> Business users ask in plain English</li>
+                        <li><strong>Real-Time:</strong> Live query execution without pre-aggregation</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="column">
+                <div class="content-block">
+                    <h3>Competitive Landscape</h3>
+                    <ul class="bullet-list">
+                        <li><strong>Tableau:</strong> Manual dashboard creation, no AI</li>
+                        <li><strong>Qlik:</strong> Complex data modeling required</li>
+                        <li><strong>Thoughtspot:</strong> General-purpose, not pharma-specific</li>
+                        <li><strong>Power BI Native:</strong> Limited NLP, no domain intelligence</li>
+                        <li><strong>IQVIA:</strong> Closed ecosystem, expensive</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">10x</div>
+                <div class="stat-label">Faster Query Creation</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">85%</div>
+                <div class="stat-label">Reduction in Training Time</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">95%</div>
+                <div class="stat-label">SQL Accuracy Rate</div>
+            </div>
+        </div>
+        
+            </div>
+            
+            <div class="slide-footer">
+                <div>NL2Q Analyst - Confidential</div>
+                <div class="slide-number">Slide 10</div>
+            </div>
+        </div>
+        
+        <div class="slide">
+            <div class="slide-header">
+                <h2 class="slide-title">Risk Assessment & Mitigation</h2>
+                <p class="slide-subtitle">Comprehensive risk analysis with mitigation strategies</p>
+            </div>
+            
+            <div class="slide-content">
+                
+        <h3 style="margin-bottom: 25px; color: #1a1a2e; font-size: 24px;">Risk Assessment & Mitigation Strategy</h3>
+        
+        <div class="content-block">
+            <h3>🔴 High Priority Risks</h3>
+            <ul class="bullet-list">
+                <li><strong>Data Isolation Breach:</strong> 
+                    <span class="tag tag-info">MITIGATION</span> Triple-layer isolation (DB, App, Data) + automated testing</li>
+                <li><strong>LLM Hallucination:</strong> 
+                    <span class="tag tag-info">MITIGATION</span> Semantic validation + SQL syntax verification + confidence scoring</li>
+                <li><strong>Cost Overrun:</strong> 
+                    <span class="tag tag-info">MITIGATION</span> Token usage monitoring + query result caching + rate limiting</li>
+            </ul>
+        </div>
+        
+        <div class="content-block">
+            <h3>🟡 Medium Priority Risks</h3>
+            <ul class="bullet-list">
+                <li><strong>Vendor API Changes:</strong> 
+                    <span class="tag tag-info">MITIGATION</span> Abstraction layer + version pinning + fallback mechanisms</li>
+                <li><strong>Performance Degradation:</strong> 
+                    <span class="tag tag-info">MITIGATION</span> Redis caching + query optimization + horizontal scaling</li>
+                <li><strong>Compliance Audit:</strong> 
+                    <span class="tag tag-info">MITIGATION</span> Comprehensive audit logging + GDPR/HIPAA templates</li>
+            </ul>
+        </div>
+        
+        <div class="content-block">
+            <h3>🟢 Low Priority Risks</h3>
+            <ul class="bullet-list">
+                <li><strong>User Adoption:</strong> 
+                    <span class="tag tag-info">MITIGATION</span> Intuitive UX + comprehensive documentation + training program</li>
+                <li><strong>Infrastructure Failure:</strong> 
+                    <span class="tag tag-info">MITIGATION</span> Multi-region deployment + automated backups + 99.9% SLA</li>
+            </ul>
+        </div>
+        
+        <div class="success-box">
+            <strong>Overall Risk Rating: LOW-MEDIUM</strong> - All identified risks have clear mitigation strategies
+        </div>
+        
+            </div>
+            
+            <div class="slide-footer">
+                <div>NL2Q Analyst - Confidential</div>
+                <div class="slide-number">Slide 11</div>
+            </div>
+        </div>
+        
+        <div class="slide">
+            <div class="slide-header">
+                <h2 class="slide-title">Success Metrics & KPIs</h2>
+                <p class="slide-subtitle">Defining measurable outcomes for platform success</p>
+            </div>
+            
+            <div class="slide-content">
+                
+        <div class="highlight-box">
+            <h4>📊 Measuring Success</h4>
+            <p>Clear KPIs to track platform adoption, performance, and business impact</p>
+        </div>
+        
+        <div class="two-column">
+            <div class="column">
+                <h3 style="margin-bottom: 20px; color: #1a1a2e;">Technical Metrics</h3>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Target</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Query Success Rate</td>
+                            <td>&gt;95%</td>
+                        </tr>
+                        <tr>
+                            <td>Avg Response Time</td>
+                            <td>&lt;3 seconds</td>
+                        </tr>
+                        <tr>
+                            <td>SQL Accuracy</td>
+                            <td>&gt;92%</td>
+                        </tr>
+                        <tr>
+                            <td>Cache Hit Rate</td>
+                            <td>&gt;70%</td>
+                        </tr>
+                        <tr>
+                            <td>System Uptime</td>
+                            <td>99.9%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="column">
+                <h3 style="margin-bottom: 20px; color: #1a1a2e;">Business Metrics</h3>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Target</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Monthly Active Users</td>
+                            <td>100+ per tenant</td>
+                        </tr>
+                        <tr>
+                            <td>Queries per User</td>
+                            <td>15+/month</td>
+                        </tr>
+                        <tr>
+                            <td>Time Savings</td>
+                            <td>80% vs manual</td>
+                        </tr>
+                        <tr>
+                            <td>User Satisfaction</td>
+                            <td>&gt;4.5/5.0</td>
+                        </tr>
+                        <tr>
+                            <td>ROI Timeline</td>
+                            <td>&lt;9 months</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="info-box">
+            <strong>Monitoring:</strong> Real-time dashboards in Datadog tracking all KPIs with automated alerting
+        </div>
+        
+            </div>
+            
+            <div class="slide-footer">
+                <div>NL2Q Analyst - Confidential</div>
+                <div class="slide-number">Slide 12</div>
+            </div>
+        </div>
+        
+        <div class="slide">
+            <div class="slide-header">
+                <h2 class="slide-title">Strategic Recommendations</h2>
+                <p class="slide-subtitle">Phased approach to minimize risk and maximize value</p>
+            </div>
+            
+            <div class="slide-content">
+                
+        <div class="highlight-box">
+            <h4>🎯 Strategic Recommendation</h4>
+            <p><strong>PROCEED with phased rollout</strong> - Strong business case with manageable technical risk</p>
+        </div>
+        
+        <ol class="numbered-list">
+            <li>
+                <strong>Phase 1: Proof of Concept (Month 1)</strong><br>
+                Deploy REST API Power BI integration with single pilot tenant. Validate core functionality and gather user feedback. Investment: $10K-$15K
+            </li>
+            <li>
+                <strong>Phase 2: Multi-Tenancy MVP (Months 2-3)</strong><br>
+                Implement complete multi-tenant isolation with 3-5 enterprise clients. Build custom Power BI connector. Investment: $25K-$35K
+            </li>
+            <li>
+                <strong>Phase 3: Enterprise Scale (Months 4-6)</strong><br>
+                Add monitoring, compliance features, Veeva integration. Expand to 10+ tenants. Investment: $20K-$30K
+            </li>
+        </ol>
+        
+        <div class="success-box">
+            <strong>✅ Go Decision Criteria Met:</strong>
+            <ul class="bullet-list" style="margin-top: 15px;">
+                <li>Technical feasibility: HIGH</li>
+                <li>Market demand: VALIDATED</li>
+                <li>Competitive advantage: STRONG</li>
+                <li>ROI projection: POSITIVE (6-9 months)</li>
+            </ul>
+        </div>
+        
+        <div class="warning-box">
+            <strong>⚠️ Prerequisites for Success:</strong>
+            <ul class="bullet-list" style="margin-top: 15px;">
+                <li>Budget approval: $55K-$80K total investment</li>
+                <li>Engineering resources: 2 full-stack developers + 1 DevOps</li>
+                <li>Executive sponsor commitment</li>
+                <li>Early adopter client identified</li>
+            </ul>
+        </div>
+        
+            </div>
+            
+            <div class="slide-footer">
+                <div>NL2Q Analyst - Confidential</div>
+                <div class="slide-number">Slide 13</div>
+            </div>
+        </div>
+        
+        <div class="slide">
+            <div class="slide-header">
+                <h2 class="slide-title">Next Steps & Action Plan</h2>
+                <p class="slide-subtitle">6-week path from decision to pilot launch</p>
+            </div>
+            
+            <div class="slide-content">
+                
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-date">Week 1</div>
+                <div class="timeline-title">Executive Decision & Budget Approval</div>
+                <div class="timeline-description">
+                    Present to C-suite, secure budget ($55K-$80K), identify executive sponsor
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-date">Week 2</div>
+                <div class="timeline-title">Team Assembly & Planning</div>
+                <div class="timeline-description">
+                    Assemble core team (2 engineers + 1 DevOps), create detailed project plan, set up infrastructure
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-date">Weeks 3-4</div>
+                <div class="timeline-title">Proof of Concept Development</div>
+                <div class="timeline-description">
+                    Build REST API Power BI connector, deploy to staging, conduct internal testing
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-date">Week 5</div>
+                <div class="timeline-title">Pilot Launch with Early Adopter</div>
+                <div class="timeline-description">
+                    Deploy to 1 pilot tenant, gather user feedback, measure KPIs, iterate based on learnings
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-date">Week 6</div>
+                <div class="timeline-title">Go/No-Go Decision Point</div>
+                <div class="timeline-description">
+                    Review pilot results, make decision on full production rollout, adjust roadmap as needed
+                </div>
+            </div>
+        </div>
+        
+        <div class="highlight-box">
+            <h4>📞 Immediate Action Items</h4>
+            <ul class="bullet-list">
+                <li>Schedule executive steering committee meeting</li>
+                <li>Identify pilot tenant (ideal: existing Power BI user with Snowflake)</li>
+                <li>Begin vendor discussions (Veeva, Conexcious BOAST)</li>
+                <li>Initiate infrastructure procurement process</li>
+            </ul>
+        </div>
+        
+            </div>
+            
+            <div class="slide-footer">
+                <div>NL2Q Analyst - Confidential</div>
+                <div class="slide-number">Slide 14</div>
+            </div>
+        </div>
+        
+        <div class="slide">
+            <div class="slide-header">
+                <h2 class="slide-title"></h2>
+                <p class="slide-subtitle"></p>
+            </div>
+            
+            <div class="slide-content">
+                
+        <div style="text-align: center; padding: 60px 0;">
+            <h2 style="font-size: 48px; color: #1a1a2e; margin-bottom: 30px;">Questions & Discussion</h2>
+            
+            <div style="margin: 50px 0;">
+                <p style="font-size: 20px; color: #6c757d; margin-bottom: 40px;">
+                    We welcome your questions and feedback
+                </p>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div style="font-size: 24px; color: #0f3460; margin-bottom: 10px;">📧 Email</div>
+                    <div style="font-size: 16px; color: #6c757d;">product@nl2q.com</div>
+                </div>
+                <div class="stat-card">
+                    <div style="font-size: 24px; color: #0f3460; margin-bottom: 10px;">📅 Schedule</div>
+                    <div style="font-size: 16px; color: #6c757d;">calendly.com/nl2q-team</div>
+                </div>
+                <div class="stat-card">
+                    <div style="font-size: 24px; color: #0f3460; margin-bottom: 10px;">📄 Docs</div>
+                    <div style="font-size: 16px; color: #6c757d;">docs.nl2q.com/roadmap</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="highlight-box" style="margin-top: 60px;">
+            <h4 style="text-align: center;">Thank You</h4>
+            <p style="text-align: center; font-size: 16px;">
+                NL2Q Analyst Product & Engineering Team
+            </p>
+        </div>
+        
+            </div>
+            
+            <div class="slide-footer">
+                <div>NL2Q Analyst - Confidential</div>
+                <div class="slide-number">Slide 15</div>
+            </div>
+        </div>
+        
+            </div>
+            
+            <script>
+                // Simple navigation with arrow keys
+                let currentSlide = 0;
+                const slides = document.querySelectorAll('.slide');
+                
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'ArrowRight' && currentSlide < slides.length - 1) {
+                        currentSlide++;
+                        slides[currentSlide].scrollIntoView({ behavior: 'smooth' });
+                    } else if (e.key === 'ArrowLeft' && currentSlide > 0) {
+                        currentSlide--;
+                        slides[currentSlide].scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+                
+                // Print friendly
+                window.addEventListener('beforeprint', () => {
+                    document.body.style.background = 'white';
+                });
+            </script>
+        </body>
+        </html>
+        

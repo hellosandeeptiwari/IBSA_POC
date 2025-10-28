@@ -1,0 +1,98 @@
+================================================================================
+IBSA TARGET VARIABLE DOCUMENTATION - ENHANCED VERSION
+================================================================================
+
+Generated: 2025-10-22 10:16:54
+
+Total HCPs: 1,313,397
+Total Targets: 8 (4 original enhanced + 4 new)
+
+================================================================================
+TARGET VARIABLES
+================================================================================
+
+1. CALL_SUCCESS (Binary Classification) - ENHANCED
+   Definition: Call resulted in positive outcome
+   Type: Binary (0/1) + Continuous Score (0-1)
+   Method: Weighted scoring (Rx Growth 40%, RFM 25%, Engagement 20%, NGD 15%)
+   Success Rate: 33.93%
+   Successful: 117,557.0 HCPs
+   Mean Score: 0.045
+
+2. PRESCRIPTION_LIFT (Regression) - ENHANCED
+   Definition: TRx increase from prior to current QTD
+   Type: Continuous (can be negative)
+   Method: Winsorized outliers using IQR method
+   Mean: -0.04 TRx
+   Median: 0.00 TRx
+   Positive Lift: 117,557 HCPs
+
+3. SAMPLE_EFFECTIVENESS (Regression) - ENHANCED
+   Definition: TRx generated per sample dropped
+   Type: Continuous (0+)
+   Method: Enhanced with call intensity normalization
+   Mean: 1.494
+   High (>1.0): 221,401 HCPs
+
+4. NGD_SCORE (Next Generation Decile) - ENHANCED
+   Definition: Composite targeting priority score
+   Type: Decile (1-10) + Continuous (0-1)
+   Method: Weighted composite (Value 30%, Momentum 25%, Potential 20%, RFM 15%, Retention 10%)
+   Mean Decile: 1.26
+   Top Tier (8-10): 0 HCPs
+
+5. CHURN_RISK (Binary Classification) - NEW
+   Definition: High risk of HCP stopping prescribing
+   Type: Binary (0/1) + Continuous Score (0-1)
+   Method: Uses churn_risk_score from EDA features (threshold 0.6)
+   High Risk: 1,093,110 (83.23%)
+   Mean Score: 0.895
+   Business Value: Proactive retention, win-back campaigns
+
+6. FUTURE_TRX_LIFT (Regression) - NEW
+   Definition: Expected TRx lift in next quarter
+   Type: Continuous (can be negative)
+   Method: Current Growth × Momentum × (1 - Regression + Engagement)
+   Mean: 5.03 TRx
+   Positive: 1,313,397 HCPs
+   Business Value: Forward-looking planning, proactive targeting
+
+7. HCP_SEGMENT (Multi-Class Classification) - NEW
+   Definition: Strategic segmentation for resource allocation
+   Type: Multi-class (1-5) + Labels
+   Classes:
+     1. Champions           :        0 ( 0.00%)
+     2. Growth_Opportunities:   14,187 ( 1.08%)
+     3. At_Risk             :   84,651 ( 6.45%)
+     4. Maintain            :   89,476 ( 6.81%)
+     5. Deprioritize        : 1,125,083 (85.66%)
+   Business Value: Portfolio management, strategic resource allocation
+
+8. EXPECTED_ROI (Regression) - NEW
+   Definition: Financial ROI per call
+   Type: Continuous (USD)
+   Formula: (Expected Lift × $150.0) - $75.0
+   Mean ROI: $679.22
+   Positive ROI: 1,313,397 (100.0%)
+   High ROI (>$100): 1,313,397 HCPs
+   Business Value: Direct financial impact, ROI-optimized call planning
+
+================================================================================
+MODELING DATASET
+================================================================================
+
+  Total Records: 1,313,396
+  Total Columns: 108
+  Features: 91
+  Targets: 16
+
+ENHANCEMENTS OVER ORIGINAL:
+  1. Weighted scoring instead of boolean OR logic
+  2. Leverages 30 new EDA features (NGD, RFM, Churn)
+  3. Better outlier handling (IQR, winsorization)
+  4. Added 4 new targets (Churn, Future Lift, Segment, ROI)
+  5. Multi-class segmentation for strategic planning
+  6. Financial ROI targets for business justification
+  7. Forward-looking predictions (future lift)
+  8. Continuous scores alongside binary/categorical targets
+

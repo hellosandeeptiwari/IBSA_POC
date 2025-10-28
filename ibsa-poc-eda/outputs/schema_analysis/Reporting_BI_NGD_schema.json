@@ -1,0 +1,520 @@
+{
+  "table_name": "Reporting_BI_NGD",
+  "file_info": {
+    "size_mb": 6.35,
+    "modified": "2025-10-13 17:46:33"
+  },
+  "row_count": "24823",
+  "column_count": 35,
+  "memory_usage_mb": 13.9,
+  "columns": [
+    {
+      "column_name": "RoWnumber",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 6200,
+      "sample_values": [
+        1622,
+        1623,
+        1624
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "TerritoryId",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 90,
+      "sample_values": [
+        10003003,
+        10003003,
+        10003003
+      ],
+      "potential_key": false,
+      "data_category": "identifier"
+    },
+    {
+      "column_name": "TerritoryName",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 92,
+      "sample_values": [
+        "Detroit MI",
+        "Detroit MI",
+        "Detroit MI"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "RegionId",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 8,
+      "sample_values": [
+        100030,
+        100030,
+        100030
+      ],
+      "potential_key": false,
+      "data_category": "identifier"
+    },
+    {
+      "column_name": "RegionName",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 8,
+      "sample_values": [
+        "Midwest",
+        "Midwest",
+        "Midwest"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "Product",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 3,
+      "sample_values": [
+        "*ALL TIROSINT",
+        "*ALL TIROSINT",
+        "*ALL TIROSINT"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "PrescriberId",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 8792,
+      "sample_values": [
+        2445019,
+        2163286,
+        3566982
+      ],
+      "potential_key": false,
+      "data_category": "identifier"
+    },
+    {
+      "column_name": "AccountName",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 8788,
+      "sample_values": [
+        "DI LEGGE,PASQUALINA",
+        "SQUIRE,DEBORAH L",
+        "POPE,HALEY MELISSA"
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "Address1",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 7497,
+      "sample_values": [
+        "15945 19 MILE RD",
+        "4918 W CLARK RD",
+        "24901 KELLY RD"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "City",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 2759,
+      "sample_values": [
+        "CLINTON TOWNSHIP",
+        "YPSILANTI",
+        "EASTPOINTE"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "State",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 53,
+      "sample_values": [
+        "MI",
+        "MI",
+        "MI"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "Zipcode",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 4119,
+      "sample_values": [
+        48038,
+        48197,
+        48021
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "SpecialtyDescription",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 93,
+      "sample_values": [
+        "NURSE PRACTITIONER",
+        "NURSE PRACTITIONER",
+        "GENERAL PRACTICE"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "PDRPFlag",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 2,
+      "sample_values": [
+        "NO",
+        "NO",
+        "NO"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "NPINumber",
+      "data_type": "float64",
+      "null_count": 34,
+      "null_percentage": 0.34,
+      "unique_values": 8760,
+      "sample_values": [
+        1700114683.0,
+        1023356748.0,
+        1578685921.0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "MeNumber",
+      "data_type": "object",
+      "null_count": 1441,
+      "null_percentage": 14.41,
+      "unique_values": 7484,
+      "sample_values": [
+        "N012445019",
+        "216328603",
+        "0187504102"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "TirosintTargetTier",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 5,
+      "sample_values": [
+        "NON-TARGET",
+        "NON-TARGET",
+        "NON-TARGET"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "TirosintTargetFlag",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 2,
+      "sample_values": [
+        "N",
+        "N",
+        "N"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "LicartTargetFlag",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 2,
+      "sample_values": [
+        "N",
+        "N",
+        "N"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "LicartTargetTier",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 5,
+      "sample_values": [
+        "NON-TARGET",
+        "NON-TARGET",
+        "NON-TARGET"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "ProductFamily",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 3,
+      "sample_values": [
+        "Tirosint",
+        "Tirosint",
+        "Tirosint"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "ProductGroup",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 4,
+      "sample_values": [
+        "Tirosint Sol",
+        "Tirosint Caps",
+        "Tirosint Caps"
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "StartDateTqty",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 89,
+      "sample_values": [
+        0,
+        0,
+        0
+      ],
+      "potential_key": false,
+      "data_category": "temporal"
+    },
+    {
+      "column_name": "EndDateTqty",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 94,
+      "sample_values": [
+        1,
+        1,
+        1
+      ],
+      "potential_key": false,
+      "data_category": "temporal"
+    },
+    {
+      "column_name": "Abs",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 69,
+      "sample_values": [
+        1,
+        1,
+        1
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "NGDType",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 3,
+      "sample_values": [
+        "New",
+        "New",
+        "New"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "TotalCalls",
+      "data_type": "float64",
+      "null_count": 7718,
+      "null_percentage": 77.18,
+      "unique_values": 8,
+      "sample_values": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "potential_key": false,
+      "data_category": "measure"
+    },
+    {
+      "column_name": "RepName",
+      "data_type": "object",
+      "null_count": 841,
+      "null_percentage": 8.41,
+      "unique_values": 83,
+      "sample_values": [
+        "Schmittler,Andrea",
+        "Schmittler,Andrea",
+        "Schmittler,Andrea"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "AbsWithPDRP",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 70,
+      "sample_values": [
+        1,
+        1,
+        1
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "StartDateTqtyWithPDRP",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 87,
+      "sample_values": [
+        0,
+        0,
+        0
+      ],
+      "potential_key": false,
+      "data_category": "temporal"
+    },
+    {
+      "column_name": "EndDateTqtyWithPDRP",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 94,
+      "sample_values": [
+        1,
+        1,
+        1
+      ],
+      "potential_key": false,
+      "data_category": "temporal"
+    },
+    {
+      "column_name": "TimePeriod",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 2,
+      "sample_values": [
+        "4V4",
+        "4V4",
+        "4V4"
+      ],
+      "potential_key": false,
+      "data_category": "temporal"
+    },
+    {
+      "column_name": "MyTarget",
+      "data_type": "int64",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 2,
+      "sample_values": [
+        0,
+        0,
+        0
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    },
+    {
+      "column_name": "CNXTerritoryRole",
+      "data_type": "object",
+      "null_count": 0,
+      "null_percentage": 0.0,
+      "unique_values": 2,
+      "sample_values": [
+        "Core",
+        "Core",
+        "Core"
+      ],
+      "potential_key": false,
+      "data_category": "dimension"
+    },
+    {
+      "column_name": "BiInclude",
+      "data_type": "object",
+      "null_count": 877,
+      "null_percentage": 8.77,
+      "unique_values": 1,
+      "sample_values": [
+        true,
+        true,
+        true
+      ],
+      "potential_key": false,
+      "data_category": "other"
+    }
+  ],
+  "potential_primary_keys": [],
+  "identifier_columns": [
+    "TerritoryId",
+    "RegionId",
+    "PrescriberId",
+    "NPINumber"
+  ],
+  "date_columns": [
+    "StartDateTqty",
+    "EndDateTqty",
+    "StartDateTqtyWithPDRP",
+    "EndDateTqtyWithPDRP",
+    "TimePeriod"
+  ],
+  "measure_columns": [
+    "AccountName",
+    "TotalCalls"
+  ]
+}

@@ -1,0 +1,429 @@
+================================================================================
+IBSA DATA WAREHOUSE - SCHEMA ANALYSIS REPORT
+================================================================================
+Generated: 2025-10-13 22:02:38
+Total Tables Analyzed: 14
+================================================================================
+
+OVERALL STATISTICS:
+  Total Tables: 14
+  Total Columns: 560
+  Total Data Size: 2789.89 MB
+  Identified Relationships: 84
+
+================================================================================
+TABLE SUMMARIES:
+================================================================================
+
+
+TABLE: Reporting_BI_PrescriberPaymentPlanSummary
+  Rows: ~653,721
+  Columns: 47
+  Size: 1188.53 MB
+  Identifiers: RegionId, TerritoryId, PrescriberId, NPINumber
+  Date Columns: TimePeriod, FromDate, ToDate
+  Measures: TRX, NRX, TRXWithPDRP, NRXWithPDRP
+
+TABLE: Reporting_BI_TerritoryPerformanceSummary
+  Rows: ~572,133
+  Columns: 35
+  Size: 694.41 MB
+  Identifiers: RegionId, TerritoryId, PrescriberId
+  Date Columns: TimePeriod
+  Measures: TRXWriters, TRX, NRX, PreviousTRX, PreviousNRX, STLYTRX, STLYNRX, PreviousTRXWriters, STLYTRXWriters
+
+TABLE: Reporting_BI_PrescriberOverview
+  Rows: 887561
+  Columns: 106
+  Size: 436.19 MB
+  Identifiers: RegionId, TerritoryId, PrescriberId
+  Date Columns: LastCallDate
+  Measures: TRX(C4 Wk), TRX(C13 Wk), TRX(C QTD), TRX(P4 Wk), TRX(P13 Wk), TRX(P QTD), TRXMktShare4, TRXMktShare13, TRXMktShareQTD, STLYTRX4
+
+TABLE: Reporting_BI_TerritoryPerformanceOverview
+  Rows: 809599
+  Columns: 44
+  Size: 161.96 MB
+  Identifiers: RegionId, TerritoryId, PrescriberId
+  Measures: TRX(C4 Wk), TRX(C13 Wk), TRX(C QTD), TRX(C YTD), TRX(C Wk), TRX(P4 Wk), TRX(P13 Wk), TRX(P QTD), TRX(P YTD), STLYTRX4
+
+TABLE: Reporting_Live_HCP_Universe
+  Rows: 1315043
+  Columns: 13
+  Size: 145.84 MB
+  Primary Keys: PrescriberId
+  Identifiers: PrescriberId, NPI
+
+TABLE: Reporting_BI_Trx_SampleSummary
+  Rows: 254872
+  Columns: 61
+  Size: 53.03 MB
+  Identifiers: AccountId, RegionId, TerritoryId
+  Date Columns: TimePeriod
+  Measures: Sample/TRX, TotalSamples, TotalTRX, Tirosint Caps TRX, Tirosint Sol TRX, Flector TRX, Licart TRX, TotalTQTY, Sample/TRX PDRP, Total TRX PDRP
+
+TABLE: Reporting_BI_Nrx_SampleSummary
+  Rows: 254872
+  Columns: 61
+  Size: 52.94 MB
+  Identifiers: AccountId, RegionId, TerritoryId
+  Date Columns: TimePeriod
+  Measures: Sample/NRX, TotalSamples, TotalNRX, Tirosint Caps NRX, Tirosint Sol NRX, Flector NRX, Licart NRX, TotalNQTY, Sample/NRX PDRP, Total NRX PDRP
+
+TABLE: Reporting_BI_CallActivity
+  Rows: 225101
+  Columns: 26
+  Size: 41.12 MB
+  Identifiers: TerritoryId, RegionId, AccountId
+  Date Columns: TimePeriod
+  Measures: CallCount, SampleQuantity, DTPQuantity
+
+TABLE: Reporting_BI_Sample_LL_DTP
+  Rows: 58066
+  Columns: 18
+  Size: 7.35 MB
+  Identifiers: TerritoryId, RegionId
+  Date Columns: TimePeriod
+  Measures: Value
+
+TABLE: Reporting_BI_NGD
+  Rows: 24823
+  Columns: 35
+  Size: 6.35 MB
+  Identifiers: TerritoryId, RegionId, PrescriberId, NPINumber
+  Date Columns: StartDateTqty, EndDateTqty, StartDateTqtyWithPDRP, EndDateTqtyWithPDRP, TimePeriod
+  Measures: AccountName, TotalCalls
+
+TABLE: Reporting_Bi_Territory_CallSummary
+  Rows: 19742
+  Columns: 13
+  Size: 2.08 MB
+  Identifiers: TerritoryId
+  Date Columns: TimePeriod
+  Measures: Value
+
+TABLE: Reporting_BI_CallAttainment_Summary_Tier
+  Rows: 603
+  Columns: 18
+  Size: 0.07 MB
+  Identifiers: TerritoryId, RegionId
+  Date Columns: TimePeriod
+  Measures: NoAccount, TotalCount
+
+TABLE: Reporting_BI_CallAttainment_Summary_TerritoryLevel
+  Rows: 90
+  Columns: 18
+  Size: 0.01 MB
+  Identifiers: TerritoryId, RegionId
+  Date Columns: TimeIn, TimeOff, TimePeriod
+  Measures: NoAccount, TotalCount
+
+TABLE: Reporting_BI_PrescriberProfile
+  Rows: 35
+  Columns: 65
+  Size: 0.01 MB
+  Identifiers: RegionId, TerritoryId, PrescriberId, NPINumber
+  Date Columns: PDRPDate, TimePeriod, LastCallDate
+  Measures: TRX, NRX, PreviousTRX, PreviousNRX, TRXShare, NRXShare, PreviousTRXShare, PreviousNRXShare, STLYTRX, STLYNRX
+
+================================================================================
+TABLE RELATIONSHIPS:
+================================================================================
+
+Reporting_BI_CallActivity <-> Reporting_BI_CallAttainment_Summary_TerritoryLevel
+  Join Keys: TerritoryId, RegionId
+
+Reporting_BI_CallActivity <-> Reporting_BI_CallAttainment_Summary_Tier
+  Join Keys: TerritoryId, RegionId
+
+Reporting_BI_CallActivity <-> Reporting_BI_NGD
+  Join Keys: TerritoryId, RegionId
+
+Reporting_BI_CallActivity <-> Reporting_BI_Nrx_SampleSummary
+  Join Keys: TerritoryId, AccountId, RegionId
+
+Reporting_BI_CallActivity <-> Reporting_BI_PrescriberOverview
+  Join Keys: TerritoryId, RegionId
+
+Reporting_BI_CallActivity <-> Reporting_BI_PrescriberPaymentPlanSummary
+  Join Keys: TerritoryId, RegionId
+
+Reporting_BI_CallActivity <-> Reporting_BI_PrescriberProfile
+  Join Keys: TerritoryId, RegionId
+
+Reporting_BI_CallActivity <-> Reporting_BI_Sample_LL_DTP
+  Join Keys: TerritoryId, RegionId
+
+Reporting_BI_CallActivity <-> Reporting_BI_TerritoryPerformanceOverview
+  Join Keys: TerritoryId, RegionId
+
+Reporting_BI_CallActivity <-> Reporting_BI_TerritoryPerformanceSummary
+  Join Keys: TerritoryId, RegionId
+
+Reporting_BI_CallActivity <-> Reporting_BI_Trx_SampleSummary
+  Join Keys: TerritoryId, AccountId, RegionId
+
+Reporting_BI_CallActivity <-> Reporting_Bi_Territory_CallSummary
+  Join Keys: TerritoryId
+
+Reporting_BI_CallAttainment_Summary_TerritoryLevel <-> Reporting_BI_CallAttainment_Summary_Tier
+  Join Keys: TerritoryId, RegionId
+
+Reporting_BI_CallAttainment_Summary_TerritoryLevel <-> Reporting_BI_NGD
+  Join Keys: TerritoryId, RegionId
+
+Reporting_BI_CallAttainment_Summary_TerritoryLevel <-> Reporting_BI_Nrx_SampleSummary
+  Join Keys: TerritoryId, RegionId
+
+Reporting_BI_CallAttainment_Summary_TerritoryLevel <-> Reporting_BI_PrescriberOverview
+  Join Keys: TerritoryId, RegionId
+
+Reporting_BI_CallAttainment_Summary_TerritoryLevel <-> Reporting_BI_PrescriberPaymentPlanSummary
+  Join Keys: TerritoryId, RegionId
+
+Reporting_BI_CallAttainment_Summary_TerritoryLevel <-> Reporting_BI_PrescriberProfile
+  Join Keys: TerritoryId, RegionId
+
+Reporting_BI_CallAttainment_Summary_TerritoryLevel <-> Reporting_BI_Sample_LL_DTP
+  Join Keys: TerritoryId, RegionId
+
+Reporting_BI_CallAttainment_Summary_TerritoryLevel <-> Reporting_BI_TerritoryPerformanceOverview
+  Join Keys: TerritoryId, RegionId
+
+Reporting_BI_CallAttainment_Summary_TerritoryLevel <-> Reporting_BI_TerritoryPerformanceSummary
+  Join Keys: TerritoryId, RegionId
+
+Reporting_BI_CallAttainment_Summary_TerritoryLevel <-> Reporting_BI_Trx_SampleSummary
+  Join Keys: TerritoryId, RegionId
+
+Reporting_BI_CallAttainment_Summary_TerritoryLevel <-> Reporting_Bi_Territory_CallSummary
+  Join Keys: TerritoryId
+
+Reporting_BI_CallAttainment_Summary_Tier <-> Reporting_BI_NGD
+  Join Keys: TerritoryId, RegionId
+
+Reporting_BI_CallAttainment_Summary_Tier <-> Reporting_BI_Nrx_SampleSummary
+  Join Keys: TerritoryId, RegionId
+
+Reporting_BI_CallAttainment_Summary_Tier <-> Reporting_BI_PrescriberOverview
+  Join Keys: TerritoryId, RegionId
+
+Reporting_BI_CallAttainment_Summary_Tier <-> Reporting_BI_PrescriberPaymentPlanSummary
+  Join Keys: TerritoryId, RegionId
+
+Reporting_BI_CallAttainment_Summary_Tier <-> Reporting_BI_PrescriberProfile
+  Join Keys: TerritoryId, RegionId
+
+Reporting_BI_CallAttainment_Summary_Tier <-> Reporting_BI_Sample_LL_DTP
+  Join Keys: TerritoryId, RegionId
+
+Reporting_BI_CallAttainment_Summary_Tier <-> Reporting_BI_TerritoryPerformanceOverview
+  Join Keys: TerritoryId, RegionId
+
+Reporting_BI_CallAttainment_Summary_Tier <-> Reporting_BI_TerritoryPerformanceSummary
+  Join Keys: TerritoryId, RegionId
+
+Reporting_BI_CallAttainment_Summary_Tier <-> Reporting_BI_Trx_SampleSummary
+  Join Keys: TerritoryId, RegionId
+
+Reporting_BI_CallAttainment_Summary_Tier <-> Reporting_Bi_Territory_CallSummary
+  Join Keys: TerritoryId
+
+Reporting_BI_NGD <-> Reporting_BI_Nrx_SampleSummary
+  Join Keys: TerritoryId, RegionId
+
+Reporting_BI_NGD <-> Reporting_BI_PrescriberOverview
+  Join Keys: TerritoryId, RegionId, PrescriberId
+
+Reporting_BI_NGD <-> Reporting_BI_PrescriberPaymentPlanSummary
+  Join Keys: TerritoryId, RegionId, PrescriberId, NPINumber
+
+Reporting_BI_NGD <-> Reporting_BI_PrescriberProfile
+  Join Keys: TerritoryId, RegionId, PrescriberId, NPINumber
+
+Reporting_BI_NGD <-> Reporting_BI_Sample_LL_DTP
+  Join Keys: TerritoryId, RegionId
+
+Reporting_BI_NGD <-> Reporting_BI_TerritoryPerformanceOverview
+  Join Keys: TerritoryId, RegionId, PrescriberId
+
+Reporting_BI_NGD <-> Reporting_BI_TerritoryPerformanceSummary
+  Join Keys: TerritoryId, RegionId, PrescriberId
+
+Reporting_BI_NGD <-> Reporting_BI_Trx_SampleSummary
+  Join Keys: TerritoryId, RegionId
+
+Reporting_BI_NGD <-> Reporting_Bi_Territory_CallSummary
+  Join Keys: TerritoryId
+
+Reporting_BI_NGD <-> Reporting_Live_HCP_Universe
+  Join Keys: PrescriberId
+
+Reporting_BI_Nrx_SampleSummary <-> Reporting_BI_PrescriberOverview
+  Join Keys: TerritoryId, RegionId
+
+Reporting_BI_Nrx_SampleSummary <-> Reporting_BI_PrescriberPaymentPlanSummary
+  Join Keys: TerritoryId, RegionId
+
+Reporting_BI_Nrx_SampleSummary <-> Reporting_BI_PrescriberProfile
+  Join Keys: TerritoryId, RegionId
+
+Reporting_BI_Nrx_SampleSummary <-> Reporting_BI_Sample_LL_DTP
+  Join Keys: TerritoryId, RegionId
+
+Reporting_BI_Nrx_SampleSummary <-> Reporting_BI_TerritoryPerformanceOverview
+  Join Keys: TerritoryId, RegionId
+
+Reporting_BI_Nrx_SampleSummary <-> Reporting_BI_TerritoryPerformanceSummary
+  Join Keys: TerritoryId, RegionId
+
+Reporting_BI_Nrx_SampleSummary <-> Reporting_BI_Trx_SampleSummary
+  Join Keys: TerritoryId, AccountId, RegionId
+
+Reporting_BI_Nrx_SampleSummary <-> Reporting_Bi_Territory_CallSummary
+  Join Keys: TerritoryId
+
+Reporting_BI_PrescriberOverview <-> Reporting_BI_PrescriberPaymentPlanSummary
+  Join Keys: TerritoryId, RegionId, PrescriberId
+
+Reporting_BI_PrescriberOverview <-> Reporting_BI_PrescriberProfile
+  Join Keys: TerritoryId, RegionId, PrescriberId
+
+Reporting_BI_PrescriberOverview <-> Reporting_BI_Sample_LL_DTP
+  Join Keys: TerritoryId, RegionId
+
+Reporting_BI_PrescriberOverview <-> Reporting_BI_TerritoryPerformanceOverview
+  Join Keys: TerritoryId, RegionId, PrescriberId
+
+Reporting_BI_PrescriberOverview <-> Reporting_BI_TerritoryPerformanceSummary
+  Join Keys: TerritoryId, RegionId, PrescriberId
+
+Reporting_BI_PrescriberOverview <-> Reporting_BI_Trx_SampleSummary
+  Join Keys: TerritoryId, RegionId
+
+Reporting_BI_PrescriberOverview <-> Reporting_Bi_Territory_CallSummary
+  Join Keys: TerritoryId
+
+Reporting_BI_PrescriberOverview <-> Reporting_Live_HCP_Universe
+  Join Keys: PrescriberId
+
+Reporting_BI_PrescriberPaymentPlanSummary <-> Reporting_BI_PrescriberProfile
+  Join Keys: TerritoryId, RegionId, PrescriberId, NPINumber
+
+Reporting_BI_PrescriberPaymentPlanSummary <-> Reporting_BI_Sample_LL_DTP
+  Join Keys: TerritoryId, RegionId
+
+Reporting_BI_PrescriberPaymentPlanSummary <-> Reporting_BI_TerritoryPerformanceOverview
+  Join Keys: TerritoryId, RegionId, PrescriberId
+
+Reporting_BI_PrescriberPaymentPlanSummary <-> Reporting_BI_TerritoryPerformanceSummary
+  Join Keys: TerritoryId, RegionId, PrescriberId
+
+Reporting_BI_PrescriberPaymentPlanSummary <-> Reporting_BI_Trx_SampleSummary
+  Join Keys: TerritoryId, RegionId
+
+Reporting_BI_PrescriberPaymentPlanSummary <-> Reporting_Bi_Territory_CallSummary
+  Join Keys: TerritoryId
+
+Reporting_BI_PrescriberPaymentPlanSummary <-> Reporting_Live_HCP_Universe
+  Join Keys: PrescriberId
+
+Reporting_BI_PrescriberProfile <-> Reporting_BI_Sample_LL_DTP
+  Join Keys: TerritoryId, RegionId
+
+Reporting_BI_PrescriberProfile <-> Reporting_BI_TerritoryPerformanceOverview
+  Join Keys: TerritoryId, RegionId, PrescriberId
+
+Reporting_BI_PrescriberProfile <-> Reporting_BI_TerritoryPerformanceSummary
+  Join Keys: TerritoryId, RegionId, PrescriberId
+
+Reporting_BI_PrescriberProfile <-> Reporting_BI_Trx_SampleSummary
+  Join Keys: TerritoryId, RegionId
+
+Reporting_BI_PrescriberProfile <-> Reporting_Bi_Territory_CallSummary
+  Join Keys: TerritoryId
+
+Reporting_BI_PrescriberProfile <-> Reporting_Live_HCP_Universe
+  Join Keys: PrescriberId
+
+Reporting_BI_Sample_LL_DTP <-> Reporting_BI_TerritoryPerformanceOverview
+  Join Keys: TerritoryId, RegionId
+
+Reporting_BI_Sample_LL_DTP <-> Reporting_BI_TerritoryPerformanceSummary
+  Join Keys: TerritoryId, RegionId
+
+Reporting_BI_Sample_LL_DTP <-> Reporting_BI_Trx_SampleSummary
+  Join Keys: TerritoryId, RegionId
+
+Reporting_BI_Sample_LL_DTP <-> Reporting_Bi_Territory_CallSummary
+  Join Keys: TerritoryId
+
+Reporting_BI_TerritoryPerformanceOverview <-> Reporting_BI_TerritoryPerformanceSummary
+  Join Keys: TerritoryId, RegionId, PrescriberId
+
+Reporting_BI_TerritoryPerformanceOverview <-> Reporting_BI_Trx_SampleSummary
+  Join Keys: TerritoryId, RegionId
+
+Reporting_BI_TerritoryPerformanceOverview <-> Reporting_Bi_Territory_CallSummary
+  Join Keys: TerritoryId
+
+Reporting_BI_TerritoryPerformanceOverview <-> Reporting_Live_HCP_Universe
+  Join Keys: PrescriberId
+
+Reporting_BI_TerritoryPerformanceSummary <-> Reporting_BI_Trx_SampleSummary
+  Join Keys: TerritoryId, RegionId
+
+Reporting_BI_TerritoryPerformanceSummary <-> Reporting_Bi_Territory_CallSummary
+  Join Keys: TerritoryId
+
+Reporting_BI_TerritoryPerformanceSummary <-> Reporting_Live_HCP_Universe
+  Join Keys: PrescriberId
+
+Reporting_BI_Trx_SampleSummary <-> Reporting_Bi_Territory_CallSummary
+  Join Keys: TerritoryId
+
+
+================================================================================
+DATA QUALITY OBSERVATIONS:
+================================================================================
+
+Reporting_BI_CallActivity:
+  - FlectorTier: 100.0% null
+  - LicartTier: 73.72% null
+  - SampledCall: 100.0% null
+  - LunchLearn: 100.0% null
+  - LunchLearnType: 100.0% null
+Reporting_BI_CallAttainment_Summary_Tier:
+  - LicartTier: 58.21% null
+Reporting_BI_NGD:
+  - TotalCalls: 77.18% null
+Reporting_BI_PrescriberOverview:
+  - PrimaryProduct: 81.61% null
+  - SecondaryProduct: 88.88% null
+  - TRX(P4 Wk): 55.51% null
+  - STLYTRX4: 54.99% null
+  - NRX(P4 Wk): 55.51% null
+Reporting_BI_PrescriberPaymentPlanSummary:
+  - Title: 60.7% null
+  - PrimaryProduct: 75.82% null
+  - SecondaryProduct: 88.72% null
+  - MyTarget: 66.16% null
+  - CoreOverlayTerritoryTQTY: 99.18% null
+Reporting_BI_PrescriberProfile:
+  - Credentials: 100.0% null
+  - AMANoContact: 100.0% null
+  - ProductPriority: 100.0% null
+  - Calls: 100.0% null
+  - LunchLearn: 100.0% null
+Reporting_BI_TerritoryPerformanceOverview:
+  - TRX(C4 Wk): 51.24% null
+  - TRX(C Wk): 79.13% null
+  - TRX(P4 Wk): 51.43% null
+  - STLYTRX4: 51.42% null
+  - TRXWriters(C4 Wk): 51.24% null
+Reporting_BI_TerritoryPerformanceSummary:
+  - MyTarget: 69.05% null
+Reporting_Live_HCP_Universe:
+  - ProfessionalDesignation: 100.0% null
+  - AddressLine2: 66.38% null
+  - Primary: 100.0% null

@@ -1,0 +1,55 @@
+HCP ID: 7269747
+Scenario: retention
+Priority: HIGH
+GPT-4 Enhanced: False
+Compliance: 100%
+Violations: 0
+
+================================================================================
+
+================================================================================
+CALL SCRIPT - HCP 7269747
+Scenario: retention
+Priority: HIGH
+================================================================================
+
+OPENING:
+Good morning, Dr. Doctor. Thank you for taking the time to meet with me today.
+I wanted to discuss Tirosint and understand how we can better support your practice. I noticed your Tirosint prescriptions have declined by approximately 0% recently, and I'd like to learn more about your current treatment approach.
+
+KEY TALKING POINTS:
+1. Acknowledge Change & Seek Understanding: I see that you've been prescribing generic levothyroxine more frequently. Could you share what's driving this change? Understanding your perspective helps me ensure we're addressing your patients' needs.
+2. Reinforce Value Proposition: Based on your specialty in your specialty, Tirosint may offer specific benefits for certain patient populations. TIROSINT (levothyroxine sodium) Capsules is a prescription medicine that contains a man-made hormone called levothyroxine which replaces a hormone that is normally produced in your body by the thyroid gland. It is meant to replace the hormone to treat a condition called hypothyroidism.
+3. Clinical Evidence: Recent studies have demonstrated If you have hypothyroidism and persistent symptoms with normal TSH levels, it may be time to talk to your doctor. Many patients continue to experience symptoms even when their TSH levels appear normal with their current therapy.. This may be relevant for patients who are not optimally controlled on current therapy.
+4. Address Competitive Positioning: I understand generic levothyroxine may have certain advantages. However, Tirosint offers unique formulation and delivery characteristics. For patients with particular therapeutic requirements, this could make a meaningful difference.
+
+OBJECTION HANDLERS:
+
+Objection: Your product is more expensive than generics/competitors
+Response: Get a low out-of-pocket price for your prescription for TIROSINT Capsules with TIROSINT Direct. Patients can get their medication delivered directly to their home from a network of participating mail-order pharmacies, often at a lower cost than retail pharmacies.
+
+Objection: I'm not seeing better results with your product
+Response: I appreciate that feedback. Could you tell me more about the patient population you're treating? Tirosint may be particularly beneficial for patients with specific clinical needs. Let's discuss whether there might be select patients where Tirosint could be a good fit.
+
+Objection: I'm satisfied with current therapy options
+Response: That's great to hear your patients are doing well. I'm not suggesting changing all patients, but rather keeping Tirosint as an option for those who may not be optimally controlled or have specific needs. Would you be open to considering it for select cases?
+
+NEXT STEPS:
+1. Leave product samples and dosing information
+2. Send clinical study reprints via email
+3. Schedule follow-up call/visit in 30 days
+4. Provide direct contact for questions
+5. Monitor TRx data for changes
+
+REQUIRED DISCLAIMERS:
+• IMPORTANT SAFETY INFORMATION: NOT FOR TREATMENT OF OBESITY OR FOR WEIGHT LOSS. Thyroid hormones, including TIROSINT, should not be used either alone or in combination with other medications for the treatment of obesity or for weight loss. In patients with normal thyroid levels, doses within the range of daily hormonal requirements are not helpful for weight loss. Larger doses may result in serious or even life threatening events.
+• See full Prescribing Information for Tirosint, including Boxed Warning, at www.tirosint.com/pi
+• Individual results may vary. Consult your healthcare provider for personalized medical advice.
+• To report SUSPECTED ADVERSE REACTIONS, contact IBSA Pharma Inc. at 1-800-IBSA (4272) or FDA at 1-800-FDA-1088 or www.fda.gov/medwatch
+
+================================================================================
+Generated: 2025-10-28T05:48:20.811735
+Method: template_rag
+GPT-4 Enhanced: No
+Compliance: ✓ VERIFIED
+================================================================================

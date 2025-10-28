@@ -1,0 +1,75 @@
+
+COMPETITIVE INTELLIGENCE & TERRITORY ANALYSIS - EXECUTIVE SUMMARY
+================================================================================
+
+OVERVIEW:
+- Total HCPs Analyzed: 1,277,087
+- HCPs with Territory Data: 338,598 (26.5%)
+- Unique Territories: 93
+- Unique Regions: 9
+
+TOP PERFORMING TERRITORIES (by Total TRx):
+              TerritoryName  RegionName  hcp_count  total_trx  avg_ngd
+   Tele-Sales 5 - Southwest   Southwest      15266   183950.0     0.39
+        Tele-Sales 4 - West        West      16549   150967.0     0.40
+     Tele-Sales 3 - Midwest     Midwest      18390   142709.0     0.41
+Tele-Sales 2 - Mid-Atlantic Midatlantic      10466   130019.0     0.40
+                Houston RSS   Southwest       3657    81202.0     0.41
+               Las Vegas NV        West       5884    73636.0     0.39
+                Dallas N TX   Southwest       3344    61865.0     0.40
+                  Miami RSS   Southeast       4305    61090.0     0.40
+           Oklahoma City OK   Southwest       4469    60618.0     0.41
+                 Chicago IL     Midwest       4065    57848.0     0.44
+
+REGIONAL PERFORMANCE:
+ RegionName  hcp_count  total_trx  avg_ibsa_share  avg_ngd
+  Southwest      56118   883938.0            7.00     0.40
+       West      65223   669556.0            5.68     0.41
+    Midwest      60654   642692.0            5.63     0.42
+Midatlantic      51968   591869.0            6.54     0.40
+  Southeast      47455   588090.0            7.25     0.40
+  Northeast      27398   359768.0            6.91     0.42
+  Tri-state      29691   356523.0            8.32     0.42
+ Unassigned         14      531.0            0.00     0.34
+ Whitespace         77      128.0            0.00     0.44
+
+COMPETITIVE INTELLIGENCE INSIGHTS:
+- Avg Competitive Pressure Score: 93.43
+- Avg Growth Opportunity Score: 46.97
+- HCPs Not Using IBSA: 242,288 (71.6%)
+- HCPs with Competitor Dominant: 0 (0.0%)
+
+CONVERSION OPPORTUNITIES:
+- High Conversion Likelihood: 242,288 HCPs
+- Medium Conversion Likelihood: 74,064 HCPs
+- Avg Conversion Probability: 0.590 (59.0%)
+- Avg Priority Score: 37.80
+
+NGD INSIGHTS BY TERRITORY:
+- Avg NGD Score (All Territories): 0.410
+- Territory with Highest NGD: Riverside CA (0.480)
+- Territory with Lowest NGD: UnAssigned (0.340)
+
+THERAPEUTIC AREA DISTRIBUTION (Total HCPs):
+- Thyroid/Endocrine: 8,813 (2.6%)
+- Primary Care: 117,596 (34.7%)
+- Pain Management: 2,647 (0.8%)
+- Mid-Level Providers: 99,587 (29.4%)
+
+CHARTS GENERATED: 13 visualizations saved to c:\Users\SandeepT\IBSA PoC V2\ibsa-poc-eda\outputs\eda_charts
+1. territory_top20_by_trx.png
+2. territory_ngd_vs_comp_pressure.png
+3. regional_trx_distribution.png
+4. regional_performance_dashboard.png
+5. ta_penetration_by_region_heatmap.png
+6. ta_distribution_by_region_stacked.png
+7. competitive_situations_by_territory.png
+8. competitor_strength_by_region.png
+9. conversion_opportunities_by_territory.png
+10. conversion_priority_bubble_chart.png
+11. ibsa_share_distribution_by_region.png
+12. ngd_classification_by_territory.png
+13. avg_ngd_score_by_region.png
+
+================================================================================
+Analysis Complete: 2025-10-17 16:55:47

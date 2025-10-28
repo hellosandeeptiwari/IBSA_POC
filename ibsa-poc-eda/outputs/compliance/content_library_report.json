@@ -1,0 +1,84 @@
+{
+  "generated_at": "2025-10-27T11:43:16.547298",
+  "total_content": 14,
+  "by_category": {
+    "product_messaging": 4,
+    "clinical_claims": 4,
+    "safety_info": 3,
+    "objection_handlers": 3
+  },
+  "by_product": {
+    "Flector": 3,
+    "Portfolio": 2,
+    "Licart": 3,
+    "Tirosint": 6
+  },
+  "by_approval_authority": {
+    "MLR": 13,
+    "CRC": 1
+  },
+  "expired_content": 0,
+  "most_used": [
+    {
+      "content_id": "TIR-MSG-001",
+      "title": "Tirosint Gel Cap Advantage",
+      "usage_count": 0,
+      "last_used": null
+    },
+    {
+      "content_id": "TIR-MSG-002",
+      "title": "Tirosint-SOL Liquid Formulation",
+      "usage_count": 0,
+      "last_used": null
+    },
+    {
+      "content_id": "TIR-CLI-001",
+      "title": "Bioavailability Study",
+      "usage_count": 0,
+      "last_used": null
+    },
+    {
+      "content_id": "TIR-CLI-002",
+      "title": "Malabsorption Study",
+      "usage_count": 0,
+      "last_used": null
+    },
+    {
+      "content_id": "TIR-SAF-001",
+      "title": "Contraindications",
+      "usage_count": 0,
+      "last_used": null
+    },
+    {
+      "content_id": "TIR-OBJ-001",
+      "title": "Price Objection - Value Discussion",
+      "usage_count": 0,
+      "last_used": null
+    },
+    {
+      "content_id": "FLE-MSG-001",
+      "title": "Flector Topical Application",
+      "usage_count": 0,
+      "last_used": null
+    },
+    {
+      "content_id": "FLE-CLI-001",
+      "title": "Acute Pain Study",
+      "usage_count": 0,
+      "last_used": null
+    },
+    {
+      "content_id": "FLE-SAF-001",
+      "title": "NSAID Warning",
+      "usage_count": 0,
+      "last_used": null
+    },
+    {
+      "content_id": "LIC-MSG-001",
+      "title": "Licart Transdermal System",
+      "usage_count": 0,
+      "last_used": null
+    }
+  ],
+  "total_usage": 0
+}

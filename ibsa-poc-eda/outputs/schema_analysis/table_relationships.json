@@ -1,0 +1,677 @@
+[
+  {
+    "table1": "Reporting_BI_CallActivity",
+    "table2": "Reporting_BI_CallAttainment_Summary_TerritoryLevel",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_CallActivity",
+    "table2": "Reporting_BI_CallAttainment_Summary_Tier",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_CallActivity",
+    "table2": "Reporting_BI_NGD",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_CallActivity",
+    "table2": "Reporting_BI_Nrx_SampleSummary",
+    "join_keys": [
+      "TerritoryId",
+      "AccountId",
+      "RegionId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_CallActivity",
+    "table2": "Reporting_BI_PrescriberOverview",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_CallActivity",
+    "table2": "Reporting_BI_PrescriberPaymentPlanSummary",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_CallActivity",
+    "table2": "Reporting_BI_PrescriberProfile",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_CallActivity",
+    "table2": "Reporting_BI_Sample_LL_DTP",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_CallActivity",
+    "table2": "Reporting_BI_TerritoryPerformanceOverview",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_CallActivity",
+    "table2": "Reporting_BI_TerritoryPerformanceSummary",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_CallActivity",
+    "table2": "Reporting_BI_Trx_SampleSummary",
+    "join_keys": [
+      "TerritoryId",
+      "AccountId",
+      "RegionId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_CallActivity",
+    "table2": "Reporting_Bi_Territory_CallSummary",
+    "join_keys": [
+      "TerritoryId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_CallAttainment_Summary_TerritoryLevel",
+    "table2": "Reporting_BI_CallAttainment_Summary_Tier",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_CallAttainment_Summary_TerritoryLevel",
+    "table2": "Reporting_BI_NGD",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_CallAttainment_Summary_TerritoryLevel",
+    "table2": "Reporting_BI_Nrx_SampleSummary",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_CallAttainment_Summary_TerritoryLevel",
+    "table2": "Reporting_BI_PrescriberOverview",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_CallAttainment_Summary_TerritoryLevel",
+    "table2": "Reporting_BI_PrescriberPaymentPlanSummary",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_CallAttainment_Summary_TerritoryLevel",
+    "table2": "Reporting_BI_PrescriberProfile",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_CallAttainment_Summary_TerritoryLevel",
+    "table2": "Reporting_BI_Sample_LL_DTP",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_CallAttainment_Summary_TerritoryLevel",
+    "table2": "Reporting_BI_TerritoryPerformanceOverview",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_CallAttainment_Summary_TerritoryLevel",
+    "table2": "Reporting_BI_TerritoryPerformanceSummary",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_CallAttainment_Summary_TerritoryLevel",
+    "table2": "Reporting_BI_Trx_SampleSummary",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_CallAttainment_Summary_TerritoryLevel",
+    "table2": "Reporting_Bi_Territory_CallSummary",
+    "join_keys": [
+      "TerritoryId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_CallAttainment_Summary_Tier",
+    "table2": "Reporting_BI_NGD",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_CallAttainment_Summary_Tier",
+    "table2": "Reporting_BI_Nrx_SampleSummary",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_CallAttainment_Summary_Tier",
+    "table2": "Reporting_BI_PrescriberOverview",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_CallAttainment_Summary_Tier",
+    "table2": "Reporting_BI_PrescriberPaymentPlanSummary",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_CallAttainment_Summary_Tier",
+    "table2": "Reporting_BI_PrescriberProfile",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_CallAttainment_Summary_Tier",
+    "table2": "Reporting_BI_Sample_LL_DTP",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_CallAttainment_Summary_Tier",
+    "table2": "Reporting_BI_TerritoryPerformanceOverview",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_CallAttainment_Summary_Tier",
+    "table2": "Reporting_BI_TerritoryPerformanceSummary",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_CallAttainment_Summary_Tier",
+    "table2": "Reporting_BI_Trx_SampleSummary",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_CallAttainment_Summary_Tier",
+    "table2": "Reporting_Bi_Territory_CallSummary",
+    "join_keys": [
+      "TerritoryId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_NGD",
+    "table2": "Reporting_BI_Nrx_SampleSummary",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_NGD",
+    "table2": "Reporting_BI_PrescriberOverview",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId",
+      "PrescriberId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_NGD",
+    "table2": "Reporting_BI_PrescriberPaymentPlanSummary",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId",
+      "PrescriberId",
+      "NPINumber"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_NGD",
+    "table2": "Reporting_BI_PrescriberProfile",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId",
+      "PrescriberId",
+      "NPINumber"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_NGD",
+    "table2": "Reporting_BI_Sample_LL_DTP",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_NGD",
+    "table2": "Reporting_BI_TerritoryPerformanceOverview",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId",
+      "PrescriberId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_NGD",
+    "table2": "Reporting_BI_TerritoryPerformanceSummary",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId",
+      "PrescriberId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_NGD",
+    "table2": "Reporting_BI_Trx_SampleSummary",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_NGD",
+    "table2": "Reporting_Bi_Territory_CallSummary",
+    "join_keys": [
+      "TerritoryId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_NGD",
+    "table2": "Reporting_Live_HCP_Universe",
+    "join_keys": [
+      "PrescriberId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_Nrx_SampleSummary",
+    "table2": "Reporting_BI_PrescriberOverview",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_Nrx_SampleSummary",
+    "table2": "Reporting_BI_PrescriberPaymentPlanSummary",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_Nrx_SampleSummary",
+    "table2": "Reporting_BI_PrescriberProfile",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_Nrx_SampleSummary",
+    "table2": "Reporting_BI_Sample_LL_DTP",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_Nrx_SampleSummary",
+    "table2": "Reporting_BI_TerritoryPerformanceOverview",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_Nrx_SampleSummary",
+    "table2": "Reporting_BI_TerritoryPerformanceSummary",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_Nrx_SampleSummary",
+    "table2": "Reporting_BI_Trx_SampleSummary",
+    "join_keys": [
+      "TerritoryId",
+      "AccountId",
+      "RegionId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_Nrx_SampleSummary",
+    "table2": "Reporting_Bi_Territory_CallSummary",
+    "join_keys": [
+      "TerritoryId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_PrescriberOverview",
+    "table2": "Reporting_BI_PrescriberPaymentPlanSummary",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId",
+      "PrescriberId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_PrescriberOverview",
+    "table2": "Reporting_BI_PrescriberProfile",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId",
+      "PrescriberId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_PrescriberOverview",
+    "table2": "Reporting_BI_Sample_LL_DTP",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_PrescriberOverview",
+    "table2": "Reporting_BI_TerritoryPerformanceOverview",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId",
+      "PrescriberId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_PrescriberOverview",
+    "table2": "Reporting_BI_TerritoryPerformanceSummary",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId",
+      "PrescriberId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_PrescriberOverview",
+    "table2": "Reporting_BI_Trx_SampleSummary",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_PrescriberOverview",
+    "table2": "Reporting_Bi_Territory_CallSummary",
+    "join_keys": [
+      "TerritoryId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_PrescriberOverview",
+    "table2": "Reporting_Live_HCP_Universe",
+    "join_keys": [
+      "PrescriberId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_PrescriberPaymentPlanSummary",
+    "table2": "Reporting_BI_PrescriberProfile",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId",
+      "PrescriberId",
+      "NPINumber"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_PrescriberPaymentPlanSummary",
+    "table2": "Reporting_BI_Sample_LL_DTP",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_PrescriberPaymentPlanSummary",
+    "table2": "Reporting_BI_TerritoryPerformanceOverview",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId",
+      "PrescriberId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_PrescriberPaymentPlanSummary",
+    "table2": "Reporting_BI_TerritoryPerformanceSummary",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId",
+      "PrescriberId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_PrescriberPaymentPlanSummary",
+    "table2": "Reporting_BI_Trx_SampleSummary",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_PrescriberPaymentPlanSummary",
+    "table2": "Reporting_Bi_Territory_CallSummary",
+    "join_keys": [
+      "TerritoryId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_PrescriberPaymentPlanSummary",
+    "table2": "Reporting_Live_HCP_Universe",
+    "join_keys": [
+      "PrescriberId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_PrescriberProfile",
+    "table2": "Reporting_BI_Sample_LL_DTP",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_PrescriberProfile",
+    "table2": "Reporting_BI_TerritoryPerformanceOverview",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId",
+      "PrescriberId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_PrescriberProfile",
+    "table2": "Reporting_BI_TerritoryPerformanceSummary",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId",
+      "PrescriberId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_PrescriberProfile",
+    "table2": "Reporting_BI_Trx_SampleSummary",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_PrescriberProfile",
+    "table2": "Reporting_Bi_Territory_CallSummary",
+    "join_keys": [
+      "TerritoryId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_PrescriberProfile",
+    "table2": "Reporting_Live_HCP_Universe",
+    "join_keys": [
+      "PrescriberId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_Sample_LL_DTP",
+    "table2": "Reporting_BI_TerritoryPerformanceOverview",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_Sample_LL_DTP",
+    "table2": "Reporting_BI_TerritoryPerformanceSummary",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_Sample_LL_DTP",
+    "table2": "Reporting_BI_Trx_SampleSummary",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_Sample_LL_DTP",
+    "table2": "Reporting_Bi_Territory_CallSummary",
+    "join_keys": [
+      "TerritoryId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_TerritoryPerformanceOverview",
+    "table2": "Reporting_BI_TerritoryPerformanceSummary",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId",
+      "PrescriberId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_TerritoryPerformanceOverview",
+    "table2": "Reporting_BI_Trx_SampleSummary",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_TerritoryPerformanceOverview",
+    "table2": "Reporting_Bi_Territory_CallSummary",
+    "join_keys": [
+      "TerritoryId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_TerritoryPerformanceOverview",
+    "table2": "Reporting_Live_HCP_Universe",
+    "join_keys": [
+      "PrescriberId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_TerritoryPerformanceSummary",
+    "table2": "Reporting_BI_Trx_SampleSummary",
+    "join_keys": [
+      "TerritoryId",
+      "RegionId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_TerritoryPerformanceSummary",
+    "table2": "Reporting_Bi_Territory_CallSummary",
+    "join_keys": [
+      "TerritoryId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_TerritoryPerformanceSummary",
+    "table2": "Reporting_Live_HCP_Universe",
+    "join_keys": [
+      "PrescriberId"
+    ]
+  },
+  {
+    "table1": "Reporting_BI_Trx_SampleSummary",
+    "table2": "Reporting_Bi_Territory_CallSummary",
+    "join_keys": [
+      "TerritoryId"
+    ]
+  }
+]
