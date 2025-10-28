@@ -3,7 +3,7 @@ import Papa from 'papaparse'
 
 let cachedData: any[] = []
 let lastFetch = 0
-const CACHE_TTL = 5 * 60 * 1000
+const CACHE_TTL = 60 * 60 * 1000 // 1 hour
 
 async function loadData() {
   const now = Date.now()
