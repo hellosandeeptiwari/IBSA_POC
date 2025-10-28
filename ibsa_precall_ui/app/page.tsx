@@ -516,81 +516,99 @@ export default function DashboardPage() {
                     <Tooltip content="Medical specialty" />
                   </div>
                 </th>
-                <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b">
+                <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100" onClick={() => handleSort('territory')}>
                   <div className="flex items-center">
                     Territory
+                    <SortIcon column="territory" />
                     <Tooltip content="Sales territory assignment" />
                   </div>
                 </th>
-                <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b bg-purple-50">
+                <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b bg-purple-50 cursor-pointer hover:bg-gray-100" onClick={() => handleSort('ngd_decile')}>
                   <div className="flex items-center gap-1">
                     <Bot className="h-3 w-3 text-purple-600" />
                     <span className="flex items-center gap-1">
                       NGD Status
                       <span className="px-1.5 py-0.5 bg-purple-200 text-purple-700 rounded text-[10px] font-bold">AI</span>
                     </span>
+                    <SortIcon column="ngd_decile" />
                     <Tooltip content="AI Classification: New (0-10% decile), Grower (11-40%), Stable (41-70%), Decliner (71-100%)" />
                   </div>
                 </th>
-                <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b">
+                <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100" onClick={() => handleSort('tier')}>
                   <div className="flex items-center">
                     Tier
+                    <SortIcon column="tier" />
                     <Tooltip content="Rule: Platinum (TRx≥100), Gold (50-99), Silver (20-49), Bronze (<20)" />
                   </div>
                 </th>
-                <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b bg-purple-50">
+                <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b bg-purple-50 cursor-pointer hover:bg-gray-100" onClick={() => handleSort('value_score')}>
                   <div className="flex items-center gap-1">
                     <Sparkles className="h-3 w-3 text-purple-600" />
                     <span className="flex items-center gap-1">
                       HCP Power Score
                       <span className="px-1.5 py-0.5 bg-purple-200 text-purple-700 rounded text-[10px] font-bold">AI</span>
                     </span>
+                    <SortIcon column="value_score" />
                     <Tooltip content="AI Prediction: ML model call success probability × 100 (higher = better engagement likelihood)" />
                   </div>
                 </th>
-                <th className="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase border-b bg-purple-50">
+                <th className="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase border-b bg-purple-50 cursor-pointer hover:bg-gray-100" onClick={() => handleSort('priority')}>
                   <div className="flex items-center justify-end gap-1">
                     <Bot className="h-3 w-3 text-purple-600" />
                     <span className="flex items-center gap-1">
                       Priority
                       <span className="px-1.5 py-0.5 bg-purple-200 text-purple-700 rounded text-[10px] font-bold">AI</span>
                     </span>
-                    <Tooltip content="AI Ranking: ML-based priority (1=Highest: Power score + tier + NGD + recency weighted)" />
+                    <SortIcon column="priority" />
+                    <Tooltip content="AI Ranking: 60% Call Success + 30% Rx Lift + 10% (Tier & NGD) mapped to 1-5" />
                   </div>
                 </th>
-                <th className="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase border-b">
+                <th className="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100" onClick={() => handleSort('trx_current')}>
                   <div className="flex items-center justify-end">
                     Current TRx
+                    <SortIcon column="trx_current" />
                     <Tooltip content="Total Rx written this quarter (QTD)" />
                   </div>
                 </th>
-                <th className="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase border-b">
+                <th className="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100" onClick={() => handleSort('trx_prior')}>
                   <div className="flex items-center justify-end">
                     Prior TRx
+                    <SortIcon column="trx_prior" />
                     <Tooltip content="Total Rx previous quarter (for comparison)" />
                   </div>
                 </th>
-                <th className="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase border-b">
+                <th className="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100" onClick={() => handleSort('trx_growth')}>
                   <div className="flex items-center justify-end">
                     Growth %
+                    <SortIcon column="trx_growth" />
                     <Tooltip content="Rule: ((Current - Prior) / Prior) × 100" />
                   </div>
                 </th>
-                <th className="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase border-b">
+                <th className="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100" onClick={() => handleSort('nrx_count')}>
                   <div className="flex items-center justify-end">
                     NRx
+                    <SortIcon column="nrx_count" />
                     <Tooltip content="New Rx (first-time prescriptions for new patients)" />
                   </div>
                 </th>
-                <th className="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase border-b">
+                <th className="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100" onClick={() => handleSort('ibsa_share')}>
                   <div className="flex items-center justify-end">
                     Market Share
+                    <SortIcon column="ibsa_share" />
                     <Tooltip content="Rule: (Your TRx / Total TRx) × 100" />
                   </div>
                 </th>
-                <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b">
+                <th className="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100" onClick={() => handleSort('rx_lift')}>
+                  <div className="flex items-center justify-end">
+                    Rx Lift
+                    <SortIcon column="rx_lift" />
+                    <Tooltip content="Predicted incremental TRx lift (higher = more revenue impact)" />
+                  </div>
+                </th>
+                <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100" onClick={() => handleSort('call_success_score')}>
                   <div className="flex items-center">
                     Call Success
+                    <SortIcon column="call_success_score" />
                     <Tooltip content="Likelihood of prescription after sales call (ML prediction 0-100%)" />
                   </div>
                 </th>
@@ -616,7 +634,13 @@ export default function DashboardPage() {
                   >
                     <td className="px-3 py-3 text-sm font-mono">{hcp.npi}</td>
                     <td className="px-3 py-3 text-sm font-semibold">{hcp.name}</td>
-                    <td className="px-3 py-3 text-sm whitespace-nowrap">{hcp.specialty}</td>
+                    <td className="px-3 py-3 text-sm">
+                      <Tooltip content={hcp.specialty}>
+                        <span className="block max-w-[150px] truncate">
+                          {hcp.specialty}
+                        </span>
+                      </Tooltip>
+                    </td>
                     <td className="px-3 py-3 text-sm">{hcp.territory}</td>
                     <td className="px-3 py-3 bg-purple-50 border-l-2 border-r-2 border-purple-300">
                       <div className="flex items-center gap-1">
@@ -671,6 +695,7 @@ export default function DashboardPage() {
                         {formatPercent(hcp.ibsa_share, 0)}
                       </span>
                     </td>
+                    <td className="px-3 py-3 text-right font-mono">{formatNumber(hcp.rx_lift || 0)}</td>
                     <td className="px-3 py-3">
                       <div className="w-20">
                         <div className="w-full bg-gray-200 rounded-full h-2">
