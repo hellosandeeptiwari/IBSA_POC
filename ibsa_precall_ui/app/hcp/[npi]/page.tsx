@@ -139,51 +139,93 @@ export default function HCPDetailPage() {
                 <div className="flex items-center gap-2">
                   <Bot className="h-3 w-3 text-purple-600 flex-shrink-0" />
                   <span className="text-gray-600">NGD Category:</span>
-                  <span className="ml-auto bg-purple-200 border border-purple-400 px-2 py-0.5 rounded font-semibold">
+                  <span className="ml-auto bg-purple-200 border border-purple-400 px-2 py-0.5 rounded font-semibold inline-flex items-center gap-1">
                     {hcp.predictions.product_focus === 'Tirosint' ? hcp.predictions.tirosint_ngd_category :
                      hcp.predictions.product_focus === 'Flector' ? hcp.predictions.flector_ngd_category :
                      hcp.predictions.licart_ngd_category}
+                    <span className="text-[10px] opacity-75">
+                      (Decile {hcp.ngd_decile}, {formatPercent(hcp.trx_growth, 1)} growth)
+                    </span>
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Bot className="h-3 w-3 text-purple-600 flex-shrink-0" />
                   <span className="text-gray-600">Next Best Action:</span>
-                  <span className="ml-auto bg-purple-200 border border-purple-400 px-2 py-0.5 rounded font-semibold">{hcp.predictions.next_best_action}</span>
+                  <span className="ml-auto bg-purple-200 border border-purple-400 px-2 py-0.5 rounded font-semibold inline-flex items-center gap-1">
+                    {hcp.predictions.next_best_action}
+                    <span className="text-[10px] bg-purple-600 text-white px-1 rounded">
+                      {hcp.predictions.sample_allocation >= 12 ? 'High ROI' : hcp.predictions.sample_allocation >= 8 ? 'Moderate ROI' : 'Selective'}
+                    </span>
+                  </span>
                 </div>
               </div>
-              <div className="mt-3 pt-3 border-t border-purple-200 text-xs text-gray-600 bg-blue-50 p-2 rounded">
-                <strong>Why {hcp.predictions.product_focus}?</strong> AI selected this product based on highest predicted call success rate across all products. 
-                {hcp.specialty.toLowerCase().includes('endocrin') ? ' Specialty alignment: Endocrinology prescriber optimal for Tirosint.' :
-                 hcp.specialty.toLowerCase().includes('pain') ? ' Specialty alignment: Pain management prescriber optimal for Flector/Licart.' :
-                 ' Other products analyzed but showed lower engagement probability.'}
+              <div className="mt-3 pt-3 border-t border-purple-200 text-xs bg-blue-50 p-3 rounded border border-blue-200">
+                <strong className="text-blue-900">Why {hcp.predictions.product_focus}?</strong>
+                <ul className="mt-2 space-y-1 ml-4 text-gray-700">
+                  <li>✓ <strong>Highest Success Rate:</strong> {formatPercent(
+                    hcp.predictions.product_focus === 'Tirosint' ? hcp.predictions.tirosint_call_success :
+                    hcp.predictions.product_focus === 'Flector' ? hcp.predictions.flector_call_success :
+                    hcp.predictions.licart_call_success, 0
+                  )} vs {formatPercent(
+                    hcp.predictions.product_focus === 'Tirosint' ? Math.max(hcp.predictions.flector_call_success, hcp.predictions.licart_call_success) :
+                    hcp.predictions.product_focus === 'Flector' ? Math.max(hcp.predictions.tirosint_call_success, hcp.predictions.licart_call_success) :
+                    Math.max(hcp.predictions.tirosint_call_success, hcp.predictions.flector_call_success), 0
+                  )} for next best</li>
+                  <li>✓ <strong>Best Lift Potential:</strong> {
+                    hcp.predictions.product_focus === 'Tirosint' ? `+${formatNumber(hcp.predictions.tirosint_prescription_lift, 1)}` :
+                    hcp.predictions.product_focus === 'Flector' ? `+${formatNumber(hcp.predictions.flector_prescription_lift, 1)}` :
+                    `+${formatNumber(hcp.predictions.licart_prescription_lift, 1)}`
+                  } TRx forecasted</li>
+                  <li>✓ <strong>Specialty Match:</strong> {hcp.specialty} prescribers show optimal outcomes with {hcp.predictions.product_focus}
+                    {hcp.specialty.toLowerCase().includes('endocrin') ? ' (Thyroid disorder focus)' :
+                     hcp.specialty.toLowerCase().includes('pain') ? ' (Pain management focus)' :
+                     hcp.specialty.toLowerCase().includes('internal') ? ' (Broad therapeutic scope)' :
+                     ''}</li>
+                  {(hcp.competitive_intel?.competitive_pressure_score || 0) > 70 && (
+                    <li>⚠️ <strong>Competitive Defense:</strong> {hcp.competitive_intel?.competitor_strength || 'Strong'} pressure detected - {hcp.predictions.product_focus} offers key differentiation</li>
+                  )}
+                </ul>
               </div>
-              <details className="mt-3 text-xs">
-                <summary className="cursor-pointer text-purple-700 font-semibold hover:text-purple-900">
-                  📊 View all product predictions (Tirosint, Flector, Licart)
-                </summary>
-                <div className="mt-2 p-3 bg-white border border-purple-200 rounded space-y-2">
-                  <div className="grid grid-cols-3 gap-2">
-                    <div className={`p-2 rounded border ${hcp.predictions.product_focus === 'Tirosint' ? 'border-green-500 bg-green-50' : 'border-gray-300'}`}>
-                      <div className="font-semibold text-gray-700">Tirosint</div>
-                      <div className="text-[11px] text-gray-600">Success: {formatPercent(hcp.predictions.tirosint_call_success, 0)}</div>
-                      <div className="text-[11px] text-gray-600">Lift: {hcp.predictions.tirosint_prescription_lift >= 0 ? '+' : ''}{formatNumber(hcp.predictions.tirosint_prescription_lift, 1)}</div>
+              
+              {/* Always-visible product comparison */}
+              <div className="mt-3 border-t pt-3 border-purple-200">
+                <div className="text-xs font-semibold text-gray-700 mb-2 flex items-center gap-1">
+                  <Sparkles className="h-3 w-3 text-purple-600" />
+                  📊 All Product Predictions Compared:
+                </div>
+                <div className="grid grid-cols-3 gap-2 text-xs">
+                  <div className={`p-2 rounded border ${hcp.predictions.product_focus === 'Tirosint' ? 'border-green-500 bg-green-50 ring-2 ring-green-300' : 'border-gray-200 opacity-60'}`}>
+                    <div className="font-semibold flex items-center gap-1">
+                      Tirosint
+                      {hcp.predictions.product_focus === 'Tirosint' && <span className="text-[10px] bg-green-600 text-white px-1 rounded">BEST</span>}
                     </div>
-                    <div className={`p-2 rounded border ${hcp.predictions.product_focus === 'Flector' ? 'border-green-500 bg-green-50' : 'border-gray-300'}`}>
-                      <div className="font-semibold text-gray-700">Flector</div>
-                      <div className="text-[11px] text-gray-600">Success: {formatPercent(hcp.predictions.flector_call_success, 0)}</div>
-                      <div className="text-[11px] text-gray-600">Lift: {hcp.predictions.flector_prescription_lift >= 0 ? '+' : ''}{formatNumber(hcp.predictions.flector_prescription_lift, 1)}</div>
-                    </div>
-                    <div className={`p-2 rounded border ${hcp.predictions.product_focus === 'Licart' ? 'border-green-500 bg-green-50' : 'border-gray-300'}`}>
-                      <div className="font-semibold text-gray-700">Licart</div>
-                      <div className="text-[11px] text-gray-600">Success: {formatPercent(hcp.predictions.licart_call_success, 0)}</div>
-                      <div className="text-[11px] text-gray-600">Lift: {hcp.predictions.licart_prescription_lift >= 0 ? '+' : ''}{formatNumber(hcp.predictions.licart_prescription_lift, 1)}</div>
-                    </div>
+                    <div className="text-[10px] text-gray-600 mt-1">Success: {formatPercent(hcp.predictions.tirosint_call_success, 0)}</div>
+                    <div className="text-[10px] text-gray-600">Lift: {hcp.predictions.tirosint_prescription_lift >= 0 ? '+' : ''}{formatNumber(hcp.predictions.tirosint_prescription_lift, 1)}</div>
+                    <div className="text-[10px] text-gray-600">NGD: {hcp.predictions.tirosint_ngd_category}</div>
                   </div>
-                  <div className="text-[11px] text-gray-500 italic">
-                    ℹ️ The recommended product ({hcp.predictions.product_focus}) has the highest predicted call success rate for this HCP. Other products may still be discussed as secondary options.
+                  <div className={`p-2 rounded border ${hcp.predictions.product_focus === 'Flector' ? 'border-green-500 bg-green-50 ring-2 ring-green-300' : 'border-gray-200 opacity-60'}`}>
+                    <div className="font-semibold flex items-center gap-1">
+                      Flector
+                      {hcp.predictions.product_focus === 'Flector' && <span className="text-[10px] bg-green-600 text-white px-1 rounded">BEST</span>}
+                    </div>
+                    <div className="text-[10px] text-gray-600 mt-1">Success: {formatPercent(hcp.predictions.flector_call_success, 0)}</div>
+                    <div className="text-[10px] text-gray-600">Lift: {hcp.predictions.flector_prescription_lift >= 0 ? '+' : ''}{formatNumber(hcp.predictions.flector_prescription_lift, 1)}</div>
+                    <div className="text-[10px] text-gray-600">NGD: {hcp.predictions.flector_ngd_category}</div>
+                  </div>
+                  <div className={`p-2 rounded border ${hcp.predictions.product_focus === 'Licart' ? 'border-green-500 bg-green-50 ring-2 ring-green-300' : 'border-gray-200 opacity-60'}`}>
+                    <div className="font-semibold flex items-center gap-1">
+                      Licart
+                      {hcp.predictions.product_focus === 'Licart' && <span className="text-[10px] bg-green-600 text-white px-1 rounded">BEST</span>}
+                    </div>
+                    <div className="text-[10px] text-gray-600 mt-1">Success: {formatPercent(hcp.predictions.licart_call_success, 0)}</div>
+                    <div className="text-[10px] text-gray-600">Lift: {hcp.predictions.licart_prescription_lift >= 0 ? '+' : ''}{formatNumber(hcp.predictions.licart_prescription_lift, 1)}</div>
+                    <div className="text-[10px] text-gray-600">NGD: {hcp.predictions.licart_ngd_category}</div>
                   </div>
                 </div>
-              </details>
+                <div className="text-[11px] text-gray-500 italic mt-2">
+                  ℹ️ The recommended product ({hcp.predictions.product_focus}) has the highest predicted call success rate for this HCP. Other products may still be discussed as secondary options.
+                </div>
+              </div>
             </div>
 
             {/* Opening Line */}
@@ -191,12 +233,12 @@ export default function HCPDetailPage() {
               <div className="text-xs font-semibold text-gray-600 mb-2">💬 OPENING LINE:</div>
               <p className="text-sm text-gray-800 italic">
                 {hcp.predictions.ngd_classification === 'Decliner'
-                  ? <>"I noticed some changes in prescribing patterns and wanted to understand what's driving your decisions. Our AI shows you as a <span className="bg-purple-200 border border-purple-400 px-1 not-italic font-medium inline-flex items-center gap-1"><Bot className="h-3 w-3" />{hcp.predictions.ngd_classification}</span> - let's discuss how we can support your practice."</>
+                  ? <>"I noticed some changes in prescribing patterns and wanted to understand what's driving your treatment decisions. Based on our analysis, I have insights that could help address competitive challenges you may be facing in your practice."</>
                   : hcp.predictions.ngd_classification === 'New'
-                  ? <>"Welcome to prescribing! Our AI identifies you as a <span className="bg-purple-200 border border-purple-400 px-1 not-italic font-medium inline-flex items-center gap-1"><Bot className="h-3 w-3" />{hcp.predictions.ngd_classification}</span> prescriber. I'd like to share how <span className="bg-purple-200 border border-purple-400 px-1 not-italic font-medium inline-flex items-center gap-1"><Sparkles className="h-3 w-3" />{hcp.predictions.product_focus}</span> could benefit your patients."</>
+                  ? <>"Welcome to prescribing! I'd like to share how <span className="bg-blue-200 border border-blue-400 px-1 not-italic font-medium">{hcp.predictions.product_focus}</span> could benefit your patient population, with clinical data showing strong outcomes for {hcp.specialty.toLowerCase()} practices."</>
                   : hcp.predictions.ngd_classification === 'Grower'
-                  ? <>"I see you're increasing prescriptions - our AI classifies you as a <span className="bg-purple-200 border border-purple-400 px-1 not-italic font-medium inline-flex items-center gap-1"><Bot className="h-3 w-3" />{hcp.predictions.ngd_classification}</span> with <span className="bg-purple-200 border border-purple-400 px-1 not-italic font-medium inline-flex items-center gap-1"><Sparkles className="h-3 w-3" />+{formatNumber(hcp.predictions.forecasted_lift, 0)} TRx growth potential</span>. Let's discuss how to accelerate this momentum."</>
-                  : <>"Thank you for your continued partnership. Our AI predicts <span className="bg-purple-200 border border-purple-400 px-1 not-italic font-medium inline-flex items-center gap-1"><Sparkles className="h-3 w-3" />{formatPercent(hcp.predictions.call_success_prob, 0)} success</span> for today's call. I have updates that align with your practice focus."</>
+                  ? <>"I see you're increasing prescriptions - <span className="bg-green-200 border border-green-400 px-1 not-italic font-medium">{formatPercent(Math.abs(hcp.trx_growth), 1)} growth this quarter</span>. I have data showing how to accelerate this momentum with <span className="bg-blue-200 border border-blue-400 px-1 not-italic font-medium">{hcp.predictions.product_focus}</span> for your patients."</>
+                  : <>"Thank you for your continued partnership. I have updates that align with your practice focus and can help optimize patient outcomes with our latest clinical evidence."</>
                 }
               </p>
             </div>
@@ -211,74 +253,70 @@ export default function HCPDetailPage() {
               <ul className="space-y-2 text-sm text-gray-700">
                 <li className="flex items-start gap-2">
                   <span className="text-purple-400">•</span>
-                  <span><strong>Bring:</strong> <span className="bg-purple-200 border border-purple-400 px-1 font-semibold inline-flex items-center gap-1"><Bot className="h-3 w-3" />{hcp.predictions.sample_allocation} samples</span> for <span className="bg-purple-200 border border-purple-400 px-1 font-semibold inline-flex items-center gap-1"><Sparkles className="h-3 w-3" />{hcp.predictions.product_focus}</span> + clinical data</span>
+                  <span><strong>Bring:</strong> <span className="bg-purple-200 border border-purple-400 px-1 font-semibold inline-flex items-center gap-1"><Bot className="h-3 w-3" />{hcp.predictions.sample_allocation} samples</span> for <span className="bg-purple-200 border border-purple-400 px-1 font-semibold inline-flex items-center gap-1"><Sparkles className="h-3 w-3" />{hcp.predictions.product_focus}</span> + clinical data
+                  <span className="text-xs text-gray-500 ml-2 italic">(Calculated: Tier {hcp.tier} × Call Success {formatPercent(hcp.predictions.call_success_prob, 0)} × Rx Lift {hcp.rx_lift ? formatNumber(hcp.rx_lift, 1) : 'N/A'})</span>
+                  </span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-purple-400">•</span>
-                  <span><strong>Discuss:</strong> {hcp.predictions.ngd_classification === 'Decliner' ? 'Retention strategy and competitive challenges' : hcp.predictions.ngd_classification === 'Grower' ? 'Growth acceleration and expanded usage' : hcp.predictions.ngd_classification === 'New' ? 'Product introduction and patient selection' : 'Treatment optimization and patient outcomes'}</span>
+                  <div className="flex-1">
+                    <strong>Discuss:</strong>
+                    <ul className="ml-4 mt-1 space-y-1 text-xs">
+                      {hcp.predictions.ngd_classification === 'Decliner' && (
+                        <>
+                          <li>• Address {hcp.competitive_intel?.competitor_strength?.toLowerCase() || 'competitive'} competitive pressure ({hcp.competitive_intel?.competitive_pressure_score || 0}/100 intensity)</li>
+                          <li>• Opportunity to recover {(100 - hcp.ibsa_share).toFixed(0)}% market share ({formatNumber(Math.round(hcp.trx_current * ((100 - hcp.ibsa_share) / 100)))} TRx gap to close)</li>
+                          <li>• {hcp.predictions.product_focus} differentiation vs {hcp.competitive_intel?.inferred_competitors?.slice(0,2).join(' and ') || 'competitors'}</li>
+                        </>
+                      )}
+                      {hcp.predictions.ngd_classification === 'Grower' && (
+                        <>
+                          <li>• Accelerate {formatPercent(hcp.trx_growth, 1)} growth momentum with {hcp.predictions.product_focus}</li>
+                          <li>• Expand usage in additional patient segments (current: {hcp.ibsa_share.toFixed(0)}% IBSA share, target: {Math.min(hcp.ibsa_share + 15, 80).toFixed(0)}%)</li>
+                          <li>• Leverage clinical data showing {hcp.predictions.product_focus} outcomes in {hcp.specialty.toLowerCase()}</li>
+                        </>
+                      )}
+                      {hcp.predictions.ngd_classification === 'New' && (
+                        <>
+                          <li>• Product introduction: {hcp.predictions.product_focus} clinical profile and patient selection</li>
+                          <li>• Formulary status and payer coverage considerations</li>
+                          <li>• Initial prescribing protocol and follow-up recommendations</li>
+                        </>
+                      )}
+                      {hcp.predictions.ngd_classification === 'Stable' && (
+                        <>
+                          <li>• Maintain {hcp.ibsa_share.toFixed(0)}% IBSA share with consistent engagement</li>
+                          <li>• Treatment optimization: New clinical evidence for {hcp.predictions.product_focus}</li>
+                          <li>• Patient outcomes review and satisfaction tracking</li>
+                        </>
+                      )}
+                    </ul>
+                  </div>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-purple-400">•</span>
-                  <span><strong>Position:</strong> Focus on <span className="bg-purple-200 border border-purple-400 px-1 font-semibold inline-flex items-center gap-1"><Bot className="h-3 w-3" />{hcp.predictions.product_focus}</span> with messaging for <span className="bg-purple-200 border border-purple-400 px-1 font-semibold inline-flex items-center gap-1"><Sparkles className="h-3 w-3" />{hcp.predictions.ngd_classification}</span> prescribers</span>
+                  <div className="flex-1">
+                    <strong>Position:</strong>
+                    <div className="ml-4 mt-1 p-2 bg-blue-50 rounded text-xs text-gray-700">
+                      Focus on <strong>{hcp.predictions.product_focus}</strong> messaging tailored to <strong>{hcp.predictions.ngd_classification}</strong> prescribers with {hcp.specialty.toLowerCase()} practice focus.
+                      {(hcp.competitive_intel?.competitive_pressure_score || 0) > 70 && (
+                        <div className="mt-1 text-red-700">
+                          ⚠️ High competitive pressure ({hcp.competitive_intel?.competitive_pressure_score}/100) detected - emphasize {hcp.predictions.product_focus} differentiation.
+                        </div>
+                      )}
+                      <div className="mt-1 text-xs text-gray-600 italic">
+                        Note: Use MLR-approved messaging from call script generator for specific clinical claims.
+                      </div>
+                    </div>
+                  </div>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-purple-400">•</span>
-                  <span><strong>Close with:</strong> Schedule follow-up on <span className="bg-purple-200 border border-purple-400 px-1 font-semibold inline-flex items-center gap-1"><Zap className="h-3 w-3" />{hcp.predictions.best_day} {hcp.predictions.best_time}</span> (AI-predicted optimal time)</span>
+                  <span><strong>Close with:</strong> Schedule follow-up on <span className="bg-purple-200 border border-purple-400 px-1 font-semibold inline-flex items-center gap-1"><Zap className="h-3 w-3" />{hcp.predictions.best_day} {hcp.predictions.best_time}</span>
+                  <span className="text-xs text-gray-500 ml-2 italic">(Optimal timing based on {hcp.specialty} practice patterns)</span>
+                  </span>
                 </li>
               </ul>
-            </div>
-
-            {/* Expected Outcomes */}
-            <div className="bg-green-50 rounded p-4 border-2 border-green-400 border-dashed">
-              <div className="text-xs font-semibold text-green-800 mb-3 flex items-center gap-1">
-                <Sparkles className="h-4 w-4" />
-                📈 EXPECTED OUTCOMES FOR {hcp.predictions.product_focus.toUpperCase()}
-                <span className="ml-auto bg-green-600 text-white px-2 py-0.5 rounded-full text-[10px] font-bold">AI PREDICTIONS</span>
-              </div>
-              <div className="grid grid-cols-3 gap-4">
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-green-900 flex items-center justify-center gap-1">
-                    <Bot className="h-5 w-5 text-green-600" />
-                    <span className="bg-green-200 border-2 border-green-500 px-2 rounded">
-                      {hcp.predictions.product_focus === 'Tirosint' ? `${hcp.predictions.tirosint_prescription_lift >= 0 ? '+' : ''}${formatNumber(hcp.predictions.tirosint_prescription_lift, 1)}` :
-                       hcp.predictions.product_focus === 'Flector' ? `${hcp.predictions.flector_prescription_lift >= 0 ? '+' : ''}${formatNumber(hcp.predictions.flector_prescription_lift, 1)}` :
-                       `${hcp.predictions.licart_prescription_lift >= 0 ? '+' : ''}${formatNumber(hcp.predictions.licart_prescription_lift, 1)}`}
-                    </span>
-                  </div>
-                  <div className="text-xs text-gray-600 mt-1 flex items-center justify-center gap-1">
-                    <Sparkles className="h-3 w-3 text-green-500" />
-                    TRx Lift (ML Forecast)
-                  </div>
-                </div>
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-green-900 flex items-center justify-center gap-1">
-                    <Bot className="h-5 w-5 text-green-600" />
-                    <span className="bg-green-200 border-2 border-green-500 px-2 rounded">
-                      {hcp.predictions.product_focus === 'Tirosint' ? formatPercent(hcp.predictions.tirosint_call_success, 0) :
-                       hcp.predictions.product_focus === 'Flector' ? formatPercent(hcp.predictions.flector_call_success, 0) :
-                       formatPercent(hcp.predictions.licart_call_success, 0)}
-                    </span>
-                  </div>
-                  <div className="text-xs text-gray-600 mt-1 flex items-center justify-center gap-1">
-                    <Sparkles className="h-3 w-3 text-green-500" />
-                    Success Probability (ML)
-                  </div>
-                </div>
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-green-900 flex items-center justify-center gap-1">
-                    <Zap className="h-5 w-5 text-green-600" />
-                    <span className="bg-green-200 border-2 border-green-500 px-2 rounded">
-                      {hcp.predictions.product_focus === 'Tirosint' ? hcp.predictions.tirosint_ngd_category :
-                       hcp.predictions.product_focus === 'Flector' ? hcp.predictions.flector_ngd_category :
-                       hcp.predictions.licart_ngd_category}
-                    </span>
-                  </div>
-                  <div className="text-xs text-gray-600 mt-1 flex items-center justify-center gap-1">
-                    <Sparkles className="h-3 w-3 text-green-500" />
-                    NGD Category (ML)
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </CardContent>
