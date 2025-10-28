@@ -242,11 +242,12 @@ export async function getHCPs(filters?: {
       last_call_date: null,
       days_since_call: null,
       next_call_date: null,
-      priority: Number(row.priority_tier1) || 0,
+      priority: computePriorityLevel(row),
       ibsa_share: Number(row.ibsa_share) || 0,
       nrx_count: Number(row.nrx_current_qtd) || 0,
       call_success_score: Number(row.call_success_score) || 0,
       value_score: Number(row.hcp_power_score) || Number(row.hcp_value_score) || 0,
+      rx_lift: Number(row.prescription_lift) || 0,
       ngd_decile: Number(row.ngd_decile) || 0,
       ngd_classification: getNGDClassification(
         Number(row.ngd_decile) || 0,
@@ -359,21 +360,45 @@ export async function getHCPDetail(npiParam: string): Promise<HCPDetail | null> 
   const expectedRoi = Number(row.expected_roi) || 0 // Model 8: Expected ROI
   const roiPositive = row.roi_positive === 1
   
-  const sampleAcceptance = sampleEffectiveness > 0 ? Math.min(sampleEffectiveness / 15, 1) : 0
   const isHighEngagement = row.high_engagement_y === 1
   const isHighValue = row.is_high_value === 1
   
-  // Determine next best action based on actual attributes
+  // Extract tier for sample allocation calculation
+  const tierString = getTierFromRow(row)
+  const tierNumber = parseInt(tierString) || 5 // Convert "1", "2", etc. to numbers
+  
+  // Calculate data-driven sample acceptance based on multiple factors
+  // Use Call Success (40%), Tier (30%), Rx Lift potential (30%)
+  const callSuccessWeight = callSuccessProb * 0.4
+  const tierWeight = (5 - tierNumber) / 4 * 0.3 // Tier 1 = 0.3, Tier 5 = 0
+  const liftWeight = Math.min(Math.abs(prescriptionLift) / 10, 1) * 0.3 // Normalize lift to 0-1
+  const sampleAcceptance = callSuccessWeight + tierWeight + liftWeight
+  
+  // Determine next best action based on sample acceptance
   let nextBestAction = 'Detail Only'
-  if (sampleAcceptance > 0.7) {
+  if (sampleAcceptance > 0.6) {
     nextBestAction = 'Detail + Sample'
-  } else if (sampleAcceptance > 0.3) {
+  } else if (sampleAcceptance > 0.35) {
     nextBestAction = 'Detail + Limited Sample'
   }
   
-  // Calculate sample allocation based on value and acceptance
-  const baseSamples = isHighValue ? 15 : 10
-  const sampleAllocation = sampleAcceptance > 0.5 ? baseSamples : Math.round(baseSamples * 0.5)
+  // Calculate sample allocation based on tier, value, and acceptance
+  // Tier 1: 15-20 samples, Tier 2: 12-15, Tier 3: 8-10, Tier 4: 5-8, Tier 5: 3-5
+  let baseSamples = 10
+  if (tierNumber === 1) {
+    baseSamples = isHighValue ? 20 : 15
+  } else if (tierNumber === 2) {
+    baseSamples = isHighValue ? 15 : 12
+  } else if (tierNumber === 3) {
+    baseSamples = isHighValue ? 10 : 8
+  } else if (tierNumber === 4) {
+    baseSamples = isHighValue ? 8 : 5
+  } else {
+    baseSamples = isHighValue ? 5 : 3
+  }
+  
+  // Adjust by sample acceptance (reduce if low acceptance)
+  const sampleAllocation = sampleAcceptance > 0.5 ? baseSamples : Math.max(Math.round(baseSamples * 0.6), 3)
   
   // Determine best call day/time based on engagement patterns
   const callFrequency = row.call_frequency_high === 1 ? 'high' : row.call_frequency_medium === 1 ? 'medium' : 'low'
@@ -395,6 +420,24 @@ export async function getHCPDetail(npiParam: string): Promise<HCPDetail | null> 
   const state = profile?.State ? String(profile.State) : (row.State ? String(row.State) : '')
   const zipcode = profile?.Zipcode ? String(profile.Zipcode) : ''
   
+  // Derive per-product probabilities/lifts from available model outputs
+  const tirosint_cs = callSuccessProb * 0.9
+  const flector_cs = callSuccessProb * 0.6
+  const licart_cs = callSuccessProb * 0.5
+
+  const tirosint_lift = prescriptionLift * 0.8
+  const flector_lift = prescriptionLift * 0.15
+  const licart_lift = prescriptionLift * 0.05
+
+  // Choose product focus by highest predicted call success, fallback to lift, then specialty
+  const csTriplet: Array<{ name: 'Tirosint' | 'Flector' | 'Licart'; cs: number; lift: number }> = [
+    { name: 'Tirosint', cs: tirosint_cs, lift: tirosint_lift },
+    { name: 'Flector', cs: flector_cs, lift: flector_lift },
+    { name: 'Licart', cs: licart_cs, lift: licart_lift },
+  ]
+  csTriplet.sort((a, b) => b.cs - a.cs || b.lift - a.lift)
+  let productFocus: 'Tirosint' | 'Flector' | 'Licart' = csTriplet[0]?.name || (isPainManagement ? 'Flector' : 'Tirosint')
+  
   return {
     npi,
     name: String(row.PrescriberName || profile?.PrescriberName || npi), // Use real name if available, fallback to NPI
@@ -413,7 +456,7 @@ export async function getHCPDetail(npiParam: string): Promise<HCPDetail | null> 
     last_call_date: null, // No call date data in main dataset
     days_since_call: null, // No days since call data in main dataset
     next_call_date: null,
-    priority: row.priority_tier1 || 0,
+  priority: computePriorityLevel(row),
     ibsa_share: effectiveIbsaShare, // Use effective share for display (15% default if no data)
     nrx_count: nrxCurrent,
     call_success_score: Number(row.call_success_score) || 0,
@@ -427,25 +470,25 @@ export async function getHCPDetail(npiParam: string): Promise<HCPDetail | null> 
       // TODO: Replace with actual API calls to trained models
       
       // Tirosint models (3)
-      tirosint_call_success: callSuccessProb * 0.9, // Slight variation per product
+      tirosint_call_success: tirosint_cs, // Slight variation per product
       tirosint_call_success_prediction: callSuccessProb > 0.5,
-      tirosint_prescription_lift: prescriptionLift * 0.8, // Most TRx goes to Tirosint
+      tirosint_prescription_lift: tirosint_lift, // Most TRx goes to Tirosint
       tirosint_ngd_category: ngdDecile >= 8 ? 'Grower' : ngdDecile >= 5 ? 'Stable' : ngdDecile >= 3 ? 'Decliner' : 'New',
       
       // Flector models (3)
-      flector_call_success: callSuccessProb * 0.6, // Lower for pain management
+      flector_call_success: flector_cs, // Lower for pain management
       flector_call_success_prediction: callSuccessProb > 0.7,
-      flector_prescription_lift: prescriptionLift * 0.15,
+      flector_prescription_lift: flector_lift,
       flector_ngd_category: ngdDecile >= 7 ? 'Grower' : ngdDecile >= 4 ? 'Stable' : ngdDecile >= 2 ? 'Decliner' : 'New',
       
       // Licart models (3)
-      licart_call_success: callSuccessProb * 0.5, // Lowest for newer product
+      licart_call_success: licart_cs, // Lowest for newer product
       licart_call_success_prediction: callSuccessProb > 0.75,
-      licart_prescription_lift: prescriptionLift * 0.05,
+      licart_prescription_lift: licart_lift,
       licart_ngd_category: ngdDecile >= 6 ? 'Grower' : ngdDecile >= 3 ? 'Stable' : ngdDecile >= 2 ? 'Decliner' : 'New',
       
       // Derived fields for UI convenience
-      product_focus: callSuccessProb > 0.5 ? 'Tirosint' : isEndocrinology ? 'Tirosint' : isPainManagement ? 'Flector' : 'Tirosint',
+      product_focus: productFocus,
       call_success_prob: callSuccessProb,
       forecasted_lift: prescriptionLift,
       ngd_classification: ngdDecile >= 8 ? 'Grower' : ngdDecile >= 5 ? 'Stable' : ngdDecile >= 3 ? 'Decliner' : 'New',
@@ -529,6 +572,36 @@ function getNGDClassification(ngdDecile: number, trxGrowth: number): 'New' | 'Gr
     if (growthPercent < -10) return 'Decliner'
     return 'Stable'
   }
+}
+
+// Compute a compact priority level (1-5) primarily from Call Success and Rx Lift,
+// with light tie-breakers from tier and NGD classification.
+function computePriorityLevel(row: ModelReadyRow): number {
+  // Primary: Call Success (0..1)
+  const callSuccess = Math.max(0, Math.min(1, Number(row.call_success_score) || Number(row.call_success) || 0))
+
+  // Secondary: Rx Lift (normalize to 0..1 assuming 0..100 typical)
+  const liftRaw = Number(row.prescription_lift) || 0
+  const rxLift = Math.max(0, Math.min(1, liftRaw / 100))
+
+  // Tie-breakers: Tier and NGD
+  const tier = getTierFromRow(row)
+  const tierWeight = tier === 'Platinum' ? 1 : tier === 'Gold' ? 0.8 : tier === 'Silver' ? 0.6 : 0.4
+
+  // NGD weight from decile/classification
+  const ngdDecile = Number(row.ngd_decile) || 0
+  const ngdClass = getNGDClassification(ngdDecile, Number(row.trx_qtd_growth) || 0)
+  const ngdWeight = ngdClass === 'Grower' ? 1 : ngdClass === 'New' ? 0.9 : ngdClass === 'Stable' ? 0.7 : 0.4
+
+  // Blend into a composite 0..1 with emphasis on call success and lift
+  const composite = 0.6 * callSuccess + 0.3 * rxLift + 0.05 * tierWeight + 0.05 * ngdWeight
+
+  // Map to 1..5 buckets for simple visual priority
+  if (composite >= 0.8) return 5
+  if (composite >= 0.6) return 4
+  if (composite >= 0.4) return 3
+  if (composite >= 0.2) return 2
+  return 1
 }
 
 export async function getUniqueSpecialties(): Promise<string[]> {

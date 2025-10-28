@@ -109,49 +109,41 @@ export default function HCPDetailPage() {
               </p>
             </div>
               
-            {/* AI Model Insights */}
+            {/* AI Model Insights - RECOMMENDED PRODUCT */}
             <div className="bg-purple-50 border-l-4 border-purple-600 rounded p-4 border-2 border-dashed border-purple-300">
               <div className="text-xs font-semibold text-purple-700 mb-3 flex items-center gap-1">
                 <Bot className="h-4 w-4" />
-                🤖 AI MODEL PREDICTIONS
-                <span className="ml-2 bg-purple-200 text-purple-800 px-2 py-0.5 rounded-full text-[10px]">from 9 trained models</span>
-                <span className="ml-auto bg-purple-600 text-white px-2 py-0.5 rounded-full text-[10px] font-bold">AI POWERED</span>
+                🎯 RECOMMENDED PRODUCT: {hcp.predictions.product_focus}
+                <span className="ml-2 bg-purple-200 text-purple-800 px-2 py-0.5 rounded-full text-[10px]">AI selected from 9 models</span>
+                <span className="ml-auto bg-purple-600 text-white px-2 py-0.5 rounded-full text-[10px] font-bold">FOCUS HERE</span>
               </div>
               <div className="grid grid-cols-2 gap-3 text-sm">
                 <div className="flex items-center gap-2">
                   <Sparkles className="h-3 w-3 text-purple-600 flex-shrink-0" />
-                  <span className="text-gray-600">{hcp.predictions.product_focus} Call Success:</span>
-                  <span className="ml-auto bg-purple-200 border border-purple-400 px-2 py-0.5 rounded font-semibold">{formatPercent(hcp.predictions.call_success_prob, 0)}</span>
+                  <span className="text-gray-600">Call Success Rate:</span>
+                  <span className="ml-auto bg-green-200 border-2 border-green-500 px-3 py-1 rounded font-bold text-green-800">
+                    {hcp.predictions.product_focus === 'Tirosint' ? formatPercent(hcp.predictions.tirosint_call_success, 0) :
+                     hcp.predictions.product_focus === 'Flector' ? formatPercent(hcp.predictions.flector_call_success, 0) :
+                     formatPercent(hcp.predictions.licart_call_success, 0)}
+                  </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Bot className="h-3 w-3 text-purple-600 flex-shrink-0" />
-                  <span className="text-gray-600">TRx Lift Forecast:</span>
-                  <span className="ml-auto bg-purple-200 border border-purple-400 px-2 py-0.5 rounded font-semibold">{hcp.predictions.forecasted_lift >= 0 ? '+' : ''}{formatNumber(hcp.predictions.forecasted_lift, 1)} TRx</span>
+                  <span className="text-gray-600">Expected TRx Lift:</span>
+                  <span className="ml-auto bg-green-200 border-2 border-green-500 px-3 py-1 rounded font-bold text-green-800">
+                    {hcp.predictions.product_focus === 'Tirosint' ? `${hcp.predictions.tirosint_prescription_lift >= 0 ? '+' : ''}${formatNumber(hcp.predictions.tirosint_prescription_lift, 1)}` :
+                     hcp.predictions.product_focus === 'Flector' ? `${hcp.predictions.flector_prescription_lift >= 0 ? '+' : ''}${formatNumber(hcp.predictions.flector_prescription_lift, 1)}` :
+                     `${hcp.predictions.licart_prescription_lift >= 0 ? '+' : ''}${formatNumber(hcp.predictions.licart_prescription_lift, 1)}`}
+                  </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Bot className="h-3 w-3 text-purple-600 flex-shrink-0" />
-                  <span className="text-gray-600">NGD Classification:</span>
-                  <span className="ml-auto bg-purple-200 border border-purple-400 px-2 py-0.5 rounded font-semibold">{hcp.predictions.ngd_classification}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Sparkles className="h-3 w-3 text-purple-600 flex-shrink-0" />
-                  <span className="text-gray-600">Product Focus:</span>
-                  <span className="ml-auto bg-purple-200 border border-purple-400 px-2 py-0.5 rounded font-semibold">{hcp.predictions.product_focus}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Zap className="h-3 w-3 text-purple-600 flex-shrink-0" />
-                  <span className="text-gray-600">Tirosint Success:</span>
-                  <span className="ml-auto bg-purple-200 border border-purple-400 px-2 py-0.5 rounded font-semibold">{formatPercent(hcp.predictions.tirosint_call_success, 0)}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Zap className="h-3 w-3 text-purple-600 flex-shrink-0" />
-                  <span className="text-gray-600">Flector Success:</span>
-                  <span className="ml-auto bg-purple-200 border border-purple-400 px-2 py-0.5 rounded font-semibold">{formatPercent(hcp.predictions.flector_call_success, 0)}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Zap className="h-3 w-3 text-purple-600 flex-shrink-0" />
-                  <span className="text-gray-600">Licart Success:</span>
-                  <span className="ml-auto bg-purple-200 border border-purple-400 px-2 py-0.5 rounded font-semibold">{formatPercent(hcp.predictions.licart_call_success, 0)}</span>
+                  <span className="text-gray-600">NGD Category:</span>
+                  <span className="ml-auto bg-purple-200 border border-purple-400 px-2 py-0.5 rounded font-semibold">
+                    {hcp.predictions.product_focus === 'Tirosint' ? hcp.predictions.tirosint_ngd_category :
+                     hcp.predictions.product_focus === 'Flector' ? hcp.predictions.flector_ngd_category :
+                     hcp.predictions.licart_ngd_category}
+                  </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Bot className="h-3 w-3 text-purple-600 flex-shrink-0" />
@@ -159,6 +151,39 @@ export default function HCPDetailPage() {
                   <span className="ml-auto bg-purple-200 border border-purple-400 px-2 py-0.5 rounded font-semibold">{hcp.predictions.next_best_action}</span>
                 </div>
               </div>
+              <div className="mt-3 pt-3 border-t border-purple-200 text-xs text-gray-600 bg-blue-50 p-2 rounded">
+                <strong>Why {hcp.predictions.product_focus}?</strong> AI selected this product based on highest predicted call success rate across all products. 
+                {hcp.specialty.toLowerCase().includes('endocrin') ? ' Specialty alignment: Endocrinology prescriber optimal for Tirosint.' :
+                 hcp.specialty.toLowerCase().includes('pain') ? ' Specialty alignment: Pain management prescriber optimal for Flector/Licart.' :
+                 ' Other products analyzed but showed lower engagement probability.'}
+              </div>
+              <details className="mt-3 text-xs">
+                <summary className="cursor-pointer text-purple-700 font-semibold hover:text-purple-900">
+                  📊 View all product predictions (Tirosint, Flector, Licart)
+                </summary>
+                <div className="mt-2 p-3 bg-white border border-purple-200 rounded space-y-2">
+                  <div className="grid grid-cols-3 gap-2">
+                    <div className={`p-2 rounded border ${hcp.predictions.product_focus === 'Tirosint' ? 'border-green-500 bg-green-50' : 'border-gray-300'}`}>
+                      <div className="font-semibold text-gray-700">Tirosint</div>
+                      <div className="text-[11px] text-gray-600">Success: {formatPercent(hcp.predictions.tirosint_call_success, 0)}</div>
+                      <div className="text-[11px] text-gray-600">Lift: {hcp.predictions.tirosint_prescription_lift >= 0 ? '+' : ''}{formatNumber(hcp.predictions.tirosint_prescription_lift, 1)}</div>
+                    </div>
+                    <div className={`p-2 rounded border ${hcp.predictions.product_focus === 'Flector' ? 'border-green-500 bg-green-50' : 'border-gray-300'}`}>
+                      <div className="font-semibold text-gray-700">Flector</div>
+                      <div className="text-[11px] text-gray-600">Success: {formatPercent(hcp.predictions.flector_call_success, 0)}</div>
+                      <div className="text-[11px] text-gray-600">Lift: {hcp.predictions.flector_prescription_lift >= 0 ? '+' : ''}{formatNumber(hcp.predictions.flector_prescription_lift, 1)}</div>
+                    </div>
+                    <div className={`p-2 rounded border ${hcp.predictions.product_focus === 'Licart' ? 'border-green-500 bg-green-50' : 'border-gray-300'}`}>
+                      <div className="font-semibold text-gray-700">Licart</div>
+                      <div className="text-[11px] text-gray-600">Success: {formatPercent(hcp.predictions.licart_call_success, 0)}</div>
+                      <div className="text-[11px] text-gray-600">Lift: {hcp.predictions.licart_prescription_lift >= 0 ? '+' : ''}{formatNumber(hcp.predictions.licart_prescription_lift, 1)}</div>
+                    </div>
+                  </div>
+                  <div className="text-[11px] text-gray-500 italic">
+                    ℹ️ The recommended product ({hcp.predictions.product_focus}) has the highest predicted call success rate for this HCP. Other products may still be discussed as secondary options.
+                  </div>
+                </div>
+              </details>
             </div>
 
             {/* Opening Line */}
@@ -204,41 +229,53 @@ export default function HCPDetailPage() {
             </div>
 
             {/* Expected Outcomes */}
-            <div className="bg-purple-50 rounded p-4 border-2 border-purple-300 border-dashed">
-              <div className="text-xs font-semibold text-purple-700 mb-3 flex items-center gap-1">
+            <div className="bg-green-50 rounded p-4 border-2 border-green-400 border-dashed">
+              <div className="text-xs font-semibold text-green-800 mb-3 flex items-center gap-1">
                 <Sparkles className="h-4 w-4" />
-                📈 EXPECTED OUTCOMES
-                <span className="ml-auto bg-purple-600 text-white px-2 py-0.5 rounded-full text-[10px] font-bold">ML MODEL PREDICTIONS</span>
+                📈 EXPECTED OUTCOMES FOR {hcp.predictions.product_focus.toUpperCase()}
+                <span className="ml-auto bg-green-600 text-white px-2 py-0.5 rounded-full text-[10px] font-bold">AI PREDICTIONS</span>
               </div>
               <div className="grid grid-cols-3 gap-4">
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-purple-900 flex items-center justify-center gap-1">
-                    <Bot className="h-5 w-5 text-purple-600" />
-                    <span className="bg-purple-200 border-2 border-purple-400 px-2 rounded">{hcp.predictions.forecasted_lift >= 0 ? '+' : ''}{formatNumber(hcp.predictions.forecasted_lift, 1)}</span>
+                  <div className="text-2xl font-bold text-green-900 flex items-center justify-center gap-1">
+                    <Bot className="h-5 w-5 text-green-600" />
+                    <span className="bg-green-200 border-2 border-green-500 px-2 rounded">
+                      {hcp.predictions.product_focus === 'Tirosint' ? `${hcp.predictions.tirosint_prescription_lift >= 0 ? '+' : ''}${formatNumber(hcp.predictions.tirosint_prescription_lift, 1)}` :
+                       hcp.predictions.product_focus === 'Flector' ? `${hcp.predictions.flector_prescription_lift >= 0 ? '+' : ''}${formatNumber(hcp.predictions.flector_prescription_lift, 1)}` :
+                       `${hcp.predictions.licart_prescription_lift >= 0 ? '+' : ''}${formatNumber(hcp.predictions.licart_prescription_lift, 1)}`}
+                    </span>
                   </div>
                   <div className="text-xs text-gray-600 mt-1 flex items-center justify-center gap-1">
-                    <Sparkles className="h-3 w-3 text-purple-500" />
+                    <Sparkles className="h-3 w-3 text-green-500" />
                     TRx Lift (ML Forecast)
                   </div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-purple-900 flex items-center justify-center gap-1">
-                    <Bot className="h-5 w-5 text-purple-600" />
-                    <span className="bg-purple-200 border-2 border-purple-400 px-2 rounded">{formatPercent(hcp.predictions.call_success_prob, 0)}</span>
+                  <div className="text-2xl font-bold text-green-900 flex items-center justify-center gap-1">
+                    <Bot className="h-5 w-5 text-green-600" />
+                    <span className="bg-green-200 border-2 border-green-500 px-2 rounded">
+                      {hcp.predictions.product_focus === 'Tirosint' ? formatPercent(hcp.predictions.tirosint_call_success, 0) :
+                       hcp.predictions.product_focus === 'Flector' ? formatPercent(hcp.predictions.flector_call_success, 0) :
+                       formatPercent(hcp.predictions.licart_call_success, 0)}
+                    </span>
                   </div>
                   <div className="text-xs text-gray-600 mt-1 flex items-center justify-center gap-1">
-                    <Sparkles className="h-3 w-3 text-purple-500" />
+                    <Sparkles className="h-3 w-3 text-green-500" />
                     Success Probability (ML)
                   </div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-purple-900 flex items-center justify-center gap-1">
-                    <Zap className="h-5 w-5 text-purple-600" />
-                    <span className="bg-purple-200 border-2 border-purple-400 px-2 rounded">{hcp.predictions.ngd_classification}</span>
+                  <div className="text-2xl font-bold text-green-900 flex items-center justify-center gap-1">
+                    <Zap className="h-5 w-5 text-green-600" />
+                    <span className="bg-green-200 border-2 border-green-500 px-2 rounded">
+                      {hcp.predictions.product_focus === 'Tirosint' ? hcp.predictions.tirosint_ngd_category :
+                       hcp.predictions.product_focus === 'Flector' ? hcp.predictions.flector_ngd_category :
+                       hcp.predictions.licart_ngd_category}
+                    </span>
                   </div>
                   <div className="text-xs text-gray-600 mt-1 flex items-center justify-center gap-1">
-                    <Sparkles className="h-3 w-3 text-purple-500" />
-                    NGD Classification (ML)
+                    <Sparkles className="h-3 w-3 text-green-500" />
+                    NGD Category (ML)
                   </div>
                 </div>
               </div>
