@@ -1,34 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
-import Papa from 'papaparse'
-
-let cachedData: any[] = []
-let lastFetch = 0
-const CACHE_TTL = 60 * 60 * 1000 // 1 hour // 5 minutes
-
-async function loadData() {
-  const now = Date.now()
-  if (cachedData.length > 0 && now - lastFetch < CACHE_TTL) {
-    return cachedData
-  }
-
-  const BLOB_URL = process.env.NEXT_PUBLIC_BLOB_URL || 'https://ibsangdpocdata.blob.core.windows.net/ngddatasets/IBSA_ModelReady_Enhanced.csv'
-  const response = await fetch(BLOB_URL)
-  const csvText = await response.text()
-  
-  const parsed = Papa.parse(csvText, {
-    header: true,
-    dynamicTyping: true,
-    skipEmptyLines: true
-  })
-
-  cachedData = parsed.data
-  lastFetch = now
-  return cachedData
-}
+import { getDataCached } from '@/lib/server/data-cache'
 
 export async function GET(request: NextRequest) {
   try {
-    const data = await loadData()
+    const data = await getDataCached()
     
     // Get query params for filtering
     const { searchParams } = new URL(request.url)
@@ -53,12 +28,15 @@ export async function GET(request: NextRequest) {
     
     const paginated = filtered.slice(offset, offset + limit)
     
-    return NextResponse.json({
+    const res = NextResponse.json({
       data: paginated,
       total: filtered.length,
       limit,
       offset
     })
+    // Cache API responses at the edge/proxy for 1 hour
+    res.headers.set('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=300')
+    return res
   } catch (error) {
     return NextResponse.json({ error: String(error) }, { status: 500 })
   }

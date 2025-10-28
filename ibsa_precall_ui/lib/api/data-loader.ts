@@ -1,7 +1,7 @@
 import Papa from 'papaparse'
 import type { HCP, HCPDetail } from '../types'
 
-interface ModelReadyRow {
+export interface ModelReadyRow {
   PrescriberId: string
   PrescriberName?: string  // ADDED - HCP name from PrescriberOverview
   Specialty?: string
