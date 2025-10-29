@@ -7,7 +7,7 @@ export async function GET(request: NextRequest) {
     
     // Get query params for filtering
     const { searchParams } = new URL(request.url)
-    const limit = parseInt(searchParams.get('limit') || '100')
+    const limit = parseInt(searchParams.get('limit') || '50')  // Reduced from 100 to 50
     const offset = parseInt(searchParams.get('offset') || '0')
     const search = searchParams.get('search')
     const territory = searchParams.get('territory')
@@ -32,10 +32,11 @@ export async function GET(request: NextRequest) {
       data: paginated,
       total: filtered.length,
       limit,
-      offset
+      offset,
+      cached: true  // Indicate data is from cache
     })
-    // Cache API responses at the edge/proxy for 1 hour
-    res.headers.set('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=300')
+    // Aggressive caching - 2 hours at edge, 10 minutes stale-while-revalidate
+    res.headers.set('Cache-Control', 'public, s-maxage=7200, stale-while-revalidate=600')
     return res
   } catch (error) {
     return NextResponse.json({ error: String(error) }, { status: 500 })

@@ -15,10 +15,11 @@ export default function DashboardPage() {
   const router = useRouter()
   const [data, setData] = useState<HCP[]>([])
   const [loading, setLoading] = useState(true)
+  const [loadingProgress, setLoadingProgress] = useState(0)
   const [globalFilter, setGlobalFilter] = useState('')
   const [showFilters, setShowFilters] = useState(false)
   const [currentPage, setCurrentPage] = useState(0)
-  const [pageSize, setPageSize] = useState(10)
+  const [pageSize, setPageSize] = useState(20)  // Increased from 10 to 20
   
   // Sorting states
   const [sortColumn, setSortColumn] = useState<string>('priority')
@@ -36,16 +37,20 @@ export default function DashboardPage() {
 
   async function loadData() {
     setLoading(true)
+    setLoadingProgress(10)
     const startTime = performance.now()
     try {
+      setLoadingProgress(30)
       const hcps = await getHCPs()
+      setLoadingProgress(80)
       const loadTime = performance.now() - startTime
       console.log(`⚡ Data loaded in ${loadTime.toFixed(0)}ms (${hcps.length} HCPs)`)
       setData(hcps)
+      setLoadingProgress(100)
     } catch (error) {
       console.error('Error loading HCPs:', error)
     } finally {
-      setLoading(false)
+      setTimeout(() => setLoading(false), 200) // Small delay for smooth transition
     }
   }
 
@@ -156,13 +161,25 @@ export default function DashboardPage() {
   if (loading) {
     return (
       <div className="container mx-auto py-6 space-y-6">
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg p-6 text-white shadow-lg animate-pulse">
-          <div className="flex items-center gap-4">
-            <Brain className="h-12 w-12" />
+        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg p-6 text-white shadow-lg">
+          <div className="flex items-center gap-4 mb-4">
+            <Brain className="h-12 w-12 animate-pulse" />
             <div>
               <h2 className="text-2xl font-bold mb-1">Loading AI-Powered Pre-Call Planning...</h2>
-              <p className="text-blue-100">Analyzing HCP data to optimize your call strategy</p>
+              <p className="text-blue-100">Fetching HCP data from secure cloud storage</p>
             </div>
+          </div>
+          {/* Progress Bar */}
+          <div className="w-full bg-blue-800 rounded-full h-3 overflow-hidden">
+            <div 
+              className="bg-white h-3 rounded-full transition-all duration-500 ease-out"
+              style={{ width: `${loadingProgress}%` }}
+            />
+          </div>
+          <div className="mt-2 text-sm text-blue-100">
+            {loadingProgress < 30 && "Initializing data connection..."}
+            {loadingProgress >= 30 && loadingProgress < 80 && "Loading HCP records..."}
+            {loadingProgress >= 80 && "Almost ready..."}
           </div>
         </div>
       </div>

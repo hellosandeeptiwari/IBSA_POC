@@ -202,15 +202,18 @@ export async function getHCPs(filters?: {
   trx_max?: number
   search?: string
 }): Promise<HCP[]> {
-  // Use API route for data fetching
+  // Use API route for data fetching with smaller initial load
   const params = new URLSearchParams()
-  params.set('limit', '100')
+  params.set('limit', '50')  // Reduced from 100 to 50 for faster initial load
   params.set('offset', '0')
   
   if (filters?.search) params.set('search', filters.search)
   if (filters?.territory) params.set('territory', filters.territory)
   
-  const response = await fetch(`/api/hcps?${params}`)
+  const response = await fetch(`/api/hcps?${params}`, {
+    // Add client-side cache headers
+    next: { revalidate: 300 } // Cache for 5 minutes
+  })
   if (!response.ok) {
     console.error('Failed to fetch HCPs from API')
     return []
