@@ -21,10 +21,10 @@ export default function TerritoryDashboardPage() {
   async function loadData() {
     setLoading(true)
     try {
-      // Load ALL HCPs for territory analytics (not just 100)
-      // We need comprehensive data for accurate territory-level metrics
+      // Load a large representative sample for territory analytics
+      // Loading all 221K HCPs is too slow, 10K provides accurate territory metrics
       const params = new URLSearchParams()
-      params.set('limit', '250000')  // Load all available HCPs
+      params.set('limit', '10000')  // Large sample for good representation
       params.set('offset', '0')
       
       const response = await fetch(`/api/hcps?${params}`)
