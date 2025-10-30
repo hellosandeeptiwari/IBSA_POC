@@ -50,6 +50,13 @@ def score_hcps():
     logger.info(f"PHASE 7: SCORING ALL HCPs WITH REAL MODELS")
     logger.info("="*80)
     
+    # Load PrescriberOverview to get real PrescriberId mapping
+    logger.info("\nLoading PrescriberOverview for real IDs...")
+    profile_file = BASE_DIR / "ibsa-poc-eda" / "data" / "Reporting_BI_PrescriberOverview.csv"
+    prescriber_ids = pd.read_csv(profile_file, usecols=['PrescriberId'], dtype={'PrescriberId': str})
+    prescriber_ids['PrescriberId'] = prescriber_ids['PrescriberId'].str.replace('.0', '', regex=False)
+    logger.info(f"✓ Loaded {len(prescriber_ids):,} real PrescriberId values")
+    
     # Load feature-engineered data metadata
     logger.info(f"\nLoading feature-engineered data: {FEATURES_FILE}")
     
@@ -97,18 +104,22 @@ def score_hcps():
     for chunk in pd.read_csv(FEATURES_FILE, chunksize=CHUNK_SIZE, low_memory=False):
         chunk_num += 1
         chunk_size = len(chunk)
+        chunk_start_idx = total_processed
         total_processed += chunk_size
         logger.info(f"\n{'='*60}")
         logger.info(f"Processing Chunk {chunk_num}: {chunk_size:,} HCPs ({total_processed:,}/{total_rows:,})")
         logger.info(f"{'='*60}")
         
+        # Map row indices to real PrescriberId from PrescriberOverview
+        chunk_real_ids = prescriber_ids.iloc[chunk_start_idx:chunk_start_idx + chunk_size].copy()
+        
         # Initialize results for this chunk - preserve essential HCP data
-        preserve_cols = ['PrescriberId', 'Specialty', 'State', 'City', 'Territory', 'Tier',
+        preserve_cols = ['Specialty', 'State', 'City', 'Territory', 'Tier',
                         'tirosint_trx', 'flector_trx', 'licart_trx', 'total_trx']
         available_cols = [c for c in preserve_cols if c in chunk.columns]
         chunk_results = chunk[available_cols].copy()
-        chunk_results.rename(columns={'PrescriberId': 'NPI',
-                                     'tirosint_trx': 'TRx_Current',
+        chunk_results['NPI'] = chunk_real_ids['PrescriberId'].values  # Use real PrescriberId as NPI
+        chunk_results.rename(columns={'tirosint_trx': 'TRx_Current',
                                      'total_trx': 'TRx_Total'}, inplace=True)
         
         # Get numeric features for modeling
@@ -260,6 +271,66 @@ def score_hcps():
     
     # Save results
     final_results.to_csv(OUTPUT_FILE, index=False)
+    
+    # Merge with Prescriber Overview data for real names and territories
+    logger.info("\n" + "="*80)
+    logger.info("MERGING WITH PRESCRIBER OVERVIEW DATA...")
+    logger.info("="*80)
+    
+    profile_file = BASE_DIR / "ibsa-poc-eda" / "data" / "Reporting_BI_PrescriberOverview.csv"
+    if profile_file.exists():
+        try:
+            # Load prescriber profiles with only needed columns
+            profile_cols = ['PrescriberId', 'PrescriberName', 'City', 'State', 'Zipcode', 'TerritoryName',
+                           'LicartTargetTier', 'FlectorTargetTier', 'TirosintTargetTier']
+            profiles = pd.read_csv(profile_file, usecols=profile_cols, dtype={'PrescriberId': str}, low_memory=False)
+            profiles['PrescriberId'] = profiles['PrescriberId'].str.replace('.0', '', regex=False)
+            
+            logger.info(f"✓ Loaded {len(profiles):,} prescriber profiles")
+            
+            # Merge with predictions - NPI already contains real PrescriberId
+            merged = final_results.merge(
+                profiles,
+                left_on='NPI',
+                right_on='PrescriberId',
+                how='left',
+                suffixes=('', '_profile')
+            )
+            
+            # Update columns with profile data where available
+            if 'PrescriberName' in merged.columns:
+                merged['PrescriberName'] = merged['PrescriberName'].fillna('HCP-' + merged['NPI'].astype(str))
+            if 'TerritoryName' in merged.columns:
+                # Keep TerritoryName, use it to update Territory if needed
+                if 'Territory' in merged.columns:
+                    merged['Territory'] = merged['TerritoryName'].fillna(merged['Territory'])
+                else:
+                    merged['Territory'] = merged['TerritoryName']
+            if 'City_profile' in merged.columns:
+                merged['City'] = merged['City_profile'].fillna(merged.get('City', ''))
+            if 'State_profile' in merged.columns:
+                merged['State'] = merged['State_profile'].fillna(merged.get('State', ''))
+            
+            # Drop duplicate columns
+            cols_to_drop = [c for c in merged.columns if c.endswith('_profile')]
+            if 'PrescriberId' in merged.columns:
+                cols_to_drop.append('PrescriberId')
+            merged = merged.drop(columns=cols_to_drop, errors='ignore')
+            
+            # Save merged results
+            merged.to_csv(OUTPUT_FILE, index=False)
+            final_results = merged
+            
+            logger.info(f"✓ Merged successfully")
+            logger.info(f"✓ Rows with real names: {(~merged['PrescriberName'].astype(str).str.startswith('HCP-')).sum():,}")
+            logger.info(f"✓ Rows with territories: {merged['TerritoryName'].notna().sum():,}")
+            
+        except Exception as e:
+            logger.warning(f"⚠️ Could not merge prescriber profiles: {e}")
+            logger.warning("Continuing with NPI only...")
+    else:
+        logger.warning(f"⚠️ Prescriber profile file not found: {profile_file}")
+        logger.warning("Continuing with NPI only...")
     
     logger.info("\n" + "="*80)
     logger.info("PHASE 7 COMPLETE - ALL HCPs SCORED")
