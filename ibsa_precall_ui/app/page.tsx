@@ -22,7 +22,7 @@ export default function DashboardPage() {
   const [pageSize, setPageSize] = useState(20)  // Increased from 10 to 20
   
   // Sorting states
-  const [sortColumn, setSortColumn] = useState<string>('priority')
+  const [sortColumn, setSortColumn] = useState<string>('npi')
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc')
   
   // Filter states
@@ -662,32 +662,11 @@ export default function DashboardPage() {
                     <Tooltip content="AI Ranking: 60% Call Success + 30% Rx Lift + 10% (Tier & NGD) mapped to 1-5" />
                   </div>
                 </th>
-                <th className="px-2 py-2 text-right text-[11px] font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100" onClick={() => handleSort('trx_current')}>
-                  <div className="flex items-center justify-end">
-                    Current TRx
+                <th className="px-2 py-2 text-left text-[11px] font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100" onClick={() => handleSort('trx_current')}>
+                  <div className="flex items-center">
+                    Total TRx (Product Mix)
                     <SortIcon column="trx_current" />
-                    <Tooltip content="Total Rx written this quarter (QTD)" />
-                  </div>
-                </th>
-                <th className="px-2 py-2 text-right text-[11px] font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100 bg-teal-50" onClick={() => handleSort('tirosint_trx')}>
-                  <div className="flex items-center justify-end gap-1">
-                    <span className="text-teal-600">Tirosint TRx</span>
-                    <SortIcon column="tirosint_trx" />
-                    <Tooltip content="Tirosint prescriptions (T4 Replacement)" />
-                  </div>
-                </th>
-                <th className="px-2 py-2 text-right text-[11px] font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100 bg-pink-50" onClick={() => handleSort('flector_trx')}>
-                  <div className="flex items-center justify-end gap-1">
-                    <span className="text-pink-600">Flector TRx</span>
-                    <SortIcon column="flector_trx" />
-                    <Tooltip content="Flector prescriptions (Pain Management)" />
-                  </div>
-                </th>
-                <th className="px-2 py-2 text-right text-[11px] font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100 bg-indigo-50" onClick={() => handleSort('licart_trx')}>
-                  <div className="flex items-center justify-end gap-1">
-                    <span className="text-indigo-600">Licart TRx</span>
-                    <SortIcon column="licart_trx" />
-                    <Tooltip content="Licart prescriptions (Cardiovascular)" />
+                    <Tooltip content="Total prescriptions with IBSA + Competitor product breakdown" />
                   </div>
                 </th>
                 <th className="px-2 py-2 text-right text-[11px] font-medium text-gray-500 uppercase border-b bg-purple-50 cursor-pointer hover:bg-gray-100" onClick={() => handleSort('forecasted_lift')}>
@@ -787,21 +766,26 @@ export default function DashboardPage() {
                         </span>
                       </div>
                     </td>
-                    <td className="px-2 py-2 text-right text-xs font-mono">{formatNumber(hcp.trx_current)}</td>
-                    <td className="px-2 py-2 text-right text-xs font-mono bg-teal-50">
-                      <span className={`font-semibold ${(hcp.tirosint_trx || 0) > 0 ? 'text-teal-600' : 'text-gray-400'}`}>
-                        {formatNumber(hcp.tirosint_trx || 0)}
-                      </span>
-                    </td>
-                    <td className="px-2 py-2 text-right text-xs font-mono bg-pink-50">
-                      <span className={`font-semibold ${(hcp.flector_trx || 0) > 0 ? 'text-pink-600' : 'text-gray-400'}`}>
-                        {formatNumber(hcp.flector_trx || 0)}
-                      </span>
-                    </td>
-                    <td className="px-2 py-2 text-right text-xs font-mono bg-indigo-50">
-                      <span className={`font-semibold ${(hcp.licart_trx || 0) > 0 ? 'text-indigo-600' : 'text-gray-400'}`}>
-                        {formatNumber(hcp.licart_trx || 0)}
-                      </span>
+                    <td className="px-2 py-2 text-xs">
+                      <div className="flex flex-col gap-0.5">
+                        <div className="font-semibold text-gray-900">{formatNumber(hcp.trx_current)} TRx</div>
+                        {hcp.trx_current > 0 && (
+                          <div className="text-[10px] text-gray-600 leading-tight">
+                            <div className="font-medium text-blue-700">IBSA:</div>
+                            {(hcp.tirosint_trx || 0) > 0 && <div className="pl-2">T: {formatNumber(hcp.tirosint_trx || 0)}</div>}
+                            {(hcp.flector_trx || 0) > 0 && <div className="pl-2">F: {formatNumber(hcp.flector_trx || 0)}</div>}
+                            {(hcp.licart_trx || 0) > 0 && <div className="pl-2">L: {formatNumber(hcp.licart_trx || 0)}</div>}
+                            {((hcp as any).competitor_trx || 0) > 0 && (
+                              <>
+                                <div className="font-medium text-orange-700 mt-0.5">Comp:</div>
+                                {((hcp as any).competitor_synthroid_levothyroxine || 0) > 0 && <div className="pl-2">Syn: {formatNumber((hcp as any).competitor_synthroid_levothyroxine || 0)}</div>}
+                                {((hcp as any).competitor_voltaren_diclofenac || 0) > 0 && <div className="pl-2">Vol: {formatNumber((hcp as any).competitor_voltaren_diclofenac || 0)}</div>}
+                                {((hcp as any).competitor_imdur_nitrates || 0) > 0 && <div className="pl-2">Imd: {formatNumber((hcp as any).competitor_imdur_nitrates || 0)}</div>}
+                              </>
+                            )}
+                          </div>
+                        )}
+                      </div>
                     </td>
                     <td className="px-2 py-2 text-right text-xs font-mono bg-purple-50">
                       <span className={`font-semibold ${hcp.trx_growth > 0 ? 'text-green-600' : hcp.trx_growth < 0 ? 'text-red-600' : 'text-gray-500'}`}>
