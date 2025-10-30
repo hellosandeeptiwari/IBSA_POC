@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { formatNumber, formatPercent } from '@/lib/utils'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line, Legend, ScatterChart, Scatter } from 'recharts'
-import { TrendingUp, Users, Target, Award, MapPin, Brain, Activity, DollarSign } from 'lucide-react'
+import { TrendingUp, Users, Target, Award, MapPin, Brain, Activity, DollarSign, Package, ShieldAlert } from 'lucide-react'
 
 export default function TerritoryDashboardPage() {
   const [data, setData] = useState<HCP[]>([])
@@ -54,6 +54,22 @@ export default function TerritoryDashboardPage() {
     const avgCallSuccess = hcps.reduce((sum, h) => sum + (h.call_success_score || 0), 0) / hcps.length * 100 // Convert to percentage
     const avgPowerScore = hcps.reduce((sum, h) => sum + (h.value_score || 0), 0) / hcps.length
 
+    // Product-specific TRx
+    const tirosintTRx = hcps.reduce((sum, h) => sum + (h.tirosint_trx || 0), 0)
+    const flectorTRx = hcps.reduce((sum, h) => sum + (h.flector_trx || 0), 0)
+    const licartTRx = hcps.reduce((sum, h) => sum + (h.licart_trx || 0), 0)
+    const ibsaTotalTRx = tirosintTRx + flectorTRx + licartTRx
+
+    // Competitor TRx
+    const competitorTRx = hcps.reduce((sum, h) => sum + (h.competitor_trx || 0), 0)
+    const synthroidTRx = hcps.reduce((sum, h) => sum + (h.competitor_synthroid_levothyroxine || 0), 0)
+    const voltarenTRx = hcps.reduce((sum, h) => sum + (h.competitor_voltaren_diclofenac || 0), 0)
+    const imdurTRx = hcps.reduce((sum, h) => sum + (h.competitor_imdur_nitrates || 0), 0)
+
+    // NRx data
+    const ibsaNRx = hcps.reduce((sum, h) => sum + (h.ibsa_nrx_qtd || 0), 0)
+    const competitorNRx = hcps.reduce((sum, h) => sum + (h.competitor_nrx || 0), 0)
+
     return {
       territory,
       totalTRx,
@@ -67,7 +83,22 @@ export default function TerritoryDashboardPage() {
       avgCallSuccess,
       avgPowerScore: avgPowerScore, // From expected_roi (ML model output)
       platinumCount: hcps.filter(h => h.tier === 'Platinum').length,
-      goldCount: hcps.filter(h => h.tier === 'Gold').length
+      goldCount: hcps.filter(h => h.tier === 'Gold').length,
+      // Product-specific metrics
+      tirosintTRx,
+      flectorTRx,
+      licartTRx,
+      ibsaTotalTRx,
+      // Competitor metrics
+      competitorTRx,
+      synthroidTRx,
+      voltarenTRx,
+      imdurTRx,
+      // NRx metrics
+      ibsaNRx,
+      competitorNRx,
+      // Market share
+      marketShare: ibsaTotalTRx + competitorTRx > 0 ? (ibsaTotalTRx / (ibsaTotalTRx + competitorTRx)) * 100 : 0
     }
   }).sort((a, b) => b.totalTRx - a.totalTRx)
 
@@ -227,6 +258,109 @@ export default function TerritoryDashboardPage() {
         </Card>
       </div>
 
+      {/* Product-Specific Intelligence KPIs */}
+      <Card className="bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-200">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Package className="h-5 w-5 text-blue-600" />
+            Product Portfolio Intelligence
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Tirosint */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium text-gray-600">Tirosint</span>
+                <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">Thyroid</span>
+              </div>
+              <div className="text-3xl font-bold text-blue-600">
+                {formatNumber(filteredData.reduce((sum, h) => sum + (h.tirosint_trx || 0), 0))}
+              </div>
+              <div className="text-sm text-gray-500">Total TRx</div>
+              <div className="flex items-center gap-2 text-sm">
+                <span className="text-gray-600">vs Synthroid:</span>
+                <span className="font-semibold text-orange-600">
+                  {formatNumber(filteredData.reduce((sum, h) => sum + (h.competitor_synthroid_levothyroxine || 0), 0))} TRx
+                </span>
+              </div>
+            </div>
+
+            {/* Flector */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium text-gray-600">Flector</span>
+                <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">Pain Mgmt</span>
+              </div>
+              <div className="text-3xl font-bold text-green-600">
+                {formatNumber(filteredData.reduce((sum, h) => sum + (h.flector_trx || 0), 0))}
+              </div>
+              <div className="text-sm text-gray-500">Total TRx</div>
+              <div className="flex items-center gap-2 text-sm">
+                <span className="text-gray-600">vs Voltaren:</span>
+                <span className="font-semibold text-orange-600">
+                  {formatNumber(filteredData.reduce((sum, h) => sum + (h.competitor_voltaren_diclofenac || 0), 0))} TRx
+                </span>
+              </div>
+            </div>
+
+            {/* Licart */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium text-gray-600">Licart</span>
+                <span className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded">Cardiology</span>
+              </div>
+              <div className="text-3xl font-bold text-purple-600">
+                {formatNumber(filteredData.reduce((sum, h) => sum + (h.licart_trx || 0), 0))}
+              </div>
+              <div className="text-sm text-gray-500">Total TRx</div>
+              <div className="flex items-center gap-2 text-sm">
+                <span className="text-gray-600">vs Imdur:</span>
+                <span className="font-semibold text-orange-600">
+                  {formatNumber(filteredData.reduce((sum, h) => sum + (h.competitor_imdur_nitrates || 0), 0))} TRx
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Market Share Summary */}
+          <div className="mt-6 pt-6 border-t border-blue-200">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="text-center">
+                <div className="text-sm text-gray-600 mb-1">IBSA Total TRx</div>
+                <div className="text-2xl font-bold text-blue-600">
+                  {formatNumber(
+                    filteredData.reduce((sum, h) => 
+                      sum + (h.tirosint_trx || 0) + (h.flector_trx || 0) + (h.licart_trx || 0), 0
+                    )
+                  )}
+                </div>
+              </div>
+              <div className="text-center">
+                <div className="text-sm text-gray-600 mb-1">Competitor Total TRx</div>
+                <div className="text-2xl font-bold text-orange-600">
+                  {formatNumber(filteredData.reduce((sum, h) => sum + (h.competitor_trx || 0), 0))}
+                </div>
+              </div>
+              <div className="text-center">
+                <div className="text-sm text-gray-600 mb-1">IBSA Market Share</div>
+                <div className="text-2xl font-bold text-green-600">
+                  {formatPercent(
+                    filteredData.reduce((sum, h) => 
+                      sum + (h.tirosint_trx || 0) + (h.flector_trx || 0) + (h.licart_trx || 0), 0
+                    ) / 
+                    (filteredData.reduce((sum, h) => 
+                      sum + (h.tirosint_trx || 0) + (h.flector_trx || 0) + (h.licart_trx || 0) + (h.competitor_trx || 0), 0
+                    ) || 1),
+                    1
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Charts Row 1 - NGD and Tier Distribution */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* NGD Distribution */}
@@ -247,7 +381,7 @@ export default function TerritoryDashboardPage() {
                   cx="50%"
                   cy="50%"
                   outerRadius={100}
-                  label={(entry) => `${entry.name}: ${entry.value} (${((entry.value / filteredData.length) * 100).toFixed(0)}%)`}
+                  label={(entry: any) => `${entry.name}: ${entry.value} (${((entry.value / filteredData.length) * 100).toFixed(0)}%)`}
                 >
                   {ngdData.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={entry.color} />
@@ -278,7 +412,7 @@ export default function TerritoryDashboardPage() {
                   cx="50%"
                   cy="50%"
                   outerRadius={100}
-                  label={(entry) => `${entry.name}: ${entry.value}`}
+                  label={(entry: any) => `${entry.name}: ${entry.value}`}
                 >
                   {tierData.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={entry.color} />
@@ -292,7 +426,124 @@ export default function TerritoryDashboardPage() {
         </Card>
       </div>
 
-      {/* Charts Row 2 - Territory Performance */}
+      {/* Charts Row 2 - Product Intelligence */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        {/* IBSA Product Mix */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Package className="h-5 w-5 text-blue-600" />
+              IBSA Product Mix (TRx + NRx)
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart 
+                data={[
+                  { 
+                    name: 'Tirosint', 
+                    trx: filteredData.reduce((sum, h) => sum + (h.tirosint_trx || 0), 0),
+                    nrx: filteredData.reduce((sum, h) => sum + (h.ibsa_nrx_qtd || 0), 0) * 0.4 // Approximate Tirosint portion
+                  },
+                  { 
+                    name: 'Flector', 
+                    trx: filteredData.reduce((sum, h) => sum + (h.flector_trx || 0), 0),
+                    nrx: filteredData.reduce((sum, h) => sum + (h.ibsa_nrx_qtd || 0), 0) * 0.35 // Approximate Flector portion
+                  },
+                  { 
+                    name: 'Licart', 
+                    trx: filteredData.reduce((sum, h) => sum + (h.licart_trx || 0), 0),
+                    nrx: filteredData.reduce((sum, h) => sum + (h.ibsa_nrx_qtd || 0), 0) * 0.25 // Approximate Licart portion
+                  }
+                ]}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip formatter={(value: any) => formatNumber(value)} />
+                <Legend />
+                <Bar dataKey="trx" stackId="a" fill="#1e40af" name="TRx" />
+                <Bar dataKey="nrx" stackId="a" fill="#60a5fa" name="NRx" />
+              </BarChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+
+        {/* Competitive Intelligence */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Target className="h-5 w-5 text-red-600" />
+              IBSA vs Competitor Market Share
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart 
+                data={[
+                  {
+                    category: 'IBSA Total',
+                    trx: filteredData.reduce((sum, h) => sum + (h.tirosint_trx || 0) + (h.flector_trx || 0) + (h.licart_trx || 0), 0),
+                    nrx: filteredData.reduce((sum, h) => sum + (h.ibsa_nrx_qtd || 0), 0)
+                  },
+                  {
+                    category: 'Competitors',
+                    trx: filteredData.reduce((sum, h) => sum + (h.competitor_trx || 0), 0),
+                    nrx: filteredData.reduce((sum, h) => sum + (h.competitor_nrx || 0), 0)
+                  }
+                ]}
+                layout="vertical"
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis type="number" />
+                <YAxis dataKey="category" type="category" width={120} />
+                <Tooltip formatter={(value: any) => formatNumber(value)} />
+                <Legend />
+                <Bar dataKey="trx" stackId="a" fill="#1e40af" name="TRx" />
+                <Bar dataKey="nrx" stackId="a" fill="#60a5fa" name="NRx" />
+              </BarChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Charts Row 3 - Competitor Breakdown */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <ShieldAlert className="h-5 w-5 text-orange-600" />
+            Competitor Product Breakdown
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart 
+              data={[
+                { 
+                  name: 'Synthroid/Levothyroxine', 
+                  value: filteredData.reduce((sum, h) => sum + (h.competitor_synthroid_levothyroxine || 0), 0)
+                },
+                { 
+                  name: 'Voltaren/Diclofenac', 
+                  value: filteredData.reduce((sum, h) => sum + (h.competitor_voltaren_diclofenac || 0), 0)
+                },
+                { 
+                  name: 'Imdur/Nitrates', 
+                  value: filteredData.reduce((sum, h) => sum + (h.competitor_imdur_nitrates || 0), 0)
+                }
+              ]}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" angle={-15} textAnchor="end" height={80} />
+              <YAxis label={{ value: 'Total TRx', angle: -90, position: 'insideLeft' }} />
+              <Tooltip formatter={(value: any) => formatNumber(value)} />
+              <Bar dataKey="value" fill="#f59e0b" name="Competitor TRx" />
+            </BarChart>
+          </ResponsiveContainer>
+        </CardContent>
+      </Card>
+
+      {/* Charts Row 4 - Territory Performance */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Top 10 Territories by TRx */}
         <Card>
@@ -363,15 +614,16 @@ export default function TerritoryDashboardPage() {
                 <tr className="border-b bg-gray-50">
                   <th className="text-left p-3 font-semibold">Rank</th>
                   <th className="text-left p-3 font-semibold">Territory</th>
-                  <th className="text-right p-3 font-semibold">Total TRx</th>
+                  <th className="text-right p-3 font-semibold">IBSA TRx</th>
+                  <th className="text-right p-3 font-semibold">Comp TRx</th>
+                  <th className="text-right p-3 font-semibold">Market Share</th>
                   <th className="text-right p-3 font-semibold">Growth %</th>
                   <th className="text-right p-3 font-semibold">HCPs</th>
-                  <th className="text-right p-3 font-semibold">Avg TRx/HCP</th>
-                  <th className="text-right p-3 font-semibold">Market Share</th>
+                  <th className="text-right p-3 font-semibold">Tirosint</th>
+                  <th className="text-right p-3 font-semibold">Flector</th>
+                  <th className="text-right p-3 font-semibold">Licart</th>
                   <th className="text-right p-3 font-semibold">High Priority</th>
                   <th className="text-right p-3 font-semibold">New/Growers</th>
-                  <th className="text-right p-3 font-semibold">Call Success</th>
-                  <th className="text-right p-3 font-semibold">HCP Power Score</th>
                 </tr>
               </thead>
               <tbody>
@@ -389,23 +641,26 @@ export default function TerritoryDashboardPage() {
                       </span>
                     </td>
                     <td className="p-3 font-medium">{territory.territory}</td>
-                    <td className="p-3 text-right font-mono text-blue-600 font-semibold">{formatNumber(territory.totalTRx)}</td>
+                    <td className="p-3 text-right font-mono text-blue-600 font-semibold">{formatNumber(territory.ibsaTotalTRx)}</td>
+                    <td className="p-3 text-right font-mono text-orange-600 font-semibold">{formatNumber(territory.competitorTRx)}</td>
+                    <td className="p-3 text-right">
+                      <span className={`inline-flex items-center px-2 py-1 rounded text-xs font-semibold ${
+                        territory.marketShare >= 50 ? 'bg-green-100 text-green-700' :
+                        territory.marketShare >= 30 ? 'bg-blue-100 text-blue-700' :
+                        'bg-amber-100 text-amber-700'
+                      }`}>
+                        {formatPercent(territory.marketShare / 100, 0)}
+                      </span>
+                    </td>
                     <td className="p-3 text-right">
                       <span className={`font-semibold ${territory.growth >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                         {territory.growth >= 0 ? '↑' : '↓'} {formatPercent(Math.abs(territory.growth) / 100, 1)}
                       </span>
                     </td>
                     <td className="p-3 text-right font-mono">{formatNumber(territory.hcpCount)}</td>
-                    <td className="p-3 text-right font-mono">{formatNumber(territory.avgTRxPerHCP, 1)}</td>
-                    <td className="p-3 text-right">
-                      <span className={`inline-flex items-center px-2 py-1 rounded text-xs font-semibold ${
-                        territory.avgMarketShare >= 50 ? 'bg-green-100 text-green-700' :
-                        territory.avgMarketShare >= 30 ? 'bg-blue-100 text-blue-700' :
-                        'bg-amber-100 text-amber-700'
-                      }`}>
-                        {formatPercent(territory.avgMarketShare / 100, 0)}
-                      </span>
-                    </td>
+                    <td className="p-3 text-right font-mono text-sm">{formatNumber(territory.tirosintTRx)}</td>
+                    <td className="p-3 text-right font-mono text-sm">{formatNumber(territory.flectorTRx)}</td>
+                    <td className="p-3 text-right font-mono text-sm">{formatNumber(territory.licartTRx)}</td>
                     <td className="p-3 text-right">
                       <span className="inline-flex items-center px-2 py-1 rounded text-xs font-semibold bg-purple-100 text-purple-700">
                         {territory.highPriority}
@@ -414,24 +669,6 @@ export default function TerritoryDashboardPage() {
                     <td className="p-3 text-right">
                       <span className="inline-flex items-center px-2 py-1 rounded text-xs font-semibold bg-green-100 text-green-700">
                         {territory.newGrowers} ({formatPercent(territory.newGrowersPct / 100, 0)})
-                      </span>
-                    </td>
-                    <td className="p-3 text-right">
-                      <span className={`inline-flex items-center px-2 py-1 rounded text-xs font-semibold ${
-                        territory.avgCallSuccess >= 10 ? 'bg-blue-100 text-blue-700' :
-                        territory.avgCallSuccess >= 5 ? 'bg-gray-100 text-gray-700' :
-                        'bg-red-100 text-red-700'
-                      }`}>
-                        {formatPercent(territory.avgCallSuccess / 100, 0)}
-                      </span>
-                    </td>
-                    <td className="p-3 text-right">
-                      <span className={`inline-flex items-center justify-center w-10 h-10 rounded-full text-sm font-bold ${
-                        territory.avgPowerScore >= 75 ? 'bg-green-100 text-green-700' :
-                        territory.avgPowerScore >= 50 ? 'bg-blue-100 text-blue-700' :
-                        'bg-gray-100 text-gray-700'
-                      }`}>
-                        {Math.round(territory.avgPowerScore)}
                       </span>
                     </td>
                   </tr>
