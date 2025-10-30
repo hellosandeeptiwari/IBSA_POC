@@ -68,7 +68,6 @@ export interface ModelReadyRow {
   trx_prior_qtd?: number
   nrx_current_qtd?: number
   ibsa_share?: number
-  hcp_power_score?: number
   
   [key: string]: string | number | undefined
 }
@@ -265,7 +264,7 @@ export async function getHCPs(filters?: {
       ibsa_share: Number(row.ibsa_share) || 0,
       nrx_count: Number(row.nrx_current_qtd) || 0,
       call_success_score: Number(row.call_success_prob) || 0,
-      value_score: Number(row.expected_roi) || Number(row.hcp_power_score) || 0,
+      value_score: Number(row.expected_roi) || 0,
       rx_lift: Number(row.forecasted_lift) || 0,
       ngd_decile: 5,
       ngd_classification: String(row.ngd_classification || 'Stable')
@@ -480,7 +479,7 @@ export async function getHCPDetail(npiParam: string): Promise<HCPDetail | null> 
     ibsa_share: effectiveIbsaShare, // Use effective share for display (15% default if no data)
     nrx_count: nrxCurrent,
     call_success_score: Number(row.call_success_prob) || 0,
-    value_score: Number(row.expected_roi || row.hcp_power_score) || 0,
+    value_score: Number(row.expected_roi) || 0,
     ngd_decile: ngdDecile,
     ngd_classification: (row.ngd_classification as 'New' | 'Grower' | 'Stable' | 'Decliner') || getNGDClassification(ngdDecile, 0),
     product_mix: productMix.filter(p => p.trx >= 0),

@@ -65,7 +65,7 @@ export default function TerritoryDashboardPage() {
       newGrowers,
       newGrowersPct: (newGrowers / hcps.length) * 100,
       avgCallSuccess,
-      avgPowerScore: avgPowerScore, // Already 0-100 scale from hcp_power_score
+      avgPowerScore: avgPowerScore, // From expected_roi (ML model output)
       platinumCount: hcps.filter(h => h.tier === 'Platinum').length,
       goldCount: hcps.filter(h => h.tier === 'Gold').length
     }

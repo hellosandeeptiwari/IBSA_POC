@@ -634,7 +634,7 @@ export default function DashboardPage() {
                   Stable: 'bg-gray-100 text-gray-800 border-gray-300',
                   Decliner: 'bg-red-100 text-red-800 border-red-300',
                 }
-                const powerScore = Math.round(hcp.value_score || 0) // Already 0-100 from hcp_power_score
+                const powerScore = Math.round(hcp.value_score || 0) // From expected_roi (ML model output)
                 const callSuccess = Math.round((hcp.call_success_score || 0) * 100) // Convert 0-1 to 0-100%
                 
                 return (
