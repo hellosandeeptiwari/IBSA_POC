@@ -20,9 +20,19 @@ export interface ModelReadyRow {
   Territory?: string
   Tier?: string
   TRx_Current?: number
+  tirosint_trx?: number
   flector_trx?: number
   licart_trx?: number
   TRx_Total?: number  // Added in phase7
+  competitor_trx?: number
+  competitor_synthroid_levothyroxine?: number
+  competitor_voltaren_diclofenac?: number
+  competitor_imdur_nitrates?: number
+  ibsa_nrx_qtd?: number
+  competitor_nrx?: number
+  competitor_nrx_synthroid_levothyroxine?: number
+  competitor_nrx_voltaren_diclofenac?: number
+  competitor_nrx_imdur_nitrates?: number
   
   // Product-specific predictions
   Tirosint_call_success_pred?: number
@@ -207,9 +217,9 @@ export async function getHCPs(filters?: {
   trx_max?: number
   search?: string
 }): Promise<HCP[]> {
-  // Use API route for data fetching with smaller initial load
+  // Use API route for data fetching with diverse product mix
   const params = new URLSearchParams()
-  params.set('limit', '50')  // Reduced from 100 to 50 for faster initial load
+  params.set('limit', '100')  // Load 100 records for better diversity
   params.set('offset', '0')
   
   // Enable random sampling when no search filter is applied (for diverse initial view)
@@ -236,14 +246,8 @@ export async function getHCPs(filters?: {
     const npi = String(row.NPI || row.PrescriberId || '').replace('.0', '')
     const specialty = row.Specialty || 'General Practice'
     
-    // Map tier values from CSV format to standard tier names
-    const rawTier = String(row.Tier || 'Silver').toUpperCase()
-    let tier = 'Silver' // Default
-    if (rawTier.includes('TIER 1') || rawTier.includes('PLATINUM')) tier = 'Platinum'
-    else if (rawTier.includes('TIER 2') || rawTier.includes('GOLD')) tier = 'Gold'
-    else if (rawTier.includes('TIER 3') || rawTier.includes('SILVER')) tier = 'Silver'
-    else if (rawTier.includes('TIER 4') || rawTier.includes('BRONZE')) tier = 'Bronze'
-    else if (rawTier.includes('NON-TARGET')) tier = 'Bronze' // Map NON-TARGET to Bronze
+    // Keep original tier value from CSV
+    const tier = String(row.Tier || 'N/A')
     
     return {
       npi,
@@ -269,9 +273,19 @@ export async function getHCPs(filters?: {
       ngd_decile: 5,
       ngd_classification: String(row.ngd_classification || 'Stable'),
       // Product-specific TRx from CSV
+      tirosint_trx: Number(row.tirosint_trx) || 0,
       flector_trx: Number(row.flector_trx) || 0,
       licart_trx: Number(row.licart_trx) || 0,
-      tirosint_trx: Number(row.TRx_Current) - Number(row.flector_trx || 0) - Number(row.licart_trx || 0) || 0
+      competitor_trx: Number(row.competitor_trx) || 0,
+      competitor_synthroid_levothyroxine: Number(row.competitor_synthroid_levothyroxine) || 0,
+      competitor_voltaren_diclofenac: Number(row.competitor_voltaren_diclofenac) || 0,
+      competitor_imdur_nitrates: Number(row.competitor_imdur_nitrates) || 0,
+      // NRx data
+      ibsa_nrx_qtd: Number(row.ibsa_nrx_qtd) || 0,
+      competitor_nrx: Number(row.competitor_nrx) || 0,
+      competitor_nrx_synthroid_levothyroxine: Number(row.competitor_nrx_synthroid_levothyroxine) || 0,
+      competitor_nrx_voltaren_diclofenac: Number(row.competitor_nrx_voltaren_diclofenac) || 0,
+      competitor_nrx_imdur_nitrates: Number(row.competitor_nrx_imdur_nitrates) || 0
     }
   })
 }
@@ -286,64 +300,45 @@ export async function getHCPDetail(npiParam: string): Promise<HCPDetail | null> 
   
   const row: ModelReadyRow = await response.json()
 
+  // Extract NPI from row data
+  const npi = String(row.NPI || row.PrescriberId || npiParam || '').replace('.0', '')
+
   // Look up competitive conversion predictions
   const cleanNpi = String(row.PrescriberId).replace('.0', '')
   const conversionPred = competitiveConversionData.get(cleanNpi)
 
-  // Calculate dynamic product mix based on actual TRx data
-  const trxCurrent = Number(row.trx_current_qtd) || 0
-  const nrxCurrent = Number(row.nrx_current_qtd) || 0
-  const ibsaShare = Number(row.ibsa_share) || 0
+  // Use ACTUAL product TRx data from CSV columns
+  const tirosintTrx = Number(row.tirosint_trx) || 0
+  const flectorTrx = Number(row.flector_trx) || 0
+  const licartTrx = Number(row.licart_trx) || 0
+  const competitorTrxTotal = Number(row.competitor_trx) || 0
+  const ibsaTrxTotal = tirosintTrx + flectorTrx + licartTrx
+  const trxCurrent = ibsaTrxTotal + competitorTrxTotal
   
-  // Calculate IBSA TRx based on market share
-  // If ibsaShare is 0%, assume a baseline 15% market share for product mix visualization
-  const effectiveIbsaShare = ibsaShare > 0 ? ibsaShare : 15 // Default to 15% if no share data
-  const ibsaTrx = Math.round(trxCurrent * (effectiveIbsaShare / 100))
+  const nrxCurrent = Number(row.ibsa_nrx_qtd) || 0
   
-  // Distribute TRx across products based on specialty and volume patterns
+  // Calculate actual IBSA share from real data
+  const ibsaShare = trxCurrent > 0 ? (ibsaTrxTotal / trxCurrent) * 100 : 0
+  const effectiveIbsaShare = ibsaShare > 0 ? ibsaShare : 15 // For display purposes
+  
+  // Specialty flags for logic that uses them
   const isEndocrinology = row.is_endocrinology === 1
   const isPainManagement = row.is_pain_management === 1
   
+  // Build product mix from ACTUAL CSV data
   let productMix: { product: string; trx: number; percentage: number }[] = []
   
-  if (ibsaTrx > 0) {
-    if (isEndocrinology || row.is_internal_medicine === 1) {
-      // Thyroid specialists - TIROSINT focused
-      const tirosCaps = Math.round(ibsaTrx * 0.55)
-      const tirosSol = Math.round(ibsaTrx * 0.30)
-      const flector = Math.round(ibsaTrx * 0.10)
-      const licart = ibsaTrx - tirosCaps - tirosSol - flector
-      productMix = [
-        { product: 'TIROSINT Caps', trx: tirosCaps, percentage: tirosCaps / ibsaTrx },
-        { product: 'TIROSINT Sol', trx: tirosSol, percentage: tirosSol / ibsaTrx },
-        { product: 'FLECTOR', trx: flector, percentage: flector / ibsaTrx },
-        { product: 'LICART', trx: Math.max(0, licart), percentage: Math.max(0, licart) / ibsaTrx }
-      ]
-    } else if (isPainManagement) {
-      // Pain management - FLECTOR focused
-      const flector = Math.round(ibsaTrx * 0.60)
-      const licart = Math.round(ibsaTrx * 0.25)
-      const tirosCaps = Math.round(ibsaTrx * 0.10)
-      const tirosSol = ibsaTrx - flector - licart - tirosCaps
-      productMix = [
-        { product: 'FLECTOR', trx: flector, percentage: flector / ibsaTrx },
-        { product: 'LICART', trx: licart, percentage: licart / ibsaTrx },
-        { product: 'TIROSINT Caps', trx: tirosCaps, percentage: tirosCaps / ibsaTrx },
-        { product: 'TIROSINT Sol', trx: Math.max(0, tirosSol), percentage: Math.max(0, tirosSol) / ibsaTrx }
-      ]
-    } else {
-      // General - balanced mix
-      const tirosCaps = Math.round(ibsaTrx * 0.40)
-      const tirosSol = Math.round(ibsaTrx * 0.25)
-      const flector = Math.round(ibsaTrx * 0.20)
-      const licart = ibsaTrx - tirosCaps - tirosSol - flector
-      productMix = [
-        { product: 'TIROSINT Caps', trx: tirosCaps, percentage: tirosCaps / ibsaTrx },
-        { product: 'TIROSINT Sol', trx: tirosSol, percentage: tirosSol / ibsaTrx },
-        { product: 'FLECTOR', trx: flector, percentage: flector / ibsaTrx },
-        { product: 'LICART', trx: Math.max(0, licart), percentage: Math.max(0, licart) / ibsaTrx }
-      ]
-    }
+  if (ibsaTrxTotal > 0) {
+    // Split tirosint into Caps (60%) and Sol (40%) for display
+    const tirosCaps = Math.round(tirosintTrx * 0.6)
+    const tirosSol = tirosintTrx - tirosCaps
+    
+    productMix = [
+      { product: 'TIROSINT Caps', trx: tirosCaps, percentage: tirosCaps / ibsaTrxTotal },
+      { product: 'TIROSINT Sol', trx: tirosSol, percentage: tirosSol / ibsaTrxTotal },
+      { product: 'FLECTOR', trx: flectorTrx, percentage: flectorTrx / ibsaTrxTotal },
+      { product: 'LICART', trx: licartTrx, percentage: licartTrx / ibsaTrxTotal }
+    ].filter(p => p.trx > 0) // Only show products with actual prescriptions
   } else {
     // No TRx - show potential products
     productMix = [
@@ -354,15 +349,10 @@ export async function getHCPDetail(npiParam: string): Promise<HCPDetail | null> 
     ]
   }
 
-  // Calculate dynamic competitive landscape based on IBSA share
-  // Real market share data - no fake competitor brands (no competitor data in dataset)
-  // ibsaShare and ibsaTrx already calculated above
-  const totalMarketTrx = ibsaShare > 0 ? Math.round(trxCurrent / (ibsaShare / 100)) : trxCurrent
-  const competitorTrx = totalMarketTrx - ibsaTrx
-  
+  // Use ACTUAL competitor data from CSV
   const competitorRx = [
-    { brand: 'IBSA', trx: ibsaTrx, share: ibsaShare / 100 },
-    { brand: 'Other Brands', trx: competitorTrx, share: (100 - ibsaShare) / 100 }
+    { brand: 'IBSA', trx: ibsaTrxTotal, share: ibsaShare / 100 },
+    { brand: 'Competitors', trx: competitorTrxTotal, share: (100 - ibsaShare) / 100 }
   ]
 
   // REAL ML predictions from Phase 6 trained models (9 models)
@@ -424,8 +414,7 @@ export async function getHCPDetail(npiParam: string): Promise<HCPDetail | null> 
   const bestDay = callFrequency === 'high' ? 'Tuesday' : callFrequency === 'medium' ? 'Wednesday' : 'Thursday'
   const bestTime = isEndocrinology ? '9:00 AM' : isPainManagement ? '2:00 PM' : '10:00 AM'
 
-  // Get prescriber profile for detailed info
-  const npi = String(row.PrescriberId).replace('.0', '')
+  // Get prescriber profile for detailed info (npi already defined above)
   const profile = prescriberProfileData.get(npi)
   
   // Prioritize prescriber profile data for specialty, then fall back to model data
@@ -474,8 +463,10 @@ export async function getHCPDetail(npiParam: string): Promise<HCPDetail | null> 
     tier: getTierFromRow(row),
     trx_current: trxCurrent,
     trx_prior: Number(row.trx_prior_qtd) || 0,
-    trx_ytd: trxCurrent,
+    trx_ytd: trxCurrent, // TODO: Use actual YTD data when available
     trx_growth: Number(row.forecasted_lift) || 0,
+    ibsa_trx_total: ibsaTrxTotal,  // Actual IBSA TRx from CSV
+    competitor_trx_total: competitorTrxTotal,  // Actual Competitor TRx from CSV
     last_call_date: null, // No call date data in main dataset
     days_since_call: null, // No days since call data in main dataset
     next_call_date: null,
@@ -539,37 +530,35 @@ export async function getHCPDetail(npiParam: string): Promise<HCPDetail | null> 
       competitive_situation: row.comp_sit_not_using_ibsa === 1 ? 'Not Using IBSA' :
                             row.comp_sit_competitor_dominant === 1 ? 'Competitor Dominant' :
                             ibsaShare > 50 ? 'IBSA Leading' : 'Competitive Market',
-      competitor_trx_est: Math.round(trxCurrent * (100 - ibsaShare) / 100),
+      competitor_trx_est: competitorTrxTotal,  // Use actual competitor TRx from CSV
       growth_opportunity_score: Number(row.growth_opportunity) || 50,
-      inferred_competitors: row.ta_thyroid_endocrine === 1 ? ['Synthroid', 'Levoxyl', 'Unithroid'] :
-                           row.ta_pain_management === 1 ? ['Voltaren Gel', 'Pennsaid', 'Lidoderm'] :
-                           row.ta_primary_care === 1 ? ['Synthroid', 'Voltaren Gel'] :
-                           ['Generic Competitors'],
-      // Competitor product distribution (market share based on industry data)
+      // Use ACTUAL competitor data from CSV instead of inferred
       competitor_product_distribution: (() => {
-        const totalCompTrx = Math.round(trxCurrent * (100 - ibsaShare) / 100)
-        if (row.ta_thyroid_endocrine === 1) {
-          // Synthroid dominates thyroid market (~50%), Levoxyl ~25%, Unithroid ~25%
-          return [
-            { product: 'Synthroid', trx: Math.round(totalCompTrx * 0.50) },
-            { product: 'Levoxyl', trx: Math.round(totalCompTrx * 0.25) },
-            { product: 'Unithroid', trx: Math.round(totalCompTrx * 0.25) }
-          ]
-        } else if (row.ta_pain_management === 1) {
-          // Voltaren Gel dominates topical pain (~50%), Pennsaid ~30%, Lidoderm ~20%
-          return [
-            { product: 'Voltaren Gel', trx: Math.round(totalCompTrx * 0.50) },
-            { product: 'Pennsaid', trx: Math.round(totalCompTrx * 0.30) },
-            { product: 'Lidoderm', trx: Math.round(totalCompTrx * 0.20) }
-          ]
-        } else if (row.ta_primary_care === 1) {
-          // Mixed bag - Synthroid and Voltaren split
-          return [
-            { product: 'Synthroid', trx: Math.round(totalCompTrx * 0.60) },
-            { product: 'Voltaren Gel', trx: Math.round(totalCompTrx * 0.40) }
-          ]
+        const synthroidTrx = Number(row.competitor_synthroid_levothyroxine) || 0
+        const voltarenTrx = Number(row.competitor_voltaren_diclofenac) || 0
+        const imdurTrx = Number(row.competitor_imdur_nitrates) || 0
+        
+        const competitors = []
+        if (synthroidTrx > 0) {
+          competitors.push({ product: 'Synthroid/Levothyroxine', trx: synthroidTrx })
         }
-        return [{ product: 'Generic Competitors', trx: totalCompTrx }]
+        if (voltarenTrx > 0) {
+          competitors.push({ product: 'Voltaren/Diclofenac', trx: voltarenTrx })
+        }
+        if (imdurTrx > 0) {
+          competitors.push({ product: 'Imdur/Nitrates', trx: imdurTrx })
+        }
+        
+        // Sort by TRx descending (largest competitor first)
+        return competitors.sort((a, b) => b.trx - a.trx)
+      })(),
+      // Build inferred competitors list from actual data
+      inferred_competitors: (() => {
+        const competitors = []
+        if (Number(row.competitor_synthroid_levothyroxine) > 0) competitors.push('Synthroid/Levothyroxine')
+        if (Number(row.competitor_voltaren_diclofenac) > 0) competitors.push('Voltaren/Diclofenac')
+        if (Number(row.competitor_imdur_nitrates) > 0) competitors.push('Imdur/Nitrates')
+        return competitors.length > 0 ? competitors : ['Generic Competitors']
       })(),
       // NEW: Model 10 - Competitive Conversion Predictions
       competitive_conversion_target: conversionPred?.competitive_conversion_target === 1,

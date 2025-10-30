@@ -67,12 +67,8 @@ export default function HCPDetailPage() {
               <h1 className="text-3xl font-bold">{hcp.name}</h1>
               <TierBadge tier={hcp.tier} />
             </div>
-            <p className="text-muted-foreground">NPI: {hcp.npi}</p>
+            <p className="text-muted-foreground">NPI: {hcp.npi || 'Not Available'}</p>
           </div>
-        </div>
-        <div className="flex gap-2">
-          <Button variant="outline">Schedule Call</Button>
-          <Button>Add to Call Plan</Button>
         </div>
       </div>
 
@@ -98,14 +94,26 @@ export default function HCPDetailPage() {
                 <span className="ml-auto bg-purple-200 text-purple-800 px-2 py-0.5 rounded-full text-[10px] font-bold">AI GENERATED</span>
               </div>
               <p className="text-lg font-semibold text-gray-900 leading-tight">
-                {hcp.predictions.ngd_classification === 'Grower'
-                  ? <>Grow {hcp.predictions.product_focus} prescriptions - AI predicts <span className="bg-purple-200 border border-purple-400 px-2 py-0.5 rounded font-bold inline-flex items-center gap-1"><Bot className="h-3 w-3" />+{formatNumber(hcp.predictions.forecasted_lift, 0)} TRx lift</span> with <span className="bg-purple-200 border border-purple-400 px-2 py-0.5 rounded font-bold inline-flex items-center gap-1"><Sparkles className="h-3 w-3" />{formatPercent(hcp.predictions.call_success_prob, 0)} success rate</span></>
-                  : hcp.predictions.ngd_classification === 'Decliner'
-                  ? <>Protect {hcp.ibsa_share.toFixed(0)}% IBSA share - <span className="bg-purple-200 border border-purple-400 px-2 py-0.5 rounded font-bold inline-flex items-center gap-1"><Bot className="h-3 w-3" />{hcp.predictions.ngd_classification}</span> status detected, prevent further decline</>
-                  : hcp.predictions.ngd_classification === 'New'
-                  ? <>Introduce {hcp.predictions.product_focus} - <span className="bg-purple-200 border border-purple-400 px-2 py-0.5 rounded font-bold inline-flex items-center gap-1"><Bot className="h-3 w-3" />{hcp.predictions.ngd_classification}</span> prescriber with <span className="bg-purple-200 border border-purple-400 px-2 py-0.5 rounded font-bold inline-flex items-center gap-1"><Sparkles className="h-3 w-3" />{formatPercent(hcp.predictions.call_success_prob, 0)} success probability</span></>
-                  : <>Maintain relationship - <span className="bg-purple-200 border border-purple-400 px-2 py-0.5 rounded font-bold inline-flex items-center gap-1"><Bot className="h-3 w-3" />{hcp.predictions.ngd_classification}</span> prescriber, continue regular engagement</>
-                }
+                {(() => {
+                  // Get product-specific call success rate
+                  const productCallSuccess = hcp.predictions.product_focus === 'Tirosint' ? hcp.predictions.tirosint_call_success :
+                                            hcp.predictions.product_focus === 'Flector' ? hcp.predictions.flector_call_success :
+                                            hcp.predictions.licart_call_success
+                  
+                  const productLift = hcp.predictions.product_focus === 'Tirosint' ? hcp.predictions.tirosint_prescription_lift :
+                                     hcp.predictions.product_focus === 'Flector' ? hcp.predictions.flector_prescription_lift :
+                                     hcp.predictions.licart_prescription_lift
+                  
+                  if (hcp.predictions.ngd_classification === 'Grower') {
+                    return <>Grow {hcp.predictions.product_focus} prescriptions - AI predicts <span className="bg-purple-200 border border-purple-400 px-2 py-0.5 rounded font-bold inline-flex items-center gap-1"><Bot className="h-3 w-3" />+{formatNumber(productLift, 1)} TRx lift</span> with <span className="bg-purple-200 border border-purple-400 px-2 py-0.5 rounded font-bold inline-flex items-center gap-1"><Sparkles className="h-3 w-3" />{formatPercent(productCallSuccess, 0)} success rate</span></>
+                  } else if (hcp.predictions.ngd_classification === 'Decliner') {
+                    return <>Protect {hcp.ibsa_share.toFixed(0)}% IBSA share - <span className="bg-purple-200 border border-purple-400 px-2 py-0.5 rounded font-bold inline-flex items-center gap-1"><Bot className="h-3 w-3" />{hcp.predictions.ngd_classification}</span> status detected, prevent further decline</>
+                  } else if (hcp.predictions.ngd_classification === 'New') {
+                    return <>Introduce {hcp.predictions.product_focus} - <span className="bg-purple-200 border border-purple-400 px-2 py-0.5 rounded font-bold inline-flex items-center gap-1"><Bot className="h-3 w-3" />{hcp.predictions.ngd_classification}</span> prescriber with <span className="bg-purple-200 border border-purple-400 px-2 py-0.5 rounded font-bold inline-flex items-center gap-1"><Sparkles className="h-3 w-3" />{formatPercent(productCallSuccess, 0)} success probability</span></>
+                  } else {
+                    return <>Maintain relationship - <span className="bg-purple-200 border border-purple-400 px-2 py-0.5 rounded font-bold inline-flex items-center gap-1"><Bot className="h-3 w-3" />{hcp.predictions.ngd_classification}</span> prescriber, continue regular engagement</>
+                  }
+                })()}
               </p>
             </div>
               
@@ -205,7 +213,9 @@ export default function HCPDetailPage() {
                     <div className="text-[10px] text-gray-600 mt-1">Call Success: {formatPercent(hcp.predictions.tirosint_call_success, 0)}</div>
                     <div className="text-[10px] text-gray-600">Rx Lift: {hcp.predictions.tirosint_prescription_lift >= 0 ? '+' : ''}{formatNumber(hcp.predictions.tirosint_prescription_lift, 1)} TRx</div>
                     <div className="text-[10px] text-gray-600">NGD: {hcp.predictions.tirosint_ngd_category}</div>
-                    <div className="text-[10px] text-blue-700 font-semibold bg-blue-50 px-1 rounded">Wallet Share Grw: +{formatNumber(hcp.predictions.tirosint_wallet_share_growth, 1)}pp</div>
+                    <div className="text-[10px] text-blue-700 font-semibold bg-blue-50 px-1 rounded">
+                      Wallet Share Grw: {hcp.predictions.tirosint_wallet_share_growth >= 0 ? '+' : ''}{Math.abs(hcp.predictions.tirosint_wallet_share_growth) >= 0.1 ? formatNumber(hcp.predictions.tirosint_wallet_share_growth, 1) : hcp.predictions.tirosint_wallet_share_growth.toFixed(2)}pp
+                    </div>
                   </div>
                   <div className={`p-2 rounded border ${hcp.predictions.product_focus === 'Flector' ? 'border-green-500 bg-green-50 ring-2 ring-green-300' : 'border-gray-200 opacity-60'}`}>
                     <div className="font-semibold flex items-center gap-1">
@@ -215,7 +225,9 @@ export default function HCPDetailPage() {
                     <div className="text-[10px] text-gray-600 mt-1">Call Success: {formatPercent(hcp.predictions.flector_call_success, 0)}</div>
                     <div className="text-[10px] text-gray-600">Rx Lift: {hcp.predictions.flector_prescription_lift >= 0 ? '+' : ''}{formatNumber(hcp.predictions.flector_prescription_lift, 1)} TRx</div>
                     <div className="text-[10px] text-gray-600">NGD: {hcp.predictions.flector_ngd_category}</div>
-                    <div className="text-[10px] text-blue-700 font-semibold bg-blue-50 px-1 rounded">Wallet Share Grw: +{formatNumber(hcp.predictions.flector_wallet_share_growth, 1)}pp</div>
+                    <div className="text-[10px] text-blue-700 font-semibold bg-blue-50 px-1 rounded">
+                      Wallet Share Grw: {hcp.predictions.flector_wallet_share_growth >= 0 ? '+' : ''}{Math.abs(hcp.predictions.flector_wallet_share_growth) >= 0.1 ? formatNumber(hcp.predictions.flector_wallet_share_growth, 1) : hcp.predictions.flector_wallet_share_growth.toFixed(2)}pp
+                    </div>
                   </div>
                   <div className={`p-2 rounded border ${hcp.predictions.product_focus === 'Licart' ? 'border-green-500 bg-green-50 ring-2 ring-green-300' : 'border-gray-200 opacity-60'}`}>
                     <div className="font-semibold flex items-center gap-1">
@@ -225,7 +237,9 @@ export default function HCPDetailPage() {
                     <div className="text-[10px] text-gray-600 mt-1">Call Success: {formatPercent(hcp.predictions.licart_call_success, 0)}</div>
                     <div className="text-[10px] text-gray-600">Rx Lift: {hcp.predictions.licart_prescription_lift >= 0 ? '+' : ''}{formatNumber(hcp.predictions.licart_prescription_lift, 1)} TRx</div>
                     <div className="text-[10px] text-gray-600">NGD: {hcp.predictions.licart_ngd_category}</div>
-                    <div className="text-[10px] text-blue-700 font-semibold bg-blue-50 px-1 rounded">Wallet Share Grw: +{formatNumber(hcp.predictions.licart_wallet_share_growth, 1)}pp</div>
+                    <div className="text-[10px] text-blue-700 font-semibold bg-blue-50 px-1 rounded">
+                      Wallet Share Grw: {hcp.predictions.licart_wallet_share_growth >= 0 ? '+' : ''}{Math.abs(hcp.predictions.licart_wallet_share_growth) >= 0.1 ? formatNumber(hcp.predictions.licart_wallet_share_growth, 1) : hcp.predictions.licart_wallet_share_growth.toFixed(2)}pp
+                    </div>
                   </div>
                 </div>
                 <div className="text-[11px] text-gray-500 italic mt-2 space-y-1">
@@ -240,34 +254,49 @@ export default function HCPDetailPage() {
                     <div className="grid grid-cols-3 gap-2 text-[10px]">
                       <div className="bg-white border border-blue-200 p-2 rounded">
                         <div className="font-bold text-blue-900">Tirosint</div>
-                        <div className="text-green-700 font-semibold mt-1">+{formatNumber(hcp.predictions.tirosint_wallet_share_growth, 1)}pp gain</div>
+                        <div className="text-green-700 font-semibold mt-1">
+                          {hcp.predictions.tirosint_wallet_share_growth >= 0 ? '+' : ''}
+                          {Math.abs(hcp.predictions.tirosint_wallet_share_growth) >= 0.1 
+                            ? formatNumber(hcp.predictions.tirosint_wallet_share_growth, 1) 
+                            : hcp.predictions.tirosint_wallet_share_growth.toFixed(2)}pp gain
+                        </div>
                         <div className="text-gray-600 mt-1">
                           {hcp.ibsa_share > 0 ? (
-                            <>From {hcp.ibsa_share.toFixed(0)}% → {(hcp.ibsa_share + hcp.predictions.tirosint_wallet_share_growth).toFixed(0)}%</>
+                            <>From {hcp.ibsa_share.toFixed(1)}% → {(hcp.ibsa_share + hcp.predictions.tirosint_wallet_share_growth).toFixed(1)}%</>
                           ) : (
-                            <>Capture {hcp.predictions.tirosint_wallet_share_growth.toFixed(1)}% from {hcp.competitive_intel?.inferred_competitors?.[0] || 'competitors'}</>
+                            <>Capture {Math.abs(hcp.predictions.tirosint_wallet_share_growth) >= 0.1 ? hcp.predictions.tirosint_wallet_share_growth.toFixed(1) : hcp.predictions.tirosint_wallet_share_growth.toFixed(2)}% from {hcp.competitive_intel?.inferred_competitors?.[0] || 'competitors'}</>
                           )}
                         </div>
                       </div>
                       <div className="bg-white border border-blue-200 p-2 rounded">
                         <div className="font-bold text-blue-900">Flector</div>
-                        <div className="text-green-700 font-semibold mt-1">+{formatNumber(hcp.predictions.flector_wallet_share_growth, 1)}pp gain</div>
+                        <div className="text-green-700 font-semibold mt-1">
+                          {hcp.predictions.flector_wallet_share_growth >= 0 ? '+' : ''}
+                          {Math.abs(hcp.predictions.flector_wallet_share_growth) >= 0.1 
+                            ? formatNumber(hcp.predictions.flector_wallet_share_growth, 1) 
+                            : hcp.predictions.flector_wallet_share_growth.toFixed(2)}pp gain
+                        </div>
                         <div className="text-gray-600 mt-1">
                           {hcp.ibsa_share > 0 ? (
-                            <>From {hcp.ibsa_share.toFixed(0)}% → {(hcp.ibsa_share + hcp.predictions.flector_wallet_share_growth).toFixed(0)}%</>
+                            <>From {hcp.ibsa_share.toFixed(1)}% → {(hcp.ibsa_share + hcp.predictions.flector_wallet_share_growth).toFixed(1)}%</>
                           ) : (
-                            <>Capture {hcp.predictions.flector_wallet_share_growth.toFixed(1)}% from {hcp.competitive_intel?.inferred_competitors?.[0] || 'competitors'}</>
+                            <>Capture {Math.abs(hcp.predictions.flector_wallet_share_growth) >= 0.1 ? hcp.predictions.flector_wallet_share_growth.toFixed(1) : hcp.predictions.flector_wallet_share_growth.toFixed(2)}% from {hcp.competitive_intel?.inferred_competitors?.[0] || 'competitors'}</>
                           )}
                         </div>
                       </div>
                       <div className="bg-white border border-blue-200 p-2 rounded">
                         <div className="font-bold text-blue-900">Licart</div>
-                        <div className="text-green-700 font-semibold mt-1">+{formatNumber(hcp.predictions.licart_wallet_share_growth, 1)}pp gain</div>
+                        <div className="text-green-700 font-semibold mt-1">
+                          {hcp.predictions.licart_wallet_share_growth >= 0 ? '+' : ''}
+                          {Math.abs(hcp.predictions.licart_wallet_share_growth) >= 0.1 
+                            ? formatNumber(hcp.predictions.licart_wallet_share_growth, 1) 
+                            : hcp.predictions.licart_wallet_share_growth.toFixed(2)}pp gain
+                        </div>
                         <div className="text-gray-600 mt-1">
                           {hcp.ibsa_share > 0 ? (
-                            <>From {hcp.ibsa_share.toFixed(0)}% → {(hcp.ibsa_share + hcp.predictions.licart_wallet_share_growth).toFixed(0)}%</>
+                            <>From {hcp.ibsa_share.toFixed(1)}% → {(hcp.ibsa_share + hcp.predictions.licart_wallet_share_growth).toFixed(1)}%</>
                           ) : (
-                            <>Capture {hcp.predictions.licart_wallet_share_growth.toFixed(1)}% from {hcp.competitive_intel?.inferred_competitors?.[0] || 'competitors'}</>
+                            <>Capture {Math.abs(hcp.predictions.licart_wallet_share_growth) >= 0.1 ? hcp.predictions.licart_wallet_share_growth.toFixed(1) : hcp.predictions.licart_wallet_share_growth.toFixed(2)}% from {hcp.competitive_intel?.inferred_competitors?.[0] || 'competitors'}</>
                           )}
                         </div>
                       </div>
@@ -613,13 +642,13 @@ export default function HCPDetailPage() {
               <div className="text-center p-3 bg-blue-50 rounded-lg">
                 <div className="text-xs text-muted-foreground">IBSA TRx</div>
                 <div className="text-lg font-bold text-blue-600">
-                  {formatNumber(Math.round(hcp.trx_current * (hcp.ibsa_share / 100)))}
+                  {formatNumber(hcp.ibsa_trx_total)}
                 </div>
               </div>
               <div className="text-center p-3 bg-red-50 rounded-lg">
                 <div className="text-xs text-muted-foreground">Competitor TRx</div>
                 <div className="text-lg font-bold text-red-600">
-                  {formatNumber(Math.round(hcp.trx_current * ((100 - hcp.ibsa_share) / 100)))}
+                  {formatNumber(hcp.competitor_trx_total)}
                 </div>
               </div>
             </div>
@@ -697,10 +726,19 @@ export default function HCPDetailPage() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              <div>
-                <div className="text-xs text-muted-foreground mb-1">Therapeutic Area</div>
-                <div className="text-sm font-semibold">{hcp.competitive_intel.ta_category}</div>
+              {/* Therapeutic Area & Situation */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <div className="text-xs text-muted-foreground mb-1">Therapeutic Area</div>
+                  <div className="text-sm font-semibold">{hcp.competitive_intel.ta_category}</div>
+                </div>
+                <div>
+                  <div className="text-xs text-muted-foreground mb-1">Situation</div>
+                  <div className="text-sm">{hcp.competitive_intel.competitive_situation}</div>
+                </div>
               </div>
+
+              {/* Competitive Pressure */}
               <div>
                 <div className="text-xs text-muted-foreground mb-1">Competitive Pressure</div>
                 <div className="flex items-center gap-2">
@@ -712,65 +750,84 @@ export default function HCPDetailPage() {
                         (hcp.competitive_intel.competitive_pressure_score || 0) > 50 ? 'bg-yellow-500' :
                         'bg-green-500'
                       }`}
-                      style={{ width: `${hcp.competitive_intel.competitive_pressure_score || 0}%` }}
+                      style={{ width: `${Math.min(hcp.competitive_intel.competitive_pressure_score || 0, 100)}%` }}
                     />
                   </div>
-                  <span className="text-sm font-bold">{hcp.competitive_intel.competitive_pressure_score || 0}/100</span>
+                  <span className="text-sm font-bold">{(hcp.competitive_intel.competitive_pressure_score || 0).toFixed(0)}/100</span>
                 </div>
-              </div>
-              <div>
-                <div className="text-xs text-muted-foreground mb-1">Competitor Strength</div>
-                <span className={`inline-block px-2 py-1 rounded text-xs font-semibold ${
-                  hcp.competitive_intel.competitor_strength === 'Dominant' ? 'bg-red-100 text-red-700' :
-                  hcp.competitive_intel.competitor_strength === 'Strong' ? 'bg-orange-100 text-orange-700' :
-                  hcp.competitive_intel.competitor_strength === 'Moderate' ? 'bg-yellow-100 text-yellow-700' :
-                  'bg-green-100 text-green-700'
-                }`}>
-                  {hcp.competitive_intel.competitor_strength}
-                </span>
-              </div>
-              <div>
-                <div className="text-xs text-muted-foreground mb-1">Situation</div>
-                <div className="text-sm">{hcp.competitive_intel.competitive_situation}</div>
-              </div>
-              <div className="pt-2 border-t">
-                <div className="text-xs text-muted-foreground mb-2">Likely Competitors</div>
-                <div className="flex flex-wrap gap-1">
-                  {hcp.competitive_intel.inferred_competitors?.map((comp, idx) => (
-                    <span key={idx} className="text-xs bg-gray-100 px-2 py-1 rounded">
-                      {comp}
+                <div className="mt-1 text-xs text-muted-foreground">
+                  {hcp.competitive_intel.competitor_strength && (
+                    <span className={`inline-block px-2 py-1 rounded font-semibold ${
+                      hcp.competitive_intel.competitor_strength === 'Dominant' ? 'bg-red-100 text-red-700' :
+                      hcp.competitive_intel.competitor_strength === 'Strong' ? 'bg-orange-100 text-orange-700' :
+                      hcp.competitive_intel.competitor_strength === 'Moderate' ? 'bg-yellow-100 text-yellow-700' :
+                      'bg-green-100 text-green-700'
+                    }`}>
+                      {hcp.competitive_intel.competitor_strength} Competition
                     </span>
-                  ))}
+                  )}
                 </div>
               </div>
 
-              {/* Competitive Product Distribution Visualization */}
+              {/* Actual Competitor Product Breakdown */}
               {hcp.competitive_intel.competitor_product_distribution && hcp.competitive_intel.competitor_product_distribution.length > 0 && (
-                <div className="pt-4 border-t">
-                  <div className="text-xs font-semibold text-gray-700 mb-3">Competitor Product Breakdown (Estimated Writes)</div>
+                <div className="pt-3 border-t">
+                  <div className="text-xs font-semibold text-gray-700 mb-3">Competitor Product Breakdown (Actual Writes)</div>
                   <div className="space-y-2">
                     {hcp.competitive_intel.competitor_product_distribution.map((comp, idx) => {
-                      const totalCompTrx = hcp.competitive_intel.competitor_trx_est || 0
+                      const totalCompTrx = hcp.competitor_trx_total || 0
                       const percentage = totalCompTrx > 0 ? (comp.trx / totalCompTrx) * 100 : 0
                       return (
                         <div key={idx} className="space-y-1">
                           <div className="flex items-center justify-between text-xs">
                             <span className="font-medium">{comp.product}</span>
-                            <span className="text-gray-600">~{formatNumber(comp.trx)} writes ({percentage.toFixed(0)}%)</span>
+                            <span className="text-gray-600 font-semibold">{formatNumber(comp.trx)} TRx ({percentage.toFixed(0)}%)</span>
                           </div>
-                          <div className="w-full bg-gray-200 rounded-full h-2">
+                          <div className="w-full bg-gray-200 rounded-full h-2.5">
                             <div
-                              className="h-2 rounded-full bg-red-500"
-                              style={{ width: `${percentage}%` }}
+                              className={`h-2.5 rounded-full ${
+                                idx === 0 ? 'bg-red-500' : 
+                                idx === 1 ? 'bg-orange-500' : 
+                                'bg-amber-500'
+                              }`}
+                              style={{ width: `${Math.min(percentage, 100)}%` }}
                             />
                           </div>
                         </div>
                       )
                     })}
                   </div>
-                  <div className="mt-3 p-2 bg-amber-50 rounded text-xs text-amber-800">
-                    <strong>💡 Strategy:</strong> Total competitor market: {formatNumber(hcp.competitive_intel.competitor_trx_est || 0)} TRx. 
-                    Focus differentiation messaging against {hcp.competitive_intel.competitor_product_distribution[0]?.product} (largest share).
+                  
+                  {/* Strategy Recommendation */}
+                  {hcp.competitive_intel.competitor_product_distribution[0] && (
+                    <div className="mt-3 p-3 bg-amber-50 rounded-lg border border-amber-200">
+                      <div className="flex items-start gap-2">
+                        <span className="text-lg">💡</span>
+                        <div className="text-xs text-amber-900">
+                          <strong>Strategy:</strong> Total competitor market: <strong>{formatNumber(hcp.competitor_trx_total)}</strong> TRx. 
+                          Primary competitor is <strong>{hcp.competitive_intel.competitor_product_distribution[0].product}</strong> with{' '}
+                          <strong>{formatNumber(hcp.competitive_intel.competitor_product_distribution[0].trx)}</strong> TRx.
+                          Focus differentiation messaging against this dominant competitor.
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* No competitor data fallback */}
+              {(!hcp.competitive_intel.competitor_product_distribution || hcp.competitive_intel.competitor_product_distribution.length === 0) && (
+                <div className="pt-3 border-t">
+                  <div className="text-xs text-muted-foreground mb-2">Active Competitors</div>
+                  <div className="flex flex-wrap gap-1">
+                    {hcp.competitive_intel.inferred_competitors?.map((comp, idx) => (
+                      <span key={idx} className="text-xs bg-gray-100 px-2 py-1 rounded">
+                        {comp}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="mt-2 text-xs text-muted-foreground italic">
+                    No specific competitor TRx data available
                   </div>
                 </div>
               )}

@@ -7,7 +7,7 @@ export interface HCP {
   state: string
   territory: string
   region: string
-  tier: 'Platinum' | 'Gold' | 'Silver' | 'Bronze'
+  tier: string  // Original tier value from CSV
   trx_current: number
   trx_prior: number
   trx_growth: number
@@ -23,15 +23,28 @@ export interface HCP {
   ngd_classification: 'New' | 'Grower' | 'Stable' | 'Decliner'
   ngd_decile: number
   // Product-specific TRx from CSV
+  tirosint_trx?: number
   flector_trx?: number
   licart_trx?: number
-  tirosint_trx?: number
+  // Competitor TRx data
+  competitor_trx?: number
+  competitor_synthroid_levothyroxine?: number
+  competitor_voltaren_diclofenac?: number
+  competitor_imdur_nitrates?: number
+  // NRx data
+  ibsa_nrx_qtd?: number
+  competitor_nrx?: number
+  competitor_nrx_synthroid_levothyroxine?: number
+  competitor_nrx_voltaren_diclofenac?: number
+  competitor_nrx_imdur_nitrates?: number
 }
 
 export interface HCPDetail extends HCP {
   address: string
   phone: string
   trx_ytd: number
+  ibsa_trx_total: number  // Total IBSA TRx (Tirosint + Flector + Licart)
+  competitor_trx_total: number  // Total Competitor TRx
   product_mix: ProductMix[]
   call_history: CallHistory[]
   predictions: Predictions

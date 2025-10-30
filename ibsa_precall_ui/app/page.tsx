@@ -19,17 +19,17 @@ export default function DashboardPage() {
   const [globalFilter, setGlobalFilter] = useState('')
   const [showFilters, setShowFilters] = useState(false)
   const [currentPage, setCurrentPage] = useState(0)
-  const [pageSize, setPageSize] = useState(20)  // Increased from 10 to 20
+  const [pageSize, setPageSize] = useState(20)  // Show 20 HCPs per page
   
   // Sorting states
-  const [sortColumn, setSortColumn] = useState<string>('npi')
-  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc')
+  const [sortColumn, setSortColumn] = useState<string>('trx_current')  // Sort by Total TRx to show HCPs with activity
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc')
   
   // Filter states
   const [selectedTiers, setSelectedTiers] = useState<string[]>([])
   const [selectedSpecialties, setSelectedSpecialties] = useState<string[]>([])
   const [selectedTerritories, setSelectedTerritories] = useState<string[]>([])
-  const [minTrx, setMinTrx] = useState(0)
+  const [minTrx, setMinTrx] = useState(0)  // Show all HCPs initially
 
   useEffect(() => {
     loadData()
@@ -510,84 +510,6 @@ export default function DashboardPage() {
         </Card>
       </div>
 
-      {/* Product Mix Summary - Second Row */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="border-2 border-teal-500">
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2 text-teal-600">
-                <DollarSign className="h-5 w-5" />
-                <div className="text-sm font-medium">Tirosint TRx</div>
-              </div>
-              <span className="px-2 py-1 bg-teal-100 text-teal-700 rounded text-xs font-bold">T4</span>
-            </div>
-            <div className="text-3xl font-bold text-teal-600">
-              {formatNumber(filteredData.reduce((sum, h) => {
-                const productMix = h.product_mix || []
-                const tirosintProduct = productMix.find(p => p.product.toLowerCase().includes('tirosint'))
-                return sum + (tirosintProduct?.trx || 0)
-              }, 0))}
-            </div>
-            <div className="text-xs text-gray-500 mt-1">
-              {formatNumber(filteredData.filter(h => {
-                const productMix = h.product_mix || []
-                return productMix.some(p => p.product.toLowerCase().includes('tirosint') && p.trx > 0)
-              }).length)} HCPs prescribing
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="border-2 border-pink-500">
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2 text-pink-600">
-                <DollarSign className="h-5 w-5" />
-                <div className="text-sm font-medium">Flector TRx</div>
-              </div>
-              <span className="px-2 py-1 bg-pink-100 text-pink-700 rounded text-xs font-bold">PAIN</span>
-            </div>
-            <div className="text-3xl font-bold text-pink-600">
-              {formatNumber(filteredData.reduce((sum, h) => {
-                const productMix = h.product_mix || []
-                const flectorProduct = productMix.find(p => p.product.toLowerCase().includes('flector'))
-                return sum + (flectorProduct?.trx || 0)
-              }, 0))}
-            </div>
-            <div className="text-xs text-gray-500 mt-1">
-              {formatNumber(filteredData.filter(h => {
-                const productMix = h.product_mix || []
-                return productMix.some(p => p.product.toLowerCase().includes('flector') && p.trx > 0)
-              }).length)} HCPs prescribing
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="border-2 border-indigo-500">
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2 text-indigo-600">
-                <DollarSign className="h-5 w-5" />
-                <div className="text-sm font-medium">Licart TRx</div>
-              </div>
-              <span className="px-2 py-1 bg-indigo-100 text-indigo-700 rounded text-xs font-bold">CVD</span>
-            </div>
-            <div className="text-3xl font-bold text-indigo-600">
-              {formatNumber(filteredData.reduce((sum, h) => {
-                const productMix = h.product_mix || []
-                const licartProduct = productMix.find(p => p.product.toLowerCase().includes('licart'))
-                return sum + (licartProduct?.trx || 0)
-              }, 0))}
-            </div>
-            <div className="text-xs text-gray-500 mt-1">
-              {formatNumber(filteredData.filter(h => {
-                const productMix = h.product_mix || []
-                return productMix.some(p => p.product.toLowerCase().includes('licart') && p.trx > 0)
-              }).length)} HCPs prescribing
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
       {/* Table */}
       <div className="rounded-md border bg-card shadow-sm">
         <div className="overflow-x-auto">
@@ -633,11 +555,11 @@ export default function DashboardPage() {
                     <Tooltip content="AI Classification: New (0-10% decile), Grower (11-40%), Stable (41-70%), Decliner (71-100%)" />
                   </div>
                 </th>
-                <th className="px-2 py-2 text-left text-[11px] font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100" onClick={() => handleSort('tier')}>
+                <th className="px-2 py-2 text-left text-[11px] font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100" onClick={() => handleSort('call_success_score')}>
                   <div className="flex items-center">
-                    Tier
-                    <SortIcon column="tier" />
-                    <Tooltip content="Rule: Platinum (TRx≥100), Gold (50-99), Silver (20-49), Bronze (<20)" />
+                    Call Success
+                    <SortIcon column="call_success_score" />
+                    <Tooltip content="Likelihood of prescription after sales call (ML prediction 0-100%)" />
                   </div>
                 </th>
                 <th className="px-2 py-2 text-left text-[11px] font-medium text-gray-500 uppercase border-b bg-purple-50 cursor-pointer hover:bg-gray-100" onClick={() => handleSort('value_score')}>
@@ -669,39 +591,45 @@ export default function DashboardPage() {
                     <Tooltip content="Total prescriptions with IBSA + Competitor product breakdown" />
                   </div>
                 </th>
-                <th className="px-2 py-2 text-right text-[11px] font-medium text-gray-500 uppercase border-b bg-purple-50 cursor-pointer hover:bg-gray-100" onClick={() => handleSort('forecasted_lift')}>
-                  <div className="flex items-center justify-end gap-1">
+                <th className="px-2 py-2 text-left text-[11px] font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100" onClick={() => handleSort('ibsa_nrx_qtd')}>
+                  <div className="flex items-center">
+                    Total NRx (Product Mix)
+                    <SortIcon column="ibsa_nrx_qtd" />
+                    <Tooltip content="New prescriptions with IBSA + Competitor product breakdown" />
+                  </div>
+                </th>
+                <th className="px-1 py-2 text-right text-[11px] font-medium text-gray-500 uppercase border-b bg-purple-50 cursor-pointer hover:bg-gray-100" onClick={() => handleSort('forecasted_lift')}>
+                  <div className="flex items-center justify-end gap-0.5">
                     <Bot className="h-3 w-3 text-purple-600" />
-                    <span className="flex items-center gap-1">
-                      Forecast Lift
-                      <span className="px-1.5 py-0.5 bg-purple-200 text-purple-700 rounded text-[10px] font-bold">AI</span>
+                    <span className="flex items-center gap-0.5 text-[10px]">
+                      Rx Lift
+                      <span className="px-1 py-0.5 bg-purple-200 text-purple-700 rounded text-[9px] font-bold">AI</span>
                     </span>
                     <SortIcon column="forecasted_lift" />
                     <Tooltip content="ML Predicted TRx lift from successful engagement" />
                   </div>
                 </th>
-                <th className="px-2 py-2 text-right text-[11px] font-medium text-gray-500 uppercase border-b bg-purple-50 cursor-pointer hover:bg-gray-100" onClick={() => handleSort('expected_roi')}>
-                  <div className="flex items-center justify-end gap-1">
+                <th className="px-1 py-2 text-right text-[11px] font-medium text-gray-500 uppercase border-b bg-purple-50 cursor-pointer hover:bg-gray-100" onClick={() => handleSort('expected_roi')}>
+                  <div className="flex items-center justify-end gap-0.5">
                     <Sparkles className="h-3 w-3 text-purple-600" />
-                    <span className="flex items-center gap-1">
-                      Expected ROI
-                      <span className="px-1.5 py-0.5 bg-purple-200 text-purple-700 rounded text-[10px] font-bold">AI</span>
+                    <span className="flex items-center gap-0.5 text-[10px]">
+                      ROI
+                      <span className="px-1 py-0.5 bg-purple-200 text-purple-700 rounded text-[9px] font-bold">AI</span>
                     </span>
                     <SortIcon column="expected_roi" />
                     <Tooltip content="ML Predicted return on investment score" />
                   </div>
                 </th>
-                <th className="px-2 py-2 text-left text-[11px] font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100" onClick={() => handleSort('call_success_score')}>
+                <th className="px-2 py-2 text-left text-[11px] font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100" onClick={() => handleSort('tier')}>
                   <div className="flex items-center">
-                    Call Success
-                    <SortIcon column="call_success_score" />
-                    <Tooltip content="Likelihood of prescription after sales call (ML prediction 0-100%)" />
+                    Tier
+                    <SortIcon column="tier" />
+                    <Tooltip content="Original tier value from data source" />
                   </div>
                 </th>
                 <th className="px-2 py-2 text-center text-[11px] font-medium text-gray-500 uppercase border-b">
                   <Tooltip content="Note: NGD Status showing 'New' for all records - phase7 classification needs recalibration" />
                 </th>
-                <th className="px-2 py-2 text-left text-[11px] font-medium text-gray-500 uppercase border-b">Actions</th>
               </tr>
             </thead>
             <tbody className="bg-white dark:bg-gray-900">
@@ -740,7 +668,19 @@ export default function DashboardPage() {
                       </div>
                     </td>
                     <td className="px-2 py-2">
-                      <TierBadge tier={hcp.tier} size="sm" />
+                      <div className="w-16">
+                        <div className="w-full bg-gray-200 rounded-full h-1.5">
+                          <div
+                            className={`h-1.5 rounded-full ${
+                              callSuccess >= 70 ? 'bg-green-500' :
+                              callSuccess >= 40 ? 'bg-blue-500' :
+                              'bg-gray-400'
+                            }`}
+                            style={{ width: `${callSuccess}%` }}
+                          />
+                        </div>
+                        <span className="text-[10px] text-muted-foreground">{callSuccess}%</span>
+                      </div>
                     </td>
                     <td className="px-2 py-2 text-center bg-purple-50 border-l-2 border-r-2 border-purple-300">
                       <div className="flex items-center justify-center gap-1">
@@ -766,71 +706,143 @@ export default function DashboardPage() {
                         </span>
                       </div>
                     </td>
-                    <td className="px-2 py-2 text-xs">
-                      <div className="flex flex-col gap-0.5">
-                        <div className="font-semibold text-gray-900">{formatNumber(hcp.trx_current)} TRx</div>
+                    <td className="px-3 py-3 text-xs min-w-[160px]">
+                      <div className="flex flex-col gap-1">
+                        {(() => {
+                          const totalTrx = (hcp.tirosint_trx || 0) + (hcp.flector_trx || 0) + (hcp.licart_trx || 0) + ((hcp as any).competitor_trx || 0)
+                          return <div className="font-bold text-gray-900 text-[15px] mb-1">{formatNumber(totalTrx)} TRx</div>
+                        })()}
                         {hcp.trx_current > 0 && (
-                          <div className="text-[10px] text-gray-600 leading-tight">
-                            <div className="font-medium text-blue-700">IBSA:</div>
-                            {(hcp.tirosint_trx || 0) > 0 && <div className="pl-2">T: {formatNumber(hcp.tirosint_trx || 0)}</div>}
-                            {(hcp.flector_trx || 0) > 0 && <div className="pl-2">F: {formatNumber(hcp.flector_trx || 0)}</div>}
-                            {(hcp.licart_trx || 0) > 0 && <div className="pl-2">L: {formatNumber(hcp.licart_trx || 0)}</div>}
+                          <div className="space-y-1.5">
+                            {/* IBSA Products */}
+                            {((hcp.tirosint_trx || 0) + (hcp.flector_trx || 0) + (hcp.licart_trx || 0)) > 0 && (
+                              <div className="bg-blue-50 rounded px-2 py-1 border-l-2 border-blue-500">
+                                <div className="font-semibold text-blue-700 text-[11px] mb-0.5">IBSA:</div>
+                                <div className="text-[11px] text-gray-700 space-y-0.5">
+                                  {(hcp.tirosint_trx || 0) > 0 && (
+                                    <div className="flex justify-between">
+                                      <span className="text-gray-600">Tirosint:</span>
+                                      <span className="font-medium">{formatNumber(hcp.tirosint_trx || 0)}</span>
+                                    </div>
+                                  )}
+                                  {(hcp.flector_trx || 0) > 0 && (
+                                    <div className="flex justify-between">
+                                      <span className="text-gray-600">Flector:</span>
+                                      <span className="font-medium">{formatNumber(hcp.flector_trx || 0)}</span>
+                                    </div>
+                                  )}
+                                  {(hcp.licart_trx || 0) > 0 && (
+                                    <div className="flex justify-between">
+                                      <span className="text-gray-600">Licart:</span>
+                                      <span className="font-medium">{formatNumber(hcp.licart_trx || 0)}</span>
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            )}
+                            
+                            {/* Competitor Products */}
                             {((hcp as any).competitor_trx || 0) > 0 && (
-                              <>
-                                <div className="font-medium text-orange-700 mt-0.5">Comp:</div>
-                                {((hcp as any).competitor_synthroid_levothyroxine || 0) > 0 && <div className="pl-2">Syn: {formatNumber((hcp as any).competitor_synthroid_levothyroxine || 0)}</div>}
-                                {((hcp as any).competitor_voltaren_diclofenac || 0) > 0 && <div className="pl-2">Vol: {formatNumber((hcp as any).competitor_voltaren_diclofenac || 0)}</div>}
-                                {((hcp as any).competitor_imdur_nitrates || 0) > 0 && <div className="pl-2">Imd: {formatNumber((hcp as any).competitor_imdur_nitrates || 0)}</div>}
-                              </>
+                              <div className="bg-orange-50 rounded px-2 py-1 border-l-2 border-orange-500">
+                                <div className="font-semibold text-orange-700 text-[11px] mb-0.5">Competitor:</div>
+                                <div className="text-[11px] text-gray-700 space-y-0.5">
+                                  {((hcp as any).competitor_synthroid_levothyroxine || 0) > 0 && (
+                                    <div className="flex justify-between">
+                                      <span className="text-gray-600">Synthroid:</span>
+                                      <span className="font-medium">{formatNumber((hcp as any).competitor_synthroid_levothyroxine || 0)}</span>
+                                    </div>
+                                  )}
+                                  {((hcp as any).competitor_voltaren_diclofenac || 0) > 0 && (
+                                    <div className="flex justify-between">
+                                      <span className="text-gray-600">Voltaren:</span>
+                                      <span className="font-medium">{formatNumber((hcp as any).competitor_voltaren_diclofenac || 0)}</span>
+                                    </div>
+                                  )}
+                                  {((hcp as any).competitor_imdur_nitrates || 0) > 0 && (
+                                    <div className="flex justify-between">
+                                      <span className="text-gray-600">Imdur:</span>
+                                      <span className="font-medium">{formatNumber((hcp as any).competitor_imdur_nitrates || 0)}</span>
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
                             )}
                           </div>
                         )}
                       </div>
                     </td>
-                    <td className="px-2 py-2 text-right text-xs font-mono bg-purple-50">
-                      <span className={`font-semibold ${hcp.trx_growth > 0 ? 'text-green-600' : hcp.trx_growth < 0 ? 'text-red-600' : 'text-gray-500'}`}>
-                        {hcp.trx_growth > 0 ? '+' : ''}{hcp.trx_growth.toFixed(2)}
-                      </span>
-                    </td>
-                    <td className="px-2 py-2 text-right text-xs font-mono bg-purple-50">
-                      <span className={`font-semibold ${hcp.value_score >= 50 ? 'text-green-600' : hcp.value_score >= 25 ? 'text-blue-600' : 'text-gray-500'}`}>
-                        {hcp.value_score.toFixed(1)}
-                      </span>
-                    </td>
-                    <td className="px-2 py-2">
-                      <div className="w-16">
-                        <div className="w-full bg-gray-200 rounded-full h-1.5">
-                          <div
-                            className={`h-1.5 rounded-full ${
-                              callSuccess >= 70 ? 'bg-green-500' :
-                              callSuccess >= 40 ? 'bg-blue-500' :
-                              'bg-gray-400'
-                            }`}
-                            style={{ width: `${callSuccess}%` }}
-                          />
+                    
+                    {/* NRx Column */}
+                    <td className="px-3 py-3 text-xs min-w-[160px]">
+                      <div className="flex flex-col gap-1">
+                        <div className="font-bold text-gray-900 text-[15px] mb-1">
+                          {formatNumber(((hcp as any).ibsa_nrx_qtd || 0) + ((hcp as any).competitor_nrx || 0))} NRx
                         </div>
-                        <span className="text-[10px] text-muted-foreground">{callSuccess}%</span>
+                        {(((hcp as any).ibsa_nrx_qtd || 0) + ((hcp as any).competitor_nrx || 0)) > 0 && (
+                          <div className="space-y-1.5">
+                            {/* IBSA NRx */}
+                            {((hcp as any).ibsa_nrx_qtd || 0) > 0 && (
+                              <div className="bg-blue-50 rounded px-2 py-1 border-l-2 border-blue-500">
+                                <div className="font-semibold text-blue-700 text-[11px] mb-0.5">IBSA:</div>
+                                <div className="text-[11px] text-gray-700">
+                                  <div className="flex justify-between">
+                                    <span className="text-gray-600">Total:</span>
+                                    <span className="font-medium">{formatNumber((hcp as any).ibsa_nrx_qtd || 0)}</span>
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+                            
+                            {/* Competitor NRx */}
+                            {((hcp as any).competitor_nrx || 0) > 0 && (
+                              <div className="bg-orange-50 rounded px-2 py-1 border-l-2 border-orange-500">
+                                <div className="font-semibold text-orange-700 text-[11px] mb-0.5">Competitor:</div>
+                                <div className="text-[11px] text-gray-700 space-y-0.5">
+                                  {((hcp as any).competitor_nrx_synthroid_levothyroxine || 0) > 0 && (
+                                    <div className="flex justify-between">
+                                      <span className="text-gray-600">Synthroid:</span>
+                                      <span className="font-medium">{formatNumber((hcp as any).competitor_nrx_synthroid_levothyroxine || 0)}</span>
+                                    </div>
+                                  )}
+                                  {((hcp as any).competitor_nrx_voltaren_diclofenac || 0) > 0 && (
+                                    <div className="flex justify-between">
+                                      <span className="text-gray-600">Voltaren:</span>
+                                      <span className="font-medium">{formatNumber((hcp as any).competitor_nrx_voltaren_diclofenac || 0)}</span>
+                                    </div>
+                                  )}
+                                  {((hcp as any).competitor_nrx_imdur_nitrates || 0) > 0 && (
+                                    <div className="flex justify-between">
+                                      <span className="text-gray-600">Imdur:</span>
+                                      <span className="font-medium">{formatNumber((hcp as any).competitor_nrx_imdur_nitrates || 0)}</span>
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        )}
                       </div>
                     </td>
-                    <td className="px-2 py-2">
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className="h-7 px-2 text-xs"
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          router.push(`/hcp/${hcp.npi}`)
-                        }}
-                      >
-                        View
-                      </Button>
+                    
+                    <td className="px-1 py-2 text-right text-xs font-mono bg-purple-50">
+                      <span className={`font-semibold text-[11px] ${hcp.trx_growth > 0 ? 'text-green-600' : hcp.trx_growth < -0.01 ? 'text-red-600' : 'text-gray-400'}`}>
+                        {hcp.trx_growth > 0.01 ? '+' + hcp.trx_growth.toFixed(1) : hcp.trx_growth < -0.01 ? hcp.trx_growth.toFixed(1) : '—'}
+                      </span>
+                    </td>
+                    <td className="px-1 py-2 text-right text-xs font-mono bg-purple-50">
+                      <span className={`font-semibold text-[11px] ${hcp.value_score >= 50 ? 'text-green-600' : hcp.value_score >= 25 ? 'text-blue-600' : hcp.value_score > 0.1 ? 'text-gray-600' : 'text-gray-400'}`}>
+                        {hcp.value_score > 0.1 ? hcp.value_score.toFixed(0) : '—'}
+                      </span>
+                    </td>
+                    <td className="px-2 py-2 text-xs font-medium text-gray-700">
+                      {hcp.tier}
                     </td>
                   </tr>
                 )
               })}
               {filteredData.length === 0 && (
                 <tr>
-                  <td colSpan={17} className="px-4 py-8 text-center text-muted-foreground">
+                  <td colSpan={16} className="px-4 py-8 text-center text-muted-foreground">
                     No HCPs found matching your filters
                   </td>
                 </tr>
