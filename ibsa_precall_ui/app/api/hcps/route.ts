@@ -38,35 +38,54 @@ export async function GET(request: NextRequest) {
       const byTier: Record<string, any[]> = {}
       const byTerritory: Record<string, any[]> = {}
       const bySpecialty: Record<string, any[]> = {}
+      const byNGD: Record<string, any[]> = {}
       
       filtered.forEach((row: any) => {
         const tier = row.Tier || 'Unknown'
         const territory = row.State || 'Unknown'
         const specialty = row.Specialty || 'Unknown'
+        const ngd = row.ngd_classification || 'Unknown'
         
         if (!byTier[tier]) byTier[tier] = []
         if (!byTerritory[territory]) byTerritory[territory] = []
         if (!bySpecialty[specialty]) bySpecialty[specialty] = []
+        if (!byNGD[ngd]) byNGD[ngd] = []
         
         byTier[tier].push(row)
         byTerritory[territory].push(row)
         bySpecialty[specialty].push(row)
+        byNGD[ngd].push(row)
       })
       
-      // Calculate samples per stratum (proportional to size)
-      const tiers = Object.keys(byTier)
-      const samplesPerTier = Math.floor(sampleSize / tiers.length)
+      // Calculate samples per stratum - prioritize NGD diversity for balanced view
+      const ngdCategories = Object.keys(byNGD)
+      const samplesPerNGD = Math.floor(sampleSize / Math.max(ngdCategories.length, 1))
       
       const selectedRecords = new Set<any>()
       
-      // Sample from each tier to ensure diversity
-      tiers.forEach(tier => {
-        const tierRecords = byTier[tier]
-        const tierSampleSize = Math.min(samplesPerTier, tierRecords.length)
+      // First, sample from each NGD category to ensure balanced representation
+      ngdCategories.forEach(ngd => {
+        const ngdRecords = byNGD[ngd]
+        const ngdSampleSize = Math.min(samplesPerNGD, ngdRecords.length)
         
-        // Random sample from this tier
-        const shuffled = [...tierRecords].sort(() => Math.random() - 0.5)
-        shuffled.slice(0, tierSampleSize).forEach(record => selectedRecords.add(record))
+        // Within each NGD category, sample diverse tiers
+        const ngdByTier: Record<string, any[]> = {}
+        ngdRecords.forEach((record: any) => {
+          const tier = record.Tier || 'Unknown'
+          if (!ngdByTier[tier]) ngdByTier[tier] = []
+          ngdByTier[tier].push(record)
+        })
+        
+        const tiersInNGD = Object.keys(ngdByTier)
+        const samplesPerTierInNGD = Math.floor(ngdSampleSize / Math.max(tiersInNGD.length, 1))
+        
+        // Sample from each tier within this NGD category
+        tiersInNGD.forEach(tier => {
+          const records = ngdByTier[tier]
+          const tierSampleSize = Math.min(samplesPerTierInNGD, records.length)
+          const shuffled = [...records].sort(() => Math.random() - 0.5)
+          shuffled.slice(0, tierSampleSize).forEach(record => selectedRecords.add(record))
+        })
       })
       
       // Fill remaining slots with random records to reach sampleSize

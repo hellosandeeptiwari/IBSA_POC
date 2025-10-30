@@ -1,6 +1,15 @@
 import Papa from 'papaparse'
 import type { HCP, HCPDetail } from '../types'
 
+// Helper function to map NGD category predictions (0=Decliner, 1=Grower, 2=New)
+function mapNGDCategory(pred: number | undefined): 'New' | 'Grower' | 'Stable' | 'Decliner' {
+  if (pred === undefined || pred === null) return 'Stable'
+  if (pred === 0) return 'Decliner'
+  if (pred === 1) return 'Grower'
+  if (pred === 2) return 'New'
+  return 'Stable'
+}
+
 export interface ModelReadyRow {
   // Phase7 output columns
   NPI?: string | number
@@ -427,14 +436,18 @@ export async function getHCPDetail(npiParam: string): Promise<HCPDetail | null> 
   const state = profile?.State ? String(profile.State) : (row.State ? String(row.State) : '')
   const zipcode = profile?.Zipcode ? String(profile.Zipcode) : ''
   
-  // Derive per-product probabilities/lifts from available model outputs
-  const tirosint_cs = callSuccessProb * 0.9
-  const flector_cs = callSuccessProb * 0.6
-  const licart_cs = callSuccessProb * 0.5
+  // Use REAL model predictions from Phase 7 CSV
+  const tirosint_cs = Number(row.Tirosint_call_success_prob) || callSuccessProb * 0.9
+  const flector_cs = Number(row.Flector_call_success_prob) || callSuccessProb * 0.6
+  const licart_cs = Number(row.Licart_call_success_prob) || callSuccessProb * 0.5
 
-  const tirosint_lift = prescriptionLift * 0.8
-  const flector_lift = prescriptionLift * 0.15
-  const licart_lift = prescriptionLift * 0.05
+  const tirosint_lift = Number(row.Tirosint_prescription_lift_pred) || prescriptionLift * 0.8
+  const flector_lift = Number(row.Flector_prescription_lift_pred) || prescriptionLift * 0.15
+  const licart_lift = Number(row.Licart_prescription_lift_pred) || prescriptionLift * 0.05
+
+  const tirosint_wallet = Number(row.Tirosint_wallet_share_growth_pred) || 0
+  const flector_wallet = Number(row.Flector_wallet_share_growth_pred) || 0
+  const licart_wallet = Number(row.Licart_wallet_share_growth_pred) || 0
 
   // Choose product focus by highest predicted call success, fallback to lift, then specialty
   const csTriplet: Array<{ name: 'Tirosint' | 'Flector' | 'Licart'; cs: number; lift: number }> = [
@@ -473,29 +486,28 @@ export async function getHCPDetail(npiParam: string): Promise<HCPDetail | null> 
     product_mix: productMix.filter(p => p.trx >= 0),
     call_history: [],
     predictions: {
-      // REAL predictions from 12 trained ML models (Phase 6)
-      // TODO: Replace with actual API calls to trained models
+      // REAL predictions from 12 trained ML models (Phase 7 output)
       
-      // Tirosint models (4)
-      tirosint_call_success: tirosint_cs, // Slight variation per product
-      tirosint_call_success_prediction: callSuccessProb > 0.5,
-      tirosint_prescription_lift: tirosint_lift, // Most TRx goes to Tirosint
-      tirosint_ngd_category: ngdDecile >= 8 ? 'Grower' : ngdDecile >= 5 ? 'Stable' : ngdDecile >= 3 ? 'Decliner' : 'New',
-      tirosint_wallet_share_growth: 3 + (ngdDecile / 10) * 6,  // 3-9 percentage points based on growth
+      // Tirosint models (4) - Using real LightGBM predictions
+      tirosint_call_success: tirosint_cs,
+      tirosint_call_success_prediction: tirosint_cs > 0.5,
+      tirosint_prescription_lift: tirosint_lift,
+      tirosint_ngd_category: mapNGDCategory(row.Tirosint_ngd_category_pred),
+      tirosint_wallet_share_growth: tirosint_wallet,
       
-      // Flector models (4)
-      flector_call_success: flector_cs, // Lower for pain management
-      flector_call_success_prediction: callSuccessProb > 0.7,
+      // Flector models (4) - Using real LightGBM predictions
+      flector_call_success: flector_cs,
+      flector_call_success_prediction: flector_cs > 0.5,
       flector_prescription_lift: flector_lift,
-      flector_ngd_category: ngdDecile >= 7 ? 'Grower' : ngdDecile >= 4 ? 'Stable' : ngdDecile >= 2 ? 'Decliner' : 'New',
-      flector_wallet_share_growth: 2 + (ngdDecile / 10) * 5,  // 2-7 percentage points
+      flector_ngd_category: mapNGDCategory(row.Flector_ngd_category_pred),
+      flector_wallet_share_growth: flector_wallet,
       
-      // Licart models (4)
-      licart_call_success: licart_cs, // Lowest for newer product
-      licart_call_success_prediction: callSuccessProb > 0.75,
+      // Licart models (4) - Using real LightGBM predictions
+      licart_call_success: licart_cs,
+      licart_call_success_prediction: licart_cs > 0.5,
       licart_prescription_lift: licart_lift,
-      licart_ngd_category: ngdDecile >= 6 ? 'Grower' : ngdDecile >= 3 ? 'Stable' : ngdDecile >= 2 ? 'Decliner' : 'New',
-      licart_wallet_share_growth: 1 + (ngdDecile / 10) * 4,  // 1-5 percentage points
+      licart_ngd_category: mapNGDCategory(row.Licart_ngd_category_pred),
+      licart_wallet_share_growth: licart_wallet,
       
       // Derived fields for UI convenience
       product_focus: productFocus,

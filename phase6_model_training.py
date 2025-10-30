@@ -69,13 +69,13 @@ except ImportError:
     HAS_IMBLEARN = False
     print("WARNING: imbalanced-learn not installed - will use class_weight='balanced' instead")
 
-# XGBoost
+# LightGBM (preferred for regression - faster than XGBoost)
 try:
-    import xgboost as xgb
-    HAS_XGBOOST = True
+    import lightgbm as lgb
+    HAS_LIGHTGBM = True
 except ImportError:
-    HAS_XGBOOST = False
-    print("WARNING: XGBoost not installed - will use RandomForest for regression")
+    HAS_LIGHTGBM = False
+    print("WARNING: LightGBM not installed - will use RandomForest for regression")
 
 # Optuna for hyperparameter tuning
 try:
@@ -176,7 +176,7 @@ class EnterpriseModelTraining:
             'random_seed': RANDOM_SEED,
             'library_versions': {
                 'optuna': HAS_OPTUNA,
-                'xgboost': HAS_XGBOOST,
+                'lightgbm': HAS_LIGHTGBM,
                 'shap': HAS_SHAP
             },
             'upstream_integration': {
@@ -200,7 +200,7 @@ class EnterpriseModelTraining:
             },
             'prescription_lift': {
                 'type': 'regression',
-                'model_class': 'XGBoostRegressor' if HAS_XGBOOST else 'RandomForestRegressor',
+                'model_class': 'LGBMRegressor' if HAS_LIGHTGBM else 'RandomForestRegressor',
                 'metrics': ['mae', 'rmse', 'r2']
             },
             'ngd_category': {
@@ -210,7 +210,7 @@ class EnterpriseModelTraining:
             },
             'wallet_share_growth': {
                 'type': 'regression',
-                'model_class': 'XGBoostRegressor' if HAS_XGBOOST else 'RandomForestRegressor',
+                'model_class': 'LGBMRegressor' if HAS_LIGHTGBM else 'RandomForestRegressor',
                 'metrics': ['mae', 'rmse', 'r2']
             }
         }
@@ -577,23 +577,25 @@ class EnterpriseModelTraining:
         
         def objective(trial):
             if model_type == 'regression':
-                if HAS_XGBOOST:
+                if HAS_LIGHTGBM:
                     params = {
-                        'n_estimators': trial.suggest_int('n_estimators', 100, 200),  # Reduced range
-                        'max_depth': trial.suggest_int('max_depth', 5, 10),  # Reduced from 12
-                        'learning_rate': trial.suggest_float('learning_rate', 0.05, 0.2),  # Narrowed range
-                        'subsample': trial.suggest_float('subsample', 0.7, 0.9),  # Narrowed range
+                        'n_estimators': trial.suggest_int('n_estimators', 100, 200),
+                        'max_depth': trial.suggest_int('max_depth', 5, 10),
+                        'learning_rate': trial.suggest_float('learning_rate', 0.05, 0.2),
+                        'num_leaves': trial.suggest_int('num_leaves', 20, 50),
+                        'subsample': trial.suggest_float('subsample', 0.7, 0.9),
                         'colsample_bytree': trial.suggest_float('colsample_bytree', 0.7, 0.9),
                         'random_state': RANDOM_SEED,
-                        'n_jobs': -1
+                        'n_jobs': -1,
+                        'verbose': -1
                     }
-                    model = xgb.XGBRegressor(**params)
+                    model = lgb.LGBMRegressor(**params)
                 else:
                     params = {
                         'n_estimators': trial.suggest_int('n_estimators', 100, 200),
-                        'max_depth': trial.suggest_int('max_depth', 8, 15),  # Narrowed range
-                        'min_samples_split': trial.suggest_int('min_samples_split', 5, 15),  # Increased min
-                        'min_samples_leaf': trial.suggest_int('min_samples_leaf', 2, 8),  # Increased min
+                        'max_depth': trial.suggest_int('max_depth', 8, 15),
+                        'min_samples_split': trial.suggest_int('min_samples_split', 5, 15),
+                        'min_samples_leaf': trial.suggest_int('min_samples_leaf', 2, 8),
                         'random_state': RANDOM_SEED,
                         'n_jobs': -1
                     }
@@ -741,9 +743,9 @@ class EnterpriseModelTraining:
             # Add common parameters
             best_params['random_state'] = RANDOM_SEED
             best_params['n_jobs'] = 2  # Limited parallelism to prevent system slowdown
-            if 'verbose' not in best_params and 'verbosity' not in best_params:
-                if self.model_configs[outcome]['type'] == 'regression' and HAS_XGBOOST:
-                    best_params['verbosity'] = 0
+            if 'verbose' not in best_params:
+                if self.model_configs[outcome]['type'] == 'regression' and HAS_LIGHTGBM:
+                    best_params['verbose'] = -1  # LightGBM uses -1 to silence
                 else:
                     best_params['verbose'] = 0
                     
@@ -772,15 +774,14 @@ class EnterpriseModelTraining:
         print(f"\n🏋️  Training final model...")
         
         if self.model_configs[outcome]['type'] == 'regression':
-            if HAS_XGBOOST:
-                model = xgb.XGBRegressor(**best_params)
+            if HAS_LIGHTGBM:
+                model = lgb.LGBMRegressor(**best_params)
             else:
-                # Remove XGBoost-specific parameters for RandomForest
-                xgb_specific_params = ['learning_rate', 'verbosity', 'subsample', 'colsample_bytree', 
-                                      'colsample_bylevel', 'colsample_bynode', 'gamma', 'reg_alpha', 
-                                      'reg_lambda', 'scale_pos_weight', 'base_score', 'booster']
+                # Remove LightGBM-specific parameters for RandomForest
+                lgb_specific_params = ['learning_rate', 'verbose', 'subsample', 'colsample_bytree', 
+                                      'num_leaves', 'min_child_samples', 'reg_alpha', 'reg_lambda']
                 rf_params = {k: v for k, v in best_params.items() 
-                           if k not in xgb_specific_params}
+                           if k not in lgb_specific_params}
                 model = RandomForestRegressor(**rf_params)
         else:
             model = RandomForestClassifier(**best_params)
@@ -1113,7 +1114,7 @@ class EnterpriseModelTraining:
         print(f"Start: {start_time}")
         print(f"Random Seed: {RANDOM_SEED}")
         print(f"Optuna: {'✓' if HAS_OPTUNA else '✗'}")
-        print(f"XGBoost: {'✓' if HAS_XGBOOST else '✗'}")
+        print(f"LightGBM: {'✓' if HAS_LIGHTGBM else '✗'}")
         print(f"SHAP: {'✓' if HAS_SHAP else '✗'}")
         
         # Execute pipeline
