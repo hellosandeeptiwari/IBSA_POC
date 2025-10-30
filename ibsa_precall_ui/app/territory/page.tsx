@@ -20,9 +20,74 @@ export default function TerritoryDashboardPage() {
 
   async function loadData() {
     setLoading(true)
-    const hcps = await getHCPs()
-    setData(hcps)
-    setLoading(false)
+    try {
+      // Load ALL HCPs for territory analytics (not just 100)
+      // We need comprehensive data for accurate territory-level metrics
+      const params = new URLSearchParams()
+      params.set('limit', '250000')  // Load all available HCPs
+      params.set('offset', '0')
+      
+      const response = await fetch(`/api/hcps?${params}`)
+      if (!response.ok) {
+        console.error('Failed to fetch HCPs from API')
+        setData([])
+        setLoading(false)
+        return
+      }
+      
+      const { data: rawData } = await response.json()
+      
+      // Transform to HCP format
+      const hcps = rawData.map((row: any) => {
+        const npi = String(row.NPI || row.PrescriberId || '').replace('.0', '')
+        return {
+          npi,
+          name: String(row.PrescriberName || npi),
+          specialty: String(row.Specialty || 'General Practice'),
+          city: String(row.City || ''),
+          state: String(row.State || ''),
+          territory: String(row.Territory || row.TerritoryName || row.State || 'Unknown'),
+          region: String(row.RegionName || row.State || 'Unknown'),
+          tier: String(row.Tier || 'N/A'),
+          trx_current: Number(row.TRx_Current || row.trx_current_qtd) || 0,
+          trx_prior: Number(row.trx_prior_qtd) || 0,
+          trx_growth: Number(row.forecasted_lift) || 0,
+          last_call_date: null,
+          days_since_call: null,
+          next_call_date: null,
+          priority: 1,
+          ibsa_share: Number(row.ibsa_share) || 0,
+          nrx_count: Number(row.nrx_current_qtd) || 0,
+          call_success_score: Number(row.call_success_prob) || 0,
+          value_score: Number(row.expected_roi) || 0,
+          rx_lift: Number(row.forecasted_lift) || 0,
+          ngd_decile: 5,
+          ngd_classification: String(row.ngd_classification || 'Stable'),
+          // Product-specific TRx
+          tirosint_trx: Number(row.tirosint_trx) || 0,
+          flector_trx: Number(row.flector_trx) || 0,
+          licart_trx: Number(row.licart_trx) || 0,
+          competitor_trx: Number(row.competitor_trx) || 0,
+          competitor_synthroid_levothyroxine: Number(row.competitor_synthroid_levothyroxine) || 0,
+          competitor_voltaren_diclofenac: Number(row.competitor_voltaren_diclofenac) || 0,
+          competitor_imdur_nitrates: Number(row.competitor_imdur_nitrates) || 0,
+          // NRx data
+          ibsa_nrx_qtd: Number(row.ibsa_nrx_qtd) || 0,
+          competitor_nrx: Number(row.competitor_nrx) || 0,
+          competitor_nrx_synthroid_levothyroxine: Number(row.competitor_nrx_synthroid_levothyroxine) || 0,
+          competitor_nrx_voltaren_diclofenac: Number(row.competitor_nrx_voltaren_diclofenac) || 0,
+          competitor_nrx_imdur_nitrates: Number(row.competitor_nrx_imdur_nitrates) || 0,
+        }
+      })
+      
+      console.log(`Loaded ${hcps.length} HCPs for territory analytics`)
+      setData(hcps)
+    } catch (error) {
+      console.error('Error loading HCP data:', error)
+      setData([])
+    } finally {
+      setLoading(false)
+    }
   }
 
   if (loading) {
@@ -361,70 +426,43 @@ export default function TerritoryDashboardPage() {
         </CardContent>
       </Card>
 
-      {/* Charts Row 1 - NGD and Tier Distribution */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        {/* NGD Distribution */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <TrendingUp className="h-5 w-5 text-green-600" />
-              NGD Classification
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <PieChart>
-                <Pie
-                  data={ngdData}
-                  dataKey="value"
-                  nameKey="name"
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={100}
-                  label={(entry: any) => `${entry.name}: ${entry.value} (${((entry.value / filteredData.length) * 100).toFixed(0)}%)`}
-                >
-                  {ngdData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Pie>
-                <Tooltip />
-                <Legend />
-              </PieChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-
-        {/* Tier Distribution */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Award className="h-5 w-5 text-amber-500" />
-              HCP Tier Distribution
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <PieChart>
-                <Pie
-                  data={tierData}
-                  dataKey="value"
-                  nameKey="name"
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={100}
-                  label={(entry: any) => `${entry.name}: ${entry.value}`}
-                >
-                  {tierData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Pie>
-                <Tooltip />
-                <Legend />
-              </PieChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-      </div>
+      {/* Charts Row 1 - NGD Classification */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <TrendingUp className="h-5 w-5 text-green-600" />
+            NGD Classification Distribution
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={ngdData} layout="vertical">
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis type="number" />
+              <YAxis dataKey="name" type="category" width={100} />
+              <Tooltip formatter={(value: any) => `${formatNumber(value)} HCPs`} />
+              <Bar dataKey="value" name="HCP Count">
+                {ngdData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color} />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+          <div className="grid grid-cols-4 gap-4 mt-4">
+            {ngdData.map((item) => (
+              <div key={item.name} className="text-center">
+                <div className="text-2xl font-bold" style={{ color: item.color }}>
+                  {formatNumber(item.value)}
+                </div>
+                <div className="text-sm text-gray-600">{item.name}</div>
+                <div className="text-xs text-gray-500">
+                  {formatPercent(item.value / filteredData.length, 0)}
+                </div>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Charts Row 2 - Product Intelligence */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -575,24 +613,31 @@ export default function TerritoryDashboardPage() {
           </CardContent>
         </Card>
 
-        {/* Territory Growth Analysis */}
+        {/* Top Territories by Market Share */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <TrendingUp className="h-5 w-5 text-green-600" />
-              Territory Growth Rate (QoQ)
+              <Target className="h-5 w-5 text-green-600" />
+              Top 10 Territories by IBSA Market Share
             </CardTitle>
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={400}>
-              <BarChart data={territoryGrowthData}>
+              <BarChart 
+                data={territoryMetrics
+                  .filter(t => t.hcpCount >= 5)
+                  .sort((a, b) => b.marketShare - a.marketShare)
+                  .slice(0, 10)
+                }
+                layout="vertical"
+              >
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="territory" angle={-45} textAnchor="end" height={100} tick={{ fontSize: 10 }} />
-                <YAxis label={{ value: 'Growth %', angle: -90, position: 'insideLeft' }} />
+                <XAxis type="number" label={{ value: 'Market Share %', position: 'bottom' }} />
+                <YAxis dataKey="territory" type="category" width={180} tick={{ fontSize: 11 }} />
                 <Tooltip 
                   formatter={(value: any) => `${Number(value).toFixed(1)}%`}
                 />
-                <Bar dataKey="growth" fill="#10b981" name="Growth %" />
+                <Bar dataKey="marketShare" fill="#10b981" name="Market Share %" />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
