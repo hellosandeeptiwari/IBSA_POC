@@ -191,7 +191,10 @@ export default function HCPDetailPage() {
               <div className="mt-3 border-t pt-3 border-purple-200">
                 <div className="text-xs font-semibold text-gray-700 mb-2 flex items-center gap-1">
                   <Sparkles className="h-3 w-3 text-purple-600" />
-                  📊 All Product Predictions Compared:
+                  📊 All Product Predictions Compared (12 ML Models - 4 per product):
+                  <span className="ml-auto text-[10px] bg-purple-100 text-purple-700 px-2 py-0.5 rounded font-normal">
+                    Each product has separate LightGBM predictions
+                  </span>
                 </div>
                 <div className="grid grid-cols-3 gap-2 text-xs">
                   <div className={`p-2 rounded border ${hcp.predictions.product_focus === 'Tirosint' ? 'border-green-500 bg-green-50 ring-2 ring-green-300' : 'border-gray-200 opacity-60'}`}>
@@ -199,34 +202,93 @@ export default function HCPDetailPage() {
                       Tirosint
                       {hcp.predictions.product_focus === 'Tirosint' && <span className="text-[10px] bg-green-600 text-white px-1 rounded">BEST</span>}
                     </div>
-                    <div className="text-[10px] text-gray-600 mt-1">Success: {formatPercent(hcp.predictions.tirosint_call_success, 0)}</div>
-                    <div className="text-[10px] text-gray-600">Lift: {hcp.predictions.tirosint_prescription_lift >= 0 ? '+' : ''}{formatNumber(hcp.predictions.tirosint_prescription_lift, 1)}</div>
+                    <div className="text-[10px] text-gray-600 mt-1">Call Success: {formatPercent(hcp.predictions.tirosint_call_success, 0)}</div>
+                    <div className="text-[10px] text-gray-600">Rx Lift: {hcp.predictions.tirosint_prescription_lift >= 0 ? '+' : ''}{formatNumber(hcp.predictions.tirosint_prescription_lift, 1)} TRx</div>
                     <div className="text-[10px] text-gray-600">NGD: {hcp.predictions.tirosint_ngd_category}</div>
-                    <div className="text-[10px] text-blue-700 font-semibold">Share: +{formatNumber(hcp.predictions.tirosint_wallet_share_growth, 1)}pp</div>
+                    <div className="text-[10px] text-blue-700 font-semibold bg-blue-50 px-1 rounded">Wallet Share Grw: +{formatNumber(hcp.predictions.tirosint_wallet_share_growth, 1)}pp</div>
                   </div>
                   <div className={`p-2 rounded border ${hcp.predictions.product_focus === 'Flector' ? 'border-green-500 bg-green-50 ring-2 ring-green-300' : 'border-gray-200 opacity-60'}`}>
                     <div className="font-semibold flex items-center gap-1">
                       Flector
                       {hcp.predictions.product_focus === 'Flector' && <span className="text-[10px] bg-green-600 text-white px-1 rounded">BEST</span>}
                     </div>
-                    <div className="text-[10px] text-gray-600 mt-1">Success: {formatPercent(hcp.predictions.flector_call_success, 0)}</div>
-                    <div className="text-[10px] text-gray-600">Lift: {hcp.predictions.flector_prescription_lift >= 0 ? '+' : ''}{formatNumber(hcp.predictions.flector_prescription_lift, 1)}</div>
+                    <div className="text-[10px] text-gray-600 mt-1">Call Success: {formatPercent(hcp.predictions.flector_call_success, 0)}</div>
+                    <div className="text-[10px] text-gray-600">Rx Lift: {hcp.predictions.flector_prescription_lift >= 0 ? '+' : ''}{formatNumber(hcp.predictions.flector_prescription_lift, 1)} TRx</div>
                     <div className="text-[10px] text-gray-600">NGD: {hcp.predictions.flector_ngd_category}</div>
-                    <div className="text-[10px] text-blue-700 font-semibold">Share: +{formatNumber(hcp.predictions.flector_wallet_share_growth, 1)}pp</div>
+                    <div className="text-[10px] text-blue-700 font-semibold bg-blue-50 px-1 rounded">Wallet Share Grw: +{formatNumber(hcp.predictions.flector_wallet_share_growth, 1)}pp</div>
                   </div>
                   <div className={`p-2 rounded border ${hcp.predictions.product_focus === 'Licart' ? 'border-green-500 bg-green-50 ring-2 ring-green-300' : 'border-gray-200 opacity-60'}`}>
                     <div className="font-semibold flex items-center gap-1">
                       Licart
                       {hcp.predictions.product_focus === 'Licart' && <span className="text-[10px] bg-green-600 text-white px-1 rounded">BEST</span>}
                     </div>
-                    <div className="text-[10px] text-gray-600 mt-1">Success: {formatPercent(hcp.predictions.licart_call_success, 0)}</div>
-                    <div className="text-[10px] text-gray-600">Lift: {hcp.predictions.licart_prescription_lift >= 0 ? '+' : ''}{formatNumber(hcp.predictions.licart_prescription_lift, 1)}</div>
+                    <div className="text-[10px] text-gray-600 mt-1">Call Success: {formatPercent(hcp.predictions.licart_call_success, 0)}</div>
+                    <div className="text-[10px] text-gray-600">Rx Lift: {hcp.predictions.licart_prescription_lift >= 0 ? '+' : ''}{formatNumber(hcp.predictions.licart_prescription_lift, 1)} TRx</div>
                     <div className="text-[10px] text-gray-600">NGD: {hcp.predictions.licart_ngd_category}</div>
-                    <div className="text-[10px] text-blue-700 font-semibold">Share: +{formatNumber(hcp.predictions.licart_wallet_share_growth, 1)}pp</div>
+                    <div className="text-[10px] text-blue-700 font-semibold bg-blue-50 px-1 rounded">Wallet Share Grw: +{formatNumber(hcp.predictions.licart_wallet_share_growth, 1)}pp</div>
                   </div>
                 </div>
-                <div className="text-[11px] text-gray-500 italic mt-2">
-                  ℹ️ The recommended product ({hcp.predictions.product_focus}) has the highest predicted call success rate for this HCP. Other products may still be discussed as secondary options.
+                <div className="text-[11px] text-gray-500 italic mt-2 space-y-1">
+                  <div>ℹ️ The recommended product ({hcp.predictions.product_focus}) has the highest predicted call success rate for this HCP. Other products may still be discussed as secondary options.</div>
+                  
+                  {/* Wallet Share Growth - Competitive Displacement */}
+                  <div className="bg-gradient-to-r from-blue-50 to-green-50 border-2 border-blue-300 p-3 rounded-lg not-italic space-y-2">
+                    <div className="flex items-center gap-2">
+                      <strong className="text-blue-800 text-sm">� Wallet Share Growth = Market Share Gain from Competitors</strong>
+                    </div>
+                    
+                    <div className="grid grid-cols-3 gap-2 text-[10px]">
+                      <div className="bg-white border border-blue-200 p-2 rounded">
+                        <div className="font-bold text-blue-900">Tirosint</div>
+                        <div className="text-green-700 font-semibold mt-1">+{formatNumber(hcp.predictions.tirosint_wallet_share_growth, 1)}pp gain</div>
+                        <div className="text-gray-600 mt-1">
+                          {hcp.ibsa_share > 0 ? (
+                            <>From {hcp.ibsa_share.toFixed(0)}% → {(hcp.ibsa_share + hcp.predictions.tirosint_wallet_share_growth).toFixed(0)}%</>
+                          ) : (
+                            <>Capture {hcp.predictions.tirosint_wallet_share_growth.toFixed(1)}% from {hcp.competitive_intel?.inferred_competitors?.[0] || 'competitors'}</>
+                          )}
+                        </div>
+                      </div>
+                      <div className="bg-white border border-blue-200 p-2 rounded">
+                        <div className="font-bold text-blue-900">Flector</div>
+                        <div className="text-green-700 font-semibold mt-1">+{formatNumber(hcp.predictions.flector_wallet_share_growth, 1)}pp gain</div>
+                        <div className="text-gray-600 mt-1">
+                          {hcp.ibsa_share > 0 ? (
+                            <>From {hcp.ibsa_share.toFixed(0)}% → {(hcp.ibsa_share + hcp.predictions.flector_wallet_share_growth).toFixed(0)}%</>
+                          ) : (
+                            <>Capture {hcp.predictions.flector_wallet_share_growth.toFixed(1)}% from {hcp.competitive_intel?.inferred_competitors?.[0] || 'competitors'}</>
+                          )}
+                        </div>
+                      </div>
+                      <div className="bg-white border border-blue-200 p-2 rounded">
+                        <div className="font-bold text-blue-900">Licart</div>
+                        <div className="text-green-700 font-semibold mt-1">+{formatNumber(hcp.predictions.licart_wallet_share_growth, 1)}pp gain</div>
+                        <div className="text-gray-600 mt-1">
+                          {hcp.ibsa_share > 0 ? (
+                            <>From {hcp.ibsa_share.toFixed(0)}% → {(hcp.ibsa_share + hcp.predictions.licart_wallet_share_growth).toFixed(0)}%</>
+                          ) : (
+                            <>Capture {hcp.predictions.licart_wallet_share_growth.toFixed(1)}% from {hcp.competitive_intel?.inferred_competitors?.[0] || 'competitors'}</>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="bg-yellow-50 border border-yellow-300 p-2 rounded text-[10px]">
+                      <strong className="text-yellow-900">🎯 Competitive Strategy:</strong> These predictions show how much market share each IBSA product can capture from 
+                      <strong> {hcp.competitive_intel?.competitor_product_distribution?.map(c => c.product).slice(0,2).join(' and ') || hcp.competitive_intel?.inferred_competitors?.slice(0,2).join(' and ') || 'competitors'}</strong>. 
+                      Current IBSA share: <strong>{hcp.ibsa_share.toFixed(0)}%</strong> → 
+                      Potential with {hcp.predictions.product_focus}: <strong>{(hcp.ibsa_share + (
+                        hcp.predictions.product_focus === 'Tirosint' ? hcp.predictions.tirosint_wallet_share_growth :
+                        hcp.predictions.product_focus === 'Flector' ? hcp.predictions.flector_wallet_share_growth :
+                        hcp.predictions.licart_wallet_share_growth
+                      )).toFixed(0)}%</strong>
+                      {hcp.competitive_intel?.competitor_product_distribution && hcp.competitive_intel.competitor_product_distribution.length > 0 && (
+                        <span className="block mt-1 text-red-700">
+                          ⚠️ Main threat: <strong>{hcp.competitive_intel.competitor_product_distribution[0].product}</strong> (~{hcp.competitive_intel.competitor_product_distribution[0].trx} TRx)
+                        </span>
+                      )}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
