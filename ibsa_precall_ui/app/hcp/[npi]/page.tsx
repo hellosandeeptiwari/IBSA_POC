@@ -920,13 +920,19 @@ export default function HCPDetailPage() {
                       <div className="flex mb-2 items-center justify-between">
                         <div>
                           <span className="text-3xl font-bold text-blue-600">
-                            {formatPercent(hcp.predictions.call_success_prob, 0)}
+                            {formatPercent(
+                              hcp.predictions.product_focus === 'Tirosint' ? hcp.predictions.tirosint_call_success :
+                              hcp.predictions.product_focus === 'Flector' ? hcp.predictions.flector_call_success :
+                              hcp.predictions.licart_call_success, 0
+                            )}
                           </span>
                         </div>
                       </div>
                       <div className="overflow-hidden h-2 text-xs flex rounded bg-blue-200">
                         <div
-                          style={{ width: `${hcp.predictions.call_success_prob * 100}%` }}
+                          style={{ width: `${(hcp.predictions.product_focus === 'Tirosint' ? hcp.predictions.tirosint_call_success :
+                                             hcp.predictions.product_focus === 'Flector' ? hcp.predictions.flector_call_success :
+                                             hcp.predictions.licart_call_success) * 100}%` }}
                           className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-blue-600"
                         ></div>
                       </div>
@@ -935,13 +941,23 @@ export default function HCPDetailPage() {
 
                   <div>
                     <div className="text-sm font-medium text-muted-foreground mb-2">Forecasted Lift</div>
-                    <div className="text-3xl font-bold text-green-600">{hcp.predictions.forecasted_lift >= 0 ? '+' : ''}{formatNumber(hcp.predictions.forecasted_lift, 1)} TRx</div>
+                    <div className="text-3xl font-bold text-green-600">
+                      {hcp.predictions.product_focus === 'Tirosint' ? `${hcp.predictions.tirosint_prescription_lift >= 0 ? '+' : ''}${formatNumber(hcp.predictions.tirosint_prescription_lift, 1)}` :
+                       hcp.predictions.product_focus === 'Flector' ? `${hcp.predictions.flector_prescription_lift >= 0 ? '+' : ''}${formatNumber(hcp.predictions.flector_prescription_lift, 1)}` :
+                       `${hcp.predictions.licart_prescription_lift >= 0 ? '+' : ''}${formatNumber(hcp.predictions.licart_prescription_lift, 1)}`} TRx
+                    </div>
                     <div className="text-sm text-muted-foreground">Expected increase</div>
                   </div>
 
                   <div>
                     <div className="text-sm font-medium text-muted-foreground mb-2">Wallet Share Growth</div>
-                    <div className="text-3xl font-bold text-indigo-600">+{formatNumber(hcp.predictions.wallet_share_growth_avg, 1)}pp</div>
+                    <div className="text-3xl font-bold text-indigo-600">
+                      +{hcp.predictions.product_focus === 'Tirosint' ? 
+                        formatNumber(hcp.predictions.tirosint_wallet_share_growth, hcp.predictions.tirosint_wallet_share_growth < 1 ? 2 : 1) :
+                        hcp.predictions.product_focus === 'Flector' ? 
+                        formatNumber(hcp.predictions.flector_wallet_share_growth, hcp.predictions.flector_wallet_share_growth < 1 ? 2 : 1) :
+                        formatNumber(hcp.predictions.licart_wallet_share_growth, hcp.predictions.licart_wallet_share_growth < 1 ? 2 : 1)}pp
+                    </div>
                     <div className="text-sm text-muted-foreground">Portfolio expansion</div>
                   </div>
 
