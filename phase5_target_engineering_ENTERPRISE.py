@@ -140,12 +140,17 @@ class EnterpriseTargetEngineering:
         # 1. Load Product-Specific Features (from Phase 4B)
         # Priority: Load comprehensive enterprise features with EDA integration
         enterprise_files = sorted(FEATURES_DIR.glob('IBSA_EnterpriseFeatures_EDA_*.csv'))
+        cleaned_files = sorted(FEATURES_DIR.glob('IBSA_Features_CLEANED_*.csv'))
         product_files = sorted(FEATURES_DIR.glob('IBSA_ProductFeatures_*.csv'))
         
         if enterprise_files:
             feature_file = enterprise_files[-1]  # Most recent enterprise features (with EDA)
             print(f"\n📥 Loading COMPREHENSIVE Enterprise Features from Phase 4B...")
             print(f"   File: {feature_file.name} (WITH EDA INTEGRATION ✨)")
+        elif cleaned_files:
+            feature_file = cleaned_files[-1]  # Phase 4C cleaned features
+            print(f"\n📥 Loading CLEANED Features from Phase 4C...")
+            print(f"   File: {feature_file.name} (VALIDATED & CLEANED ✨)")
         elif product_files:
             feature_file = product_files[-1]  # Fallback to basic product features
             print(f"\n📥 Loading Product Features from Phase 4B...")
@@ -446,54 +451,149 @@ class EnterpriseTargetEngineering:
         
         df = self.targets_df
         
-        # Use official NGD table with correct product mapping
+        # ML-BASED NGD PREDICTION: Train on 17K HCPs with real labels, predict for all
         if self.ngd_official_df is not None:
-            print(f"\n✅ Using Official NGD Table (ground truth from database)")
-            print(f"   NGD records: {len(self.ngd_official_df):,}")
+            print(f"\n✅ ML-Based NGD Prediction (Train on real labels, predict for all)")
+            print(f"   Strategy: Use 17K labeled HCPs to train predictor, apply to 349K total")
             
+            # Step 1: Prepare ground truth from NGD table
+            ngd_type_mapping = {'New': 'NEW', 'More': 'GROWER', 'Less': 'DECLINER'}
+            ngd_ground_truth = self.ngd_official_df.copy()
+            ngd_ground_truth['NGD_Category'] = ngd_ground_truth['NGDType'].map(ngd_type_mapping)
+            ngd_ground_truth['NGD_Category'] = ngd_ground_truth['NGD_Category'].fillna('STABLE')
+            
+            # Get one label per HCP (use mode if multiple products)
+            ngd_labels = ngd_ground_truth.groupby('PrescriberId')['NGD_Category'].agg(
+                lambda x: x.mode()[0] if len(x.mode()) > 0 else 'STABLE'
+            )
+            
+            print(f"   ✓ Ground truth labels: {len(ngd_labels):,} HCPs")
+            print(f"   Label distribution: {ngd_labels.value_counts().to_dict()}")
+            
+            # Step 2: Select predictive features from our dataset
+            predictive_features = []
+            for pattern in ['trx', 'nrx', 'growth', 'change', 'delta', 'trend', 'lag', 'prev', 'prior']:
+                predictive_features.extend([c for c in df.columns if pattern in c.lower() and df[c].dtype in ['int64', 'float64']])
+            predictive_features = list(set(predictive_features))
+            predictive_features = [f for f in predictive_features if f not in ['PrescriberId']]
+            
+            print(f"   ✓ Selected {len(predictive_features)} predictive features")
+            
+            # Step 3: Create training dataset (HCPs with NGD labels)
+            train_mask = df['PrescriberId'].isin(ngd_labels.index)
+            X_train = df.loc[train_mask, predictive_features].fillna(0)
+            y_train = df.loc[train_mask, 'PrescriberId'].map(ngd_labels)
+            
+            print(f"   ✓ Training samples: {len(X_train):,} ({len(X_train)/len(df)*100:.1f}% of total)")
+            
+            # Step 4: Handle class imbalance with SMOTE
+            try:
+                from imblearn.over_sampling import SMOTE
+                print(f"   Applying SMOTE for class balance...")
+                smote = SMOTE(random_state=42, k_neighbors=min(3, y_train.value_counts().min()-1))
+                X_train_balanced, y_train_balanced = smote.fit_resample(X_train, y_train)
+                print(f"   ✓ After SMOTE: {pd.Series(y_train_balanced).value_counts().to_dict()}")
+            except ImportError:
+                print(f"   ⚠️  SMOTE not available, using class_weight='balanced'")
+                X_train_balanced, y_train_balanced = X_train, y_train
+            
+            # Step 5: Train NGD predictor
+            from sklearn.ensemble import RandomForestClassifier
+            print(f"   Training Random Forest NGD predictor...")
+            ngd_predictor = RandomForestClassifier(
+                n_estimators=100,
+                max_depth=12,
+                min_samples_split=20,
+                min_samples_leaf=10,
+                class_weight='balanced',
+                random_state=42,
+                n_jobs=2,
+                verbose=0
+            )
+            ngd_predictor.fit(X_train_balanced, y_train_balanced)
+            train_acc = ngd_predictor.score(X_train_balanced, y_train_balanced)
+            print(f"   ✓ Training accuracy: {train_acc:.3f}")
+            
+            # Step 6: Predict NGD for ALL HCPs using stratified approach
+            print(f"   Predicting NGD for all {len(df):,} HCPs...")
+            X_all = df[predictive_features].fillna(0)
+            
+            # Get probability scores from trained model
+            ngd_probabilities = ngd_predictor.predict_proba(X_all)
+            class_labels = ngd_predictor.classes_
+            
+            # Strategy: Maintain ground truth distribution (57% NEW, 28% DECLINER, 15% GROWER)
+            # For HCPs with labels (17K), keep their ground truth
+            # For unlabeled (332K), assign based on ranked probabilities to match distribution
+            labeled_hcps = set(ngd_labels.index)
+            
+            # Separate labeled and unlabeled HCPs
+            labeled_idx = [i for i, pid in enumerate(df['PrescriberId']) if pid in labeled_hcps]
+            unlabeled_idx = [i for i, pid in enumerate(df['PrescriberId']) if pid not in labeled_hcps]
+            
+            print(f"   ✓ Labeled HCPs (keep ground truth): {len(labeled_idx):,}")
+            print(f"   ✓ Unlabeled HCPs (assign strategically): {len(unlabeled_idx):,}")
+            
+            # Target distribution from ground truth
+            target_dist = ngd_labels.value_counts(normalize=True).to_dict()
+            print(f"   Target distribution: {target_dist}")
+            
+            # Initialize predictions with ground truth for labeled HCPs
+            final_predictions = np.array([''] * len(df), dtype=object)
+            for idx in labeled_idx:
+                prescriber_id = df.iloc[idx]['PrescriberId']
+                final_predictions[idx] = ngd_labels[prescriber_id]
+            
+            # For unlabeled HCPs, use probability-weighted stratified assignment
+            n_unlabeled = len(unlabeled_idx)
+            target_counts = {
+                label: int(n_unlabeled * pct) 
+                for label, pct in target_dist.items()
+            }
+            
+            # Create probability scores for each unlabeled HCP
+            unlabeled_scores = []
+            for idx in unlabeled_idx:
+                # Score = probability of each class
+                scores = {class_labels[j]: ngd_probabilities[idx][j] for j in range(len(class_labels))}
+                unlabeled_scores.append((idx, scores))
+            
+            # Assign labels greedily: for each category, assign to HCPs with highest probability for that category
+            assigned = set()
+            for label in ['NEW', 'DECLINER', 'GROWER']:
+                if label not in target_counts:
+                    continue
+                    
+                # Sort unlabeled HCPs by probability of this label (descending)
+                candidates = [(idx, scores.get(label, 0)) for idx, scores in unlabeled_scores if idx not in assigned]
+                candidates.sort(key=lambda x: x[1], reverse=True)
+                
+                # Assign top N HCPs to this label
+                n_assign = min(target_counts[label], len(candidates))
+                for i in range(n_assign):
+                    idx = candidates[i][0]
+                    final_predictions[idx] = label
+                    assigned.add(idx)
+            
+            # Any remaining unlabeled (shouldn't be any) → assign to NEW
+            for idx in unlabeled_idx:
+                if idx not in assigned:
+                    final_predictions[idx] = 'NEW'
+            
+            ngd_predictions = final_predictions
+            
+            # Assign predictions to each product
             for product in self.products:
                 ngd_col = f'{product}_ngd_category'
-                ngd_product_name = self.product_ngd_mapping[product]
-                
-                print(f"\n   Processing {product} (NGD: '{ngd_product_name}')...")
-                
-                # Initialize with default
-                df[ngd_col] = 'NEW'
-                
-                # Filter NGD for this product
-                product_ngd = self.ngd_official_df[
-                    self.ngd_official_df['Product'] == ngd_product_name
-                ].copy()
-                
-                print(f"      Found {len(product_ngd):,} NGD records")
-                
-                if len(product_ngd) > 0:
-                    # Map NGD types (database uses: New, More, Less)
-                    ngd_type_mapping = {
-                        'New': 'NEW',
-                        'More': 'GROWER',
-                        'Less': 'DECLINER'
-                    }
-                    
-                    # Merge with main data on PrescriberId
-                    product_ngd['NGD_Category_Mapped'] = product_ngd['NGDType'].map(ngd_type_mapping)
-                    product_ngd['NGD_Category_Mapped'] = product_ngd['NGD_Category_Mapped'].fillna('STABLE')
-                    
-                    # Merge by PrescriberId
-                    ngd_lookup = product_ngd.groupby('PrescriberId')['NGD_Category_Mapped'].first()
-                    
-                    # Update our targets dataframe
-                    matched_mask = df['PrescriberId'].isin(ngd_lookup.index)
-                    df.loc[matched_mask, ngd_col] = df.loc[matched_mask, 'PrescriberId'].map(ngd_lookup)
-                    
-                    print(f"      Matched {matched_mask.sum():,} HCPs to NGD data")
-                
-                # Distribution
-                dist = df[ngd_col].value_counts()
-                print(f"      Distribution:")
-                for cat, count in dist.items():
-                    pct = count / len(df) * 100
-                    print(f"         • {cat}: {count:,} ({pct:.1f}%)")
+                df[ngd_col] = ngd_predictions
+            
+            # Show final distribution
+            print(f"\n   ✅ ML Prediction Complete!")
+            print(f"   Predicted Distribution:")
+            pred_dist = pd.Series(ngd_predictions).value_counts()
+            for cat, count in pred_dist.items():
+                pct = count / len(df) * 100
+                print(f"      • {cat}: {count:,} ({pct:.1f}%)")
         else:
             print(f"\n⚠️  Official NGD table not available - using derived categories")
             # Fallback: derive from prescription lift

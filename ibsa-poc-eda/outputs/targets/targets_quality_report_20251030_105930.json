@@ -1,0 +1,68 @@
+{
+  "total_records": 349864,
+  "targets_created": 12,
+  "products": [
+    "Tirosint",
+    "Flector",
+    "Licart"
+  ],
+  "target_types": [
+    "call_success",
+    "prescription_lift",
+    "ngd_category"
+  ],
+  "call_success": {
+    "Tirosint_call_success": {
+      "success_rate": 0.83,
+      "missing_pct": 0.0
+    },
+    "Flector_call_success": {
+      "success_rate": 0.08,
+      "missing_pct": 0.0
+    },
+    "Licart_call_success": {
+      "success_rate": 0.12,
+      "missing_pct": 0.0
+    }
+  },
+  "prescription_lift": {
+    "Tirosint_prescription_lift": {
+      "mean": 0.35,
+      "median": 0.0,
+      "std": 1.23,
+      "min": 0.0,
+      "max": 9.0
+    },
+    "Flector_prescription_lift": {
+      "mean": 0.01,
+      "median": 0.0,
+      "std": 0.26,
+      "min": 0.0,
+      "max": 81.0
+    },
+    "Licart_prescription_lift": {
+      "mean": 0.01,
+      "median": 0.0,
+      "std": 0.49,
+      "min": 0.0,
+      "max": 140.0
+    }
+  },
+  "ngd_category": {
+    "Tirosint_ngd_category": {
+      "DECLINER": 287722,
+      "NEW": 52228,
+      "GROWER": 9914
+    },
+    "Flector_ngd_category": {
+      "DECLINER": 287722,
+      "NEW": 52228,
+      "GROWER": 9914
+    },
+    "Licart_ngd_category": {
+      "DECLINER": 287722,
+      "NEW": 52228,
+      "GROWER": 9914
+    }
+  }
+}

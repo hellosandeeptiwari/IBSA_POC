@@ -567,18 +567,20 @@ export async function getHCPDetail(npiParam: string): Promise<HCPDetail | null> 
 }
 
 function getTierFromRow(row: ModelReadyRow): 'Platinum' | 'Gold' | 'Silver' | 'Bronze' {
-  // Use direct tier from CSV if available
-  if (row.tier) {
-    const tierStr = String(row.tier)
-    if (tierStr === 'Platinum' || tierStr === 'Gold' || tierStr === 'Silver' || tierStr === 'Bronze') {
-      return tierStr as 'Platinum' | 'Gold' | 'Silver' | 'Bronze'
-    }
-  }
+  // Map tier values from CSV format to standard tier names
+  const tierValue = String(row.Tier || row.tier || '').toUpperCase()
+  
+  if (tierValue.includes('TIER 1') || tierValue.includes('PLATINUM')) return 'Platinum'
+  if (tierValue.includes('TIER 2') || tierValue.includes('GOLD')) return 'Gold'
+  if (tierValue.includes('TIER 3') || tierValue.includes('SILVER')) return 'Silver'
+  if (tierValue.includes('TIER 4') || tierValue.includes('BRONZE')) return 'Bronze'
+  if (tierValue.includes('NON-TARGET')) return 'Bronze'
   
   // Fallback to binary flags
   if (row.hcp_tier_platinum === 1) return 'Platinum'
   if (row.hcp_tier_gold === 1) return 'Gold'
   if (row.hcp_tier_silver === 1) return 'Silver'
+  
   return 'Bronze'
 }
 

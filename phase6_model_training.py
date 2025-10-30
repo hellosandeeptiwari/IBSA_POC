@@ -161,6 +161,9 @@ class EnterpriseModelTraining:
         self.model_performance = {}
         self.feature_importance = {}
         
+        # Pre-optimized hyperparameters (load from file)
+        self.best_hyperparameters = self.load_best_hyperparameters()
+        
         # EDA integration
         self.eda_recommendations = None
         self.eda_applied = False
@@ -211,6 +214,24 @@ class EnterpriseModelTraining:
                 'metrics': ['mae', 'rmse', 'r2']
             }
         }
+    
+    def load_best_hyperparameters(self):
+        """
+        Load pre-optimized hyperparameters from previous Optuna runs
+        This skips optimization and uses proven best parameters for faster training
+        """
+        best_params_file = OUTPUT_DIR / 'best_hyperparameters.json'
+        
+        if best_params_file.exists():
+            try:
+                with open(best_params_file, 'r') as f:
+                    params_data = json.load(f)
+                # Remove metadata, keep only model params
+                return {k: v for k, v in params_data.items() if k != 'metadata'}
+            except Exception as e:
+                print(f"⚠️  Could not load best hyperparameters: {e}")
+                return {}
+        return {}
     
     def load_data(self):
         """
@@ -702,15 +723,39 @@ class EnterpriseModelTraining:
                 class_weights_dict = None
         
         # 4. Hyperparameter optimization
-        # ENABLED: Optuna with 50 trials for overnight hyperparameter tuning
-        # Will find optimal parameters for all 9 models
-        print(f"\n🔧 Starting hyperparameter optimization with Optuna (50 trials)...")
-        n_trials = 50  # Overnight optimization for best performance
+        # Check if we have pre-optimized parameters for this model
+        model_key = f"{product}_{outcome}"
         
-        # Store class weights temporarily for Optuna to use
-        self.temp_class_weights = class_weights_dict
-        
-        if n_trials > 0:
+        if model_key in self.best_hyperparameters:
+            print(f"\n✨ Using pre-optimized hyperparameters (from previous Optuna run)")
+            best_params = self.best_hyperparameters[model_key].copy()
+            
+            # Update class weights if they were computed (for classification models)
+            if class_weights_dict is not None:
+                if isinstance(class_weights_dict, dict):
+                    # Convert keys to int for consistency
+                    best_params['class_weight'] = {int(k): v for k, v in best_params.get('class_weight', {}).items()}
+                else:
+                    best_params['class_weight'] = class_weights_dict
+            
+            # Add common parameters
+            best_params['random_state'] = RANDOM_SEED
+            best_params['n_jobs'] = 2  # Limited parallelism to prevent system slowdown
+            if 'verbose' not in best_params and 'verbosity' not in best_params:
+                if self.model_configs[outcome]['type'] == 'regression' and HAS_XGBOOST:
+                    best_params['verbosity'] = 0
+                else:
+                    best_params['verbose'] = 0
+                    
+            print(f"   ✓ Loaded parameters: {best_params}")
+        else:
+            # FALLBACK: Run Optuna optimization if no pre-optimized params available
+            print(f"\n🔧 No pre-optimized parameters found, running Optuna (50 trials)...")
+            n_trials = 50
+            
+            # Store class weights temporarily for Optuna to use
+            self.temp_class_weights = class_weights_dict
+            
             best_params = self.optimize_hyperparameters(
                 X_train, y_train, 
                 self.model_configs[outcome]['type'],
@@ -722,29 +767,6 @@ class EnterpriseModelTraining:
             # Ensure class weights are in best_params for classification
             if class_weights_dict is not None and 'class_weight' not in best_params:
                 best_params['class_weight'] = class_weights_dict
-        else:
-            # Default parameters (proven to work from COMPLETE script)
-            if self.model_configs[outcome]['type'] == 'regression':
-                best_params = {
-                    'n_estimators': 100,  # Reduced for faster training
-                    'max_depth': 10,
-                    'learning_rate': 0.1,
-                    'random_state': RANDOM_SEED,
-                    'n_jobs': 2,  # Limited parallelism to avoid KeyboardInterrupt
-                    'verbosity': 0
-                }
-            else:
-                best_params = {
-                    'n_estimators': 100,  # Reduced for faster training
-                    'max_depth': 15,
-                    'min_samples_split': 5,
-                    'min_samples_leaf': 2,
-                    'random_state': RANDOM_SEED,
-                    'class_weight': 'balanced',
-                    'n_jobs': 2,  # Limited parallelism to avoid KeyboardInterrupt
-                    'verbose': 0
-                }
-            print(f"   ✓ Using default parameters (optimized for stability)")
         
         # 5. Train final model
         print(f"\n🏋️  Training final model...")
@@ -754,8 +776,11 @@ class EnterpriseModelTraining:
                 model = xgb.XGBRegressor(**best_params)
             else:
                 # Remove XGBoost-specific parameters for RandomForest
+                xgb_specific_params = ['learning_rate', 'verbosity', 'subsample', 'colsample_bytree', 
+                                      'colsample_bylevel', 'colsample_bynode', 'gamma', 'reg_alpha', 
+                                      'reg_lambda', 'scale_pos_weight', 'base_score', 'booster']
                 rf_params = {k: v for k, v in best_params.items() 
-                           if k not in ['learning_rate', 'verbosity']}
+                           if k not in xgb_specific_params}
                 model = RandomForestRegressor(**rf_params)
         else:
             model = RandomForestClassifier(**best_params)

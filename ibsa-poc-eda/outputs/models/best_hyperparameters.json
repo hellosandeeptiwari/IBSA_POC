@@ -1,0 +1,102 @@
+{
+  "metadata": {
+    "created_at": "2025-10-30T07:04:24",
+    "optimization_date": "2025-10-30",
+    "optuna_trials": 50,
+    "total_training_time_hours": 1.5,
+    "notes": "Pre-optimized hyperparameters from Optuna with 50 trials. Use these to skip optimization and train faster."
+  },
+  "Tirosint_call_success": {
+    "n_estimators": 111,
+    "max_depth": 15,
+    "min_samples_split": 5,
+    "min_samples_leaf": 2,
+    "class_weight": {
+      "0": 0.5042045417697987,
+      "1": 89.9392673521851
+    }
+  },
+  "Tirosint_prescription_lift": {
+    "n_estimators": 191,
+    "max_depth": 7,
+    "learning_rate": 0.07418070711685787,
+    "subsample": 0.7528140732924741,
+    "colsample_bytree": 0.8539409368017035
+  },
+  "Tirosint_ngd_category": {
+    "n_estimators": 128,
+    "max_depth": 14,
+    "min_samples_split": 6,
+    "min_samples_leaf": 2,
+    "class_weight": "balanced"
+  },
+  "Tirosint_wallet_share_growth": {
+    "n_estimators": 142,
+    "max_depth": 5,
+    "learning_rate": 0.08143017218399347,
+    "subsample": 0.8771753986126427,
+    "colsample_bytree": 0.8599334231286914
+  },
+  "Flector_call_success": {
+    "n_estimators": 187,
+    "max_depth": 14,
+    "min_samples_split": 8,
+    "min_samples_leaf": 3,
+    "class_weight": {
+      "0": 0.5003843733463007,
+      "1": 976.3639534883721
+    }
+  },
+  "Flector_prescription_lift": {
+    "n_estimators": 138,
+    "max_depth": 8,
+    "learning_rate": 0.18742832906580156,
+    "subsample": 0.8481586321157663,
+    "colsample_bytree": 0.7001111470468185
+  },
+  "Flector_ngd_category": {
+    "n_estimators": 180,
+    "max_depth": 14,
+    "min_samples_split": 8,
+    "min_samples_leaf": 3,
+    "class_weight": "balanced"
+  },
+  "Flector_wallet_share_growth": {
+    "n_estimators": 149,
+    "max_depth": 5,
+    "learning_rate": 0.09287814626676488,
+    "subsample": 0.7584476931003973,
+    "colsample_bytree": 0.7945428013315897
+  },
+  "Licart_call_success": {
+    "n_estimators": 106,
+    "max_depth": 15,
+    "min_samples_split": 5,
+    "min_samples_leaf": 3,
+    "class_weight": {
+      "0": 0.5006081180178215,
+      "1": 617.4066176470589
+    }
+  },
+  "Licart_prescription_lift": {
+    "n_estimators": 151,
+    "max_depth": 10,
+    "learning_rate": 0.09476802391892111,
+    "subsample": 0.8138874820158595,
+    "colsample_bytree": 0.8547716009023657
+  },
+  "Licart_ngd_category": {
+    "n_estimators": 168,
+    "max_depth": 15,
+    "min_samples_split": 5,
+    "min_samples_leaf": 3,
+    "class_weight": "balanced"
+  },
+  "Licart_wallet_share_growth": {
+    "n_estimators": 148,
+    "max_depth": 5,
+    "learning_rate": 0.05197688215713857,
+    "subsample": 0.7940832713621686,
+    "colsample_bytree": 0.8234775521752558
+  }
+}

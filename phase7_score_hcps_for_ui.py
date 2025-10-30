@@ -189,12 +189,14 @@ def score_hcps():
         # NGD classification
         ngd_cols = [c for c in chunk_results.columns if 'ngd_category_pred' in c]
         if ngd_cols:
+            # Map numeric predictions back to labels (LabelEncoder uses alphabetical order)
+            # 0 = DECLINER, 1 = GROWER, 2 = NEW
             def map_ngd(val):
                 if pd.isna(val): return 'Stable'
-                if val < 0.25: return 'Decliner'
-                elif val < 0.5: return 'Stable'
-                elif val < 0.75: return 'Grower'
-                else: return 'New'
+                if val == 0: return 'Decliner'
+                elif val == 1: return 'Grower'
+                elif val == 2: return 'New'
+                else: return 'Stable'
             chunk_results['ngd_classification'] = chunk_results[ngd_cols[0]].apply(map_ngd)
         else:
             chunk_results['ngd_classification'] = 'Stable'
@@ -275,10 +277,22 @@ def score_hcps():
     logger.info(f"  Expected ROI: ${final_results['expected_roi'].mean():.0f} ± ${final_results['expected_roi'].std():.0f}")
     logger.info(f"\nSegment Distribution:")
     print(final_results['hcp_segment_name'].value_counts())
-    logger.info(f"\nWallet Share Growth Distribution:")
-    logger.info(f"  Tirosint: {final_results['Tirosint_wallet_share_growth_pred'].mean():.2f} ± {final_results['Tirosint_wallet_share_growth_pred'].std():.2f}pp")
-    logger.info(f"  Flector: {final_results['Flector_wallet_share_growth_pred'].mean():.2f} ± {final_results['Flector_wallet_share_growth_pred'].std():.2f}pp")
-    logger.info(f"  Licart: {final_results['Licart_wallet_share_growth_pred'].mean():.2f} ± {final_results['Licart_wallet_share_growth_pred'].std():.2f}pp")
+    
+    # Check if wallet share columns exist before printing
+    wallet_cols = [c for c in final_results.columns if 'wallet_share_growth_pred' in c]
+    if wallet_cols:
+        logger.info(f"\nWallet Share Growth Distribution:")
+        for col in wallet_cols:
+            product = col.split('_')[0]
+            logger.info(f"  {product}: {final_results[col].mean():.2f} ± {final_results[col].std():.2f}pp")
+    
+    # Show NGD distribution
+    logger.info(f"\nNGD Classification Distribution:")
+    print(final_results['ngd_classification'].value_counts())
+    ngd_pct = final_results['ngd_classification'].value_counts(normalize=True) * 100
+    for category in ['New', 'Grower', 'Decliner']:
+        if category in ngd_pct.index:
+            logger.info(f"  {category}: {ngd_pct[category]:.1f}%")
     
     return final_results
 
