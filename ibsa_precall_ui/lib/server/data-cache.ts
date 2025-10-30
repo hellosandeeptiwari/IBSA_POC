@@ -7,19 +7,20 @@ import path from 'path'
 // For large datasets (350K rows), streaming would be better but for now we optimize parsing
 
 export async function getDataCached(): Promise<ModelReadyRow[]> {
-  const BLOB_URL = process.env.NEXT_PUBLIC_BLOB_URL ||
-    'https://ibsangdpocdata.blob.core.windows.net/ngddatasets/IBSA_ModelReady_Enhanced_WithPredictions.csv'
-
   let csvText: string
-
-  // Check if using local file path (starts with /)
-  if (BLOB_URL.startsWith('/')) {
-    // Read from local file system
-    const filePath = path.join(process.cwd(), 'public', BLOB_URL)
-    console.log(`📂 [Server] Reading from local file: ${filePath}`)
-    csvText = fs.readFileSync(filePath, 'utf-8')
+  
+  // Try local file first (for development), then fallback to Azure Blob
+  const localFilePath = path.join(process.cwd(), 'public', 'data', 'IBSA_ModelReady_Enhanced_WithPredictions.csv')
+  
+  if (fs.existsSync(localFilePath)) {
+    // Use local file if available (development)
+    console.log(`📂 [Server] Reading from local file: ${localFilePath}`)
+    csvText = fs.readFileSync(localFilePath, 'utf-8')
   } else {
-    // Fetch from remote URL
+    // Fallback to Azure Blob (production or if local file missing)
+    const BLOB_URL = process.env.NEXT_PUBLIC_BLOB_URL ||
+      'https://ibsangdpocdata.blob.core.windows.net/ngddatasets/IBSA_ModelReady_Enhanced_WithPredictions.csv'
+    
     console.log(`📥 [Server] Fetching from Azure Blob: ${BLOB_URL}`)
     const res = await fetch(BLOB_URL)
     if (!res.ok) {
