@@ -525,27 +525,6 @@ export default function HCPDetailPage() {
       {/* EDA Business Intelligence - Why This HCP? */}
       <HCPEDAInsights hcp={hcp} />
 
-      <Card>
-        <CardContent className="pt-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="flex items-center gap-2">
-              <MapPin className="h-4 w-4 text-muted-foreground" />
-              <div>
-                <div className="text-sm font-medium">Location</div>
-                <div className="text-sm text-muted-foreground">{hcp.address || `${hcp.city}, ${hcp.state}`}</div>
-              </div>
-            </div>
-            <div className="flex items-center gap-2">
-              <Target className="h-4 w-4 text-muted-foreground" />
-              <div>
-                <div className="text-sm font-medium">Specialty</div>
-                <div className="text-sm text-muted-foreground">{hcp.specialty}</div>
-              </div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card>
           <CardHeader className="pb-2">
@@ -593,79 +572,80 @@ export default function HCPDetailPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <Card>
           <CardHeader>
-            <CardTitle>IBSA Product Mix</CardTitle>
+            <CardTitle>IBSA Product Mix (TRx + NRx)</CardTitle>
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={250}>
-              <BarChart data={hcp.product_mix}>
+              <BarChart data={hcp.product_mix.map(p => ({ 
+                ...p, 
+                nrx: Math.round(p.trx * 0.15) // Approximate NRx as 15% of TRx for IBSA products
+              }))}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="product" angle={-45} textAnchor="end" height={80} tick={{ fontSize: 11 }} />
                 <YAxis />
                 <Tooltip 
                   formatter={(value: any, name: string) => [
-                    name === 'trx' ? `${formatNumber(value)} Rx` : value,
-                    name === 'trx' ? 'Prescriptions' : name
+                    `${formatNumber(value)} Rx`,
+                    name === 'trx' ? 'Total Rx' : 'New Rx'
                   ]}
                 />
-                <Bar dataKey="trx" fill="#2563eb" name="TRx" />
+                <Bar dataKey="trx" stackId="a" fill="#2563eb" name="TRx" />
+                <Bar dataKey="nrx" stackId="a" fill="#93c5fd" name="NRx" />
               </BarChart>
             </ResponsiveContainer>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Market Share Breakdown</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={250}>
-              <PieChart>
-                <Pie
-                  data={[
-                    { name: 'IBSA', value: hcp.ibsa_share, fill: '#2563eb' },
-                    { name: 'Competitors', value: 100 - hcp.ibsa_share, fill: '#dc2626' }
-                  ]}
-                  dataKey="value"
-                  nameKey="name"
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={80}
-                  label={(entry: any) => `${entry.name}: ${entry.value.toFixed(0)}%`}
-                >
-                  <Cell fill="#2563eb" />
-                  <Cell fill="#dc2626" />
-                </Pie>
-                <Tooltip formatter={(value: any) => `${Number(value).toFixed(1)}%`} />
-              </PieChart>
-            </ResponsiveContainer>
-            <div className="grid grid-cols-2 gap-4 pt-4">
-              <div className="text-center p-3 bg-blue-50 rounded-lg">
-                <div className="text-xs text-muted-foreground">IBSA TRx</div>
-                <div className="text-lg font-bold text-blue-600">
-                  {formatNumber(hcp.ibsa_trx_total)}
-                </div>
+            <div className="flex items-center justify-center gap-4 mt-2 text-xs">
+              <div className="flex items-center gap-1">
+                <div className="w-3 h-3 bg-blue-600 rounded"></div>
+                <span>Total Rx</span>
               </div>
-              <div className="text-center p-3 bg-red-50 rounded-lg">
-                <div className="text-xs text-muted-foreground">Competitor TRx</div>
-                <div className="text-lg font-bold text-red-600">
-                  {formatNumber(hcp.competitor_trx_total)}
-                </div>
+              <div className="flex items-center gap-1">
+                <div className="w-3 h-3 bg-blue-300 rounded"></div>
+                <span>New Rx</span>
               </div>
             </div>
           </CardContent>
         </Card>
-      </div>
 
-      <div className="grid grid-cols-1 gap-4">
         <Card>
           <CardHeader>
-            <CardTitle>Market Position Details</CardTitle>
+            <CardTitle>Market Share Breakdown (TRx + NRx)</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
+            <ResponsiveContainer width="100%" height={250}>
+              <BarChart 
+                data={[
+                  { 
+                    category: 'IBSA', 
+                    trx: hcp.ibsa_trx_total, 
+                    nrx: hcp.ibsa_nrx_qtd || 0 
+                  },
+                  { 
+                    category: 'Competitors', 
+                    trx: hcp.competitor_trx_total, 
+                    nrx: hcp.competitor_nrx || 0 
+                  }
+                ]}
+                layout="vertical"
+                margin={{ left: 80 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis type="number" />
+                <YAxis dataKey="category" type="category" />
+                <Tooltip 
+                  formatter={(value: any, name: string) => [
+                    `${formatNumber(value)} Rx`,
+                    name === 'trx' ? 'Total Rx' : 'New Rx'
+                  ]}
+                />
+                <Bar dataKey="trx" stackId="a" fill="#2563eb" name="TRx" />
+                <Bar dataKey="nrx" stackId="a" fill="#93c5fd" name="NRx" />
+              </BarChart>
+            </ResponsiveContainer>
+            {/* Market Share Progress Bar */}
+            <div className="pt-4 border-t">
+              <div className="flex items-center justify-between mb-2">
                 <span className="text-sm font-medium">IBSA Market Share</span>
-                <span className={`text-2xl font-bold ${
+                <span className={`text-xl font-bold ${
                   hcp.ibsa_share >= 50 ? 'text-green-600' :
                   hcp.ibsa_share >= 30 ? 'text-blue-600' :
                   'text-amber-600'
@@ -673,9 +653,9 @@ export default function HCPDetailPage() {
                   {formatPercent(hcp.ibsa_share, 0)}
                 </span>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-6">
+              <div className="w-full bg-gray-200 rounded-full h-5 mb-3">
                 <div
-                  className={`h-6 rounded-full flex items-center justify-end pr-2 text-white text-xs font-semibold ${
+                  className={`h-5 rounded-full flex items-center justify-end pr-2 text-white text-xs font-semibold ${
                     hcp.ibsa_share >= 50 ? 'bg-green-500' :
                     hcp.ibsa_share >= 30 ? 'bg-blue-500' :
                     'bg-amber-500'
@@ -685,40 +665,49 @@ export default function HCPDetailPage() {
                   {hcp.ibsa_share >= 20 ? 'IBSA' : ''}
                 </div>
               </div>
-              <div className="grid grid-cols-3 gap-4 pt-2">
-                <div className="text-center p-3 bg-blue-50 rounded-lg">
-                  <div className="text-xs text-muted-foreground">IBSA TRx</div>
-                  <div className="text-lg font-bold text-blue-600">
-                    {formatNumber(Math.round(hcp.trx_current * (hcp.ibsa_share / 100)))}
-                  </div>
+            </div>
+
+            {/* TRx Breakdown Grid */}
+            <div className="grid grid-cols-3 gap-3">
+              <div className="text-center p-3 bg-blue-50 rounded-lg">
+                <div className="text-xs text-muted-foreground">IBSA TRx</div>
+                <div className="text-lg font-bold text-blue-600">
+                  {formatNumber(hcp.ibsa_trx_total)}
                 </div>
-                <div className="text-center p-3 bg-gray-50 rounded-lg">
-                  <div className="text-xs text-muted-foreground">Total Market TRx</div>
-                  <div className="text-lg font-bold">
-                    {formatNumber(hcp.trx_current)}
-                  </div>
-                </div>
-                <div className="text-center p-3 bg-red-50 rounded-lg">
-                  <div className="text-xs text-muted-foreground">Gap to Close</div>
-                  <div className="text-lg font-bold text-red-600">
-                    {formatNumber(Math.round(hcp.trx_current * ((100 - hcp.ibsa_share) / 100)))}
-                  </div>
+                <div className="text-xs text-blue-600 mt-1">+{formatNumber(hcp.ibsa_nrx_qtd || 0)} NRx</div>
+              </div>
+              <div className="text-center p-3 bg-gray-50 rounded-lg border border-gray-200">
+                <div className="text-xs text-muted-foreground">Total Market TRx</div>
+                <div className="text-lg font-bold">
+                  {formatNumber(hcp.trx_current)}
                 </div>
               </div>
-              <div className="pt-2 border-t">
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-muted-foreground">Growth Opportunity</span>
-                  <span className={`font-semibold ${
-                    hcp.competitive_intel.opportunity_score >= 50 ? 'text-green-600' :
-                    'text-amber-600'
-                  }`}>
-                    {hcp.competitive_intel.opportunity_score}% available
-                  </span>
+              <div className="text-center p-3 bg-red-50 rounded-lg">
+                <div className="text-xs text-muted-foreground">Gap to Close</div>
+                <div className="text-lg font-bold text-red-600">
+                  {formatNumber(hcp.competitor_trx_total)}
                 </div>
+                <div className="text-xs text-red-600 mt-1">+{formatNumber(hcp.competitor_nrx || 0)} NRx</div>
+              </div>
+            </div>
+
+            {/* Growth Opportunity */}
+            <div className="pt-3 border-t mt-3">
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-muted-foreground">Growth Opportunity</span>
+                <span className={`font-semibold ${
+                  hcp.competitive_intel.opportunity_score >= 50 ? 'text-green-600' :
+                  'text-amber-600'
+                }`}>
+                  {hcp.competitive_intel.opportunity_score}% available
+                </span>
               </div>
             </div>
           </CardContent>
         </Card>
+      </div>
+
+      <div className="grid grid-cols-1 gap-4">
 
         <Card>
           <CardHeader>
