@@ -404,7 +404,7 @@ export default function HCPDetailPage() {
                             <strong>Market Entry Opportunity:</strong>
                             <div className="ml-4 mt-1">
                               <div className="text-xs">• <span className="font-semibold">First-mover advantage:</span> {hcp.competitive_intel?.competitive_situation === 'Not Using IBSA' ? 'Establish IBSA as preferred brand' : 'Early adoption window open'}</div>
-                              <div className="text-xs">• <span className="font-semibold">Competitive landscape:</span> {hcp.competitive_intel?.competitor_product_distribution?.map(c => c.product).slice(0,2).join(' and ') || 'Generic competitors'} currently prescribe ~{hcp.competitive_intel?.competitor_trx_est || 0} TRx</div>
+                              <div className="text-xs">• <span className="font-semibold">Competitive landscape:</span> {hcp.competitive_intel?.competitor_product_distribution?.map(c => c.product).slice(0,2).join(' and ') || 'Generic competitors'} currently prescribe ~{formatNumber(hcp.competitor_trx_total || 0)} TRx</div>
                               <div className="text-[10px] text-gray-500 mt-1">
                                 (Position {hcp.predictions.product_focus} as superior alternative)
                               </div>

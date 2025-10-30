@@ -2,6 +2,7 @@
 
 import { HCPDetail } from '@/lib/types'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { formatNumber } from '@/lib/utils'
 import { 
   AlertTriangle, 
   TrendingUp, 
@@ -38,7 +39,7 @@ export function HCPEDAInsights({ hcp }: HCPInsightsProps) {
     // OPPORTUNITY DETECTION (264 HCPs identified in EDA)
     isOpportunity: hcp.trx_current > 50 && hcp.ibsa_share < 25,
     opportunityReason: hcp.trx_current > 50 && hcp.ibsa_share < 25
-      ? `High prescribing volume (${hcp.trx_current} TRx) but low IBSA share (${hcp.ibsa_share.toFixed(0)}%) - ${(100 - hcp.ibsa_share).toFixed(0)}% growth potential`
+      ? `High prescribing volume (${formatNumber(hcp.trx_current)} TRx) but low IBSA share (${hcp.ibsa_share.toFixed(0)}%) - ${(100 - hcp.ibsa_share).toFixed(0)}% growth potential`
       : null,
     
     // SAMPLE BLACK HOLE DETECTION - Using forecasted lift as proxy
@@ -84,7 +85,7 @@ export function HCPEDAInsights({ hcp }: HCPInsightsProps) {
     <div className="space-y-4">
       
       {/* Critical Alerts - Show first */}
-      <div className="space-y-2">
+      <div className="space-y-4">
         
         {/* AT-RISK ALERT (660 HCPs from EDA) */}
         {insights.isAtRisk && (
