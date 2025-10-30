@@ -267,7 +267,11 @@ export async function getHCPs(filters?: {
       value_score: Number(row.expected_roi) || 0,
       rx_lift: Number(row.forecasted_lift) || 0,
       ngd_decile: 5,
-      ngd_classification: String(row.ngd_classification || 'Stable')
+      ngd_classification: String(row.ngd_classification || 'Stable'),
+      // Product-specific TRx from CSV
+      flector_trx: Number(row.flector_trx) || 0,
+      licart_trx: Number(row.licart_trx) || 0,
+      tirosint_trx: Number(row.TRx_Current) - Number(row.flector_trx || 0) - Number(row.licart_trx || 0) || 0
     }
   })
 }

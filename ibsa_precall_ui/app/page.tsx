@@ -448,7 +448,7 @@ export default function DashboardPage() {
         </CardContent>
       </Card>
 
-      {/* Summary Stats */}
+      {/* Summary Stats - Top Row */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card className="border-2 border-blue-500">
           <CardContent className="pt-6">
@@ -457,6 +457,10 @@ export default function DashboardPage() {
               <div className="text-sm font-medium">Total HCPs</div>
             </div>
             <div className="text-3xl font-bold">{formatNumber(filteredData.length)}</div>
+            <div className="text-xs text-gray-500 mt-1">
+              {formatNumber(filteredData.filter(h => h.ngd_classification === 'New').length)} New • {' '}
+              {formatNumber(filteredData.filter(h => h.ngd_classification === 'Grower').length)} Growers
+            </div>
           </CardContent>
         </Card>
         
@@ -464,10 +468,13 @@ export default function DashboardPage() {
           <CardContent className="pt-6">
             <div className="flex items-center gap-2 text-green-600 mb-2">
               <TrendingUp className="h-5 w-5" />
-              <div className="text-sm font-medium">Growing</div>
+              <div className="text-sm font-medium">Total TRx</div>
             </div>
             <div className="text-3xl font-bold text-green-600">
-              {formatNumber(filteredData.filter(h => h.trx_growth > 0).length)}
+              {formatNumber(filteredData.reduce((sum, h) => sum + h.trx_current, 0))}
+            </div>
+            <div className="text-xs text-gray-500 mt-1">
+              Avg: {(filteredData.reduce((sum, h) => sum + h.trx_current, 0) / Math.max(filteredData.length, 1)).toFixed(1)} per HCP
             </div>
           </CardContent>
         </Card>
@@ -475,23 +482,107 @@ export default function DashboardPage() {
         <Card className="border-2 border-purple-500">
           <CardContent className="pt-6">
             <div className="flex items-center gap-2 text-purple-600 mb-2">
-              <DollarSign className="h-5 w-5" />
-              <div className="text-sm font-medium">Total TRx</div>
+              <Sparkles className="h-5 w-5" />
+              <div className="text-sm font-medium">Avg Power Score</div>
             </div>
             <div className="text-3xl font-bold">
-              {formatNumber(filteredData.reduce((sum, h) => sum + h.trx_current, 0))}
+              {(filteredData.reduce((sum, h) => sum + (h.value_score || 0), 0) / Math.max(filteredData.length, 1)).toFixed(0)}
+            </div>
+            <div className="text-xs text-gray-500 mt-1">
+              {formatNumber(filteredData.filter(h => (h.value_score || 0) >= 75).length)} High Value (75+)
             </div>
           </CardContent>
         </Card>
         
-        <Card className="border-2 border-yellow-500">
+        <Card className="border-2 border-orange-500">
           <CardContent className="pt-6">
-            <div className="flex items-center gap-2 text-yellow-600 mb-2">
+            <div className="flex items-center gap-2 text-orange-600 mb-2">
               <Target className="h-5 w-5" />
-              <div className="text-sm font-medium">High Value</div>
+              <div className="text-sm font-medium">Avg Call Success</div>
             </div>
-            <div className="text-3xl font-bold text-yellow-600">
-              {formatNumber(filteredData.filter(h => (h.value_score || 0) > 0.7).length)}
+            <div className="text-3xl font-bold text-orange-600">
+              {(filteredData.reduce((sum, h) => sum + ((h.call_success_score || 0) * 100), 0) / Math.max(filteredData.length, 1)).toFixed(0)}%
+            </div>
+            <div className="text-xs text-gray-500 mt-1">
+              {formatNumber(filteredData.filter(h => (h.call_success_score || 0) >= 0.7).length)} High Probability (70%+)
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Product Mix Summary - Second Row */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <Card className="border-2 border-teal-500">
+          <CardContent className="pt-6">
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-2 text-teal-600">
+                <DollarSign className="h-5 w-5" />
+                <div className="text-sm font-medium">Tirosint TRx</div>
+              </div>
+              <span className="px-2 py-1 bg-teal-100 text-teal-700 rounded text-xs font-bold">T4</span>
+            </div>
+            <div className="text-3xl font-bold text-teal-600">
+              {formatNumber(filteredData.reduce((sum, h) => {
+                const productMix = h.product_mix || []
+                const tirosintProduct = productMix.find(p => p.product.toLowerCase().includes('tirosint'))
+                return sum + (tirosintProduct?.trx || 0)
+              }, 0))}
+            </div>
+            <div className="text-xs text-gray-500 mt-1">
+              {formatNumber(filteredData.filter(h => {
+                const productMix = h.product_mix || []
+                return productMix.some(p => p.product.toLowerCase().includes('tirosint') && p.trx > 0)
+              }).length)} HCPs prescribing
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-2 border-pink-500">
+          <CardContent className="pt-6">
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-2 text-pink-600">
+                <DollarSign className="h-5 w-5" />
+                <div className="text-sm font-medium">Flector TRx</div>
+              </div>
+              <span className="px-2 py-1 bg-pink-100 text-pink-700 rounded text-xs font-bold">PAIN</span>
+            </div>
+            <div className="text-3xl font-bold text-pink-600">
+              {formatNumber(filteredData.reduce((sum, h) => {
+                const productMix = h.product_mix || []
+                const flectorProduct = productMix.find(p => p.product.toLowerCase().includes('flector'))
+                return sum + (flectorProduct?.trx || 0)
+              }, 0))}
+            </div>
+            <div className="text-xs text-gray-500 mt-1">
+              {formatNumber(filteredData.filter(h => {
+                const productMix = h.product_mix || []
+                return productMix.some(p => p.product.toLowerCase().includes('flector') && p.trx > 0)
+              }).length)} HCPs prescribing
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-2 border-indigo-500">
+          <CardContent className="pt-6">
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-2 text-indigo-600">
+                <DollarSign className="h-5 w-5" />
+                <div className="text-sm font-medium">Licart TRx</div>
+              </div>
+              <span className="px-2 py-1 bg-indigo-100 text-indigo-700 rounded text-xs font-bold">CVD</span>
+            </div>
+            <div className="text-3xl font-bold text-indigo-600">
+              {formatNumber(filteredData.reduce((sum, h) => {
+                const productMix = h.product_mix || []
+                const licartProduct = productMix.find(p => p.product.toLowerCase().includes('licart'))
+                return sum + (licartProduct?.trx || 0)
+              }, 0))}
+            </div>
+            <div className="text-xs text-gray-500 mt-1">
+              {formatNumber(filteredData.filter(h => {
+                const productMix = h.product_mix || []
+                return productMix.some(p => p.product.toLowerCase().includes('licart') && p.trx > 0)
+              }).length)} HCPs prescribing
             </div>
           </CardContent>
         </Card>
@@ -578,39 +669,47 @@ export default function DashboardPage() {
                     <Tooltip content="Total Rx written this quarter (QTD)" />
                   </div>
                 </th>
-                <th className="px-2 py-2 text-right text-[11px] font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100" onClick={() => handleSort('trx_prior')}>
-                  <div className="flex items-center justify-end">
-                    Prior TRx
-                    <SortIcon column="trx_prior" />
-                    <Tooltip content="Total Rx previous quarter (for comparison)" />
+                <th className="px-2 py-2 text-right text-[11px] font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100 bg-teal-50" onClick={() => handleSort('tirosint_trx')}>
+                  <div className="flex items-center justify-end gap-1">
+                    <span className="text-teal-600">Tirosint TRx</span>
+                    <SortIcon column="tirosint_trx" />
+                    <Tooltip content="Tirosint prescriptions (T4 Replacement)" />
                   </div>
                 </th>
-                <th className="px-2 py-2 text-right text-[11px] font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100" onClick={() => handleSort('trx_growth')}>
-                  <div className="flex items-center justify-end">
-                    Growth %
-                    <SortIcon column="trx_growth" />
-                    <Tooltip content="Rule: ((Current - Prior) / Prior) × 100" />
+                <th className="px-2 py-2 text-right text-[11px] font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100 bg-pink-50" onClick={() => handleSort('flector_trx')}>
+                  <div className="flex items-center justify-end gap-1">
+                    <span className="text-pink-600">Flector TRx</span>
+                    <SortIcon column="flector_trx" />
+                    <Tooltip content="Flector prescriptions (Pain Management)" />
                   </div>
                 </th>
-                <th className="px-2 py-2 text-right text-[11px] font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100" onClick={() => handleSort('nrx_count')}>
-                  <div className="flex items-center justify-end">
-                    NRx
-                    <SortIcon column="nrx_count" />
-                    <Tooltip content="New Rx (first-time prescriptions for new patients)" />
+                <th className="px-2 py-2 text-right text-[11px] font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100 bg-indigo-50" onClick={() => handleSort('licart_trx')}>
+                  <div className="flex items-center justify-end gap-1">
+                    <span className="text-indigo-600">Licart TRx</span>
+                    <SortIcon column="licart_trx" />
+                    <Tooltip content="Licart prescriptions (Cardiovascular)" />
                   </div>
                 </th>
-                <th className="px-2 py-2 text-right text-[11px] font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100" onClick={() => handleSort('ibsa_share')}>
-                  <div className="flex items-center justify-end">
-                    Market Share
-                    <SortIcon column="ibsa_share" />
-                    <Tooltip content="Rule: (Your TRx / Total TRx) × 100" />
+                <th className="px-2 py-2 text-right text-[11px] font-medium text-gray-500 uppercase border-b bg-purple-50 cursor-pointer hover:bg-gray-100" onClick={() => handleSort('forecasted_lift')}>
+                  <div className="flex items-center justify-end gap-1">
+                    <Bot className="h-3 w-3 text-purple-600" />
+                    <span className="flex items-center gap-1">
+                      Forecast Lift
+                      <span className="px-1.5 py-0.5 bg-purple-200 text-purple-700 rounded text-[10px] font-bold">AI</span>
+                    </span>
+                    <SortIcon column="forecasted_lift" />
+                    <Tooltip content="ML Predicted TRx lift from successful engagement" />
                   </div>
                 </th>
-                <th className="px-2 py-2 text-right text-[11px] font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100" onClick={() => handleSort('rx_lift')}>
-                  <div className="flex items-center justify-end">
-                    Rx Lift
-                    <SortIcon column="rx_lift" />
-                    <Tooltip content="Predicted incremental TRx lift (higher = more revenue impact)" />
+                <th className="px-2 py-2 text-right text-[11px] font-medium text-gray-500 uppercase border-b bg-purple-50 cursor-pointer hover:bg-gray-100" onClick={() => handleSort('expected_roi')}>
+                  <div className="flex items-center justify-end gap-1">
+                    <Sparkles className="h-3 w-3 text-purple-600" />
+                    <span className="flex items-center gap-1">
+                      Expected ROI
+                      <span className="px-1.5 py-0.5 bg-purple-200 text-purple-700 rounded text-[10px] font-bold">AI</span>
+                    </span>
+                    <SortIcon column="expected_roi" />
+                    <Tooltip content="ML Predicted return on investment score" />
                   </div>
                 </th>
                 <th className="px-2 py-2 text-left text-[11px] font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100" onClick={() => handleSort('call_success_score')}>
@@ -689,23 +788,31 @@ export default function DashboardPage() {
                       </div>
                     </td>
                     <td className="px-2 py-2 text-right text-xs font-mono">{formatNumber(hcp.trx_current)}</td>
-                    <td className="px-2 py-2 text-right text-xs font-mono text-muted-foreground">{formatNumber(hcp.trx_prior)}</td>
-                    <td className="px-2 py-2 text-right text-xs font-mono">
-                      <span className={hcp.trx_growth > 0 ? 'text-green-600' : hcp.trx_growth < 0 ? 'text-red-600' : ''}>
-                        {hcp.trx_growth > 0 ? '↑' : hcp.trx_growth < 0 ? '↓' : '→'} {formatPercent(Math.abs(hcp.trx_growth), 1)}
+                    <td className="px-2 py-2 text-right text-xs font-mono bg-teal-50">
+                      <span className={`font-semibold ${(hcp.tirosint_trx || 0) > 0 ? 'text-teal-600' : 'text-gray-400'}`}>
+                        {formatNumber(hcp.tirosint_trx || 0)}
                       </span>
                     </td>
-                    <td className="px-2 py-2 text-right text-xs font-mono">{formatNumber(hcp.nrx_count)}</td>
-                    <td className="px-2 py-2 text-right">
-                      <span className={`inline-flex items-center px-2 py-1 rounded text-xs font-semibold ${
-                        hcp.ibsa_share >= 50 ? 'bg-green-100 text-green-700' :
-                        hcp.ibsa_share >= 30 ? 'bg-blue-100 text-blue-700' :
-                        'bg-amber-100 text-amber-700'
-                      }`}>
-                        {formatPercent(hcp.ibsa_share, 0)}
+                    <td className="px-2 py-2 text-right text-xs font-mono bg-pink-50">
+                      <span className={`font-semibold ${(hcp.flector_trx || 0) > 0 ? 'text-pink-600' : 'text-gray-400'}`}>
+                        {formatNumber(hcp.flector_trx || 0)}
                       </span>
                     </td>
-                    <td className="px-2 py-2 text-right text-xs font-mono">{formatNumber(hcp.rx_lift || 0)}</td>
+                    <td className="px-2 py-2 text-right text-xs font-mono bg-indigo-50">
+                      <span className={`font-semibold ${(hcp.licart_trx || 0) > 0 ? 'text-indigo-600' : 'text-gray-400'}`}>
+                        {formatNumber(hcp.licart_trx || 0)}
+                      </span>
+                    </td>
+                    <td className="px-2 py-2 text-right text-xs font-mono bg-purple-50">
+                      <span className={`font-semibold ${hcp.trx_growth > 0 ? 'text-green-600' : hcp.trx_growth < 0 ? 'text-red-600' : 'text-gray-500'}`}>
+                        {hcp.trx_growth > 0 ? '+' : ''}{hcp.trx_growth.toFixed(2)}
+                      </span>
+                    </td>
+                    <td className="px-2 py-2 text-right text-xs font-mono bg-purple-50">
+                      <span className={`font-semibold ${hcp.value_score >= 50 ? 'text-green-600' : hcp.value_score >= 25 ? 'text-blue-600' : 'text-gray-500'}`}>
+                        {hcp.value_score.toFixed(1)}
+                      </span>
+                    </td>
                     <td className="px-2 py-2">
                       <div className="w-16">
                         <div className="w-full bg-gray-200 rounded-full h-1.5">

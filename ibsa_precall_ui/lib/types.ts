@@ -22,6 +22,10 @@ export interface HCP {
   rx_lift?: number
   ngd_classification: 'New' | 'Grower' | 'Stable' | 'Decliner'
   ngd_decile: number
+  // Product-specific TRx from CSV
+  flector_trx?: number
+  licart_trx?: number
+  tirosint_trx?: number
 }
 
 export interface HCPDetail extends HCP {
