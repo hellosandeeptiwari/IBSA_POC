@@ -1,12 +1,308 @@
 {
   "summary": {
-    "total_features_analyzed": 326,
-    "features_to_keep": 256,
-    "features_to_remove": 70,
-    "reduction_percentage": 21.47,
-    "high_priority_features": 107
+    "total_features_analyzed": 340,
+    "features_to_keep": 260,
+    "features_to_remove": 80,
+    "reduction_percentage": 23.53,
+    "high_priority_features": 110
   },
   "decisions": {
+    "prescriber_overview.frequency": {
+      "feature": "prescriber_overview.frequency",
+      "action": "KEEP",
+      "reasons": [
+        "High value score (top 25%)"
+      ],
+      "priority": "HIGH",
+      "coverage": 100.0,
+      "coefficient_of_variation": 3.2469,
+      "value_score": 1.0
+    },
+    "prescriber_overview.monetary": {
+      "feature": "prescriber_overview.monetary",
+      "action": "KEEP",
+      "reasons": [
+        "High value score (top 25%)"
+      ],
+      "priority": "HIGH",
+      "coverage": 100.0,
+      "coefficient_of_variation": 3.0953,
+      "value_score": 1.0
+    },
+    "prescriber_overview.product_count": {
+      "feature": "prescriber_overview.product_count",
+      "action": "KEEP",
+      "reasons": [
+        "High value score (top 25%)"
+      ],
+      "priority": "HIGH",
+      "coverage": 100.0,
+      "coefficient_of_variation": 2.2288,
+      "value_score": 1.0
+    },
+    "prescriber_profile.Credentials": {
+      "feature": "prescriber_profile.Credentials",
+      "action": "REMOVE",
+      "reasons": [
+        "Low coverage (<50%)"
+      ],
+      "priority": "MEDIUM",
+      "coverage": 0.0,
+      "coefficient_of_variation": NaN,
+      "value_score": NaN
+    },
+    "prescriber_profile.AMANoContact": {
+      "feature": "prescriber_profile.AMANoContact",
+      "action": "REMOVE",
+      "reasons": [
+        "Low coverage (<50%)"
+      ],
+      "priority": "MEDIUM",
+      "coverage": 0.0,
+      "coefficient_of_variation": NaN,
+      "value_score": NaN
+    },
+    "prescriber_profile.ProductPriority": {
+      "feature": "prescriber_profile.ProductPriority",
+      "action": "REMOVE",
+      "reasons": [
+        "Low coverage (<50%)"
+      ],
+      "priority": "MEDIUM",
+      "coverage": 0.0,
+      "coefficient_of_variation": NaN,
+      "value_score": NaN
+    },
+    "prescriber_profile.TRX": {
+      "feature": "prescriber_profile.TRX",
+      "action": "KEEP",
+      "reasons": [
+        "High value score (top 25%)"
+      ],
+      "priority": "HIGH",
+      "coverage": 100.0,
+      "coefficient_of_variation": 1.4552,
+      "value_score": 1.0
+    },
+    "prescriber_profile.NRX": {
+      "feature": "prescriber_profile.NRX",
+      "action": "KEEP",
+      "reasons": [
+        "High value score (top 25%)"
+      ],
+      "priority": "HIGH",
+      "coverage": 100.0,
+      "coefficient_of_variation": 2.2442,
+      "value_score": 1.0
+    },
+    "prescriber_profile.NQTY": {
+      "feature": "prescriber_profile.NQTY",
+      "action": "KEEP",
+      "reasons": [
+        "High value score (top 25%)"
+      ],
+      "priority": "HIGH",
+      "coverage": 100.0,
+      "coefficient_of_variation": 1.8768,
+      "value_score": 1.0
+    },
+    "prescriber_profile.TQTY": {
+      "feature": "prescriber_profile.TQTY",
+      "action": "KEEP",
+      "reasons": [
+        "High value score (top 25%)"
+      ],
+      "priority": "HIGH",
+      "coverage": 100.0,
+      "coefficient_of_variation": 1.0963,
+      "value_score": 1.0
+    },
+    "prescriber_overview.nrx_ratio": {
+      "feature": "prescriber_overview.nrx_ratio",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 99.94,
+      "coefficient_of_variation": 1.1537,
+      "value_score": 0.9994
+    },
+    "prescriber_profile.MeNumber": {
+      "feature": "prescriber_profile.MeNumber",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 100.0,
+      "coefficient_of_variation": 0.5124,
+      "value_score": 0.5124
+    },
+    "prescriber_profile.NPINumber": {
+      "feature": "prescriber_profile.NPINumber",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 100.0,
+      "coefficient_of_variation": 0.221,
+      "value_score": 0.221
+    },
+    "prescriber_overview.trx_change": {
+      "feature": "prescriber_overview.trx_change",
+      "action": "REMOVE",
+      "reasons": [
+        "Zero variance (CV < 0.01)"
+      ],
+      "priority": "MEDIUM",
+      "coverage": 70.2,
+      "coefficient_of_variation": -9.7705,
+      "value_score": -6.8588
+    },
+    "prescriber_overview.velocity_13wk": {
+      "feature": "prescriber_overview.velocity_13wk",
+      "action": "REMOVE",
+      "reasons": [
+        "Zero variance (CV < 0.01)"
+      ],
+      "priority": "MEDIUM",
+      "coverage": 70.2,
+      "coefficient_of_variation": -12.6623,
+      "value_score": -8.8888
+    },
+    "prescriber_profile.Calls": {
+      "feature": "prescriber_profile.Calls",
+      "action": "REMOVE",
+      "reasons": [
+        "Low coverage (<50%)"
+      ],
+      "priority": "MEDIUM",
+      "coverage": 0.0,
+      "coefficient_of_variation": NaN,
+      "value_score": NaN
+    },
+    "prescriber_profile.LunchLearn": {
+      "feature": "prescriber_profile.LunchLearn",
+      "action": "REMOVE",
+      "reasons": [
+        "Low coverage (<50%)"
+      ],
+      "priority": "MEDIUM",
+      "coverage": 0.0,
+      "coefficient_of_variation": NaN,
+      "value_score": NaN
+    },
+    "prescriber_profile.Samples": {
+      "feature": "prescriber_profile.Samples",
+      "action": "REMOVE",
+      "reasons": [
+        "Low coverage (<50%)"
+      ],
+      "priority": "MEDIUM",
+      "coverage": 0.0,
+      "coefficient_of_variation": NaN,
+      "value_score": NaN
+    },
+    "prescriber_profile.LastCallDate": {
+      "feature": "prescriber_profile.LastCallDate",
+      "action": "REMOVE",
+      "reasons": [
+        "Low coverage (<50%)"
+      ],
+      "priority": "MEDIUM",
+      "coverage": 0.0,
+      "coefficient_of_variation": NaN,
+      "value_score": NaN
+    },
+    "prescriber_profile.PreviousNRX": {
+      "feature": "prescriber_profile.PreviousNRX",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 74.29,
+      "coefficient_of_variation": 1.5121,
+      "value_score": 0.7429
+    },
+    "prescriber_profile.PreviousTRX": {
+      "feature": "prescriber_profile.PreviousTRX",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 74.29,
+      "coefficient_of_variation": 0.8261,
+      "value_score": 0.6137
+    },
+    "prescriber_overview.RFM_score": {
+      "feature": "prescriber_overview.RFM_score",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 100.0,
+      "coefficient_of_variation": 0.0386,
+      "value_score": 0.0386
+    },
+    "prescriber_profile.PrescriberAtSameAddress": {
+      "feature": "prescriber_profile.PrescriberAtSameAddress",
+      "action": "REMOVE",
+      "reasons": [
+        "Low coverage (<50%)"
+      ],
+      "priority": "MEDIUM",
+      "coverage": 0.0,
+      "coefficient_of_variation": NaN,
+      "value_score": NaN
+    },
+    "prescriber_profile.PrescriberAtSameAddressSpeciality": {
+      "feature": "prescriber_profile.PrescriberAtSameAddressSpeciality",
+      "action": "REMOVE",
+      "reasons": [
+        "Low coverage (<50%)"
+      ],
+      "priority": "MEDIUM",
+      "coverage": 0.0,
+      "coefficient_of_variation": NaN,
+      "value_score": NaN
+    },
+    "prescriber_profile.PreviousCalls": {
+      "feature": "prescriber_profile.PreviousCalls",
+      "action": "REMOVE",
+      "reasons": [
+        "Low coverage (<50%)"
+      ],
+      "priority": "MEDIUM",
+      "coverage": 0.0,
+      "coefficient_of_variation": NaN,
+      "value_score": NaN
+    },
+    "prescriber_profile.PreviousLunchLearn": {
+      "feature": "prescriber_profile.PreviousLunchLearn",
+      "action": "REMOVE",
+      "reasons": [
+        "Low coverage (<50%)"
+      ],
+      "priority": "MEDIUM",
+      "coverage": 0.0,
+      "coefficient_of_variation": NaN,
+      "value_score": NaN
+    },
+    "prescriber_profile.PreviouSamples": {
+      "feature": "prescriber_profile.PreviouSamples",
+      "action": "REMOVE",
+      "reasons": [
+        "Low coverage (<50%)"
+      ],
+      "priority": "MEDIUM",
+      "coverage": 0.0,
+      "coefficient_of_variation": NaN,
+      "value_score": NaN
+    },
+    "trx_sample.Licart TQTY": {
+      "feature": "trx_sample.Licart TQTY",
+      "action": "KEEP",
+      "reasons": [
+        "High value score (top 25%)"
+      ],
+      "priority": "HIGH",
+      "coverage": 100.0,
+      "coefficient_of_variation": 17.4131,
+      "value_score": 1.0
+    },
     "trx_sample.Tirosint Caps Samples/Tirosint Caps TRX": {
       "feature": "trx_sample.Tirosint Caps Samples/Tirosint Caps TRX",
       "action": "KEEP",
@@ -609,7 +905,7 @@
       ],
       "priority": "HIGH",
       "coverage": 100.0,
-      "coefficient_of_variation": 3.5907,
+      "coefficient_of_variation": 3.6679,
       "value_score": 1.0
     },
     "territory_performance.NRX": {
@@ -620,7 +916,7 @@
       ],
       "priority": "HIGH",
       "coverage": 100.0,
-      "coefficient_of_variation": 3.4811,
+      "coefficient_of_variation": 3.485,
       "value_score": 1.0
     },
     "territory_performance.TQTY": {
@@ -631,7 +927,7 @@
       ],
       "priority": "HIGH",
       "coverage": 100.0,
-      "coefficient_of_variation": 3.359,
+      "coefficient_of_variation": 3.6042,
       "value_score": 1.0
     },
     "territory_performance.NQTY": {
@@ -642,7 +938,7 @@
       ],
       "priority": "HIGH",
       "coverage": 100.0,
-      "coefficient_of_variation": 3.3926,
+      "coefficient_of_variation": 3.6141,
       "value_score": 1.0
     },
     "territory_overview.TRX(C YTD)": {
@@ -653,7 +949,7 @@
       ],
       "priority": "HIGH",
       "coverage": 100.0,
-      "coefficient_of_variation": 3.1261,
+      "coefficient_of_variation": 3.1204,
       "value_score": 1.0
     },
     "territory_overview.TQTY(C YTD)": {
@@ -664,8 +960,625 @@
       ],
       "priority": "HIGH",
       "coverage": 100.0,
-      "coefficient_of_variation": 3.094,
+      "coefficient_of_variation": 2.9886,
       "value_score": 1.0
+    },
+    "territory_performance.PreviousTRX": {
+      "feature": "territory_performance.PreviousTRX",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 99.74,
+      "coefficient_of_variation": 2.6503,
+      "value_score": 0.9974
+    },
+    "territory_performance.PreviousNRX": {
+      "feature": "territory_performance.PreviousNRX",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 99.74,
+      "coefficient_of_variation": 2.6509,
+      "value_score": 0.9974
+    },
+    "territory_performance.PreviousTQTY": {
+      "feature": "territory_performance.PreviousTQTY",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 99.74,
+      "coefficient_of_variation": 2.6029,
+      "value_score": 0.9974
+    },
+    "territory_performance.PreviousNQTY": {
+      "feature": "territory_performance.PreviousNQTY",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 99.74,
+      "coefficient_of_variation": 2.6456,
+      "value_score": 0.9974
+    },
+    "territory_overview.TRX(P YTD)": {
+      "feature": "territory_overview.TRX(P YTD)",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 99.74,
+      "coefficient_of_variation": 2.523,
+      "value_score": 0.9974
+    },
+    "territory_overview.TQTY(P YTD)": {
+      "feature": "territory_overview.TQTY(P YTD)",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 99.74,
+      "coefficient_of_variation": 2.4804,
+      "value_score": 0.9974
+    },
+    "trx_sample.Sample/TRX PDRP": {
+      "feature": "trx_sample.Sample/TRX PDRP",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 97.47,
+      "coefficient_of_variation": 8.1928,
+      "value_score": 0.9747
+    },
+    "trx_sample.Total TRX PDRP": {
+      "feature": "trx_sample.Total TRX PDRP",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 97.47,
+      "coefficient_of_variation": 2.843,
+      "value_score": 0.9747
+    },
+    "trx_sample.Tirosint Caps TRX PDRP": {
+      "feature": "trx_sample.Tirosint Caps TRX PDRP",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 97.47,
+      "coefficient_of_variation": 2.9446,
+      "value_score": 0.9747
+    },
+    "trx_sample.Tirosint Sol TRX PDRP": {
+      "feature": "trx_sample.Tirosint Sol TRX PDRP",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 97.47,
+      "coefficient_of_variation": 5.3438,
+      "value_score": 0.9747
+    },
+    "trx_sample.Flector TRX PDRP": {
+      "feature": "trx_sample.Flector TRX PDRP",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 97.47,
+      "coefficient_of_variation": 17.3239,
+      "value_score": 0.9747
+    },
+    "trx_sample.Licart TRX PDRP": {
+      "feature": "trx_sample.Licart TRX PDRP",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 97.47,
+      "coefficient_of_variation": 14.6168,
+      "value_score": 0.9747
+    },
+    "trx_sample.Sample/TQTY PDRP": {
+      "feature": "trx_sample.Sample/TQTY PDRP",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 97.47,
+      "coefficient_of_variation": 9.1249,
+      "value_score": 0.9747
+    },
+    "trx_sample.Total TQTY PDRP": {
+      "feature": "trx_sample.Total TQTY PDRP",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 97.47,
+      "coefficient_of_variation": 2.95,
+      "value_score": 0.9747
+    },
+    "trx_sample.Tirosint Caps TQTY PDRP": {
+      "feature": "trx_sample.Tirosint Caps TQTY PDRP",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 97.47,
+      "coefficient_of_variation": 3.0443,
+      "value_score": 0.9747
+    },
+    "trx_sample.Tirosint Sol TQTY PDRP": {
+      "feature": "trx_sample.Tirosint Sol TQTY PDRP",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 97.47,
+      "coefficient_of_variation": 5.4913,
+      "value_score": 0.9747
+    },
+    "trx_sample.Flector TQTY PDRP": {
+      "feature": "trx_sample.Flector TQTY PDRP",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 97.47,
+      "coefficient_of_variation": 18.2321,
+      "value_score": 0.9747
+    },
+    "trx_sample.Licart TQTY PDRP": {
+      "feature": "trx_sample.Licart TQTY PDRP",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 97.47,
+      "coefficient_of_variation": 17.3671,
+      "value_score": 0.9747
+    },
+    "nrx_sample.Sample/NRX PDRP": {
+      "feature": "nrx_sample.Sample/NRX PDRP",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 97.47,
+      "coefficient_of_variation": 8.0485,
+      "value_score": 0.9747
+    },
+    "nrx_sample.Total NRX PDRP": {
+      "feature": "nrx_sample.Total NRX PDRP",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 97.47,
+      "coefficient_of_variation": 2.8843,
+      "value_score": 0.9747
+    },
+    "nrx_sample.Tirosint Caps NRX PDRP": {
+      "feature": "nrx_sample.Tirosint Caps NRX PDRP",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 97.47,
+      "coefficient_of_variation": 3.0242,
+      "value_score": 0.9747
+    },
+    "nrx_sample.Tirosint Sol NRX PDRP": {
+      "feature": "nrx_sample.Tirosint Sol NRX PDRP",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 97.47,
+      "coefficient_of_variation": 5.7106,
+      "value_score": 0.9747
+    },
+    "nrx_sample.Flector NRX PDRP": {
+      "feature": "nrx_sample.Flector NRX PDRP",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 97.47,
+      "coefficient_of_variation": 16.1298,
+      "value_score": 0.9747
+    },
+    "nrx_sample.Licart NRX PDRP": {
+      "feature": "nrx_sample.Licart NRX PDRP",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 97.47,
+      "coefficient_of_variation": 12.9304,
+      "value_score": 0.9747
+    },
+    "nrx_sample.Sample/NQTY PDRP": {
+      "feature": "nrx_sample.Sample/NQTY PDRP",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 97.47,
+      "coefficient_of_variation": 8.9549,
+      "value_score": 0.9747
+    },
+    "nrx_sample.Total NQTY PDRP": {
+      "feature": "nrx_sample.Total NQTY PDRP",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 97.47,
+      "coefficient_of_variation": 3.0927,
+      "value_score": 0.9747
+    },
+    "nrx_sample.Tirosint Caps NQTY PDRP": {
+      "feature": "nrx_sample.Tirosint Caps NQTY PDRP",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 97.47,
+      "coefficient_of_variation": 3.2008,
+      "value_score": 0.9747
+    },
+    "nrx_sample.Tirosint Sol NQTY PDRP": {
+      "feature": "nrx_sample.Tirosint Sol NQTY PDRP",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 97.47,
+      "coefficient_of_variation": 6.1647,
+      "value_score": 0.9747
+    },
+    "nrx_sample.Flector NQTY PDRP": {
+      "feature": "nrx_sample.Flector NQTY PDRP",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 97.47,
+      "coefficient_of_variation": 17.2518,
+      "value_score": 0.9747
+    },
+    "nrx_sample.Licart NQTY PDRP": {
+      "feature": "nrx_sample.Licart NQTY PDRP",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 97.47,
+      "coefficient_of_variation": 18.8735,
+      "value_score": 0.9747
+    },
+    "trx_sample.samples_per_trx": {
+      "feature": "trx_sample.samples_per_trx",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 81.77,
+      "coefficient_of_variation": 7.3981,
+      "value_score": 0.8177
+    },
+    "territory_overview.TRX(C13 Wk)": {
+      "feature": "territory_overview.TRX(C13 Wk)",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 75.59,
+      "coefficient_of_variation": 2.6788,
+      "value_score": 0.7559
+    },
+    "territory_overview.TQTY(C13 Wk)": {
+      "feature": "territory_overview.TQTY(C13 Wk)",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 75.59,
+      "coefficient_of_variation": 2.5542,
+      "value_score": 0.7559
+    },
+    "territory_overview.TRX(P13 Wk)": {
+      "feature": "territory_overview.TRX(P13 Wk)",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 75.45,
+      "coefficient_of_variation": 2.1298,
+      "value_score": 0.7545
+    },
+    "territory_overview.TQTY(P13 Wk)": {
+      "feature": "territory_overview.TQTY(P13 Wk)",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 75.45,
+      "coefficient_of_variation": 2.0809,
+      "value_score": 0.7545
+    },
+    "territory_overview.STLYTRX13": {
+      "feature": "territory_overview.STLYTRX13",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 75.34,
+      "coefficient_of_variation": 2.22,
+      "value_score": 0.7534
+    },
+    "territory_overview.STLYTQTY13": {
+      "feature": "territory_overview.STLYTQTY13",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 75.34,
+      "coefficient_of_variation": 2.1739,
+      "value_score": 0.7534
+    },
+    "territory_overview.TRX(C QTD)": {
+      "feature": "territory_overview.TRX(C QTD)",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 74.99,
+      "coefficient_of_variation": 2.663,
+      "value_score": 0.7499
+    },
+    "territory_overview.TQTY(C QTD)": {
+      "feature": "territory_overview.TQTY(C QTD)",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 74.99,
+      "coefficient_of_variation": 2.5383,
+      "value_score": 0.7499
+    },
+    "territory_overview.TRX(P QTD)": {
+      "feature": "territory_overview.TRX(P QTD)",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 74.84,
+      "coefficient_of_variation": 2.1111,
+      "value_score": 0.7484
+    },
+    "territory_overview.TQTY(P QTD)": {
+      "feature": "territory_overview.TQTY(P QTD)",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 74.84,
+      "coefficient_of_variation": 2.0347,
+      "value_score": 0.7484
+    },
+    "territory_overview.STLYTRXQTD": {
+      "feature": "territory_overview.STLYTRXQTD",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 74.73,
+      "coefficient_of_variation": 2.1951,
+      "value_score": 0.7473
+    },
+    "territory_overview.STLYTQTYQTD": {
+      "feature": "territory_overview.STLYTQTYQTD",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 74.73,
+      "coefficient_of_variation": 2.0684,
+      "value_score": 0.7473
+    },
+    "territory_performance.STLYTRX": {
+      "feature": "territory_performance.STLYTRX",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 69.74,
+      "coefficient_of_variation": 2.2939,
+      "value_score": 0.6974
+    },
+    "territory_performance.STLYNRX": {
+      "feature": "territory_performance.STLYNRX",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 69.74,
+      "coefficient_of_variation": 2.3148,
+      "value_score": 0.6974
+    },
+    "territory_performance.STLYTQTY": {
+      "feature": "territory_performance.STLYTQTY",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 69.74,
+      "coefficient_of_variation": 2.2351,
+      "value_score": 0.6974
+    },
+    "territory_performance.STLYNQTY": {
+      "feature": "territory_performance.STLYNQTY",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 69.74,
+      "coefficient_of_variation": 2.313,
+      "value_score": 0.6974
+    },
+    "territory_overview.TRX(C4 Wk)": {
+      "feature": "territory_overview.TRX(C4 Wk)",
+      "action": "REMOVE",
+      "reasons": [
+        "Low coverage (<50%)"
+      ],
+      "priority": "MEDIUM",
+      "coverage": 47.81,
+      "coefficient_of_variation": 2.1008,
+      "value_score": 0.4781
+    },
+    "territory_overview.TQTY(C4 Wk)": {
+      "feature": "territory_overview.TQTY(C4 Wk)",
+      "action": "REMOVE",
+      "reasons": [
+        "Low coverage (<50%)"
+      ],
+      "priority": "MEDIUM",
+      "coverage": 47.81,
+      "coefficient_of_variation": 2.0185,
+      "value_score": 0.4781
+    },
+    "territory_overview.TRX(P4 Wk)": {
+      "feature": "territory_overview.TRX(P4 Wk)",
+      "action": "REMOVE",
+      "reasons": [
+        "Low coverage (<50%)"
+      ],
+      "priority": "MEDIUM",
+      "coverage": 47.6,
+      "coefficient_of_variation": 1.6543,
+      "value_score": 0.476
+    },
+    "territory_overview.TQTY(P4 Wk)": {
+      "feature": "territory_overview.TQTY(P4 Wk)",
+      "action": "REMOVE",
+      "reasons": [
+        "Low coverage (<50%)"
+      ],
+      "priority": "MEDIUM",
+      "coverage": 47.6,
+      "coefficient_of_variation": 1.5605,
+      "value_score": 0.476
+    },
+    "territory_overview.STLYTRX4": {
+      "feature": "territory_overview.STLYTRX4",
+      "action": "REMOVE",
+      "reasons": [
+        "Low coverage (<50%)"
+      ],
+      "priority": "MEDIUM",
+      "coverage": 47.53,
+      "coefficient_of_variation": 1.7088,
+      "value_score": 0.4753
+    },
+    "territory_overview.STLYTQTY4": {
+      "feature": "territory_overview.STLYTQTY4",
+      "action": "REMOVE",
+      "reasons": [
+        "Low coverage (<50%)"
+      ],
+      "priority": "MEDIUM",
+      "coverage": 47.53,
+      "coefficient_of_variation": 1.6469,
+      "value_score": 0.4753
+    },
+    "territory_overview.TRX(C Wk)": {
+      "feature": "territory_overview.TRX(C Wk)",
+      "action": "REMOVE",
+      "reasons": [
+        "Low coverage (<50%)"
+      ],
+      "priority": "MEDIUM",
+      "coverage": 20.88,
+      "coefficient_of_variation": 1.3278,
+      "value_score": 0.2088
+    },
+    "territory_overview.TQTY(C Wk)": {
+      "feature": "territory_overview.TQTY(C Wk)",
+      "action": "REMOVE",
+      "reasons": [
+        "Low coverage (<50%)"
+      ],
+      "priority": "MEDIUM",
+      "coverage": 20.88,
+      "coefficient_of_variation": 1.3245,
+      "value_score": 0.2088
+    },
+    "hcp_universe.NPI": {
+      "feature": "hcp_universe.NPI",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 97.09,
+      "coefficient_of_variation": 0.1923,
+      "value_score": 0.1867
+    },
+    "territory_performance.PreviousTRXWriters": {
+      "feature": "territory_performance.PreviousTRXWriters",
+      "action": "REMOVE",
+      "reasons": [
+        "Zero variance (CV < 0.01)"
+      ],
+      "priority": "MEDIUM",
+      "coverage": 99.74,
+      "coefficient_of_variation": 0.0,
+      "value_score": 0.0
+    },
+    "territory_performance.STLYTRXWriters": {
+      "feature": "territory_performance.STLYTRXWriters",
+      "action": "REMOVE",
+      "reasons": [
+        "Zero variance (CV < 0.01)"
+      ],
+      "priority": "MEDIUM",
+      "coverage": 69.74,
+      "coefficient_of_variation": 0.0,
+      "value_score": 0.0
+    },
+    "territory_overview.TRXWriters(C4 Wk)": {
+      "feature": "territory_overview.TRXWriters(C4 Wk)",
+      "action": "REMOVE",
+      "reasons": [
+        "Low coverage (<50%)",
+        "Zero variance (CV < 0.01)"
+      ],
+      "priority": "MEDIUM",
+      "coverage": 47.81,
+      "coefficient_of_variation": 0.0,
+      "value_score": 0.0
+    },
+    "hcp_universe.ProfessionalDesignation": {
+      "feature": "hcp_universe.ProfessionalDesignation",
+      "action": "REMOVE",
+      "reasons": [
+        "Low coverage (<50%)"
+      ],
+      "priority": "MEDIUM",
+      "coverage": 0.0,
+      "coefficient_of_variation": NaN,
+      "value_score": NaN
+    },
+    "hcp_universe.Zipcode": {
+      "feature": "hcp_universe.Zipcode",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 100.0,
+      "coefficient_of_variation": 0.6186,
+      "value_score": 0.6186
+    },
+    "territory_overview.TRXWriters(C Wk)": {
+      "feature": "territory_overview.TRXWriters(C Wk)",
+      "action": "REMOVE",
+      "reasons": [
+        "Low coverage (<50%)",
+        "Zero variance (CV < 0.01)"
+      ],
+      "priority": "MEDIUM",
+      "coverage": 20.88,
+      "coefficient_of_variation": 0.0,
+      "value_score": 0.0
+    },
+    "hcp_universe.Primary": {
+      "feature": "hcp_universe.Primary",
+      "action": "REMOVE",
+      "reasons": [
+        "Low coverage (<50%)"
+      ],
+      "priority": "MEDIUM",
+      "coverage": 0.0,
+      "coefficient_of_variation": NaN,
+      "value_score": NaN
+    },
+    "call_activity.CallCount": {
+      "feature": "call_activity.CallCount",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 98.5,
+      "coefficient_of_variation": 0.6919,
+      "value_score": 0.6815
+    },
+    "call_activity.FlectorTier": {
+      "feature": "call_activity.FlectorTier",
+      "action": "REMOVE",
+      "reasons": [
+        "Low coverage (<50%)"
+      ],
+      "priority": "MEDIUM",
+      "coverage": 0.0,
+      "coefficient_of_variation": NaN,
+      "value_score": NaN
     },
     "ngd_official.StartDateTqty": {
       "feature": "ngd_official.StartDateTqty",
@@ -876,132 +1789,6 @@
       "coefficient_of_variation": 1.4283,
       "value_score": 1.0
     },
-    "prescriber_overview.TRX(C13 Wk)": {
-      "feature": "prescriber_overview.TRX(C13 Wk)",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 99.91,
-      "coefficient_of_variation": 3.1779,
-      "value_score": 0.9991
-    },
-    "prescriber_overview.NRX(C13 Wk)": {
-      "feature": "prescriber_overview.NRX(C13 Wk)",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 99.91,
-      "coefficient_of_variation": 3.1784,
-      "value_score": 0.9991
-    },
-    "prescriber_overview.TQTY(C13 Wk)": {
-      "feature": "prescriber_overview.TQTY(C13 Wk)",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 99.91,
-      "coefficient_of_variation": 3.0728,
-      "value_score": 0.9991
-    },
-    "prescriber_overview.NQTY(C13 Wk)": {
-      "feature": "prescriber_overview.NQTY(C13 Wk)",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 99.91,
-      "coefficient_of_variation": 3.1704,
-      "value_score": 0.9991
-    },
-    "territory_performance.PreviousTRX": {
-      "feature": "territory_performance.PreviousTRX",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 99.72,
-      "coefficient_of_variation": 2.5757,
-      "value_score": 0.9972
-    },
-    "territory_performance.PreviousNRX": {
-      "feature": "territory_performance.PreviousNRX",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 99.72,
-      "coefficient_of_variation": 2.6286,
-      "value_score": 0.9972
-    },
-    "territory_performance.PreviousTQTY": {
-      "feature": "territory_performance.PreviousTQTY",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 99.72,
-      "coefficient_of_variation": 2.5419,
-      "value_score": 0.9972
-    },
-    "territory_performance.PreviousNQTY": {
-      "feature": "territory_performance.PreviousNQTY",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 99.72,
-      "coefficient_of_variation": 2.6236,
-      "value_score": 0.9972
-    },
-    "territory_overview.TRX(P YTD)": {
-      "feature": "territory_overview.TRX(P YTD)",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 99.71,
-      "coefficient_of_variation": 2.6746,
-      "value_score": 0.9971
-    },
-    "territory_overview.TQTY(P YTD)": {
-      "feature": "territory_overview.TQTY(P YTD)",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 99.71,
-      "coefficient_of_variation": 2.5912,
-      "value_score": 0.9971
-    },
-    "prescriber_overview.TRX(C QTD)": {
-      "feature": "prescriber_overview.TRX(C QTD)",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 98.35,
-      "coefficient_of_variation": 3.1501,
-      "value_score": 0.9835
-    },
-    "prescriber_overview.NRX(C QTD)": {
-      "feature": "prescriber_overview.NRX(C QTD)",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 98.35,
-      "coefficient_of_variation": 3.1511,
-      "value_score": 0.9835
-    },
-    "prescriber_overview.TQTY(C QTD)": {
-      "feature": "prescriber_overview.TQTY(C QTD)",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 98.35,
-      "coefficient_of_variation": 3.0449,
-      "value_score": 0.9835
-    },
-    "prescriber_overview.NQTY(C QTD)": {
-      "feature": "prescriber_overview.NQTY(C QTD)",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 98.35,
-      "coefficient_of_variation": 3.1406,
-      "value_score": 0.9835
-    },
     "call_attainment_tier.PlannedCalls": {
       "feature": "call_attainment_tier.PlannedCalls",
       "action": "KEEP",
@@ -1011,213 +1798,6 @@
       "coefficient_of_variation": 0.9811,
       "value_score": 0.9811
     },
-    "trx_sample.Licart TRX PDRP": {
-      "feature": "trx_sample.Licart TRX PDRP",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 97.47,
-      "coefficient_of_variation": 14.6168,
-      "value_score": 0.9747
-    },
-    "trx_sample.Sample/TQTY PDRP": {
-      "feature": "trx_sample.Sample/TQTY PDRP",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 97.47,
-      "coefficient_of_variation": 9.1249,
-      "value_score": 0.9747
-    },
-    "trx_sample.Total TQTY PDRP": {
-      "feature": "trx_sample.Total TQTY PDRP",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 97.47,
-      "coefficient_of_variation": 2.95,
-      "value_score": 0.9747
-    },
-    "trx_sample.Tirosint Caps TQTY PDRP": {
-      "feature": "trx_sample.Tirosint Caps TQTY PDRP",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 97.47,
-      "coefficient_of_variation": 3.0443,
-      "value_score": 0.9747
-    },
-    "trx_sample.Tirosint Sol TQTY PDRP": {
-      "feature": "trx_sample.Tirosint Sol TQTY PDRP",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 97.47,
-      "coefficient_of_variation": 5.4913,
-      "value_score": 0.9747
-    },
-    "trx_sample.Flector TQTY PDRP": {
-      "feature": "trx_sample.Flector TQTY PDRP",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 97.47,
-      "coefficient_of_variation": 18.2321,
-      "value_score": 0.9747
-    },
-    "trx_sample.Licart TQTY PDRP": {
-      "feature": "trx_sample.Licart TQTY PDRP",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 97.47,
-      "coefficient_of_variation": 17.3671,
-      "value_score": 0.9747
-    },
-    "nrx_sample.Sample/NRX PDRP": {
-      "feature": "nrx_sample.Sample/NRX PDRP",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 97.47,
-      "coefficient_of_variation": 8.0485,
-      "value_score": 0.9747
-    },
-    "nrx_sample.Total NRX PDRP": {
-      "feature": "nrx_sample.Total NRX PDRP",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 97.47,
-      "coefficient_of_variation": 2.8843,
-      "value_score": 0.9747
-    },
-    "nrx_sample.Tirosint Caps NRX PDRP": {
-      "feature": "nrx_sample.Tirosint Caps NRX PDRP",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 97.47,
-      "coefficient_of_variation": 3.0242,
-      "value_score": 0.9747
-    },
-    "nrx_sample.Tirosint Sol NRX PDRP": {
-      "feature": "nrx_sample.Tirosint Sol NRX PDRP",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 97.47,
-      "coefficient_of_variation": 5.7106,
-      "value_score": 0.9747
-    },
-    "nrx_sample.Flector NRX PDRP": {
-      "feature": "nrx_sample.Flector NRX PDRP",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 97.47,
-      "coefficient_of_variation": 16.1298,
-      "value_score": 0.9747
-    },
-    "nrx_sample.Licart NRX PDRP": {
-      "feature": "nrx_sample.Licart NRX PDRP",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 97.47,
-      "coefficient_of_variation": 12.9304,
-      "value_score": 0.9747
-    },
-    "nrx_sample.Sample/NQTY PDRP": {
-      "feature": "nrx_sample.Sample/NQTY PDRP",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 97.47,
-      "coefficient_of_variation": 8.9549,
-      "value_score": 0.9747
-    },
-    "nrx_sample.Total NQTY PDRP": {
-      "feature": "nrx_sample.Total NQTY PDRP",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 97.47,
-      "coefficient_of_variation": 3.0927,
-      "value_score": 0.9747
-    },
-    "nrx_sample.Tirosint Caps NQTY PDRP": {
-      "feature": "nrx_sample.Tirosint Caps NQTY PDRP",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 97.47,
-      "coefficient_of_variation": 3.2008,
-      "value_score": 0.9747
-    },
-    "nrx_sample.Tirosint Sol NQTY PDRP": {
-      "feature": "nrx_sample.Tirosint Sol NQTY PDRP",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 97.47,
-      "coefficient_of_variation": 6.1647,
-      "value_score": 0.9747
-    },
-    "nrx_sample.Flector NQTY PDRP": {
-      "feature": "nrx_sample.Flector NQTY PDRP",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 97.47,
-      "coefficient_of_variation": 17.2518,
-      "value_score": 0.9747
-    },
-    "nrx_sample.Licart NQTY PDRP": {
-      "feature": "nrx_sample.Licart NQTY PDRP",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 97.47,
-      "coefficient_of_variation": 18.8735,
-      "value_score": 0.9747
-    },
-    "prescriber_overview.TRXC13WithPDRP": {
-      "feature": "prescriber_overview.TRXC13WithPDRP",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 97.17,
-      "coefficient_of_variation": 3.1771,
-      "value_score": 0.9717
-    },
-    "prescriber_overview.NRXC13WithPDRP": {
-      "feature": "prescriber_overview.NRXC13WithPDRP",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 97.17,
-      "coefficient_of_variation": 3.1782,
-      "value_score": 0.9717
-    },
-    "prescriber_overview.TQTYC13WithPDRP": {
-      "feature": "prescriber_overview.TQTYC13WithPDRP",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 97.17,
-      "coefficient_of_variation": 3.0658,
-      "value_score": 0.9717
-    },
-    "prescriber_overview.NQTYC13WithPDRP": {
-      "feature": "prescriber_overview.NQTYC13WithPDRP",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 97.17,
-      "coefficient_of_variation": 3.1632,
-      "value_score": 0.9717
-    },
     "call_attainment_tier.PercentageAttainment": {
       "feature": "call_attainment_tier.PercentageAttainment",
       "action": "KEEP",
@@ -1226,42 +1806,6 @@
       "coverage": 100.0,
       "coefficient_of_variation": 0.9637,
       "value_score": 0.9637
-    },
-    "prescriber_overview.TRXCQTDWithPDRP": {
-      "feature": "prescriber_overview.TRXCQTDWithPDRP",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 95.65,
-      "coefficient_of_variation": 3.1491,
-      "value_score": 0.9565
-    },
-    "prescriber_overview.NRXCQTDWithPDRP": {
-      "feature": "prescriber_overview.NRXCQTDWithPDRP",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 95.65,
-      "coefficient_of_variation": 3.1509,
-      "value_score": 0.9565
-    },
-    "prescriber_overview.TQTYCQTDWithPDRP": {
-      "feature": "prescriber_overview.TQTYCQTDWithPDRP",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 95.65,
-      "coefficient_of_variation": 3.0373,
-      "value_score": 0.9565
-    },
-    "prescriber_overview.NQTYCQTDWithPDRP": {
-      "feature": "prescriber_overview.NQTYCQTDWithPDRP",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 95.65,
-      "coefficient_of_variation": 3.133,
-      "value_score": 0.9565
     },
     "call_attainment_tier.Attainment": {
       "feature": "call_attainment_tier.Attainment",
@@ -1290,51 +1834,6 @@
       "coefficient_of_variation": 0.9444,
       "value_score": 0.9444
     },
-    "trx_sample.samples_per_trx": {
-      "feature": "trx_sample.samples_per_trx",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 81.77,
-      "coefficient_of_variation": 7.3981,
-      "value_score": 0.8177
-    },
-    "territory_performance.STLYTRX": {
-      "feature": "territory_performance.STLYTRX",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 78.49,
-      "coefficient_of_variation": 2.204,
-      "value_score": 0.7849
-    },
-    "territory_performance.STLYNRX": {
-      "feature": "territory_performance.STLYNRX",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 78.49,
-      "coefficient_of_variation": 2.2937,
-      "value_score": 0.7849
-    },
-    "territory_performance.STLYTQTY": {
-      "feature": "territory_performance.STLYTQTY",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 78.49,
-      "coefficient_of_variation": 2.1508,
-      "value_score": 0.7849
-    },
-    "territory_performance.STLYNQTY": {
-      "feature": "territory_performance.STLYNQTY",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 78.49,
-      "coefficient_of_variation": 2.3067,
-      "value_score": 0.7849
-    },
     "ngd_official.RoWnumber": {
       "feature": "ngd_official.RoWnumber",
       "action": "KEEP",
@@ -1344,366 +1843,6 @@
       "coefficient_of_variation": 0.7584,
       "value_score": 0.7584
     },
-    "territory_overview.TRX(C13 Wk)": {
-      "feature": "territory_overview.TRX(C13 Wk)",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 75.51,
-      "coefficient_of_variation": 2.7064,
-      "value_score": 0.7551
-    },
-    "territory_overview.TQTY(C13 Wk)": {
-      "feature": "territory_overview.TQTY(C13 Wk)",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 75.51,
-      "coefficient_of_variation": 2.6516,
-      "value_score": 0.7551
-    },
-    "territory_overview.TRX(P13 Wk)": {
-      "feature": "territory_overview.TRX(P13 Wk)",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 75.36,
-      "coefficient_of_variation": 2.221,
-      "value_score": 0.7536
-    },
-    "territory_overview.TQTY(P13 Wk)": {
-      "feature": "territory_overview.TQTY(P13 Wk)",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 75.36,
-      "coefficient_of_variation": 2.11,
-      "value_score": 0.7536
-    },
-    "territory_overview.STLYTRX13": {
-      "feature": "territory_overview.STLYTRX13",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 75.25,
-      "coefficient_of_variation": 2.2242,
-      "value_score": 0.7525
-    },
-    "territory_overview.STLYTQTY13": {
-      "feature": "territory_overview.STLYTQTY13",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 75.25,
-      "coefficient_of_variation": 2.1098,
-      "value_score": 0.7525
-    },
-    "territory_overview.TRX(C QTD)": {
-      "feature": "territory_overview.TRX(C QTD)",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 74.97,
-      "coefficient_of_variation": 2.6936,
-      "value_score": 0.7497
-    },
-    "territory_overview.TQTY(C QTD)": {
-      "feature": "territory_overview.TQTY(C QTD)",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 74.97,
-      "coefficient_of_variation": 2.6401,
-      "value_score": 0.7497
-    },
-    "territory_overview.TRX(P QTD)": {
-      "feature": "territory_overview.TRX(P QTD)",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 74.81,
-      "coefficient_of_variation": 2.2967,
-      "value_score": 0.7481
-    },
-    "territory_overview.TQTY(P QTD)": {
-      "feature": "territory_overview.TQTY(P QTD)",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 74.81,
-      "coefficient_of_variation": 2.1446,
-      "value_score": 0.7481
-    },
-    "territory_overview.STLYTRXQTD": {
-      "feature": "territory_overview.STLYTRXQTD",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 74.69,
-      "coefficient_of_variation": 2.2269,
-      "value_score": 0.7469
-    },
-    "territory_overview.STLYTQTYQTD": {
-      "feature": "territory_overview.STLYTQTYQTD",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 74.69,
-      "coefficient_of_variation": 2.1302,
-      "value_score": 0.7469
-    },
-    "prescriber_overview.STLYTRX13": {
-      "feature": "prescriber_overview.STLYTRX13",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 70.97,
-      "coefficient_of_variation": 2.7004,
-      "value_score": 0.7097
-    },
-    "prescriber_overview.STLYNRX13": {
-      "feature": "prescriber_overview.STLYNRX13",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 70.97,
-      "coefficient_of_variation": 2.6494,
-      "value_score": 0.7097
-    },
-    "prescriber_overview.STLYTQTY13": {
-      "feature": "prescriber_overview.STLYTQTY13",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 70.97,
-      "coefficient_of_variation": 2.5807,
-      "value_score": 0.7097
-    },
-    "prescriber_overview.STLYNQTY13": {
-      "feature": "prescriber_overview.STLYNQTY13",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 70.97,
-      "coefficient_of_variation": 2.6043,
-      "value_score": 0.7097
-    },
-    "prescriber_overview.TRX(C4 Wk)": {
-      "feature": "prescriber_overview.TRX(C4 Wk)",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 70.93,
-      "coefficient_of_variation": 2.6816,
-      "value_score": 0.7093
-    },
-    "prescriber_overview.NRX(C4 Wk)": {
-      "feature": "prescriber_overview.NRX(C4 Wk)",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 70.93,
-      "coefficient_of_variation": 2.7966,
-      "value_score": 0.7093
-    },
-    "prescriber_overview.TQTY(C4 Wk)": {
-      "feature": "prescriber_overview.TQTY(C4 Wk)",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 70.93,
-      "coefficient_of_variation": 2.6333,
-      "value_score": 0.7093
-    },
-    "prescriber_overview.NQTY(C4 Wk)": {
-      "feature": "prescriber_overview.NQTY(C4 Wk)",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 70.93,
-      "coefficient_of_variation": 2.8371,
-      "value_score": 0.7093
-    },
-    "prescriber_overview.TRX(P13 Wk)": {
-      "feature": "prescriber_overview.TRX(P13 Wk)",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 70.03,
-      "coefficient_of_variation": 2.6151,
-      "value_score": 0.7003
-    },
-    "prescriber_overview.NRX(P13 Wk)": {
-      "feature": "prescriber_overview.NRX(P13 Wk)",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 70.03,
-      "coefficient_of_variation": 2.5514,
-      "value_score": 0.7003
-    },
-    "prescriber_overview.TQTY(P13 Wk)": {
-      "feature": "prescriber_overview.TQTY(P13 Wk)",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 70.03,
-      "coefficient_of_variation": 2.5191,
-      "value_score": 0.7003
-    },
-    "prescriber_overview.NQTY(P13 Wk)": {
-      "feature": "prescriber_overview.NQTY(P13 Wk)",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 70.03,
-      "coefficient_of_variation": 2.5434,
-      "value_score": 0.7003
-    },
-    "prescriber_overview.TRX(P QTD)": {
-      "feature": "prescriber_overview.TRX(P QTD)",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 69.49,
-      "coefficient_of_variation": 2.6009,
-      "value_score": 0.6949
-    },
-    "prescriber_overview.NRX(P QTD)": {
-      "feature": "prescriber_overview.NRX(P QTD)",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 69.49,
-      "coefficient_of_variation": 2.5425,
-      "value_score": 0.6949
-    },
-    "prescriber_overview.TQTY(P QTD)": {
-      "feature": "prescriber_overview.TQTY(P QTD)",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 69.49,
-      "coefficient_of_variation": 2.5058,
-      "value_score": 0.6949
-    },
-    "prescriber_overview.NQTY(P QTD)": {
-      "feature": "prescriber_overview.NQTY(P QTD)",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 69.49,
-      "coefficient_of_variation": 2.5349,
-      "value_score": 0.6949
-    },
-    "prescriber_overview.TRXC4WithPDRP": {
-      "feature": "prescriber_overview.TRXC4WithPDRP",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 68.92,
-      "coefficient_of_variation": 2.6791,
-      "value_score": 0.6892
-    },
-    "prescriber_overview.NRXC4WithPDRP": {
-      "feature": "prescriber_overview.NRXC4WithPDRP",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 68.92,
-      "coefficient_of_variation": 2.7946,
-      "value_score": 0.6892
-    },
-    "prescriber_overview.TQTYC4WithPDRP": {
-      "feature": "prescriber_overview.TQTYC4WithPDRP",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 68.92,
-      "coefficient_of_variation": 2.6216,
-      "value_score": 0.6892
-    },
-    "prescriber_overview.NQTYC4WithPDRP": {
-      "feature": "prescriber_overview.NQTYC4WithPDRP",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 68.92,
-      "coefficient_of_variation": 2.8249,
-      "value_score": 0.6892
-    },
-    "prescriber_overview.STLYTRXQTD": {
-      "feature": "prescriber_overview.STLYTRXQTD",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 68.75,
-      "coefficient_of_variation": 2.654,
-      "value_score": 0.6875
-    },
-    "prescriber_overview.STLYNRXQTD": {
-      "feature": "prescriber_overview.STLYNRXQTD",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 68.75,
-      "coefficient_of_variation": 2.6057,
-      "value_score": 0.6875
-    },
-    "prescriber_overview.STLYTQTYQTD": {
-      "feature": "prescriber_overview.STLYTQTYQTD",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 68.75,
-      "coefficient_of_variation": 2.5333,
-      "value_score": 0.6875
-    },
-    "prescriber_overview.STLYNQTYQTD": {
-      "feature": "prescriber_overview.STLYNQTYQTD",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 68.75,
-      "coefficient_of_variation": 2.5586,
-      "value_score": 0.6875
-    },
-    "call_activity.CallCount": {
-      "feature": "call_activity.CallCount",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 98.5,
-      "coefficient_of_variation": 0.6919,
-      "value_score": 0.6815
-    },
-    "prescriber_overview.TRXP13WithPDRP": {
-      "feature": "prescriber_overview.TRXP13WithPDRP",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 67.95,
-      "coefficient_of_variation": 2.6156,
-      "value_score": 0.6795
-    },
-    "prescriber_overview.NRXP13WithPDRP": {
-      "feature": "prescriber_overview.NRXP13WithPDRP",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 67.95,
-      "coefficient_of_variation": 2.5542,
-      "value_score": 0.6795
-    },
-    "prescriber_overview.TQTYP13WithPDRP": {
-      "feature": "prescriber_overview.TQTYP13WithPDRP",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 67.95,
-      "coefficient_of_variation": 2.5163,
-      "value_score": 0.6795
-    },
     "call_attainment_territory.PercentageReached": {
       "feature": "call_attainment_territory.PercentageReached",
       "action": "KEEP",
@@ -1712,33 +1851,6 @@
       "coverage": 100.0,
       "coefficient_of_variation": 0.6759,
       "value_score": 0.6759
-    },
-    "prescriber_overview.TRXPQTDWithPDRP": {
-      "feature": "prescriber_overview.TRXPQTDWithPDRP",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 67.41,
-      "coefficient_of_variation": 2.6009,
-      "value_score": 0.6741
-    },
-    "prescriber_overview.NRXPQTDWithPDRP": {
-      "feature": "prescriber_overview.NRXPQTDWithPDRP",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 67.41,
-      "coefficient_of_variation": 2.5448,
-      "value_score": 0.6741
-    },
-    "prescriber_overview.TQTYPQTDWithPDRP": {
-      "feature": "prescriber_overview.TQTYPQTDWithPDRP",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 67.41,
-      "coefficient_of_variation": 2.5025,
-      "value_score": 0.6741
     },
     "call_attainment_territory.PercentageAttainment": {
       "feature": "call_attainment_territory.PercentageAttainment",
@@ -1758,14 +1870,14 @@
       "coefficient_of_variation": 0.6519,
       "value_score": 0.6519
     },
-    "hcp_universe.Zipcode": {
-      "feature": "hcp_universe.Zipcode",
+    "prescriber_profile.STLYNRX": {
+      "feature": "prescriber_profile.STLYNRX",
       "action": "KEEP",
       "reasons": [],
       "priority": "MEDIUM",
-      "coverage": 100.0,
-      "coefficient_of_variation": 0.6117,
-      "value_score": 0.6117
+      "coverage": 60.0,
+      "coefficient_of_variation": 1.0038,
+      "value_score": 0.6
     },
     "ngd_official.Zipcode": {
       "feature": "ngd_official.Zipcode",
@@ -1775,15 +1887,6 @@
       "coverage": 100.0,
       "coefficient_of_variation": 0.5868,
       "value_score": 0.5868
-    },
-    "prescriber_overview.Zipcode": {
-      "feature": "prescriber_overview.Zipcode",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 100.0,
-      "coefficient_of_variation": 0.5839,
-      "value_score": 0.5839
     },
     "territory_call_summary.Sort": {
       "feature": "territory_call_summary.Sort",
@@ -1802,204 +1905,6 @@
       "coverage": 100.0,
       "coefficient_of_variation": 0.5383,
       "value_score": 0.5383
-    },
-    "territory_overview.TRX(C4 Wk)": {
-      "feature": "territory_overview.TRX(C4 Wk)",
-      "action": "REMOVE",
-      "reasons": [
-        "Low coverage (<50%)"
-      ],
-      "priority": "MEDIUM",
-      "coverage": 47.77,
-      "coefficient_of_variation": 2.1284,
-      "value_score": 0.4777
-    },
-    "territory_overview.TQTY(C4 Wk)": {
-      "feature": "territory_overview.TQTY(C4 Wk)",
-      "action": "REMOVE",
-      "reasons": [
-        "Low coverage (<50%)"
-      ],
-      "priority": "MEDIUM",
-      "coverage": 47.77,
-      "coefficient_of_variation": 2.1009,
-      "value_score": 0.4777
-    },
-    "territory_overview.TRX(P4 Wk)": {
-      "feature": "territory_overview.TRX(P4 Wk)",
-      "action": "REMOVE",
-      "reasons": [
-        "Low coverage (<50%)"
-      ],
-      "priority": "MEDIUM",
-      "coverage": 47.53,
-      "coefficient_of_variation": 1.6442,
-      "value_score": 0.4753
-    },
-    "territory_overview.TQTY(P4 Wk)": {
-      "feature": "territory_overview.TQTY(P4 Wk)",
-      "action": "REMOVE",
-      "reasons": [
-        "Low coverage (<50%)"
-      ],
-      "priority": "MEDIUM",
-      "coverage": 47.53,
-      "coefficient_of_variation": 1.6031,
-      "value_score": 0.4753
-    },
-    "territory_overview.STLYTRX4": {
-      "feature": "territory_overview.STLYTRX4",
-      "action": "REMOVE",
-      "reasons": [
-        "Low coverage (<50%)"
-      ],
-      "priority": "MEDIUM",
-      "coverage": 47.49,
-      "coefficient_of_variation": 1.6759,
-      "value_score": 0.4749
-    },
-    "territory_overview.STLYTQTY4": {
-      "feature": "territory_overview.STLYTQTY4",
-      "action": "REMOVE",
-      "reasons": [
-        "Low coverage (<50%)"
-      ],
-      "priority": "MEDIUM",
-      "coverage": 47.49,
-      "coefficient_of_variation": 1.6421,
-      "value_score": 0.4749
-    },
-    "prescriber_overview.STLYTRX4": {
-      "feature": "prescriber_overview.STLYTRX4",
-      "action": "REMOVE",
-      "reasons": [
-        "Low coverage (<50%)"
-      ],
-      "priority": "MEDIUM",
-      "coverage": 44.43,
-      "coefficient_of_variation": 2.1178,
-      "value_score": 0.4443
-    },
-    "prescriber_overview.STLYNRX4": {
-      "feature": "prescriber_overview.STLYNRX4",
-      "action": "REMOVE",
-      "reasons": [
-        "Low coverage (<50%)"
-      ],
-      "priority": "MEDIUM",
-      "coverage": 44.43,
-      "coefficient_of_variation": 2.1633,
-      "value_score": 0.4443
-    },
-    "prescriber_overview.STLYTQTY4": {
-      "feature": "prescriber_overview.STLYTQTY4",
-      "action": "REMOVE",
-      "reasons": [
-        "Low coverage (<50%)"
-      ],
-      "priority": "MEDIUM",
-      "coverage": 44.43,
-      "coefficient_of_variation": 2.0368,
-      "value_score": 0.4443
-    },
-    "prescriber_overview.STLYNQTY4": {
-      "feature": "prescriber_overview.STLYNQTY4",
-      "action": "REMOVE",
-      "reasons": [
-        "Low coverage (<50%)"
-      ],
-      "priority": "MEDIUM",
-      "coverage": 44.43,
-      "coefficient_of_variation": 2.1521,
-      "value_score": 0.4443
-    },
-    "prescriber_overview.TRX(P4 Wk)": {
-      "feature": "prescriber_overview.TRX(P4 Wk)",
-      "action": "REMOVE",
-      "reasons": [
-        "Low coverage (<50%)"
-      ],
-      "priority": "MEDIUM",
-      "coverage": 43.84,
-      "coefficient_of_variation": 2.0353,
-      "value_score": 0.4384
-    },
-    "prescriber_overview.NRX(P4 Wk)": {
-      "feature": "prescriber_overview.NRX(P4 Wk)",
-      "action": "REMOVE",
-      "reasons": [
-        "Low coverage (<50%)"
-      ],
-      "priority": "MEDIUM",
-      "coverage": 43.84,
-      "coefficient_of_variation": 2.1385,
-      "value_score": 0.4384
-    },
-    "prescriber_overview.TQTY(P4 Wk)": {
-      "feature": "prescriber_overview.TQTY(P4 Wk)",
-      "action": "REMOVE",
-      "reasons": [
-        "Low coverage (<50%)"
-      ],
-      "priority": "MEDIUM",
-      "coverage": 43.84,
-      "coefficient_of_variation": 1.971,
-      "value_score": 0.4384
-    },
-    "prescriber_overview.NQTY(P4 Wk)": {
-      "feature": "prescriber_overview.NQTY(P4 Wk)",
-      "action": "REMOVE",
-      "reasons": [
-        "Low coverage (<50%)"
-      ],
-      "priority": "MEDIUM",
-      "coverage": 43.84,
-      "coefficient_of_variation": 2.1449,
-      "value_score": 0.4384
-    },
-    "prescriber_overview.TRXP4WithPDRP": {
-      "feature": "prescriber_overview.TRXP4WithPDRP",
-      "action": "REMOVE",
-      "reasons": [
-        "Low coverage (<50%)"
-      ],
-      "priority": "MEDIUM",
-      "coverage": 42.55,
-      "coefficient_of_variation": 2.0299,
-      "value_score": 0.4255
-    },
-    "prescriber_overview.NRXP4WithPDRP": {
-      "feature": "prescriber_overview.NRXP4WithPDRP",
-      "action": "REMOVE",
-      "reasons": [
-        "Low coverage (<50%)"
-      ],
-      "priority": "MEDIUM",
-      "coverage": 42.55,
-      "coefficient_of_variation": 2.1318,
-      "value_score": 0.4255
-    },
-    "prescriber_overview.TQTYP4WithPDRP": {
-      "feature": "prescriber_overview.TQTYP4WithPDRP",
-      "action": "REMOVE",
-      "reasons": [
-        "Low coverage (<50%)"
-      ],
-      "priority": "MEDIUM",
-      "coverage": 42.55,
-      "coefficient_of_variation": 1.9648,
-      "value_score": 0.4255
-    },
-    "prescriber_overview.NQTYP4WithPDRP": {
-      "feature": "prescriber_overview.NQTYP4WithPDRP",
-      "action": "REMOVE",
-      "reasons": [
-        "Low coverage (<50%)"
-      ],
-      "priority": "MEDIUM",
-      "coverage": 42.55,
-      "coefficient_of_variation": 2.137,
-      "value_score": 0.4255
     },
     "trx_sample.SortingOrder": {
       "feature": "trx_sample.SortingOrder",
@@ -2046,6 +1951,15 @@
       "coefficient_of_variation": 0.4051,
       "value_score": 0.4051
     },
+    "prescriber_profile.STLYTRX": {
+      "feature": "prescriber_profile.STLYTRX",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 60.0,
+      "coefficient_of_variation": 0.5692,
+      "value_score": 0.3415
+    },
     "call_attainment_territory.PlannedCalls": {
       "feature": "call_attainment_territory.PlannedCalls",
       "action": "KEEP",
@@ -2064,41 +1978,14 @@
       "coefficient_of_variation": 0.3342,
       "value_score": 0.3342
     },
-    "prescriber_overview.TQTYMktShare13": {
-      "feature": "prescriber_overview.TQTYMktShare13",
+    "prescriber_profile.Zipcode": {
+      "feature": "prescriber_profile.Zipcode",
       "action": "KEEP",
       "reasons": [],
       "priority": "MEDIUM",
-      "coverage": 86.39,
-      "coefficient_of_variation": 0.2564,
-      "value_score": 0.2215
-    },
-    "prescriber_overview.TRXMktShare13": {
-      "feature": "prescriber_overview.TRXMktShare13",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 86.57,
-      "coefficient_of_variation": 0.2549,
-      "value_score": 0.2207
-    },
-    "prescriber_overview.TQTYMktShareQTD": {
-      "feature": "prescriber_overview.TQTYMktShareQTD",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 85.3,
-      "coefficient_of_variation": 0.2556,
-      "value_score": 0.218
-    },
-    "prescriber_overview.TRXMktShareQTD": {
-      "feature": "prescriber_overview.TRXMktShareQTD",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 85.48,
-      "coefficient_of_variation": 0.2541,
-      "value_score": 0.2172
+      "coverage": 100.0,
+      "coefficient_of_variation": 0.2884,
+      "value_score": 0.2884
     },
     "ngd_official.TotalCalls": {
       "feature": "ngd_official.TotalCalls",
@@ -2111,64 +1998,6 @@
       "coefficient_of_variation": 0.7478,
       "value_score": 0.2119
     },
-    "prescriber_overview.NQTYMktShare13": {
-      "feature": "prescriber_overview.NQTYMktShare13",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 77.02,
-      "coefficient_of_variation": 0.2705,
-      "value_score": 0.2083
-    },
-    "prescriber_overview.NRXMktShare13": {
-      "feature": "prescriber_overview.NRXMktShare13",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 77.29,
-      "coefficient_of_variation": 0.2684,
-      "value_score": 0.2075
-    },
-    "territory_overview.TRX(C Wk)": {
-      "feature": "territory_overview.TRX(C Wk)",
-      "action": "REMOVE",
-      "reasons": [
-        "Low coverage (<50%)"
-      ],
-      "priority": "MEDIUM",
-      "coverage": 20.75,
-      "coefficient_of_variation": 1.3669,
-      "value_score": 0.2075
-    },
-    "territory_overview.TQTY(C Wk)": {
-      "feature": "territory_overview.TQTY(C Wk)",
-      "action": "REMOVE",
-      "reasons": [
-        "Low coverage (<50%)"
-      ],
-      "priority": "MEDIUM",
-      "coverage": 20.75,
-      "coefficient_of_variation": 1.3688,
-      "value_score": 0.2075
-    },
-    "prescriber_overview.NQTYMktShareQTD": {
-      "feature": "prescriber_overview.NQTYMktShareQTD",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 75.91,
-      "coefficient_of_variation": 0.2702,
-      "value_score": 0.2051
-    },
-    "prescriber_overview.NRXMktShareQTD": {
-      "feature": "prescriber_overview.NRXMktShareQTD",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 76.18,
-      "coefficient_of_variation": 0.2681,
-      "value_score": 0.2042
-    },
     "ngd_official.NPINumber": {
       "feature": "ngd_official.NPINumber",
       "action": "KEEP",
@@ -2177,33 +2006,6 @@
       "coverage": 99.67,
       "coefficient_of_variation": 0.1916,
       "value_score": 0.191
-    },
-    "hcp_universe.NPI": {
-      "feature": "hcp_universe.NPI",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 97.01,
-      "coefficient_of_variation": 0.1917,
-      "value_score": 0.1859
-    },
-    "prescriber_overview.TQTYMktShare4": {
-      "feature": "prescriber_overview.TQTYMktShare4",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 57.94,
-      "coefficient_of_variation": 0.2507,
-      "value_score": 0.1452
-    },
-    "prescriber_overview.TRXMktShare4": {
-      "feature": "prescriber_overview.TRXMktShare4",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 58.07,
-      "coefficient_of_variation": 0.2479,
-      "value_score": 0.1439
     },
     "call_activity.SampleQuantity": {
       "feature": "call_activity.SampleQuantity",
@@ -2216,28 +2018,6 @@
       "coefficient_of_variation": 1.7972,
       "value_score": 0.1415
     },
-    "prescriber_overview.NQTYMktShare4": {
-      "feature": "prescriber_overview.NQTYMktShare4",
-      "action": "REMOVE",
-      "reasons": [
-        "Low coverage (<50%)"
-      ],
-      "priority": "MEDIUM",
-      "coverage": 45.34,
-      "coefficient_of_variation": 0.277,
-      "value_score": 0.1256
-    },
-    "prescriber_overview.NRXMktShare4": {
-      "feature": "prescriber_overview.NRXMktShare4",
-      "action": "REMOVE",
-      "reasons": [
-        "Low coverage (<50%)"
-      ],
-      "priority": "MEDIUM",
-      "coverage": 45.54,
-      "coefficient_of_variation": 0.2754,
-      "value_score": 0.1254
-    },
     "trx_sample.sample_roi": {
       "feature": "trx_sample.sample_roi",
       "action": "REMOVE",
@@ -2249,417 +2029,60 @@
       "coefficient_of_variation": 3.1207,
       "value_score": 0.0997
     },
-    "prescriber_overview.Calls13": {
-      "feature": "prescriber_overview.Calls13",
+    "call_activity.SampledCall": {
+      "feature": "call_activity.SampledCall",
       "action": "REMOVE",
       "reasons": [
         "Low coverage (<50%)"
       ],
       "priority": "MEDIUM",
-      "coverage": 1.36,
-      "coefficient_of_variation": 0.6814,
-      "value_score": 0.0092
+      "coverage": 14.15,
+      "coefficient_of_variation": 0.5666,
+      "value_score": 0.0802
     },
-    "prescriber_overview.CallsQTD": {
-      "feature": "prescriber_overview.CallsQTD",
+    "call_activity.LunchLearn": {
+      "feature": "call_activity.LunchLearn",
       "action": "REMOVE",
       "reasons": [
         "Low coverage (<50%)"
       ],
       "priority": "MEDIUM",
-      "coverage": 1.35,
-      "coefficient_of_variation": 0.6797,
-      "value_score": 0.0092
+      "coverage": 7.06,
+      "coefficient_of_variation": 0.5161,
+      "value_score": 0.0364
     },
-    "prescriber_overview.Samples13": {
-      "feature": "prescriber_overview.Samples13",
+    "call_activity.DTPQuantity": {
+      "feature": "call_activity.DTPQuantity",
       "action": "REMOVE",
       "reasons": [
         "Low coverage (<50%)"
       ],
       "priority": "MEDIUM",
-      "coverage": 0.41,
-      "coefficient_of_variation": 1.3551,
-      "value_score": 0.0041
+      "coverage": 1.5,
+      "coefficient_of_variation": 1.3272,
+      "value_score": 0.015
     },
-    "prescriber_overview.SamplesQTD": {
-      "feature": "prescriber_overview.SamplesQTD",
+    "prescriber_overview.call_to_trx_ratio": {
+      "feature": "prescriber_overview.call_to_trx_ratio",
       "action": "REMOVE",
       "reasons": [
         "Low coverage (<50%)"
       ],
       "priority": "MEDIUM",
-      "coverage": 0.4,
-      "coefficient_of_variation": 1.3451,
-      "value_score": 0.004
+      "coverage": 1.44,
+      "coefficient_of_variation": 2.0523,
+      "value_score": 0.0144
     },
-    "prescriber_overview.Calls4": {
-      "feature": "prescriber_overview.Calls4",
+    "prescriber_overview.recency_days": {
+      "feature": "prescriber_overview.recency_days",
       "action": "REMOVE",
       "reasons": [
         "Low coverage (<50%)"
       ],
       "priority": "MEDIUM",
-      "coverage": 0.74,
-      "coefficient_of_variation": 0.4267,
-      "value_score": 0.0031
-    },
-    "prescriber_overview.Samples4": {
-      "feature": "prescriber_overview.Samples4",
-      "action": "REMOVE",
-      "reasons": [
-        "Low coverage (<50%)"
-      ],
-      "priority": "MEDIUM",
-      "coverage": 0.17,
-      "coefficient_of_variation": 1.3309,
-      "value_score": 0.0017
-    },
-    "prescriber_overview.LunchLearn13": {
-      "feature": "prescriber_overview.LunchLearn13",
-      "action": "REMOVE",
-      "reasons": [
-        "Low coverage (<50%)"
-      ],
-      "priority": "MEDIUM",
-      "coverage": 0.2,
-      "coefficient_of_variation": 0.554,
-      "value_score": 0.0011
-    },
-    "prescriber_overview.LunchLearnQTD": {
-      "feature": "prescriber_overview.LunchLearnQTD",
-      "action": "REMOVE",
-      "reasons": [
-        "Low coverage (<50%)"
-      ],
-      "priority": "MEDIUM",
-      "coverage": 0.2,
-      "coefficient_of_variation": 0.5544,
-      "value_score": 0.0011
-    },
-    "prescriber_overview.LunchLearn4": {
-      "feature": "prescriber_overview.LunchLearn4",
-      "action": "REMOVE",
-      "reasons": [
-        "Low coverage (<50%)"
-      ],
-      "priority": "MEDIUM",
-      "coverage": 0.08,
-      "coefficient_of_variation": 0.163,
-      "value_score": 0.0001
-    },
-    "prescriber_profile.Credentials": {
-      "feature": "prescriber_profile.Credentials",
-      "action": "REMOVE",
-      "reasons": [
-        "Low coverage (<50%)"
-      ],
-      "priority": "MEDIUM",
-      "coverage": 0.0,
-      "coefficient_of_variation": NaN,
-      "value_score": NaN
-    },
-    "prescriber_profile.AMANoContact": {
-      "feature": "prescriber_profile.AMANoContact",
-      "action": "REMOVE",
-      "reasons": [
-        "Low coverage (<50%)"
-      ],
-      "priority": "MEDIUM",
-      "coverage": 0.0,
-      "coefficient_of_variation": NaN,
-      "value_score": NaN
-    },
-    "prescriber_profile.ProductPriority": {
-      "feature": "prescriber_profile.ProductPriority",
-      "action": "REMOVE",
-      "reasons": [
-        "Low coverage (<50%)"
-      ],
-      "priority": "MEDIUM",
-      "coverage": 0.0,
-      "coefficient_of_variation": NaN,
-      "value_score": NaN
-    },
-    "prescriber_profile.TRX": {
-      "feature": "prescriber_profile.TRX",
-      "action": "KEEP",
-      "reasons": [
-        "High value score (top 25%)"
-      ],
-      "priority": "HIGH",
-      "coverage": 100.0,
-      "coefficient_of_variation": 1.4552,
-      "value_score": 1.0
-    },
-    "prescriber_profile.NRX": {
-      "feature": "prescriber_profile.NRX",
-      "action": "KEEP",
-      "reasons": [
-        "High value score (top 25%)"
-      ],
-      "priority": "HIGH",
-      "coverage": 100.0,
-      "coefficient_of_variation": 2.2442,
-      "value_score": 1.0
-    },
-    "prescriber_profile.NQTY": {
-      "feature": "prescriber_profile.NQTY",
-      "action": "KEEP",
-      "reasons": [
-        "High value score (top 25%)"
-      ],
-      "priority": "HIGH",
-      "coverage": 100.0,
-      "coefficient_of_variation": 1.8768,
-      "value_score": 1.0
-    },
-    "prescriber_profile.TQTY": {
-      "feature": "prescriber_profile.TQTY",
-      "action": "KEEP",
-      "reasons": [
-        "High value score (top 25%)"
-      ],
-      "priority": "HIGH",
-      "coverage": 100.0,
-      "coefficient_of_variation": 1.0963,
-      "value_score": 1.0
-    },
-    "prescriber_overview.NQTYP13WithPDRP": {
-      "feature": "prescriber_overview.NQTYP13WithPDRP",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 67.95,
-      "coefficient_of_variation": 2.5464,
-      "value_score": 0.6795
-    },
-    "prescriber_overview.NQTYPQTDWithPDRP": {
-      "feature": "prescriber_overview.NQTYPQTDWithPDRP",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 67.41,
-      "coefficient_of_variation": 2.5372,
-      "value_score": 0.6741
-    },
-    "prescriber_overview.share_change": {
-      "feature": "prescriber_overview.share_change",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 58.05,
-      "coefficient_of_variation": 68.9882,
-      "value_score": 0.5805
-    },
-    "prescriber_profile.MeNumber": {
-      "feature": "prescriber_profile.MeNumber",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 100.0,
-      "coefficient_of_variation": 0.5124,
-      "value_score": 0.5124
-    },
-    "prescriber_profile.Zipcode": {
-      "feature": "prescriber_profile.Zipcode",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 100.0,
-      "coefficient_of_variation": 0.2884,
-      "value_score": 0.2884
-    },
-    "prescriber_profile.NPINumber": {
-      "feature": "prescriber_profile.NPINumber",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 100.0,
-      "coefficient_of_variation": 0.221,
-      "value_score": 0.221
-    },
-    "prescriber_profile.Calls": {
-      "feature": "prescriber_profile.Calls",
-      "action": "REMOVE",
-      "reasons": [
-        "Low coverage (<50%)"
-      ],
-      "priority": "MEDIUM",
-      "coverage": 0.0,
-      "coefficient_of_variation": NaN,
-      "value_score": NaN
-    },
-    "prescriber_profile.LunchLearn": {
-      "feature": "prescriber_profile.LunchLearn",
-      "action": "REMOVE",
-      "reasons": [
-        "Low coverage (<50%)"
-      ],
-      "priority": "MEDIUM",
-      "coverage": 0.0,
-      "coefficient_of_variation": NaN,
-      "value_score": NaN
-    },
-    "prescriber_profile.Samples": {
-      "feature": "prescriber_profile.Samples",
-      "action": "REMOVE",
-      "reasons": [
-        "Low coverage (<50%)"
-      ],
-      "priority": "MEDIUM",
-      "coverage": 0.0,
-      "coefficient_of_variation": NaN,
-      "value_score": NaN
-    },
-    "prescriber_profile.LastCallDate": {
-      "feature": "prescriber_profile.LastCallDate",
-      "action": "REMOVE",
-      "reasons": [
-        "Low coverage (<50%)"
-      ],
-      "priority": "MEDIUM",
-      "coverage": 0.0,
-      "coefficient_of_variation": NaN,
-      "value_score": NaN
-    },
-    "prescriber_profile.PreviousNRX": {
-      "feature": "prescriber_profile.PreviousNRX",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 74.29,
-      "coefficient_of_variation": 1.5121,
-      "value_score": 0.7429
-    },
-    "prescriber_profile.PreviousTRX": {
-      "feature": "prescriber_profile.PreviousTRX",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 74.29,
-      "coefficient_of_variation": 0.8261,
-      "value_score": 0.6137
-    },
-    "prescriber_profile.PrescriberAtSameAddress": {
-      "feature": "prescriber_profile.PrescriberAtSameAddress",
-      "action": "REMOVE",
-      "reasons": [
-        "Low coverage (<50%)"
-      ],
-      "priority": "MEDIUM",
-      "coverage": 0.0,
-      "coefficient_of_variation": NaN,
-      "value_score": NaN
-    },
-    "prescriber_profile.PrescriberAtSameAddressSpeciality": {
-      "feature": "prescriber_profile.PrescriberAtSameAddressSpeciality",
-      "action": "REMOVE",
-      "reasons": [
-        "Low coverage (<50%)"
-      ],
-      "priority": "MEDIUM",
-      "coverage": 0.0,
-      "coefficient_of_variation": NaN,
-      "value_score": NaN
-    },
-    "prescriber_profile.PreviousCalls": {
-      "feature": "prescriber_profile.PreviousCalls",
-      "action": "REMOVE",
-      "reasons": [
-        "Low coverage (<50%)"
-      ],
-      "priority": "MEDIUM",
-      "coverage": 0.0,
-      "coefficient_of_variation": NaN,
-      "value_score": NaN
-    },
-    "prescriber_profile.PreviousLunchLearn": {
-      "feature": "prescriber_profile.PreviousLunchLearn",
-      "action": "REMOVE",
-      "reasons": [
-        "Low coverage (<50%)"
-      ],
-      "priority": "MEDIUM",
-      "coverage": 0.0,
-      "coefficient_of_variation": NaN,
-      "value_score": NaN
-    },
-    "prescriber_profile.PreviouSamples": {
-      "feature": "prescriber_profile.PreviouSamples",
-      "action": "REMOVE",
-      "reasons": [
-        "Low coverage (<50%)"
-      ],
-      "priority": "MEDIUM",
-      "coverage": 0.0,
-      "coefficient_of_variation": NaN,
-      "value_score": NaN
-    },
-    "prescriber_profile.STLYNRX": {
-      "feature": "prescriber_profile.STLYNRX",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 60.0,
-      "coefficient_of_variation": 1.0038,
-      "value_score": 0.6
-    },
-    "prescriber_profile.IbsaDesiccatedTarget": {
-      "feature": "prescriber_profile.IbsaDesiccatedTarget",
-      "action": "REMOVE",
-      "reasons": [
-        "Low coverage (<50%)"
-      ],
-      "priority": "MEDIUM",
-      "coverage": 0.0,
-      "coefficient_of_variation": NaN,
-      "value_score": NaN
-    },
-    "prescriber_profile.PreviousNQTY": {
-      "feature": "prescriber_profile.PreviousNQTY",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 74.29,
-      "coefficient_of_variation": 1.3022,
-      "value_score": 0.7429
-    },
-    "prescriber_profile.STLYNQTY": {
-      "feature": "prescriber_profile.STLYNQTY",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 60.0,
-      "coefficient_of_variation": 1.1033,
-      "value_score": 0.6
-    },
-    "prescriber_profile.PreviousTQTY": {
-      "feature": "prescriber_profile.PreviousTQTY",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 74.29,
-      "coefficient_of_variation": 0.5719,
-      "value_score": 0.4248
-    },
-    "prescriber_profile.STLYTQTY": {
-      "feature": "prescriber_profile.STLYTQTY",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 60.0,
-      "coefficient_of_variation": 0.6162,
-      "value_score": 0.3697
-    },
-    "prescriber_profile.STLYTRX": {
-      "feature": "prescriber_profile.STLYTRX",
-      "action": "KEEP",
-      "reasons": [],
-      "priority": "MEDIUM",
-      "coverage": 60.0,
-      "coefficient_of_variation": 0.5692,
-      "value_score": 0.3415
+      "coverage": 1.49,
+      "coefficient_of_variation": 0.4031,
+      "value_score": 0.006
     },
     "prescriber_profile.TRXShare": {
       "feature": "prescriber_profile.TRXShare",
@@ -2728,50 +2151,62 @@
       "coefficient_of_variation": 0.0,
       "value_score": 0.0
     },
-    "prescriber_profile.TQTYShare": {
-      "feature": "prescriber_profile.TQTYShare",
-      "action": "REMOVE",
-      "reasons": [
-        "Zero variance (CV < 0.01)"
-      ],
-      "priority": "MEDIUM",
-      "coverage": 80.0,
-      "coefficient_of_variation": 0.0,
-      "value_score": 0.0
-    },
-    "prescriber_profile.NQTYShare": {
-      "feature": "prescriber_profile.NQTYShare",
+    "prescriber_overview.acceleration": {
+      "feature": "prescriber_overview.acceleration",
       "action": "REMOVE",
       "reasons": [
         "Low coverage (<50%)",
         "Zero variance (CV < 0.01)"
       ],
       "priority": "MEDIUM",
-      "coverage": 45.71,
-      "coefficient_of_variation": 0.0,
-      "value_score": 0.0
+      "coverage": 39.51,
+      "coefficient_of_variation": -3.6815,
+      "value_score": -1.4544
     },
-    "prescriber_profile.PreviousTQTYShare": {
-      "feature": "prescriber_profile.PreviousTQTYShare",
+    "prescriber_overview.velocity_4wk": {
+      "feature": "prescriber_overview.velocity_4wk",
+      "action": "REMOVE",
+      "reasons": [
+        "Low coverage (<50%)",
+        "Zero variance (CV < 0.01)"
+      ],
+      "priority": "MEDIUM",
+      "coverage": 44.02,
+      "coefficient_of_variation": -4.6351,
+      "value_score": -2.0403
+    },
+    "prescriber_overview.trx_change_pct": {
+      "feature": "prescriber_overview.trx_change_pct",
       "action": "REMOVE",
       "reasons": [
         "Zero variance (CV < 0.01)"
       ],
       "priority": "MEDIUM",
-      "coverage": 74.29,
-      "coefficient_of_variation": 0.0,
-      "value_score": 0.0
+      "coverage": 70.2,
+      "coefficient_of_variation": -12.6623,
+      "value_score": -8.8888
     },
-    "prescriber_profile.PreviousNQTYShare": {
-      "feature": "prescriber_profile.PreviousNQTYShare",
+    "prescriber_overview.share_change": {
+      "feature": "prescriber_overview.share_change",
       "action": "REMOVE",
       "reasons": [
         "Zero variance (CV < 0.01)"
       ],
       "priority": "MEDIUM",
-      "coverage": 62.86,
-      "coefficient_of_variation": 0.0,
-      "value_score": 0.0
+      "coverage": 85.75,
+      "coefficient_of_variation": -1200.5132,
+      "value_score": -1029.416
+    },
+    "prescriber_profile.IbsaDesiccatedTarget": {
+      "feature": "prescriber_profile.IbsaDesiccatedTarget",
+      "action": "REMOVE",
+      "reasons": [
+        "Low coverage (<50%)"
+      ],
+      "priority": "MEDIUM",
+      "coverage": 0.0,
+      "coefficient_of_variation": NaN,
+      "value_score": NaN
     },
     "prescriber_profile.MyTarget": {
       "feature": "prescriber_profile.MyTarget",
@@ -2792,7 +2227,7 @@
       ],
       "priority": "HIGH",
       "coverage": 100.0,
-      "coefficient_of_variation": 1.5636,
+      "coefficient_of_variation": 1.3081,
       "value_score": 1.0
     },
     "payment_plan.NRX": {
@@ -2803,7 +2238,7 @@
       ],
       "priority": "HIGH",
       "coverage": 100.0,
-      "coefficient_of_variation": 1.7179,
+      "coefficient_of_variation": 1.6122,
       "value_score": 1.0
     },
     "payment_plan.TQTY": {
@@ -2814,7 +2249,7 @@
       ],
       "priority": "HIGH",
       "coverage": 100.0,
-      "coefficient_of_variation": 1.6418,
+      "coefficient_of_variation": 1.3859,
       "value_score": 1.0
     },
     "payment_plan.NQTY": {
@@ -2825,7 +2260,7 @@
       ],
       "priority": "HIGH",
       "coverage": 100.0,
-      "coefficient_of_variation": 1.8282,
+      "coefficient_of_variation": 1.6619,
       "value_score": 1.0
     },
     "trx_sample.HcpCalls": {
@@ -3037,115 +2472,518 @@
       "coefficient_of_variation": 17.9937,
       "value_score": 1.0
     },
-    "trx_sample.Licart TQTY": {
-      "feature": "trx_sample.Licart TQTY",
-      "action": "KEEP",
-      "reasons": [
-        "High value score (top 25%)"
-      ],
-      "priority": "HIGH",
-      "coverage": 100.0,
-      "coefficient_of_variation": 17.4131,
-      "value_score": 1.0
-    },
-    "trx_sample.Sample/TRX PDRP": {
-      "feature": "trx_sample.Sample/TRX PDRP",
+    "prescriber_overview.TRX(C13 Wk)": {
+      "feature": "prescriber_overview.TRX(C13 Wk)",
       "action": "KEEP",
       "reasons": [],
       "priority": "MEDIUM",
-      "coverage": 97.47,
-      "coefficient_of_variation": 8.1928,
-      "value_score": 0.9747
+      "coverage": 99.94,
+      "coefficient_of_variation": 3.2459,
+      "value_score": 0.9994
     },
-    "trx_sample.Total TRX PDRP": {
-      "feature": "trx_sample.Total TRX PDRP",
+    "prescriber_overview.NRX(C13 Wk)": {
+      "feature": "prescriber_overview.NRX(C13 Wk)",
       "action": "KEEP",
       "reasons": [],
       "priority": "MEDIUM",
-      "coverage": 97.47,
-      "coefficient_of_variation": 2.843,
-      "value_score": 0.9747
+      "coverage": 99.94,
+      "coefficient_of_variation": 3.2347,
+      "value_score": 0.9994
     },
-    "trx_sample.Tirosint Caps TRX PDRP": {
-      "feature": "trx_sample.Tirosint Caps TRX PDRP",
+    "prescriber_overview.TQTY(C13 Wk)": {
+      "feature": "prescriber_overview.TQTY(C13 Wk)",
       "action": "KEEP",
       "reasons": [],
       "priority": "MEDIUM",
-      "coverage": 97.47,
-      "coefficient_of_variation": 2.9446,
-      "value_score": 0.9747
+      "coverage": 99.94,
+      "coefficient_of_variation": 3.0943,
+      "value_score": 0.9994
     },
-    "trx_sample.Tirosint Sol TRX PDRP": {
-      "feature": "trx_sample.Tirosint Sol TRX PDRP",
+    "prescriber_overview.NQTY(C13 Wk)": {
+      "feature": "prescriber_overview.NQTY(C13 Wk)",
       "action": "KEEP",
       "reasons": [],
       "priority": "MEDIUM",
-      "coverage": 97.47,
-      "coefficient_of_variation": 5.3438,
-      "value_score": 0.9747
+      "coverage": 99.94,
+      "coefficient_of_variation": 3.2471,
+      "value_score": 0.9994
     },
-    "trx_sample.Flector TRX PDRP": {
-      "feature": "trx_sample.Flector TRX PDRP",
+    "prescriber_overview.TRX(C QTD)": {
+      "feature": "prescriber_overview.TRX(C QTD)",
       "action": "KEEP",
       "reasons": [],
       "priority": "MEDIUM",
-      "coverage": 97.47,
-      "coefficient_of_variation": 17.3239,
-      "value_score": 0.9747
+      "coverage": 98.37,
+      "coefficient_of_variation": 3.2162,
+      "value_score": 0.9837
+    },
+    "prescriber_overview.NRX(C QTD)": {
+      "feature": "prescriber_overview.NRX(C QTD)",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 98.37,
+      "coefficient_of_variation": 3.2087,
+      "value_score": 0.9837
+    },
+    "prescriber_overview.TQTY(C QTD)": {
+      "feature": "prescriber_overview.TQTY(C QTD)",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 98.37,
+      "coefficient_of_variation": 3.0642,
+      "value_score": 0.9837
+    },
+    "prescriber_overview.NQTY(C QTD)": {
+      "feature": "prescriber_overview.NQTY(C QTD)",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 98.37,
+      "coefficient_of_variation": 3.2207,
+      "value_score": 0.9837
     },
     "payment_plan.TRXWithPDRP": {
       "feature": "payment_plan.TRXWithPDRP",
       "action": "KEEP",
       "reasons": [],
       "priority": "MEDIUM",
-      "coverage": 96.91,
-      "coefficient_of_variation": 1.5648,
-      "value_score": 0.9691
+      "coverage": 97.61,
+      "coefficient_of_variation": 1.3108,
+      "value_score": 0.9761
     },
     "payment_plan.NRXWithPDRP": {
       "feature": "payment_plan.NRXWithPDRP",
       "action": "KEEP",
       "reasons": [],
       "priority": "MEDIUM",
-      "coverage": 96.91,
-      "coefficient_of_variation": 1.717,
-      "value_score": 0.9691
+      "coverage": 97.61,
+      "coefficient_of_variation": 1.6159,
+      "value_score": 0.9761
     },
     "payment_plan.TQTYWithPDRP": {
       "feature": "payment_plan.TQTYWithPDRP",
       "action": "KEEP",
       "reasons": [],
       "priority": "MEDIUM",
-      "coverage": 96.91,
-      "coefficient_of_variation": 1.6381,
-      "value_score": 0.9691
+      "coverage": 97.61,
+      "coefficient_of_variation": 1.3878,
+      "value_score": 0.9761
     },
     "payment_plan.NQTYWithPDRP": {
       "feature": "payment_plan.NQTYWithPDRP",
       "action": "KEEP",
       "reasons": [],
       "priority": "MEDIUM",
-      "coverage": 96.91,
-      "coefficient_of_variation": 1.8205,
-      "value_score": 0.9691
+      "coverage": 97.61,
+      "coefficient_of_variation": 1.6651,
+      "value_score": 0.9761
+    },
+    "prescriber_overview.TRXC13WithPDRP": {
+      "feature": "prescriber_overview.TRXC13WithPDRP",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 97.26,
+      "coefficient_of_variation": 3.2431,
+      "value_score": 0.9726
+    },
+    "prescriber_overview.NRXC13WithPDRP": {
+      "feature": "prescriber_overview.NRXC13WithPDRP",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 97.26,
+      "coefficient_of_variation": 3.2249,
+      "value_score": 0.9726
+    },
+    "prescriber_overview.TQTYC13WithPDRP": {
+      "feature": "prescriber_overview.TQTYC13WithPDRP",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 97.26,
+      "coefficient_of_variation": 3.0782,
+      "value_score": 0.9726
+    },
+    "prescriber_overview.NQTYC13WithPDRP": {
+      "feature": "prescriber_overview.NQTYC13WithPDRP",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 97.26,
+      "coefficient_of_variation": 3.2214,
+      "value_score": 0.9726
+    },
+    "prescriber_overview.TRXCQTDWithPDRP": {
+      "feature": "prescriber_overview.TRXCQTDWithPDRP",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 95.73,
+      "coefficient_of_variation": 3.213,
+      "value_score": 0.9573
+    },
+    "prescriber_overview.NRXCQTDWithPDRP": {
+      "feature": "prescriber_overview.NRXCQTDWithPDRP",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 95.73,
+      "coefficient_of_variation": 3.1985,
+      "value_score": 0.9573
+    },
+    "prescriber_overview.TQTYCQTDWithPDRP": {
+      "feature": "prescriber_overview.TQTYCQTDWithPDRP",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 95.73,
+      "coefficient_of_variation": 3.0473,
+      "value_score": 0.9573
+    },
+    "prescriber_overview.NQTYCQTDWithPDRP": {
+      "feature": "prescriber_overview.NQTYCQTDWithPDRP",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 95.73,
+      "coefficient_of_variation": 3.1945,
+      "value_score": 0.9573
     },
     "payment_plan.OverlaySumTQTY": {
       "feature": "payment_plan.OverlaySumTQTY",
       "action": "KEEP",
       "reasons": [],
       "priority": "MEDIUM",
-      "coverage": 93.56,
-      "coefficient_of_variation": 1.6599,
-      "value_score": 0.9356
+      "coverage": 93.44,
+      "coefficient_of_variation": 1.3756,
+      "value_score": 0.9344
     },
     "payment_plan.CoreSumTQTY": {
       "feature": "payment_plan.CoreSumTQTY",
       "action": "KEEP",
       "reasons": [],
       "priority": "MEDIUM",
-      "coverage": 92.4,
-      "coefficient_of_variation": 1.6604,
-      "value_score": 0.924
+      "coverage": 92.38,
+      "coefficient_of_variation": 1.3743,
+      "value_score": 0.9238
+    },
+    "prescriber_profile.PreviousNQTY": {
+      "feature": "prescriber_profile.PreviousNQTY",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 74.29,
+      "coefficient_of_variation": 1.3022,
+      "value_score": 0.7429
+    },
+    "prescriber_overview.TRX(C4 Wk)": {
+      "feature": "prescriber_overview.TRX(C4 Wk)",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 71.01,
+      "coefficient_of_variation": 2.7566,
+      "value_score": 0.7101
+    },
+    "prescriber_overview.NRX(C4 Wk)": {
+      "feature": "prescriber_overview.NRX(C4 Wk)",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 71.01,
+      "coefficient_of_variation": 2.8494,
+      "value_score": 0.7101
+    },
+    "prescriber_overview.TQTY(C4 Wk)": {
+      "feature": "prescriber_overview.TQTY(C4 Wk)",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 71.01,
+      "coefficient_of_variation": 2.6534,
+      "value_score": 0.7101
+    },
+    "prescriber_overview.NQTY(C4 Wk)": {
+      "feature": "prescriber_overview.NQTY(C4 Wk)",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 71.01,
+      "coefficient_of_variation": 2.8972,
+      "value_score": 0.7101
+    },
+    "prescriber_overview.STLYTRX13": {
+      "feature": "prescriber_overview.STLYTRX13",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 70.7,
+      "coefficient_of_variation": 2.7055,
+      "value_score": 0.707
+    },
+    "prescriber_overview.STLYNRX13": {
+      "feature": "prescriber_overview.STLYNRX13",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 70.7,
+      "coefficient_of_variation": 2.7344,
+      "value_score": 0.707
+    },
+    "prescriber_overview.STLYTQTY13": {
+      "feature": "prescriber_overview.STLYTQTY13",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 70.7,
+      "coefficient_of_variation": 2.6233,
+      "value_score": 0.707
+    },
+    "prescriber_overview.STLYNQTY13": {
+      "feature": "prescriber_overview.STLYNQTY13",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 70.7,
+      "coefficient_of_variation": 2.7738,
+      "value_score": 0.707
+    },
+    "prescriber_overview.TRX(P13 Wk)": {
+      "feature": "prescriber_overview.TRX(P13 Wk)",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 70.2,
+      "coefficient_of_variation": 2.6343,
+      "value_score": 0.702
+    },
+    "prescriber_overview.NRX(P13 Wk)": {
+      "feature": "prescriber_overview.NRX(P13 Wk)",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 70.2,
+      "coefficient_of_variation": 2.6135,
+      "value_score": 0.702
+    },
+    "prescriber_overview.TQTY(P13 Wk)": {
+      "feature": "prescriber_overview.TQTY(P13 Wk)",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 70.2,
+      "coefficient_of_variation": 2.5196,
+      "value_score": 0.702
+    },
+    "prescriber_overview.NQTY(P13 Wk)": {
+      "feature": "prescriber_overview.NQTY(P13 Wk)",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 70.2,
+      "coefficient_of_variation": 2.6015,
+      "value_score": 0.702
+    },
+    "prescriber_overview.TRX(P QTD)": {
+      "feature": "prescriber_overview.TRX(P QTD)",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 69.63,
+      "coefficient_of_variation": 2.6191,
+      "value_score": 0.6963
+    },
+    "prescriber_overview.NRX(P QTD)": {
+      "feature": "prescriber_overview.NRX(P QTD)",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 69.63,
+      "coefficient_of_variation": 2.6001,
+      "value_score": 0.6963
+    },
+    "prescriber_overview.TQTY(P QTD)": {
+      "feature": "prescriber_overview.TQTY(P QTD)",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 69.63,
+      "coefficient_of_variation": 2.5071,
+      "value_score": 0.6963
+    },
+    "prescriber_overview.NQTY(P QTD)": {
+      "feature": "prescriber_overview.NQTY(P QTD)",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 69.63,
+      "coefficient_of_variation": 2.5926,
+      "value_score": 0.6963
+    },
+    "prescriber_overview.TRXC4WithPDRP": {
+      "feature": "prescriber_overview.TRXC4WithPDRP",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 69.02,
+      "coefficient_of_variation": 2.7511,
+      "value_score": 0.6902
+    },
+    "prescriber_overview.NRXC4WithPDRP": {
+      "feature": "prescriber_overview.NRXC4WithPDRP",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 69.02,
+      "coefficient_of_variation": 2.8384,
+      "value_score": 0.6902
+    },
+    "prescriber_overview.TQTYC4WithPDRP": {
+      "feature": "prescriber_overview.TQTYC4WithPDRP",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 69.02,
+      "coefficient_of_variation": 2.6346,
+      "value_score": 0.6902
+    },
+    "prescriber_overview.NQTYC4WithPDRP": {
+      "feature": "prescriber_overview.NQTYC4WithPDRP",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 69.02,
+      "coefficient_of_variation": 2.871,
+      "value_score": 0.6902
+    },
+    "prescriber_overview.STLYTRXQTD": {
+      "feature": "prescriber_overview.STLYTRXQTD",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 68.41,
+      "coefficient_of_variation": 2.6528,
+      "value_score": 0.6841
+    },
+    "prescriber_overview.STLYNRXQTD": {
+      "feature": "prescriber_overview.STLYNRXQTD",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 68.41,
+      "coefficient_of_variation": 2.6827,
+      "value_score": 0.6841
+    },
+    "prescriber_overview.STLYTQTYQTD": {
+      "feature": "prescriber_overview.STLYTQTYQTD",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 68.41,
+      "coefficient_of_variation": 2.5669,
+      "value_score": 0.6841
+    },
+    "prescriber_overview.STLYNQTYQTD": {
+      "feature": "prescriber_overview.STLYNQTYQTD",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 68.41,
+      "coefficient_of_variation": 2.7098,
+      "value_score": 0.6841
+    },
+    "prescriber_overview.TRXP13WithPDRP": {
+      "feature": "prescriber_overview.TRXP13WithPDRP",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 68.18,
+      "coefficient_of_variation": 2.6303,
+      "value_score": 0.6818
+    },
+    "prescriber_overview.NRXP13WithPDRP": {
+      "feature": "prescriber_overview.NRXP13WithPDRP",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 68.18,
+      "coefficient_of_variation": 2.6042,
+      "value_score": 0.6818
+    },
+    "prescriber_overview.TQTYP13WithPDRP": {
+      "feature": "prescriber_overview.TQTYP13WithPDRP",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 68.18,
+      "coefficient_of_variation": 2.5074,
+      "value_score": 0.6818
+    },
+    "prescriber_overview.NQTYP13WithPDRP": {
+      "feature": "prescriber_overview.NQTYP13WithPDRP",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 68.18,
+      "coefficient_of_variation": 2.5816,
+      "value_score": 0.6818
+    },
+    "prescriber_overview.TRXPQTDWithPDRP": {
+      "feature": "prescriber_overview.TRXPQTDWithPDRP",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 67.63,
+      "coefficient_of_variation": 2.6148,
+      "value_score": 0.6763
+    },
+    "prescriber_overview.NRXPQTDWithPDRP": {
+      "feature": "prescriber_overview.NRXPQTDWithPDRP",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 67.63,
+      "coefficient_of_variation": 2.5908,
+      "value_score": 0.6763
+    },
+    "prescriber_overview.TQTYPQTDWithPDRP": {
+      "feature": "prescriber_overview.TQTYPQTDWithPDRP",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 67.63,
+      "coefficient_of_variation": 2.4946,
+      "value_score": 0.6763
+    },
+    "prescriber_overview.NQTYPQTDWithPDRP": {
+      "feature": "prescriber_overview.NQTYPQTDWithPDRP",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 67.63,
+      "coefficient_of_variation": 2.5723,
+      "value_score": 0.6763
+    },
+    "prescriber_profile.STLYNQTY": {
+      "feature": "prescriber_profile.STLYNQTY",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 60.0,
+      "coefficient_of_variation": 1.1033,
+      "value_score": 0.6
+    },
+    "prescriber_overview.Zipcode": {
+      "feature": "prescriber_overview.Zipcode",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 100.0,
+      "coefficient_of_variation": 0.5849,
+      "value_score": 0.5849
     },
     "payment_plan.Zipcode": {
       "feature": "payment_plan.Zipcode",
@@ -3153,17 +2991,301 @@
       "reasons": [],
       "priority": "MEDIUM",
       "coverage": 100.0,
-      "coefficient_of_variation": 0.5804,
-      "value_score": 0.5804
+      "coefficient_of_variation": 0.5654,
+      "value_score": 0.5654
+    },
+    "prescriber_overview.STLYTRX4": {
+      "feature": "prescriber_overview.STLYTRX4",
+      "action": "REMOVE",
+      "reasons": [
+        "Low coverage (<50%)"
+      ],
+      "priority": "MEDIUM",
+      "coverage": 44.39,
+      "coefficient_of_variation": 2.1081,
+      "value_score": 0.4439
+    },
+    "prescriber_overview.STLYNRX4": {
+      "feature": "prescriber_overview.STLYNRX4",
+      "action": "REMOVE",
+      "reasons": [
+        "Low coverage (<50%)"
+      ],
+      "priority": "MEDIUM",
+      "coverage": 44.39,
+      "coefficient_of_variation": 2.2175,
+      "value_score": 0.4439
+    },
+    "prescriber_overview.STLYTQTY4": {
+      "feature": "prescriber_overview.STLYTQTY4",
+      "action": "REMOVE",
+      "reasons": [
+        "Low coverage (<50%)"
+      ],
+      "priority": "MEDIUM",
+      "coverage": 44.39,
+      "coefficient_of_variation": 2.0581,
+      "value_score": 0.4439
+    },
+    "prescriber_overview.STLYNQTY4": {
+      "feature": "prescriber_overview.STLYNQTY4",
+      "action": "REMOVE",
+      "reasons": [
+        "Low coverage (<50%)"
+      ],
+      "priority": "MEDIUM",
+      "coverage": 44.39,
+      "coefficient_of_variation": 2.2677,
+      "value_score": 0.4439
+    },
+    "prescriber_overview.TRX(P4 Wk)": {
+      "feature": "prescriber_overview.TRX(P4 Wk)",
+      "action": "REMOVE",
+      "reasons": [
+        "Low coverage (<50%)"
+      ],
+      "priority": "MEDIUM",
+      "coverage": 44.02,
+      "coefficient_of_variation": 2.0713,
+      "value_score": 0.4402
+    },
+    "prescriber_overview.NRX(P4 Wk)": {
+      "feature": "prescriber_overview.NRX(P4 Wk)",
+      "action": "REMOVE",
+      "reasons": [
+        "Low coverage (<50%)"
+      ],
+      "priority": "MEDIUM",
+      "coverage": 44.02,
+      "coefficient_of_variation": 2.1632,
+      "value_score": 0.4402
+    },
+    "prescriber_overview.TQTY(P4 Wk)": {
+      "feature": "prescriber_overview.TQTY(P4 Wk)",
+      "action": "REMOVE",
+      "reasons": [
+        "Low coverage (<50%)"
+      ],
+      "priority": "MEDIUM",
+      "coverage": 44.02,
+      "coefficient_of_variation": 1.9758,
+      "value_score": 0.4402
+    },
+    "prescriber_overview.NQTY(P4 Wk)": {
+      "feature": "prescriber_overview.NQTY(P4 Wk)",
+      "action": "REMOVE",
+      "reasons": [
+        "Low coverage (<50%)"
+      ],
+      "priority": "MEDIUM",
+      "coverage": 44.02,
+      "coefficient_of_variation": 2.1797,
+      "value_score": 0.4402
+    },
+    "prescriber_overview.TRXP4WithPDRP": {
+      "feature": "prescriber_overview.TRXP4WithPDRP",
+      "action": "REMOVE",
+      "reasons": [
+        "Low coverage (<50%)"
+      ],
+      "priority": "MEDIUM",
+      "coverage": 42.75,
+      "coefficient_of_variation": 2.0664,
+      "value_score": 0.4275
+    },
+    "prescriber_overview.NRXP4WithPDRP": {
+      "feature": "prescriber_overview.NRXP4WithPDRP",
+      "action": "REMOVE",
+      "reasons": [
+        "Low coverage (<50%)"
+      ],
+      "priority": "MEDIUM",
+      "coverage": 42.75,
+      "coefficient_of_variation": 2.1543,
+      "value_score": 0.4275
+    },
+    "prescriber_overview.TQTYP4WithPDRP": {
+      "feature": "prescriber_overview.TQTYP4WithPDRP",
+      "action": "REMOVE",
+      "reasons": [
+        "Low coverage (<50%)"
+      ],
+      "priority": "MEDIUM",
+      "coverage": 42.75,
+      "coefficient_of_variation": 1.9634,
+      "value_score": 0.4275
+    },
+    "prescriber_overview.NQTYP4WithPDRP": {
+      "feature": "prescriber_overview.NQTYP4WithPDRP",
+      "action": "REMOVE",
+      "reasons": [
+        "Low coverage (<50%)"
+      ],
+      "priority": "MEDIUM",
+      "coverage": 42.75,
+      "coefficient_of_variation": 2.162,
+      "value_score": 0.4275
+    },
+    "prescriber_profile.PreviousTQTY": {
+      "feature": "prescriber_profile.PreviousTQTY",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 74.29,
+      "coefficient_of_variation": 0.5719,
+      "value_score": 0.4248
+    },
+    "prescriber_profile.STLYTQTY": {
+      "feature": "prescriber_profile.STLYTQTY",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 60.0,
+      "coefficient_of_variation": 0.6162,
+      "value_score": 0.3697
+    },
+    "prescriber_overview.TQTYMktShare13": {
+      "feature": "prescriber_overview.TQTYMktShare13",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 86.72,
+      "coefficient_of_variation": 0.2598,
+      "value_score": 0.2253
+    },
+    "prescriber_overview.TRXMktShare13": {
+      "feature": "prescriber_overview.TRXMktShare13",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 86.88,
+      "coefficient_of_variation": 0.2583,
+      "value_score": 0.2244
+    },
+    "prescriber_overview.TQTYMktShareQTD": {
+      "feature": "prescriber_overview.TQTYMktShareQTD",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 85.6,
+      "coefficient_of_variation": 0.2593,
+      "value_score": 0.2219
+    },
+    "prescriber_overview.TRXMktShareQTD": {
+      "feature": "prescriber_overview.TRXMktShareQTD",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 85.75,
+      "coefficient_of_variation": 0.2577,
+      "value_score": 0.221
+    },
+    "prescriber_overview.NQTYMktShare13": {
+      "feature": "prescriber_overview.NQTYMktShare13",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 77.47,
+      "coefficient_of_variation": 0.2749,
+      "value_score": 0.213
+    },
+    "prescriber_overview.NRXMktShare13": {
+      "feature": "prescriber_overview.NRXMktShare13",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 77.71,
+      "coefficient_of_variation": 0.2733,
+      "value_score": 0.2124
+    },
+    "prescriber_overview.NQTYMktShareQTD": {
+      "feature": "prescriber_overview.NQTYMktShareQTD",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 76.32,
+      "coefficient_of_variation": 0.2752,
+      "value_score": 0.21
+    },
+    "prescriber_overview.NRXMktShareQTD": {
+      "feature": "prescriber_overview.NRXMktShareQTD",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 76.56,
+      "coefficient_of_variation": 0.2735,
+      "value_score": 0.2094
     },
     "payment_plan.NPINumber": {
       "feature": "payment_plan.NPINumber",
       "action": "KEEP",
       "reasons": [],
       "priority": "MEDIUM",
-      "coverage": 99.82,
-      "coefficient_of_variation": 0.1922,
-      "value_score": 0.1919
+      "coverage": 99.97,
+      "coefficient_of_variation": 0.1944,
+      "value_score": 0.1943
+    },
+    "prescriber_overview.TQTYMktShare4": {
+      "feature": "prescriber_overview.TQTYMktShare4",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 58.17,
+      "coefficient_of_variation": 0.2529,
+      "value_score": 0.1471
+    },
+    "prescriber_overview.TRXMktShare4": {
+      "feature": "prescriber_overview.TRXMktShare4",
+      "action": "KEEP",
+      "reasons": [],
+      "priority": "MEDIUM",
+      "coverage": 58.31,
+      "coefficient_of_variation": 0.2494,
+      "value_score": 0.1454
+    },
+    "prescriber_overview.NQTYMktShare4": {
+      "feature": "prescriber_overview.NQTYMktShare4",
+      "action": "REMOVE",
+      "reasons": [
+        "Low coverage (<50%)"
+      ],
+      "priority": "MEDIUM",
+      "coverage": 45.53,
+      "coefficient_of_variation": 0.2805,
+      "value_score": 0.1277
+    },
+    "prescriber_overview.NRXMktShare4": {
+      "feature": "prescriber_overview.NRXMktShare4",
+      "action": "REMOVE",
+      "reasons": [
+        "Low coverage (<50%)"
+      ],
+      "priority": "MEDIUM",
+      "coverage": 45.72,
+      "coefficient_of_variation": 0.2784,
+      "value_score": 0.1273
+    },
+    "prescriber_overview.Calls13": {
+      "feature": "prescriber_overview.Calls13",
+      "action": "REMOVE",
+      "reasons": [
+        "Low coverage (<50%)"
+      ],
+      "priority": "MEDIUM",
+      "coverage": 1.44,
+      "coefficient_of_variation": 0.6812,
+      "value_score": 0.0098
+    },
+    "prescriber_overview.CallsQTD": {
+      "feature": "prescriber_overview.CallsQTD",
+      "action": "REMOVE",
+      "reasons": [
+        "Low coverage (<50%)"
+      ],
+      "priority": "MEDIUM",
+      "coverage": 1.43,
+      "coefficient_of_variation": 0.677,
+      "value_score": 0.0097
     },
     "payment_plan.CoreOverlayTerritoryTQTY": {
       "feature": "payment_plan.CoreOverlayTerritoryTQTY",
@@ -3172,9 +3294,131 @@
         "Low coverage (<50%)"
       ],
       "priority": "MEDIUM",
-      "coverage": 0.98,
-      "coefficient_of_variation": 1.3402,
-      "value_score": 0.0098
+      "coverage": 0.86,
+      "coefficient_of_variation": 1.2157,
+      "value_score": 0.0086
+    },
+    "prescriber_overview.Samples13": {
+      "feature": "prescriber_overview.Samples13",
+      "action": "REMOVE",
+      "reasons": [
+        "Low coverage (<50%)"
+      ],
+      "priority": "MEDIUM",
+      "coverage": 0.38,
+      "coefficient_of_variation": 1.3656,
+      "value_score": 0.0038
+    },
+    "prescriber_overview.SamplesQTD": {
+      "feature": "prescriber_overview.SamplesQTD",
+      "action": "REMOVE",
+      "reasons": [
+        "Low coverage (<50%)"
+      ],
+      "priority": "MEDIUM",
+      "coverage": 0.38,
+      "coefficient_of_variation": 1.3729,
+      "value_score": 0.0038
+    },
+    "prescriber_overview.Calls4": {
+      "feature": "prescriber_overview.Calls4",
+      "action": "REMOVE",
+      "reasons": [
+        "Low coverage (<50%)"
+      ],
+      "priority": "MEDIUM",
+      "coverage": 0.72,
+      "coefficient_of_variation": 0.5176,
+      "value_score": 0.0037
+    },
+    "prescriber_overview.Samples4": {
+      "feature": "prescriber_overview.Samples4",
+      "action": "REMOVE",
+      "reasons": [
+        "Low coverage (<50%)"
+      ],
+      "priority": "MEDIUM",
+      "coverage": 0.16,
+      "coefficient_of_variation": 1.434,
+      "value_score": 0.0016
+    },
+    "prescriber_overview.LunchLearn13": {
+      "feature": "prescriber_overview.LunchLearn13",
+      "action": "REMOVE",
+      "reasons": [
+        "Low coverage (<50%)"
+      ],
+      "priority": "MEDIUM",
+      "coverage": 0.18,
+      "coefficient_of_variation": 0.633,
+      "value_score": 0.0011
+    },
+    "prescriber_overview.LunchLearnQTD": {
+      "feature": "prescriber_overview.LunchLearnQTD",
+      "action": "REMOVE",
+      "reasons": [
+        "Low coverage (<50%)"
+      ],
+      "priority": "MEDIUM",
+      "coverage": 0.18,
+      "coefficient_of_variation": 0.6338,
+      "value_score": 0.0011
+    },
+    "prescriber_overview.LunchLearn4": {
+      "feature": "prescriber_overview.LunchLearn4",
+      "action": "REMOVE",
+      "reasons": [
+        "Low coverage (<50%)"
+      ],
+      "priority": "MEDIUM",
+      "coverage": 0.08,
+      "coefficient_of_variation": 0.2098,
+      "value_score": 0.0002
+    },
+    "prescriber_profile.TQTYShare": {
+      "feature": "prescriber_profile.TQTYShare",
+      "action": "REMOVE",
+      "reasons": [
+        "Zero variance (CV < 0.01)"
+      ],
+      "priority": "MEDIUM",
+      "coverage": 80.0,
+      "coefficient_of_variation": 0.0,
+      "value_score": 0.0
+    },
+    "prescriber_profile.NQTYShare": {
+      "feature": "prescriber_profile.NQTYShare",
+      "action": "REMOVE",
+      "reasons": [
+        "Low coverage (<50%)",
+        "Zero variance (CV < 0.01)"
+      ],
+      "priority": "MEDIUM",
+      "coverage": 45.71,
+      "coefficient_of_variation": 0.0,
+      "value_score": 0.0
+    },
+    "prescriber_profile.PreviousTQTYShare": {
+      "feature": "prescriber_profile.PreviousTQTYShare",
+      "action": "REMOVE",
+      "reasons": [
+        "Zero variance (CV < 0.01)"
+      ],
+      "priority": "MEDIUM",
+      "coverage": 74.29,
+      "coefficient_of_variation": 0.0,
+      "value_score": 0.0
+    },
+    "prescriber_profile.PreviousNQTYShare": {
+      "feature": "prescriber_profile.PreviousNQTYShare",
+      "action": "REMOVE",
+      "reasons": [
+        "Zero variance (CV < 0.01)"
+      ],
+      "priority": "MEDIUM",
+      "coverage": 62.86,
+      "coefficient_of_variation": 0.0,
+      "value_score": 0.0
     },
     "prescriber_profile.STLYTQTYShare": {
       "feature": "prescriber_profile.STLYTQTYShare",
@@ -3198,96 +3442,6 @@
       "coefficient_of_variation": 0.0,
       "value_score": 0.0
     },
-    "territory_performance.PreviousTRXWriters": {
-      "feature": "territory_performance.PreviousTRXWriters",
-      "action": "REMOVE",
-      "reasons": [
-        "Zero variance (CV < 0.01)"
-      ],
-      "priority": "MEDIUM",
-      "coverage": 99.72,
-      "coefficient_of_variation": 0.0,
-      "value_score": 0.0
-    },
-    "territory_performance.STLYTRXWriters": {
-      "feature": "territory_performance.STLYTRXWriters",
-      "action": "REMOVE",
-      "reasons": [
-        "Zero variance (CV < 0.01)"
-      ],
-      "priority": "MEDIUM",
-      "coverage": 78.49,
-      "coefficient_of_variation": 0.0,
-      "value_score": 0.0
-    },
-    "territory_overview.TRXWriters(C4 Wk)": {
-      "feature": "territory_overview.TRXWriters(C4 Wk)",
-      "action": "REMOVE",
-      "reasons": [
-        "Low coverage (<50%)",
-        "Zero variance (CV < 0.01)"
-      ],
-      "priority": "MEDIUM",
-      "coverage": 47.77,
-      "coefficient_of_variation": 0.0,
-      "value_score": 0.0
-    },
-    "territory_overview.TRXWriters(C Wk)": {
-      "feature": "territory_overview.TRXWriters(C Wk)",
-      "action": "REMOVE",
-      "reasons": [
-        "Low coverage (<50%)",
-        "Zero variance (CV < 0.01)"
-      ],
-      "priority": "MEDIUM",
-      "coverage": 20.75,
-      "coefficient_of_variation": 0.0,
-      "value_score": 0.0
-    },
-    "call_activity.FlectorTier": {
-      "feature": "call_activity.FlectorTier",
-      "action": "REMOVE",
-      "reasons": [
-        "Low coverage (<50%)"
-      ],
-      "priority": "MEDIUM",
-      "coverage": 0.0,
-      "coefficient_of_variation": NaN,
-      "value_score": NaN
-    },
-    "call_activity.SampledCall": {
-      "feature": "call_activity.SampledCall",
-      "action": "REMOVE",
-      "reasons": [
-        "Low coverage (<50%)"
-      ],
-      "priority": "MEDIUM",
-      "coverage": 14.15,
-      "coefficient_of_variation": 0.5666,
-      "value_score": 0.0802
-    },
-    "call_activity.LunchLearn": {
-      "feature": "call_activity.LunchLearn",
-      "action": "REMOVE",
-      "reasons": [
-        "Low coverage (<50%)"
-      ],
-      "priority": "MEDIUM",
-      "coverage": 7.06,
-      "coefficient_of_variation": 0.5161,
-      "value_score": 0.0364
-    },
-    "call_activity.DTPQuantity": {
-      "feature": "call_activity.DTPQuantity",
-      "action": "REMOVE",
-      "reasons": [
-        "Low coverage (<50%)"
-      ],
-      "priority": "MEDIUM",
-      "coverage": 1.5,
-      "coefficient_of_variation": 1.3272,
-      "value_score": 0.015
-    },
     "territory_performance.TRXWriters": {
       "feature": "territory_performance.TRXWriters",
       "action": "REMOVE",
@@ -3301,6 +3455,20 @@
     }
   },
   "keep_features": [
+    "prescriber_overview.frequency",
+    "prescriber_overview.monetary",
+    "prescriber_overview.product_count",
+    "prescriber_profile.TRX",
+    "prescriber_profile.NRX",
+    "prescriber_profile.NQTY",
+    "prescriber_profile.TQTY",
+    "prescriber_overview.nrx_ratio",
+    "prescriber_profile.MeNumber",
+    "prescriber_profile.NPINumber",
+    "prescriber_profile.PreviousNRX",
+    "prescriber_profile.PreviousTRX",
+    "prescriber_overview.RFM_score",
+    "trx_sample.Licart TQTY",
     "trx_sample.Tirosint Caps Samples/Tirosint Caps TRX",
     "trx_sample.Tirosint Sol Samples/Tirosint Sol TRX",
     "trx_sample.Flector Samples/Flector TRX",
@@ -3361,40 +3529,17 @@
     "territory_performance.NQTY",
     "territory_overview.TRX(C YTD)",
     "territory_overview.TQTY(C YTD)",
-    "ngd_official.StartDateTqty",
-    "ngd_official.EndDateTqty",
-    "ngd_official.Abs",
-    "ngd_official.AbsWithPDRP",
-    "ngd_official.StartDateTqtyWithPDRP",
-    "ngd_official.EndDateTqtyWithPDRP",
-    "ngd_official.MyTarget",
-    "sample_ll_dtp.Samples",
-    "sample_ll_dtp.LunchLearn",
-    "sample_ll_dtp.DTPShipped",
-    "sample_ll_dtp.Value",
-    "territory_call_summary.Value",
-    "call_attainment_territory.TimeOff",
-    "call_attainment_territory.AvgCallsPerDay",
-    "call_attainment_tier.NoAccount",
-    "call_attainment_tier.ActualCalls",
-    "call_attainment_tier.Reached",
-    "call_attainment_tier.PercentageReached",
-    "call_attainment_tier.TotalCount",
-    "prescriber_overview.TRX(C13 Wk)",
-    "prescriber_overview.NRX(C13 Wk)",
-    "prescriber_overview.TQTY(C13 Wk)",
-    "prescriber_overview.NQTY(C13 Wk)",
     "territory_performance.PreviousTRX",
     "territory_performance.PreviousNRX",
     "territory_performance.PreviousTQTY",
     "territory_performance.PreviousNQTY",
     "territory_overview.TRX(P YTD)",
     "territory_overview.TQTY(P YTD)",
-    "prescriber_overview.TRX(C QTD)",
-    "prescriber_overview.NRX(C QTD)",
-    "prescriber_overview.TQTY(C QTD)",
-    "prescriber_overview.NQTY(C QTD)",
-    "call_attainment_tier.PlannedCalls",
+    "trx_sample.Sample/TRX PDRP",
+    "trx_sample.Total TRX PDRP",
+    "trx_sample.Tirosint Caps TRX PDRP",
+    "trx_sample.Tirosint Sol TRX PDRP",
+    "trx_sample.Flector TRX PDRP",
     "trx_sample.Licart TRX PDRP",
     "trx_sample.Sample/TQTY PDRP",
     "trx_sample.Total TQTY PDRP",
@@ -3414,24 +3559,7 @@
     "nrx_sample.Tirosint Sol NQTY PDRP",
     "nrx_sample.Flector NQTY PDRP",
     "nrx_sample.Licart NQTY PDRP",
-    "prescriber_overview.TRXC13WithPDRP",
-    "prescriber_overview.NRXC13WithPDRP",
-    "prescriber_overview.TQTYC13WithPDRP",
-    "prescriber_overview.NQTYC13WithPDRP",
-    "call_attainment_tier.PercentageAttainment",
-    "prescriber_overview.TRXCQTDWithPDRP",
-    "prescriber_overview.NRXCQTDWithPDRP",
-    "prescriber_overview.TQTYCQTDWithPDRP",
-    "prescriber_overview.NQTYCQTDWithPDRP",
-    "call_attainment_tier.Attainment",
-    "call_attainment_territory.TReached",
-    "call_attainment_territory.ActualCalls",
     "trx_sample.samples_per_trx",
-    "territory_performance.STLYTRX",
-    "territory_performance.STLYNRX",
-    "territory_performance.STLYTQTY",
-    "territory_performance.STLYNQTY",
-    "ngd_official.RoWnumber",
     "territory_overview.TRX(C13 Wk)",
     "territory_overview.TQTY(C13 Wk)",
     "territory_overview.TRX(P13 Wk)",
@@ -3444,43 +3572,43 @@
     "territory_overview.TQTY(P QTD)",
     "territory_overview.STLYTRXQTD",
     "territory_overview.STLYTQTYQTD",
-    "prescriber_overview.STLYTRX13",
-    "prescriber_overview.STLYNRX13",
-    "prescriber_overview.STLYTQTY13",
-    "prescriber_overview.STLYNQTY13",
-    "prescriber_overview.TRX(C4 Wk)",
-    "prescriber_overview.NRX(C4 Wk)",
-    "prescriber_overview.TQTY(C4 Wk)",
-    "prescriber_overview.NQTY(C4 Wk)",
-    "prescriber_overview.TRX(P13 Wk)",
-    "prescriber_overview.NRX(P13 Wk)",
-    "prescriber_overview.TQTY(P13 Wk)",
-    "prescriber_overview.NQTY(P13 Wk)",
-    "prescriber_overview.TRX(P QTD)",
-    "prescriber_overview.NRX(P QTD)",
-    "prescriber_overview.TQTY(P QTD)",
-    "prescriber_overview.NQTY(P QTD)",
-    "prescriber_overview.TRXC4WithPDRP",
-    "prescriber_overview.NRXC4WithPDRP",
-    "prescriber_overview.TQTYC4WithPDRP",
-    "prescriber_overview.NQTYC4WithPDRP",
-    "prescriber_overview.STLYTRXQTD",
-    "prescriber_overview.STLYNRXQTD",
-    "prescriber_overview.STLYTQTYQTD",
-    "prescriber_overview.STLYNQTYQTD",
+    "territory_performance.STLYTRX",
+    "territory_performance.STLYNRX",
+    "territory_performance.STLYTQTY",
+    "territory_performance.STLYNQTY",
+    "hcp_universe.NPI",
+    "hcp_universe.Zipcode",
     "call_activity.CallCount",
-    "prescriber_overview.TRXP13WithPDRP",
-    "prescriber_overview.NRXP13WithPDRP",
-    "prescriber_overview.TQTYP13WithPDRP",
+    "ngd_official.StartDateTqty",
+    "ngd_official.EndDateTqty",
+    "ngd_official.Abs",
+    "ngd_official.AbsWithPDRP",
+    "ngd_official.StartDateTqtyWithPDRP",
+    "ngd_official.EndDateTqtyWithPDRP",
+    "ngd_official.MyTarget",
+    "sample_ll_dtp.Samples",
+    "sample_ll_dtp.LunchLearn",
+    "sample_ll_dtp.DTPShipped",
+    "sample_ll_dtp.Value",
+    "territory_call_summary.Value",
+    "call_attainment_territory.TimeOff",
+    "call_attainment_territory.AvgCallsPerDay",
+    "call_attainment_tier.NoAccount",
+    "call_attainment_tier.ActualCalls",
+    "call_attainment_tier.Reached",
+    "call_attainment_tier.PercentageReached",
+    "call_attainment_tier.TotalCount",
+    "call_attainment_tier.PlannedCalls",
+    "call_attainment_tier.PercentageAttainment",
+    "call_attainment_tier.Attainment",
+    "call_attainment_territory.TReached",
+    "call_attainment_territory.ActualCalls",
+    "ngd_official.RoWnumber",
     "call_attainment_territory.PercentageReached",
-    "prescriber_overview.TRXPQTDWithPDRP",
-    "prescriber_overview.NRXPQTDWithPDRP",
-    "prescriber_overview.TQTYPQTDWithPDRP",
     "call_attainment_territory.PercentageAttainment",
     "call_attainment_territory.Attainment",
-    "hcp_universe.Zipcode",
+    "prescriber_profile.STLYNRX",
     "ngd_official.Zipcode",
-    "prescriber_overview.Zipcode",
     "territory_call_summary.Sort",
     "sample_ll_dtp.SortingOrder",
     "trx_sample.SortingOrder",
@@ -3488,38 +3616,11 @@
     "call_attainment_territory.NoAccount",
     "call_attainment_territory.TotalCount",
     "call_activity.SortingOrder",
+    "prescriber_profile.STLYTRX",
     "call_attainment_territory.PlannedCalls",
     "call_attainment_territory.TimeIn",
-    "prescriber_overview.TQTYMktShare13",
-    "prescriber_overview.TRXMktShare13",
-    "prescriber_overview.TQTYMktShareQTD",
-    "prescriber_overview.TRXMktShareQTD",
-    "prescriber_overview.NQTYMktShare13",
-    "prescriber_overview.NRXMktShare13",
-    "prescriber_overview.NQTYMktShareQTD",
-    "prescriber_overview.NRXMktShareQTD",
-    "ngd_official.NPINumber",
-    "hcp_universe.NPI",
-    "prescriber_overview.TQTYMktShare4",
-    "prescriber_overview.TRXMktShare4",
-    "prescriber_profile.TRX",
-    "prescriber_profile.NRX",
-    "prescriber_profile.NQTY",
-    "prescriber_profile.TQTY",
-    "prescriber_overview.NQTYP13WithPDRP",
-    "prescriber_overview.NQTYPQTDWithPDRP",
-    "prescriber_overview.share_change",
-    "prescriber_profile.MeNumber",
     "prescriber_profile.Zipcode",
-    "prescriber_profile.NPINumber",
-    "prescriber_profile.PreviousNRX",
-    "prescriber_profile.PreviousTRX",
-    "prescriber_profile.STLYNRX",
-    "prescriber_profile.PreviousNQTY",
-    "prescriber_profile.STLYNQTY",
-    "prescriber_profile.PreviousTQTY",
-    "prescriber_profile.STLYTQTY",
-    "prescriber_profile.STLYTRX",
+    "ngd_official.NPINumber",
     "payment_plan.TRX",
     "payment_plan.NRX",
     "payment_plan.TQTY",
@@ -3543,28 +3644,128 @@
     "trx_sample.Tirosint Caps TQTY",
     "trx_sample.Tirosint Sol TQTY",
     "trx_sample.Flector TQTY",
-    "trx_sample.Licart TQTY",
-    "trx_sample.Sample/TRX PDRP",
-    "trx_sample.Total TRX PDRP",
-    "trx_sample.Tirosint Caps TRX PDRP",
-    "trx_sample.Tirosint Sol TRX PDRP",
-    "trx_sample.Flector TRX PDRP",
+    "prescriber_overview.TRX(C13 Wk)",
+    "prescriber_overview.NRX(C13 Wk)",
+    "prescriber_overview.TQTY(C13 Wk)",
+    "prescriber_overview.NQTY(C13 Wk)",
+    "prescriber_overview.TRX(C QTD)",
+    "prescriber_overview.NRX(C QTD)",
+    "prescriber_overview.TQTY(C QTD)",
+    "prescriber_overview.NQTY(C QTD)",
     "payment_plan.TRXWithPDRP",
     "payment_plan.NRXWithPDRP",
     "payment_plan.TQTYWithPDRP",
     "payment_plan.NQTYWithPDRP",
+    "prescriber_overview.TRXC13WithPDRP",
+    "prescriber_overview.NRXC13WithPDRP",
+    "prescriber_overview.TQTYC13WithPDRP",
+    "prescriber_overview.NQTYC13WithPDRP",
+    "prescriber_overview.TRXCQTDWithPDRP",
+    "prescriber_overview.NRXCQTDWithPDRP",
+    "prescriber_overview.TQTYCQTDWithPDRP",
+    "prescriber_overview.NQTYCQTDWithPDRP",
     "payment_plan.OverlaySumTQTY",
     "payment_plan.CoreSumTQTY",
+    "prescriber_profile.PreviousNQTY",
+    "prescriber_overview.TRX(C4 Wk)",
+    "prescriber_overview.NRX(C4 Wk)",
+    "prescriber_overview.TQTY(C4 Wk)",
+    "prescriber_overview.NQTY(C4 Wk)",
+    "prescriber_overview.STLYTRX13",
+    "prescriber_overview.STLYNRX13",
+    "prescriber_overview.STLYTQTY13",
+    "prescriber_overview.STLYNQTY13",
+    "prescriber_overview.TRX(P13 Wk)",
+    "prescriber_overview.NRX(P13 Wk)",
+    "prescriber_overview.TQTY(P13 Wk)",
+    "prescriber_overview.NQTY(P13 Wk)",
+    "prescriber_overview.TRX(P QTD)",
+    "prescriber_overview.NRX(P QTD)",
+    "prescriber_overview.TQTY(P QTD)",
+    "prescriber_overview.NQTY(P QTD)",
+    "prescriber_overview.TRXC4WithPDRP",
+    "prescriber_overview.NRXC4WithPDRP",
+    "prescriber_overview.TQTYC4WithPDRP",
+    "prescriber_overview.NQTYC4WithPDRP",
+    "prescriber_overview.STLYTRXQTD",
+    "prescriber_overview.STLYNRXQTD",
+    "prescriber_overview.STLYTQTYQTD",
+    "prescriber_overview.STLYNQTYQTD",
+    "prescriber_overview.TRXP13WithPDRP",
+    "prescriber_overview.NRXP13WithPDRP",
+    "prescriber_overview.TQTYP13WithPDRP",
+    "prescriber_overview.NQTYP13WithPDRP",
+    "prescriber_overview.TRXPQTDWithPDRP",
+    "prescriber_overview.NRXPQTDWithPDRP",
+    "prescriber_overview.TQTYPQTDWithPDRP",
+    "prescriber_overview.NQTYPQTDWithPDRP",
+    "prescriber_profile.STLYNQTY",
+    "prescriber_overview.Zipcode",
     "payment_plan.Zipcode",
-    "payment_plan.NPINumber"
+    "prescriber_profile.PreviousTQTY",
+    "prescriber_profile.STLYTQTY",
+    "prescriber_overview.TQTYMktShare13",
+    "prescriber_overview.TRXMktShare13",
+    "prescriber_overview.TQTYMktShareQTD",
+    "prescriber_overview.TRXMktShareQTD",
+    "prescriber_overview.NQTYMktShare13",
+    "prescriber_overview.NRXMktShare13",
+    "prescriber_overview.NQTYMktShareQTD",
+    "prescriber_overview.NRXMktShareQTD",
+    "payment_plan.NPINumber",
+    "prescriber_overview.TQTYMktShare4",
+    "prescriber_overview.TRXMktShare4"
   ],
   "remove_features": [
+    "prescriber_profile.Credentials",
+    "prescriber_profile.AMANoContact",
+    "prescriber_profile.ProductPriority",
+    "prescriber_overview.trx_change",
+    "prescriber_overview.velocity_13wk",
+    "prescriber_profile.Calls",
+    "prescriber_profile.LunchLearn",
+    "prescriber_profile.Samples",
+    "prescriber_profile.LastCallDate",
+    "prescriber_profile.PrescriberAtSameAddress",
+    "prescriber_profile.PrescriberAtSameAddressSpeciality",
+    "prescriber_profile.PreviousCalls",
+    "prescriber_profile.PreviousLunchLearn",
+    "prescriber_profile.PreviouSamples",
     "territory_overview.TRX(C4 Wk)",
     "territory_overview.TQTY(C4 Wk)",
     "territory_overview.TRX(P4 Wk)",
     "territory_overview.TQTY(P4 Wk)",
     "territory_overview.STLYTRX4",
     "territory_overview.STLYTQTY4",
+    "territory_overview.TRX(C Wk)",
+    "territory_overview.TQTY(C Wk)",
+    "territory_performance.PreviousTRXWriters",
+    "territory_performance.STLYTRXWriters",
+    "territory_overview.TRXWriters(C4 Wk)",
+    "hcp_universe.ProfessionalDesignation",
+    "territory_overview.TRXWriters(C Wk)",
+    "hcp_universe.Primary",
+    "call_activity.FlectorTier",
+    "ngd_official.TotalCalls",
+    "call_activity.SampleQuantity",
+    "trx_sample.sample_roi",
+    "call_activity.SampledCall",
+    "call_activity.LunchLearn",
+    "call_activity.DTPQuantity",
+    "prescriber_overview.call_to_trx_ratio",
+    "prescriber_overview.recency_days",
+    "prescriber_profile.TRXShare",
+    "prescriber_profile.NRXShare",
+    "prescriber_profile.PreviousTRXShare",
+    "prescriber_profile.PreviousNRXShare",
+    "prescriber_profile.STLYTRXShare",
+    "prescriber_profile.STLYNRXShare",
+    "prescriber_overview.acceleration",
+    "prescriber_overview.velocity_4wk",
+    "prescriber_overview.trx_change_pct",
+    "prescriber_overview.share_change",
+    "prescriber_profile.IbsaDesiccatedTarget",
+    "prescriber_profile.MyTarget",
     "prescriber_overview.STLYTRX4",
     "prescriber_overview.STLYNRX4",
     "prescriber_overview.STLYTQTY4",
@@ -3577,15 +3778,11 @@
     "prescriber_overview.NRXP4WithPDRP",
     "prescriber_overview.TQTYP4WithPDRP",
     "prescriber_overview.NQTYP4WithPDRP",
-    "ngd_official.TotalCalls",
-    "territory_overview.TRX(C Wk)",
-    "territory_overview.TQTY(C Wk)",
-    "call_activity.SampleQuantity",
     "prescriber_overview.NQTYMktShare4",
     "prescriber_overview.NRXMktShare4",
-    "trx_sample.sample_roi",
     "prescriber_overview.Calls13",
     "prescriber_overview.CallsQTD",
+    "payment_plan.CoreOverlayTerritoryTQTY",
     "prescriber_overview.Samples13",
     "prescriber_overview.SamplesQTD",
     "prescriber_overview.Calls4",
@@ -3593,44 +3790,23 @@
     "prescriber_overview.LunchLearn13",
     "prescriber_overview.LunchLearnQTD",
     "prescriber_overview.LunchLearn4",
-    "prescriber_profile.Credentials",
-    "prescriber_profile.AMANoContact",
-    "prescriber_profile.ProductPriority",
-    "prescriber_profile.Calls",
-    "prescriber_profile.LunchLearn",
-    "prescriber_profile.Samples",
-    "prescriber_profile.LastCallDate",
-    "prescriber_profile.PrescriberAtSameAddress",
-    "prescriber_profile.PrescriberAtSameAddressSpeciality",
-    "prescriber_profile.PreviousCalls",
-    "prescriber_profile.PreviousLunchLearn",
-    "prescriber_profile.PreviouSamples",
-    "prescriber_profile.IbsaDesiccatedTarget",
-    "prescriber_profile.TRXShare",
-    "prescriber_profile.NRXShare",
-    "prescriber_profile.PreviousTRXShare",
-    "prescriber_profile.PreviousNRXShare",
-    "prescriber_profile.STLYTRXShare",
-    "prescriber_profile.STLYNRXShare",
     "prescriber_profile.TQTYShare",
     "prescriber_profile.NQTYShare",
     "prescriber_profile.PreviousTQTYShare",
     "prescriber_profile.PreviousNQTYShare",
-    "prescriber_profile.MyTarget",
-    "payment_plan.CoreOverlayTerritoryTQTY",
     "prescriber_profile.STLYTQTYShare",
     "prescriber_profile.STLYNQTYShare",
-    "territory_performance.PreviousTRXWriters",
-    "territory_performance.STLYTRXWriters",
-    "territory_overview.TRXWriters(C4 Wk)",
-    "territory_overview.TRXWriters(C Wk)",
-    "call_activity.FlectorTier",
-    "call_activity.SampledCall",
-    "call_activity.LunchLearn",
-    "call_activity.DTPQuantity",
     "territory_performance.TRXWriters"
   ],
   "high_priority_features": [
+    "prescriber_overview.frequency",
+    "prescriber_overview.monetary",
+    "prescriber_overview.product_count",
+    "prescriber_profile.TRX",
+    "prescriber_profile.NRX",
+    "prescriber_profile.NQTY",
+    "prescriber_profile.TQTY",
+    "trx_sample.Licart TQTY",
     "trx_sample.Tirosint Caps Samples/Tirosint Caps TRX",
     "trx_sample.Tirosint Sol Samples/Tirosint Sol TRX",
     "trx_sample.Flector Samples/Flector TRX",
@@ -3710,10 +3886,6 @@
     "call_attainment_tier.Reached",
     "call_attainment_tier.PercentageReached",
     "call_attainment_tier.TotalCount",
-    "prescriber_profile.TRX",
-    "prescriber_profile.NRX",
-    "prescriber_profile.NQTY",
-    "prescriber_profile.TQTY",
     "payment_plan.TRX",
     "payment_plan.NRX",
     "payment_plan.TQTY",
@@ -3736,18 +3908,17 @@
     "trx_sample.TotalTQTY",
     "trx_sample.Tirosint Caps TQTY",
     "trx_sample.Tirosint Sol TQTY",
-    "trx_sample.Flector TQTY",
-    "trx_sample.Licart TQTY"
+    "trx_sample.Flector TQTY"
   ],
   "removal_reasons": {
-    "low_coverage": 57,
-    "zero_variance": 17,
-    "redundant": 170
+    "low_coverage": 63,
+    "zero_variance": 23,
+    "redundant": 174
   },
   "recommendations": [
-    "Rebuild Phase 4B to create only the 256 KEEP features",
-    "Focus on 107 high-priority features for model training",
-    "Remove 70 features to reduce noise and overfitting",
+    "Rebuild Phase 4B to create only the 260 KEEP features",
+    "Focus on 110 high-priority features for model training",
+    "Remove 80 features to reduce noise and overfitting",
     "Re-run EDA after Phase 5 to compute actual feature importance with targets",
     "Validate that model performance doesn't degrade with reduced feature set"
   ]

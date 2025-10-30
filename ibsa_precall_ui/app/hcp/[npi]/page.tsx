@@ -202,6 +202,7 @@ export default function HCPDetailPage() {
                     <div className="text-[10px] text-gray-600 mt-1">Success: {formatPercent(hcp.predictions.tirosint_call_success, 0)}</div>
                     <div className="text-[10px] text-gray-600">Lift: {hcp.predictions.tirosint_prescription_lift >= 0 ? '+' : ''}{formatNumber(hcp.predictions.tirosint_prescription_lift, 1)}</div>
                     <div className="text-[10px] text-gray-600">NGD: {hcp.predictions.tirosint_ngd_category}</div>
+                    <div className="text-[10px] text-blue-700 font-semibold">Share: +{formatNumber(hcp.predictions.tirosint_wallet_share_growth, 1)}pp</div>
                   </div>
                   <div className={`p-2 rounded border ${hcp.predictions.product_focus === 'Flector' ? 'border-green-500 bg-green-50 ring-2 ring-green-300' : 'border-gray-200 opacity-60'}`}>
                     <div className="font-semibold flex items-center gap-1">
@@ -211,6 +212,7 @@ export default function HCPDetailPage() {
                     <div className="text-[10px] text-gray-600 mt-1">Success: {formatPercent(hcp.predictions.flector_call_success, 0)}</div>
                     <div className="text-[10px] text-gray-600">Lift: {hcp.predictions.flector_prescription_lift >= 0 ? '+' : ''}{formatNumber(hcp.predictions.flector_prescription_lift, 1)}</div>
                     <div className="text-[10px] text-gray-600">NGD: {hcp.predictions.flector_ngd_category}</div>
+                    <div className="text-[10px] text-blue-700 font-semibold">Share: +{formatNumber(hcp.predictions.flector_wallet_share_growth, 1)}pp</div>
                   </div>
                   <div className={`p-2 rounded border ${hcp.predictions.product_focus === 'Licart' ? 'border-green-500 bg-green-50 ring-2 ring-green-300' : 'border-gray-200 opacity-60'}`}>
                     <div className="font-semibold flex items-center gap-1">
@@ -220,6 +222,7 @@ export default function HCPDetailPage() {
                     <div className="text-[10px] text-gray-600 mt-1">Success: {formatPercent(hcp.predictions.licart_call_success, 0)}</div>
                     <div className="text-[10px] text-gray-600">Lift: {hcp.predictions.licart_prescription_lift >= 0 ? '+' : ''}{formatNumber(hcp.predictions.licart_prescription_lift, 1)}</div>
                     <div className="text-[10px] text-gray-600">NGD: {hcp.predictions.licart_ngd_category}</div>
+                    <div className="text-[10px] text-blue-700 font-semibold">Share: +{formatNumber(hcp.predictions.licart_wallet_share_growth, 1)}pp</div>
                   </div>
                 </div>
                 <div className="text-[11px] text-gray-500 italic mt-2">
@@ -815,6 +818,12 @@ export default function HCPDetailPage() {
                     <div className="text-sm font-medium text-muted-foreground mb-2">Forecasted Lift</div>
                     <div className="text-3xl font-bold text-green-600">{hcp.predictions.forecasted_lift >= 0 ? '+' : ''}{formatNumber(hcp.predictions.forecasted_lift, 1)} TRx</div>
                     <div className="text-sm text-muted-foreground">Expected increase</div>
+                  </div>
+
+                  <div>
+                    <div className="text-sm font-medium text-muted-foreground mb-2">Wallet Share Growth</div>
+                    <div className="text-3xl font-bold text-indigo-600">+{formatNumber(hcp.predictions.wallet_share_growth_avg, 1)}pp</div>
+                    <div className="text-sm text-muted-foreground">Portfolio expansion</div>
                   </div>
 
                   <div>

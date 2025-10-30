@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getDataCached, findByNpi } from '@/lib/server/data-cache'
 
-export async function GET(request: NextRequest, { params }: { params: { npi: string } }) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ npi: string }> }) {
   try {
     const data = await getDataCached()
-    const npi = params.npi
+    const { npi } = await params
     const hcp = findByNpi(data as any, npi)
     
     if (!hcp) {

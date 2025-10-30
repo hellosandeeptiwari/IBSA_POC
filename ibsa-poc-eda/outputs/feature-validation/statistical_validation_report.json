@@ -1,0 +1,118 @@
+{
+  "timestamp": "2025-10-30T03:52:45.353021",
+  "leakage_tests": {
+    "total_issues": 1,
+    "issues": [
+      {
+        "type": "exact_match",
+        "matches": [
+          {
+            "feature": "PrescriberName",
+            "target": "PrescriberName"
+          },
+          {
+            "feature": "TerritoryName",
+            "target": "TerritoryName"
+          },
+          {
+            "feature": "RegionName",
+            "target": "RegionName"
+          }
+        ],
+        "severity": "CRITICAL"
+      }
+    ],
+    "status": "FAIL"
+  },
+  "multicollinearity": {
+    "high_vif_count": 14,
+    "moderate_vif_count": 1,
+    "low_vif_count": 8,
+    "high_vif_features": [
+      "tirosint_trx",
+      "flector_trx",
+      "licart_trx",
+      "competitor_trx",
+      "total_trx",
+      "ibsa_total_trx",
+      "territory_avg_trx",
+      "territory_median_trx",
+      "payer_trx",
+      "territory_has_ll",
+      "territory_total_calls",
+      "territory_total_trx_vol",
+      "total_calls",
+      "payer_nrx"
+    ],
+    "status": "WARNING"
+  },
+  "heteroscedasticity": {
+    "heteroscedastic_count": 5,
+    "heteroscedastic_features": [
+      "competitor_trx",
+      "total_trx",
+      "payer_trx",
+      "payer_nrx",
+      "payer_count"
+    ],
+    "status": "WARNING"
+  },
+  "autocorrelation": {
+    "temporal_features_count": 5,
+    "temporal_features": [
+      "trx_lag_1period",
+      "trx_lag_2period",
+      "trx_lag_3period",
+      "trx_trending_up",
+      "trx_trending_down"
+    ],
+    "status": "PASS",
+    "note": "Temporal features are intentional and valid for this use case"
+  },
+  "feature_target_correlation": {
+    "total_correlations_tested": 30,
+    "significant_correlations": 1,
+    "top_features": [
+      "tirosint_trx",
+      "ibsa_total_trx",
+      "competitor_trx",
+      "total_trx",
+      "competitor_trx",
+      "total_trx",
+      "payer_count",
+      "payer_nrx",
+      "tirosint_trx",
+      "payer_nrx"
+    ]
+  },
+  "final_recommendations": {
+    "remove_features": [],
+    "transform_features": [
+      "licart_trx",
+      "payer_nrx",
+      "total_trx",
+      "territory_avg_trx",
+      "territory_has_ll",
+      "ibsa_total_trx",
+      "flector_trx",
+      "payer_count",
+      "territory_median_trx",
+      "competitor_trx",
+      "tirosint_trx",
+      "payer_trx"
+    ],
+    "keep_features": [],
+    "high_priority_features": [
+      "tirosint_trx",
+      "ibsa_total_trx",
+      "competitor_trx",
+      "total_trx",
+      "competitor_trx",
+      "total_trx",
+      "payer_count",
+      "payer_nrx",
+      "tirosint_trx",
+      "payer_nrx"
+    ]
+  }
+}

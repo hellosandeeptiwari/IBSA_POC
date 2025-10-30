@@ -1,57 +1,47 @@
 import Papa from 'papaparse'
 import type { ModelReadyRow } from '@/lib/api/data-loader'
+import fs from 'fs'
+import path from 'path'
 
-// Use a global cache to ensure a single dataset is reused across API routes
-// This survives module reloads within the same Node.js process
-declare global {
-  // eslint-disable-next-line no-var
-  var __IBSA_DATA_CACHE__: {
-    data: ModelReadyRow[] | null
-    fetchedAt: number
-    ttlMs: number
-  } | undefined
-}
+// NO CACHE - Read fresh data each time to avoid memory buildup
+// For large datasets (350K rows), streaming would be better but for now we optimize parsing
 
-const DEFAULT_TTL = 60 * 60 * 1000 // 1 hour
-
-function getCache() {
-  if (!global.__IBSA_DATA_CACHE__) {
-    global.__IBSA_DATA_CACHE__ = { data: null, fetchedAt: 0, ttlMs: DEFAULT_TTL }
-  }
-  return global.__IBSA_DATA_CACHE__
-}
-
-export async function getDataCached(ttlMs: number = DEFAULT_TTL): Promise<ModelReadyRow[]> {
-  const cache = getCache()
-  const now = Date.now()
-  const valid = cache.data && now - cache.fetchedAt < cache.ttlMs
-
-  if (valid) return cache.data as ModelReadyRow[]
-
+export async function getDataCached(): Promise<ModelReadyRow[]> {
   const BLOB_URL = process.env.NEXT_PUBLIC_BLOB_URL ||
-    'https://ibsangdpocdata.blob.core.windows.net/ngddatasets/IBSA_ModelReady_Enhanced.csv'
+    'https://ibsangdpocdata.blob.core.windows.net/ngddatasets/IBSA_ModelReady_Enhanced_WithPredictions.csv'
 
-  const res = await fetch(BLOB_URL)
-  if (!res.ok) {
-    throw new Error(`Blob fetch failed with status: ${res.status}`)
+  let csvText: string
+
+  // Check if using local file path (starts with /)
+  if (BLOB_URL.startsWith('/')) {
+    // Read from local file system
+    const filePath = path.join(process.cwd(), 'public', BLOB_URL)
+    console.log(`📂 [Server] Reading from local file: ${filePath}`)
+    csvText = fs.readFileSync(filePath, 'utf-8')
+  } else {
+    // Fetch from remote URL
+    console.log(`📥 [Server] Fetching from Azure Blob: ${BLOB_URL}`)
+    const res = await fetch(BLOB_URL)
+    if (!res.ok) {
+      throw new Error(`Blob fetch failed with status: ${res.status}`)
+    }
+    csvText = await res.text()
   }
-  const csvText = await res.text()
 
+  // Parse with memory-efficient options
   const parsed = Papa.parse<ModelReadyRow>(csvText, {
     header: true,
     dynamicTyping: true,
     skipEmptyLines: true
   })
 
-  cache.data = parsed.data
-  cache.fetchedAt = now
-  cache.ttlMs = ttlMs
-  return cache.data
+  return parsed.data
 }
 
 export function findByNpi(rows: ModelReadyRow[], npi: string): ModelReadyRow | undefined {
   return rows.find((r) => {
-    const prescriberId = String(r.PrescriberId).replace('.0', '')
-    return prescriberId === npi || r.PrescriberId === (npi as any)
+    // Handle both NPI and PrescriberId columns
+    const prescriberId = String(r.NPI || r.PrescriberId || '').replace('.0', '')
+    return prescriberId === npi || String(r.NPI) === npi || r.PrescriberId === (npi as any)
   })
 }

@@ -1,0 +1,13 @@
+{
+  "nrx_vs_trx_mix": {
+    "avg_nrx_ratio": 33.75,
+    "segments": {
+      "Retention-Focused": 49940,
+      "Acquisition-Focused": 37631,
+      "Balanced": 12429
+    }
+  },
+  "recommendations": [
+    "Balance acquisition and retention strategies by HCP segment"
+  ]
+}

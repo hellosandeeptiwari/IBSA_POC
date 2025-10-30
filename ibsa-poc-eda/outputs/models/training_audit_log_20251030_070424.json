@@ -1,0 +1,156 @@
+{
+  "created_at": "2025-10-30T05:28:28.267228",
+  "random_seed": 42,
+  "library_versions": {
+    "optuna": true,
+    "xgboost": true,
+    "shap": false
+  },
+  "upstream_integration": {
+    "phase3_eda_applied": true,
+    "phase4b_features_loaded": 77,
+    "phase5_targets_loaded": 12
+  },
+  "training_history": [
+    {
+      "step": "data_loading",
+      "timestamp": "2025-10-30T05:28:32.390132",
+      "features_loaded": 349864,
+      "targets_loaded": 349864,
+      "selected_features": 66,
+      "eda_applied": true
+    },
+    {
+      "model": "Tirosint_call_success",
+      "timestamp": "2025-10-30T05:36:02.338329",
+      "metrics": {
+        "optimal_threshold": 0.7500000000000002,
+        "roc_auc": 0.9984039301563712,
+        "accuracy": 0.9957840881482858,
+        "precision": 0.7016806722689075,
+        "recall": 0.8593481989708405,
+        "f1": 0.7725520431765613
+      },
+      "training_time": 449.915603
+    },
+    {
+      "model": "Tirosint_prescription_lift",
+      "timestamp": "2025-10-30T05:41:44.136922",
+      "metrics": {
+        "mae": 0.0055493330406698495,
+        "rmse": 0.042276174718347034,
+        "r2": 0.9988371877772093
+      },
+      "training_time": 341.760221
+    },
+    {
+      "model": "Tirosint_ngd_category",
+      "timestamp": "2025-10-30T05:55:55.131280",
+      "metrics": {
+        "accuracy": 0.9994569333885928,
+        "precision_macro": 0.984769019200507,
+        "recall_macro": 0.9915114424234726,
+        "f1_macro": 0.9881113017876162
+      },
+      "training_time": 850.949951
+    },
+    {
+      "model": "Tirosint_wallet_share_growth",
+      "timestamp": "2025-10-30T06:00:50.215076",
+      "metrics": {
+        "mae": 0.0010484689315171777,
+        "rmse": 0.034349215528419214,
+        "r2": 0.9996568578654461
+      },
+      "training_time": 295.038868
+    },
+    {
+      "model": "Flector_call_success",
+      "timestamp": "2025-10-30T06:09:10.714533",
+      "metrics": {
+        "optimal_threshold": 0.6000000000000002,
+        "roc_auc": 0.9997852011825323,
+        "accuracy": 0.9994855158418247,
+        "precision": 0.625,
+        "recall": 0.8333333333333334,
+        "f1": 0.7142857142857143
+      },
+      "training_time": 500.466063
+    },
+    {
+      "model": "Flector_prescription_lift",
+      "timestamp": "2025-10-30T06:13:57.220615",
+      "metrics": {
+        "mae": 0.0022033772783501917,
+        "rmse": 0.20391118355105145,
+        "r2": 0.544621534143491
+      },
+      "training_time": 286.449617
+    },
+    {
+      "model": "Flector_ngd_category",
+      "timestamp": "2025-10-30T06:28:36.623820",
+      "metrics": {
+        "accuracy": 0.9983708001657783,
+        "precision_macro": 0.7641225320061938,
+        "recall_macro": 0.8890488733468237,
+        "f1_macro": 0.8135695107274641
+      },
+      "training_time": 879.369673
+    },
+    {
+      "model": "Flector_wallet_share_growth",
+      "timestamp": "2025-10-30T06:33:47.502154",
+      "metrics": {
+        "mae": 0.0006878073760233313,
+        "rmse": 0.01781498777907709,
+        "r2": 0.9999077264195437
+      },
+      "training_time": 310.835357
+    },
+    {
+      "model": "Licart_call_success",
+      "timestamp": "2025-10-30T06:41:23.340889",
+      "metrics": {
+        "optimal_threshold": 0.7000000000000002,
+        "roc_auc": 0.9996986775479423,
+        "accuracy": 0.9993854772555129,
+        "precision": 0.75,
+        "recall": 0.7411764705882353,
+        "f1": 0.7455621301775148
+      },
+      "training_time": 455.812705
+    },
+    {
+      "model": "Licart_prescription_lift",
+      "timestamp": "2025-10-30T06:46:28.534123",
+      "metrics": {
+        "mae": 0.0036359670188534448,
+        "rmse": 0.33014063429611923,
+        "r2": 0.6585493006841944
+      },
+      "training_time": 305.147876
+    },
+    {
+      "model": "Licart_ngd_category",
+      "timestamp": "2025-10-30T06:59:31.123029",
+      "metrics": {
+        "accuracy": 0.9989853229102654,
+        "precision_macro": 0.8662698460837556,
+        "recall_macro": 0.9367571321133917,
+        "f1_macro": 0.8986785169680487
+      },
+      "training_time": 782.548479
+    },
+    {
+      "model": "Licart_wallet_share_growth",
+      "timestamp": "2025-10-30T07:04:24.616191",
+      "metrics": {
+        "mae": 0.001044291044934102,
+        "rmse": 0.022176624082062345,
+        "r2": 0.9998570394253093
+      },
+      "training_time": 293.454111
+    }
+  ]
+}

@@ -4,13 +4,13 @@
  * 
  * ACTUAL MODELS TRAINED:
  * - 3 Products: Tirosint, Flector, Licart
- * - 3 Outcomes per product: call_success, prescription_lift, ngd_category
- * - Total: 9 models
+ * - 4 Outcomes per product: call_success, prescription_lift, ngd_category, wallet_share_growth
+ * - Total: 12 models
  */
 
 export interface MLPredictions {
   // ============================================================================
-  // TIROSINT MODELS (3)
+  // TIROSINT MODELS (4)
   // ============================================================================
   
   // Model 1: Tirosint Call Success (Binary Classification)
@@ -23,33 +23,42 @@ export interface MLPredictions {
   // Model 3: Tirosint NGD Category (Multi-Class Classification)
   tirosint_ngd_category: 'New' | 'Grower' | 'Stable' | 'Decliner'
   
+  // Model 4: Tirosint Wallet Share Growth (Regression)
+  tirosint_wallet_share_growth: number  // Percentage points (0-100)
+  
   // ============================================================================
-  // FLECTOR MODELS (3)
+  // FLECTOR MODELS (4)
   // ============================================================================
   
-  // Model 4: Flector Call Success (Binary Classification)
+  // Model 5: Flector Call Success (Binary Classification)
   flector_call_success: number  // Probability 0-1
   flector_call_success_prediction: boolean  // True if >= 0.5
   
-  // Model 5: Flector Prescription Lift (Regression)
+  // Model 6: Flector Prescription Lift (Regression)
   flector_prescription_lift: number  // Forecasted TRx increase
   
-  // Model 6: Flector NGD Category (Multi-Class Classification)
+  // Model 7: Flector NGD Category (Multi-Class Classification)
   flector_ngd_category: 'New' | 'Grower' | 'Stable' | 'Decliner'
   
+  // Model 8: Flector Wallet Share Growth (Regression)
+  flector_wallet_share_growth: number  // Percentage points (0-100)
+  
   // ============================================================================
-  // LICART MODELS (3)
+  // LICART MODELS (4)
   // ============================================================================
   
-  // Model 7: Licart Call Success (Binary Classification)
+  // Model 9: Licart Call Success (Binary Classification)
   licart_call_success: number  // Probability 0-1
   licart_call_success_prediction: boolean  // True if >= 0.5
   
-  // Model 8: Licart Prescription Lift (Regression)
+  // Model 10: Licart Prescription Lift (Regression)
   licart_prescription_lift: number  // Forecasted TRx increase
   
-  // Model 9: Licart NGD Category (Multi-Class Classification)
+  // Model 11: Licart NGD Category (Multi-Class Classification)
   licart_ngd_category: 'New' | 'Grower' | 'Stable' | 'Decliner'
+  
+  // Model 12: Licart Wallet Share Growth (Regression)
+  licart_wallet_share_growth: number  // Percentage points (0-100)
 }
 
 interface HCPFeatures {
@@ -115,18 +124,21 @@ function getMockPredictions(npi: string): MLPredictions {
     tirosint_call_success_prediction: seed > 0.4,
     tirosint_prescription_lift: (seed - 0.5) * 20,
     tirosint_ngd_category: categories[categoryIndex],
+    tirosint_wallet_share_growth: 3 + seed * 6,  // 3-9 percentage points
     
     // Flector predictions
     flector_call_success: Math.min(0.25 + seed * 0.5, 0.85),
     flector_call_success_prediction: seed > 0.5,
     flector_prescription_lift: (seed - 0.5) * 15,
     flector_ngd_category: categories[(categoryIndex + 1) % 4],
+    flector_wallet_share_growth: 2 + seed * 5,  // 2-7 percentage points
     
     // Licart predictions
     licart_call_success: Math.min(0.2 + seed * 0.5, 0.80),
     licart_call_success_prediction: seed > 0.55,
     licart_prescription_lift: (seed - 0.5) * 12,
     licart_ngd_category: categories[(categoryIndex + 2) % 4],
+    licart_wallet_share_growth: 1 + seed * 4,  // 1-5 percentage points
   }
 }
 

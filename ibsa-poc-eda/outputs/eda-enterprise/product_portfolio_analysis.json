@@ -1,0 +1,11 @@
+{
+  "total_hcps": 100000,
+  "product_distribution": {},
+  "multi_product_prescribers": {
+    "count": 10809,
+    "lift_percentage": -49.49
+  },
+  "recommendations": [
+    "Focus cross-selling to single-product high-volume HCPs"
+  ]
+}

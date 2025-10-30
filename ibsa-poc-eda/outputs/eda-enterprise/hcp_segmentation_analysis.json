@@ -1,0 +1,274 @@
+{
+  "total_hcps": 100000,
+  "segments": {
+    "Dormant": {
+      "count": 99222,
+      "percentage": 99.22
+    },
+    "At-Risk": {
+      "count": 613,
+      "percentage": 0.61
+    },
+    "Need Attention": {
+      "count": 158,
+      "percentage": 0.16
+    },
+    "Potential": {
+      "count": 5,
+      "percentage": 0.01
+    },
+    "Champions": {
+      "count": 1,
+      "percentage": 0.0
+    },
+    "Loyal": {
+      "count": 1,
+      "percentage": 0.0
+    }
+  },
+  "segment_characteristics": {
+    "TRX(C13 Wk)": {
+      "At-Risk": 8.2,
+      "Champions": 1124.0,
+      "Dormant": 4.3,
+      "Loyal": 740.0,
+      "Need Attention": 235.8,
+      "Potential": 489.0
+    },
+    "TRXMktShare13": {
+      "At-Risk": 14.46,
+      "Champions": 100.0,
+      "Dormant": 92.18,
+      "Loyal": 100.0,
+      "Need Attention": 95.12,
+      "Potential": 99.0
+    },
+    "Calls13": {
+      "At-Risk": 3.18,
+      "Champions": NaN,
+      "Dormant": 1.76,
+      "Loyal": NaN,
+      "Need Attention": NaN,
+      "Potential": NaN
+    },
+    "Samples13": {
+      "At-Risk": 25.68,
+      "Champions": NaN,
+      "Dormant": 16.84,
+      "Loyal": NaN,
+      "Need Attention": NaN,
+      "Potential": NaN
+    },
+    "recency_days": {
+      "At-Risk": 38.62,
+      "Champions": NaN,
+      "Dormant": 74.26,
+      "Loyal": NaN,
+      "Need Attention": NaN,
+      "Potential": NaN
+    }
+  },
+  "recommendations": [
+    "Focus on 1 Champions - they drive most revenue",
+    "Re-engage 613 At-Risk HCPs before they churn",
+    "Win-back campaign needed for 99,222 Dormant HCPs"
+  ],
+  "decile_analysis": [
+    {
+      "decile": 1,
+      "hcp_count": 10000,
+      "cumulative_hcps_pct": 10.0,
+      "trx": 300659,
+      "trx_pct": 63.6,
+      "cumulative_trx_pct": 63.6,
+      "avg_trx": 30.1,
+      "calls": 812,
+      "samples": 3664
+    },
+    {
+      "decile": 2,
+      "hcp_count": 10000,
+      "cumulative_hcps_pct": 20.0,
+      "trx": 73825,
+      "trx_pct": 15.6,
+      "cumulative_trx_pct": 79.2,
+      "avg_trx": 7.4,
+      "calls": 589,
+      "samples": 1272
+    },
+    {
+      "decile": 3,
+      "hcp_count": 10000,
+      "cumulative_hcps_pct": 30.0,
+      "trx": 39392,
+      "trx_pct": 8.3,
+      "cumulative_trx_pct": 87.5,
+      "avg_trx": 3.9,
+      "calls": 478,
+      "samples": 864
+    },
+    {
+      "decile": 4,
+      "hcp_count": 10000,
+      "cumulative_hcps_pct": 40.0,
+      "trx": 24715,
+      "trx_pct": 5.2,
+      "cumulative_trx_pct": 92.7,
+      "avg_trx": 2.5,
+      "calls": 314,
+      "samples": 856
+    },
+    {
+      "decile": 5,
+      "hcp_count": 10000,
+      "cumulative_hcps_pct": 50.0,
+      "trx": 15522,
+      "trx_pct": 3.3,
+      "cumulative_trx_pct": 96.0,
+      "avg_trx": 1.6,
+      "calls": 279,
+      "samples": 377
+    },
+    {
+      "decile": 6,
+      "hcp_count": 10000,
+      "cumulative_hcps_pct": 60.0,
+      "trx": 10000,
+      "trx_pct": 2.1,
+      "cumulative_trx_pct": 98.1,
+      "avg_trx": 1.0,
+      "calls": 270,
+      "samples": 236
+    },
+    {
+      "decile": 7,
+      "hcp_count": 10000,
+      "cumulative_hcps_pct": 70.0,
+      "trx": 8808,
+      "trx_pct": 1.9,
+      "cumulative_trx_pct": 100.0,
+      "avg_trx": 0.9,
+      "calls": 222,
+      "samples": 275
+    },
+    {
+      "decile": 8,
+      "hcp_count": 10000,
+      "cumulative_hcps_pct": 80.0,
+      "trx": 0,
+      "trx_pct": 0.0,
+      "cumulative_trx_pct": 100.0,
+      "avg_trx": 0.0,
+      "calls": 141,
+      "samples": 108
+    },
+    {
+      "decile": 9,
+      "hcp_count": 10000,
+      "cumulative_hcps_pct": 90.0,
+      "trx": 0,
+      "trx_pct": 0.0,
+      "cumulative_trx_pct": 100.0,
+      "avg_trx": 0.0,
+      "calls": 116,
+      "samples": 83
+    },
+    {
+      "decile": 10,
+      "hcp_count": 10000,
+      "cumulative_hcps_pct": 100.0,
+      "trx": 0,
+      "trx_pct": 0.0,
+      "cumulative_trx_pct": 100.0,
+      "avg_trx": 0.0,
+      "calls": 146,
+      "samples": 87
+    }
+  ],
+  "pareto_insights": {
+    "top_10_pct_trx": 63.6,
+    "top_20_pct_trx": 79.2,
+    "top_50_pct_trx": 96.0
+  },
+  "pharma_standard_segments": {
+    "Active Writer": {
+      "count": 65306,
+      "percentage": 65.31,
+      "avg_trx_current": 7.14,
+      "total_trx": 466231
+    },
+    "Potential Writer": {
+      "count": 29630,
+      "percentage": 29.63,
+      "avg_trx_current": 0.0,
+      "total_trx": 0
+    },
+    "Lapsed Writer": {
+      "count": 4642,
+      "percentage": 4.64,
+      "avg_trx_current": 1.44,
+      "total_trx": 6690
+    },
+    "Unaware Non-Writer": {
+      "count": 225,
+      "percentage": 0.22,
+      "avg_trx_current": 0.0,
+      "total_trx": 0
+    },
+    "Aware Non-Writer": {
+      "count": 197,
+      "percentage": 0.2,
+      "avg_trx_current": 0.0,
+      "total_trx": 0
+    }
+  },
+  "pharma_cross_tab": {
+    "Active Writer": {
+      "At-Risk": 489,
+      "Champions": 1,
+      "Dormant": 64652,
+      "Loyal": 1,
+      "Need Attention": 158,
+      "Potential": 5
+    },
+    "Aware Non-Writer": {
+      "At-Risk": 44,
+      "Champions": 0,
+      "Dormant": 153,
+      "Loyal": 0,
+      "Need Attention": 0,
+      "Potential": 0
+    },
+    "Lapsed Writer": {
+      "At-Risk": 37,
+      "Champions": 0,
+      "Dormant": 4605,
+      "Loyal": 0,
+      "Need Attention": 0,
+      "Potential": 0
+    },
+    "Potential Writer": {
+      "At-Risk": 19,
+      "Champions": 0,
+      "Dormant": 29611,
+      "Loyal": 0,
+      "Need Attention": 0,
+      "Potential": 0
+    },
+    "Unaware Non-Writer": {
+      "At-Risk": 24,
+      "Champions": 0,
+      "Dormant": 201,
+      "Loyal": 0,
+      "Need Attention": 0,
+      "Potential": 0
+    }
+  },
+  "strategic_priorities": {
+    "active_writers": 65306,
+    "lapsed_writers": 4642,
+    "potential_writers": 29630,
+    "aware_non_writers": 197,
+    "unaware_non_writers": 225
+  }
+}

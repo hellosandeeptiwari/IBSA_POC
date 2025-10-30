@@ -100,7 +100,7 @@ feature_data: Optional[pd.DataFrame] = None
 
 # Product and outcome definitions
 PRODUCTS = ['Tirosint', 'Flector', 'Licart']
-OUTCOMES = ['call_success', 'prescription_lift', 'ngd_category']
+OUTCOMES = ['call_success', 'prescription_lift', 'ngd_category', 'wallet_share_growth']
 
 # ============================================================================
 # REQUEST/RESPONSE MODELS
@@ -247,7 +247,7 @@ async def startup_event():
                 else:
                     logger.warning(f"  [MISS] Not found: {model_name}")
         
-        logger.info(f"[OK] Loaded {loaded_count}/9 ML models")
+        logger.info(f"[OK] Loaded {loaded_count}/12 ML models")
         
         # 4. Load feature data cache (for quick lookups)
         logger.info("Loading feature data cache...")
@@ -301,8 +301,11 @@ def run_ml_predictions(hcp_features: Dict[str, Any]) -> Dict[str, Any]:
         'tirosint_call_success': 0.72,
         'tirosint_prescription_lift': 8.5,
         'tirosint_ngd_category': 'Moderate Growth',
+        'tirosint_wallet_share_growth': 4.5,
         'flector_call_success': 0.45,
-        'licart_call_success': 0.38
+        'flector_wallet_share_growth': 3.2,
+        'licart_call_success': 0.38,
+        'licart_wallet_share_growth': 5.1
     }
     
     return predictions
@@ -925,20 +928,20 @@ async def get_models_status(api_key: str = Depends(verify_api_key)):
     try:
         models_info = []
         
-        # Expected 12 models (4 products × 3 targets)
+        # Expected 12 models (3 products × 4 targets)
         expected_models = [
             ('Tirosint', 'call_success'),
             ('Tirosint', 'prescription_lift'),
             ('Tirosint', 'ngd_category'),
+            ('Tirosint', 'wallet_share_growth'),
             ('Flector', 'call_success'),
             ('Flector', 'prescription_lift'),
             ('Flector', 'ngd_category'),
+            ('Flector', 'wallet_share_growth'),
             ('Licart', 'call_success'),
             ('Licart', 'prescription_lift'),
             ('Licart', 'ngd_category'),
-            ('Dyloject', 'call_success'),
-            ('Dyloject', 'prescription_lift'),
-            ('Dyloject', 'ngd_category'),
+            ('Licart', 'wallet_share_growth'),
         ]
         
         for product, target in expected_models:

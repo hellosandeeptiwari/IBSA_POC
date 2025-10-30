@@ -1,0 +1,28 @@
+{
+  "timestamp": "20251030_035304",
+  "original_features": 85,
+  "removed_features": [
+    "TerritoryName",
+    "payer_nrx",
+    "PrescriberName",
+    "total_trx",
+    "ibsa_total_trx",
+    "payer_count",
+    "RegionName",
+    "competitor_trx",
+    "payer_trx"
+  ],
+  "transformed_features": [
+    "total_trx",
+    "payer_trx",
+    "payer_nrx",
+    "payer_count"
+  ],
+  "final_features": 76,
+  "cleaning_rules": {
+    "infinite_vif_removed": 6,
+    "leakage_removed": 0,
+    "heteroscedastic_transformed": 4,
+    "redundant_removed": 1
+  }
+}

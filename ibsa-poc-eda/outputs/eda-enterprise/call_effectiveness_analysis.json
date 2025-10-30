@@ -1,0 +1,26 @@
+{
+  "call_effectiveness": {
+    "avg_trx_per_call": 2.96
+  },
+  "reach_frequency": {
+    "reach_pct": 1.44,
+    "reached_hcps": 1443,
+    "avg_frequency": 2.33,
+    "frequency_segments": {
+      "Not Reached": 98557,
+      "2-3 Calls (Medium Touch)": 598,
+      "1 Call (Low Touch)": 575,
+      "4+ Calls (High Touch)": 270
+    }
+  },
+  "lunch_learn_impact": {
+    "lift_percentage": 90.02,
+    "without_ll_avg_trx": 4.72,
+    "with_ll_avg_trx": 8.98
+  },
+  "recommendations": [
+    "LOW REACH (1.4%) - expand call coverage to unreached HCPs",
+    "Increase call frequency from 2.3 to 3-4 calls per HCP",
+    "Expand Lunch & Learn program - shows significant TRx lift"
+  ]
+}

@@ -1,55 +1,55 @@
 {
   "market_share_distribution": {
     "metric": "TRXMktShare4",
-    "mean": 92.24,
+    "mean": 92.17,
     "median": 100.0,
-    "std": 22.86,
+    "std": 22.99,
     "min": 0.0,
     "max": 100.0
   },
   "competitive_segments": {
     "IBSA Dominant (>50%)": {
-      "count": 48246,
-      "percentage": 93.61
+      "count": 54544,
+      "percentage": 93.55
     },
     "Unknown": {
-      "count": 37217,
-      "percentage": 72.21
+      "count": 41694,
+      "percentage": 71.51
     },
     "Competitor Dominant (<25%)": {
-      "count": 1489,
-      "percentage": 2.89
+      "count": 1712,
+      "percentage": 2.94
     },
     "Zero IBSA Share": {
-      "count": 1305,
-      "percentage": 2.53
+      "count": 1489,
+      "percentage": 2.55
     },
     "Balanced (25-50%)": {
-      "count": 499,
-      "percentage": 0.97
+      "count": 561,
+      "percentage": 0.96
     }
   },
   "share_trends": {
-    "declining_hcps": 2376,
-    "declining_percentage": 2.68,
-    "growing_hcps": 2796,
-    "growing_percentage": 3.15,
-    "stable_hcps": 83584
+    "declining_hcps": 2698,
+    "declining_percentage": 2.7,
+    "growing_hcps": 3253,
+    "growing_percentage": 3.25,
+    "stable_hcps": 94049
   },
   "at_risk_hcps": {
-    "count": 660,
-    "avg_share_loss": -10.8,
-    "total_trx_at_risk": 2847
+    "count": 722,
+    "avg_share_loss": -10.29,
+    "total_trx_at_risk": 3073
   },
   "opportunity_hcps": {
-    "count": 264,
-    "avg_current_share": 12.86,
-    "total_trx_opportunity": 1566,
-    "potential_share_gain": 87.14
+    "count": 285,
+    "avg_current_share": 11.99,
+    "total_trx_opportunity": 1702,
+    "potential_share_gain": 88.01
   },
   "statistical_tests": {},
   "recommendations": [
-    "URGENT: 660 high-value HCPs are losing share - competitive threat!",
-    "OPPORTUNITY: 264 high-volume HCPs with <25% IBSA share - growth targets!"
+    "URGENT: 722 high-value HCPs are losing share - competitive threat!",
+    "OPPORTUNITY: 285 high-volume HCPs with <25% IBSA share - growth targets!"
   ]
 }

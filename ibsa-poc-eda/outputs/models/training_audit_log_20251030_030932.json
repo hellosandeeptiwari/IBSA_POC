@@ -1,0 +1,96 @@
+{
+  "created_at": "2025-10-30T03:07:54.089926",
+  "random_seed": 42,
+  "library_versions": {
+    "optuna": false,
+    "xgboost": false,
+    "shap": false
+  },
+  "upstream_integration": {
+    "phase3_eda_applied": true,
+    "phase4b_features_loaded": 73,
+    "phase5_targets_loaded": 12
+  },
+  "training_history": [
+    {
+      "step": "data_loading",
+      "timestamp": "2025-10-30T03:07:58.063514",
+      "features_loaded": 349864,
+      "targets_loaded": 349864,
+      "selected_features": 65,
+      "eda_applied": true
+    },
+    {
+      "model": "Tirosint_call_success",
+      "timestamp": "2025-10-30T03:08:05.272782",
+      "metrics": {
+        "optimal_threshold": 0.8000000000000002,
+        "roc_auc": 0.9980232395593022,
+        "accuracy": 0.996,
+        "precision": 0.7253886010362695,
+        "recall": 0.8383233532934131,
+        "f1": 0.7777777777777778
+      },
+      "training_time": 7.187096
+    },
+    {
+      "model": "Tirosint_ngd_category",
+      "timestamp": "2025-10-30T03:09:01.249119",
+      "metrics": {
+        "accuracy": 0.999175,
+        "precision_macro": 0.9765458598223969,
+        "recall_macro": 0.9889012268552845,
+        "f1_macro": 0.9826238540708424
+      },
+      "training_time": 8.539708
+    },
+    {
+      "model": "Flector_call_success",
+      "timestamp": "2025-10-30T03:09:07.007985",
+      "metrics": {
+        "optimal_threshold": 0.6000000000000002,
+        "roc_auc": 0.9995738632924387,
+        "accuracy": 0.999475,
+        "precision": 0.631578947368421,
+        "recall": 0.7741935483870968,
+        "f1": 0.6956521739130435
+      },
+      "training_time": 5.171607
+    },
+    {
+      "model": "Flector_ngd_category",
+      "timestamp": "2025-10-30T03:09:15.941916",
+      "metrics": {
+        "accuracy": 0.998025,
+        "precision_macro": 0.6973777791132848,
+        "recall_macro": 0.8872995857408493,
+        "f1_macro": 0.7708690440611735
+      },
+      "training_time": 8.354977
+    },
+    {
+      "model": "Licart_call_success",
+      "timestamp": "2025-10-30T03:09:23.232171",
+      "metrics": {
+        "optimal_threshold": 0.7000000000000002,
+        "roc_auc": 0.9997885164428465,
+        "accuracy": 0.999425,
+        "precision": 0.7407407407407407,
+        "recall": 0.8163265306122449,
+        "f1": 0.7766990291262136
+      },
+      "training_time": 6.683618
+    },
+    {
+      "model": "Licart_ngd_category",
+      "timestamp": "2025-10-30T03:09:31.795758",
+      "metrics": {
+        "accuracy": 0.9983,
+        "precision_macro": 0.781391986394225,
+        "recall_macro": 0.9153916978320265,
+        "f1_macro": 0.8363026173337103
+      },
+      "training_time": 7.983524
+    }
+  ]
+}

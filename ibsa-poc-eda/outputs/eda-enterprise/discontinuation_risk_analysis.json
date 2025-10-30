@@ -1,0 +1,28 @@
+{
+  "total_hcps": 100000,
+  "declining_prescribers": {
+    "count": 26609,
+    "percentage": 26.61,
+    "avg_trx_loss": -2.24,
+    "total_trx_at_risk": 59671
+  },
+  "share_losers": {
+    "count": 56,
+    "avg_share_loss": -20.29
+  },
+  "call_resistant": {
+    "count": 24
+  },
+  "sample_non_responders": {
+    "count": 206,
+    "wasted_samples": 4282
+  },
+  "high_risk_churn": {
+    "count": 0
+  },
+  "recommendations": [
+    "Prioritize 26,609 declining prescribers for win-back campaigns",
+    "Stop wasting samples on 206 non-responders",
+    "URGENT: 0 HCPs at high risk of complete churn"
+  ]
+}

@@ -1,6 +1,6 @@
 {
   "prescriber_overview": {
-    "rows": 88756,
+    "rows": 100000,
     "columns": 106,
     "missing_columns": 92,
     "high_missing_columns": 27,
@@ -16,9 +16,9 @@
     "zero_variance_columns": 12
   },
   "payment_plan": {
-    "rows": 367280,
+    "rows": 100000,
     "columns": 47,
-    "missing_columns": 22,
+    "missing_columns": 16,
     "high_missing_columns": 5,
     "duplicate_rows": 0,
     "zero_variance_columns": 0
@@ -40,7 +40,7 @@
     "zero_variance_columns": 0
   },
   "territory_performance": {
-    "rows": 383171,
+    "rows": 100000,
     "columns": 35,
     "missing_columns": 14,
     "high_missing_columns": 1,
@@ -48,7 +48,7 @@
     "zero_variance_columns": 3
   },
   "territory_overview": {
-    "rows": 80959,
+    "rows": 100000,
     "columns": 44,
     "missing_columns": 27,
     "high_missing_columns": 11,
@@ -56,9 +56,9 @@
     "zero_variance_columns": 2
   },
   "hcp_universe": {
-    "rows": 131504,
+    "rows": 100000,
     "columns": 13,
-    "missing_columns": 7,
+    "missing_columns": 5,
     "high_missing_columns": 3,
     "duplicate_rows": 0,
     "zero_variance_columns": 0

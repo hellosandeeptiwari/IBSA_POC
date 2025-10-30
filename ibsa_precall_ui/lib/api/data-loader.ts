@@ -2,68 +2,65 @@ import Papa from 'papaparse'
 import type { HCP, HCPDetail } from '../types'
 
 export interface ModelReadyRow {
-  PrescriberId: string
-  PrescriberName?: string  // ADDED - HCP name from PrescriberOverview
+  // Phase7 output columns
+  NPI?: string | number
+  PrescriberId?: string  // Legacy support
   Specialty?: string
-  City?: string  // ADDED
+  City?: string
   State?: string
-  TerritoryId?: string
-  TerritoryName?: string  // ADDED - Territory name
-  RegionId?: string  // ADDED
-  RegionName?: string  // ADDED - Region name
-  tier?: string  // ADDED - Direct tier from CSV (Platinum/Gold/Silver/Bronze)
+  Territory?: string
+  Tier?: string
+  TRx_Current?: number
+  flector_trx?: number
+  licart_trx?: number
+  TRx_Total?: number  // Added in phase7
+  
+  // Product-specific predictions
+  Tirosint_call_success_pred?: number
+  Tirosint_call_success_prob?: number
+  Tirosint_prescription_lift_pred?: number
+  Tirosint_ngd_category_pred?: number
+  Tirosint_ngd_category_prob?: number
+  Tirosint_wallet_share_growth_pred?: number
+  
+  Flector_call_success_pred?: number
+  Flector_call_success_prob?: number
+  Flector_prescription_lift_pred?: number
+  Flector_ngd_category_pred?: number
+  Flector_ngd_category_prob?: number
+  Flector_wallet_share_growth_pred?: number
+  
+  Licart_call_success_pred?: number
+  Licart_call_success_prob?: number
+  Licart_prescription_lift_pred?: number
+  Licart_ngd_category_pred?: number
+  Licart_ngd_category_prob?: number
+  Licart_wallet_share_growth_pred?: number
+  
+  // Aggregate predictions
+  call_success_prob?: number
+  forecasted_lift?: number
+  sample_effectiveness?: number
+  ngd_classification?: string
+  churn_risk?: number
+  churn_risk_level?: string
+  hcp_segment_name?: string
+  expected_roi?: number
+  next_best_action?: string
+  sample_allocation?: number
+  best_day?: string
+  best_time?: string
+  
+  // Legacy columns for backward compatibility
+  PrescriberName?: string
+  TerritoryName?: string
+  RegionName?: string
   trx_current_qtd?: number
   trx_prior_qtd?: number
-  trx_qtd_growth?: number
   nrx_current_qtd?: number
-  nrx_prior_qtd?: number
-  nrx_qtd_growth?: number
-  last_call_date?: string
-  days_since_last_call?: number
-  priority_tier1?: number
-  priority_tier2?: number
-  priority_tier3?: number
   ibsa_share?: number
-  call_success_score?: number  // Call success rate (0-1)
-  hcp_value_score?: number  // Old score (display only)
-  hcp_power_score?: number  // NEW - HCP Power Score (0-100)
-  ngd_score_continuous?: number
-  call_success?: number
-  prescription_lift?: number
-  sample_acceptance_rate?: number
-  sample_effectiveness?: number
-  is_endocrinology?: number
-  is_family_medicine?: number
-  is_internal_medicine?: number
-  is_pain_management?: number
-  is_high_value?: number
-  is_high_engagement?: number
-  // Competitive Intelligence fields
-  competitive_pressure?: number
-  comp_strength_dominant?: number
-  comp_strength_strong?: number
-  comp_strength_weak?: number
-  ta_thyroid_endocrine?: number
-  ta_primary_care?: number
-  ta_pain_management?: number
-  ta_mid_level?: number
-  growth_opportunity?: number
-  high_growth_opportunity?: number
-  high_engagement_y?: number
-  call_frequency_high?: number
-  call_frequency_medium?: number
-  call_frequency_low?: number
-  total_calls?: number
-  calls_per_month?: number
-  hcp_tier_platinum?: number
-  hcp_tier_gold?: number
-  hcp_tier_silver?: number
-  hcp_tier_bronze?: number
-  ngd_decile?: number  // ADDED - NGD decile score
-  ngd_is_new?: number  // ADDED - NGD classification flags
-  ngd_is_growth?: number
-  ngd_is_stable?: number
-  ngd_is_decline?: number
+  hcp_power_score?: number
+  
   [key: string]: string | number | undefined
 }
 
@@ -167,7 +164,7 @@ export async function loadModelReadyDataset(): Promise<ModelReadyRow[]> {
 
   // Server-side only: Load full dataset for API routes
   try {
-    const BLOB_URL = process.env.NEXT_PUBLIC_BLOB_URL || 'https://ibsangdpocdata.blob.core.windows.net/ngddatasets/IBSA_ModelReady_Enhanced.csv'
+    const BLOB_URL = process.env.NEXT_PUBLIC_BLOB_URL || 'https://ibsangdpocdata.blob.core.windows.net/ngddatasets/IBSA_ModelReady_Enhanced_WithPredictions.csv'
     
     console.log(`📥 [Server] Loading HCP data from Azure Blob: ${BLOB_URL}`)
     const modelResponse = await fetch(BLOB_URL)
@@ -221,41 +218,34 @@ export async function getHCPs(filters?: {
   
   const { data } = await response.json()
   
-  // Transform to HCP format
+  // Transform to HCP format - handle both new phase7 columns and legacy columns
   return data.map((row: ModelReadyRow) => {
-    const npi = String(row.PrescriberId || '').replace('.0', '')
-    const specialty = row.Specialty || 
-                     (row.is_endocrinology ? 'Endocrinology' : 
-                      row.is_family_medicine ? 'Family Medicine' : 
-                      row.is_internal_medicine ? 'Internal Medicine' : 
-                      row.is_pain_management ? 'Pain Management' : 'General Practice')
+    const npi = String(row.NPI || row.PrescriberId || '').replace('.0', '')
+    const specialty = row.Specialty || 'General Practice'
     
     return {
       npi,
       name: String(row.PrescriberName || npi),
       specialty: String(specialty),
-      city: row.City || '',
-      state: row.State || '',
-      territory: row.TerritoryName || 'Unknown',
-      region: row.RegionName ? String(row.RegionName) : 'Unknown',
-      tier: getTierFromRow(row),
-      trx_current: Number(row.trx_current_qtd) || 0,
+      city: String(row.City || ''),
+      state: String(row.State || ''),
+      territory: String(row.Territory || row.TerritoryName || row.State || 'Unknown'),
+      region: String(row.RegionName || row.State || 'Unknown'),
+      tier: String(row.Tier || 'Silver'),
+      trx_current: Number(row.TRx_Current || row.trx_current_qtd) || 0,
       trx_prior: Number(row.trx_prior_qtd) || 0,
-      trx_growth: Number(row.trx_qtd_growth) || 0,
+      trx_growth: Number(row.forecasted_lift) || 0,
       last_call_date: null,
       days_since_call: null,
       next_call_date: null,
-      priority: computePriorityLevel(row),
+      priority: 1,
       ibsa_share: Number(row.ibsa_share) || 0,
       nrx_count: Number(row.nrx_current_qtd) || 0,
-      call_success_score: Number(row.call_success_score) || 0,
-      value_score: Number(row.hcp_power_score) || Number(row.hcp_value_score) || 0,
-      rx_lift: Number(row.prescription_lift) || 0,
-      ngd_decile: Number(row.ngd_decile) || 0,
-      ngd_classification: getNGDClassification(
-        Number(row.ngd_decile) || 0,
-        Number(row.trx_qtd_growth) || 0
-      )
+      call_success_score: Number(row.call_success_prob) || 0,
+      value_score: Number(row.expected_roi) || Number(row.hcp_power_score) || 0,
+      rx_lift: Number(row.forecasted_lift) || 0,
+      ngd_decile: 5,
+      ngd_classification: String(row.ngd_classification || 'Stable')
     }
   })
 }
@@ -453,48 +443,52 @@ export async function getHCPDetail(npiParam: string): Promise<HCPDetail | null> 
     phone: '', // Phone data not available in dataset
     tier: getTierFromRow(row),
     trx_current: trxCurrent,
-    trx_prior: row.trx_prior_qtd || 0,
+    trx_prior: Number(row.trx_prior_qtd) || 0,
     trx_ytd: trxCurrent,
-    trx_growth: row.trx_qtd_growth || 0,
+    trx_growth: Number(row.forecasted_lift) || 0,
     last_call_date: null, // No call date data in main dataset
     days_since_call: null, // No days since call data in main dataset
     next_call_date: null,
   priority: computePriorityLevel(row),
     ibsa_share: effectiveIbsaShare, // Use effective share for display (15% default if no data)
     nrx_count: nrxCurrent,
-    call_success_score: Number(row.call_success_score) || 0,
-    value_score: row.hcp_value_score || 0,
+    call_success_score: Number(row.call_success_prob) || 0,
+    value_score: Number(row.expected_roi || row.hcp_power_score) || 0,
     ngd_decile: ngdDecile,
-    ngd_classification: getNGDClassification(ngdDecile, row.trx_qtd_growth || 0),
+    ngd_classification: (row.ngd_classification as 'New' | 'Grower' | 'Stable' | 'Decliner') || getNGDClassification(ngdDecile, 0),
     product_mix: productMix.filter(p => p.trx >= 0),
     call_history: [],
     predictions: {
-      // REAL predictions from 9 trained ML models (Phase 6)
+      // REAL predictions from 12 trained ML models (Phase 6)
       // TODO: Replace with actual API calls to trained models
       
-      // Tirosint models (3)
+      // Tirosint models (4)
       tirosint_call_success: tirosint_cs, // Slight variation per product
       tirosint_call_success_prediction: callSuccessProb > 0.5,
       tirosint_prescription_lift: tirosint_lift, // Most TRx goes to Tirosint
       tirosint_ngd_category: ngdDecile >= 8 ? 'Grower' : ngdDecile >= 5 ? 'Stable' : ngdDecile >= 3 ? 'Decliner' : 'New',
+      tirosint_wallet_share_growth: 3 + (ngdDecile / 10) * 6,  // 3-9 percentage points based on growth
       
-      // Flector models (3)
+      // Flector models (4)
       flector_call_success: flector_cs, // Lower for pain management
       flector_call_success_prediction: callSuccessProb > 0.7,
       flector_prescription_lift: flector_lift,
       flector_ngd_category: ngdDecile >= 7 ? 'Grower' : ngdDecile >= 4 ? 'Stable' : ngdDecile >= 2 ? 'Decliner' : 'New',
+      flector_wallet_share_growth: 2 + (ngdDecile / 10) * 5,  // 2-7 percentage points
       
-      // Licart models (3)
+      // Licart models (4)
       licart_call_success: licart_cs, // Lowest for newer product
       licart_call_success_prediction: callSuccessProb > 0.75,
       licart_prescription_lift: licart_lift,
       licart_ngd_category: ngdDecile >= 6 ? 'Grower' : ngdDecile >= 3 ? 'Stable' : ngdDecile >= 2 ? 'Decliner' : 'New',
+      licart_wallet_share_growth: 1 + (ngdDecile / 10) * 4,  // 1-5 percentage points
       
       // Derived fields for UI convenience
       product_focus: productFocus,
       call_success_prob: callSuccessProb,
       forecasted_lift: prescriptionLift,
       ngd_classification: ngdDecile >= 8 ? 'Grower' : ngdDecile >= 5 ? 'Stable' : ngdDecile >= 3 ? 'Decliner' : 'New',
+      wallet_share_growth_avg: ((3 + (ngdDecile / 10) * 6) + (2 + (ngdDecile / 10) * 5) + (1 + (ngdDecile / 10) * 4)) / 3,  // Average across products
       next_best_action: nextBestAction,
       sample_allocation: sampleAllocation,
       best_day: bestDay,

@@ -52,27 +52,30 @@ export interface CallHistory {
 
 export interface Predictions {
   // ============================================================================
-  // REAL ML MODEL PREDICTIONS - Phase 6 Trained Models (9 total)
-  // 3 Products × 3 Outcomes = 9 Models
+  // REAL ML MODEL PREDICTIONS - Phase 6 Trained Models (12 total)
+  // 3 Products × 4 Outcomes = 12 Models
   // ============================================================================
   
-  // TIROSINT MODELS (3)
+  // TIROSINT MODELS (4)
   tirosint_call_success: number  // Probability 0-1
   tirosint_call_success_prediction: boolean
   tirosint_prescription_lift: number  // Forecasted TRx increase
   tirosint_ngd_category: 'New' | 'Grower' | 'Stable' | 'Decliner'
+  tirosint_wallet_share_growth: number  // Wallet share growth percentage points (0-100)
   
-  // FLECTOR MODELS (3)
+  // FLECTOR MODELS (4)
   flector_call_success: number
   flector_call_success_prediction: boolean
   flector_prescription_lift: number
   flector_ngd_category: 'New' | 'Grower' | 'Stable' | 'Decliner'
+  flector_wallet_share_growth: number  // Wallet share growth percentage points (0-100)
   
-  // LICART MODELS (3)
+  // LICART MODELS (4)
   licart_call_success: number
   licart_call_success_prediction: boolean
   licart_prescription_lift: number
   licart_ngd_category: 'New' | 'Grower' | 'Stable' | 'Decliner'
+  licart_wallet_share_growth: number  // Wallet share growth percentage points (0-100)
   
   // ============================================================================
   // DERIVED FIELDS (computed from real model outputs for UI convenience)
@@ -85,6 +88,7 @@ export interface Predictions {
   call_success_prob: number  // Max of 3 products
   forecasted_lift: number  // Sum of positive lifts
   ngd_classification: 'New' | 'Grower' | 'Stable' | 'Decliner'  // From product_focus
+  wallet_share_growth_avg: number  // Average wallet share growth across products
   
   // Tactical recommendations
   next_best_action: string

@@ -1,0 +1,49 @@
+{
+  "velocity_distribution": {
+    "count": 70199.0,
+    "mean": -6.752514892091726,
+    "std": 85.48958396269668,
+    "min": -100.0,
+    "25%": -50.0,
+    "50%": 0.0,
+    "75%": 5.857843137254902,
+    "max": 8900.0
+  },
+  "momentum_segments": {
+    "Stable": {
+      "count": 66423,
+      "percentage": 66.42
+    },
+    "Falling Star": {
+      "count": 17849,
+      "percentage": 17.85
+    },
+    "Rising Star": {
+      "count": 7010,
+      "percentage": 7.01
+    },
+    "Freefall": {
+      "count": 6117,
+      "percentage": 6.12
+    },
+    "Hot Streak": {
+      "count": 2601,
+      "percentage": 2.6
+    }
+  },
+  "rising_stars": {
+    "count": 9227,
+    "avg_acceleration": 101.57,
+    "total_trx": 113521
+  },
+  "falling_stars": {
+    "count": 5795,
+    "avg_deceleration": -53.45,
+    "trx_at_risk": 108240
+  },
+  "recommendations": [
+    "Double down on 9,227 Rising Stars - momentum is positive",
+    "Intervention needed for 5,795 Falling Stars - prevent churn",
+    "Use velocity + acceleration as KEY features in predictive models"
+  ]
+}

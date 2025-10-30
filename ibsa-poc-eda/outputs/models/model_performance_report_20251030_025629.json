@@ -1,0 +1,78 @@
+{
+  "created_at": "2025-10-30T02:56:29.116430",
+  "total_models": 3,
+  "models": {
+    "Tirosint_ngd_category": {
+      "metrics": {
+        "accuracy": 0.999,
+        "precision_macro": 0.9717249410803358,
+        "recall_macro": 0.9884663436692884,
+        "f1_macro": 0.9799639519846876
+      },
+      "best_params": {
+        "n_estimators": 150,
+        "max_depth": 12,
+        "min_samples_split": 10,
+        "min_samples_leaf": 5,
+        "random_state": 42,
+        "class_weight": "balanced",
+        "n_jobs": -1
+      },
+      "training_time": 9.986583,
+      "train_size": 160000,
+      "test_size": 40000
+    },
+    "Flector_ngd_category": {
+      "metrics": {
+        "accuracy": 0.998225,
+        "precision_macro": 0.6961976224209264,
+        "recall_macro": 0.8071833158366563,
+        "f1_macro": 0.7435565617734806
+      },
+      "best_params": {
+        "n_estimators": 150,
+        "max_depth": 12,
+        "min_samples_split": 10,
+        "min_samples_leaf": 5,
+        "random_state": 42,
+        "class_weight": "balanced",
+        "n_jobs": -1
+      },
+      "training_time": 9.019521,
+      "train_size": 160000,
+      "test_size": 40000
+    },
+    "Licart_ngd_category": {
+      "metrics": {
+        "accuracy": 0.99825,
+        "precision_macro": 0.7819003676392909,
+        "recall_macro": 0.9079438332381278,
+        "f1_macro": 0.8343033859509936
+      },
+      "best_params": {
+        "n_estimators": 150,
+        "max_depth": 12,
+        "min_samples_split": 10,
+        "min_samples_leaf": 5,
+        "random_state": 42,
+        "class_weight": "balanced",
+        "n_jobs": -1
+      },
+      "training_time": 8.531085,
+      "train_size": 160000,
+      "test_size": 40000
+    }
+  },
+  "summary_statistics": {
+    "ngd_category": {
+      "accuracy_mean": 0.9984916666666667,
+      "accuracy_std": 0.00035959081683985597,
+      "precision_macro_mean": 0.8166076437135178,
+      "precision_macro_std": 0.11512970103693305,
+      "recall_macro_mean": 0.9011978309146907,
+      "recall_macro_std": 0.07416205433846694,
+      "f1_macro_mean": 0.8526079665697206,
+      "f1_macro_std": 0.09737695411933658
+    }
+  }
+}

@@ -1,0 +1,156 @@
+{
+  "created_at": "2025-10-30T03:09:32.366176",
+  "total_models": 6,
+  "models": {
+    "Tirosint_call_success": {
+      "metrics": {
+        "optimal_threshold": 0.8000000000000002,
+        "roc_auc": 0.9980232395593022,
+        "accuracy": 0.996,
+        "precision": 0.7253886010362695,
+        "recall": 0.8383233532934131,
+        "f1": 0.7777777777777778
+      },
+      "best_params": {
+        "n_estimators": 150,
+        "max_depth": 12,
+        "min_samples_split": 10,
+        "min_samples_leaf": 5,
+        "random_state": 42,
+        "class_weight": "balanced",
+        "n_jobs": -1
+      },
+      "training_time": 7.187096,
+      "train_size": 160000,
+      "test_size": 40000
+    },
+    "Tirosint_ngd_category": {
+      "metrics": {
+        "accuracy": 0.999175,
+        "precision_macro": 0.9765458598223969,
+        "recall_macro": 0.9889012268552845,
+        "f1_macro": 0.9826238540708424
+      },
+      "best_params": {
+        "n_estimators": 150,
+        "max_depth": 12,
+        "min_samples_split": 10,
+        "min_samples_leaf": 5,
+        "random_state": 42,
+        "class_weight": "balanced",
+        "n_jobs": -1
+      },
+      "training_time": 8.539708,
+      "train_size": 160000,
+      "test_size": 40000
+    },
+    "Flector_call_success": {
+      "metrics": {
+        "optimal_threshold": 0.6000000000000002,
+        "roc_auc": 0.9995738632924387,
+        "accuracy": 0.999475,
+        "precision": 0.631578947368421,
+        "recall": 0.7741935483870968,
+        "f1": 0.6956521739130435
+      },
+      "best_params": {
+        "n_estimators": 150,
+        "max_depth": 12,
+        "min_samples_split": 10,
+        "min_samples_leaf": 5,
+        "random_state": 42,
+        "class_weight": "balanced",
+        "n_jobs": -1
+      },
+      "training_time": 5.171607,
+      "train_size": 160000,
+      "test_size": 40000
+    },
+    "Flector_ngd_category": {
+      "metrics": {
+        "accuracy": 0.998025,
+        "precision_macro": 0.6973777791132848,
+        "recall_macro": 0.8872995857408493,
+        "f1_macro": 0.7708690440611735
+      },
+      "best_params": {
+        "n_estimators": 150,
+        "max_depth": 12,
+        "min_samples_split": 10,
+        "min_samples_leaf": 5,
+        "random_state": 42,
+        "class_weight": "balanced",
+        "n_jobs": -1
+      },
+      "training_time": 8.354977,
+      "train_size": 160000,
+      "test_size": 40000
+    },
+    "Licart_call_success": {
+      "metrics": {
+        "optimal_threshold": 0.7000000000000002,
+        "roc_auc": 0.9997885164428465,
+        "accuracy": 0.999425,
+        "precision": 0.7407407407407407,
+        "recall": 0.8163265306122449,
+        "f1": 0.7766990291262136
+      },
+      "best_params": {
+        "n_estimators": 150,
+        "max_depth": 12,
+        "min_samples_split": 10,
+        "min_samples_leaf": 5,
+        "random_state": 42,
+        "class_weight": "balanced",
+        "n_jobs": -1
+      },
+      "training_time": 6.683618,
+      "train_size": 160000,
+      "test_size": 40000
+    },
+    "Licart_ngd_category": {
+      "metrics": {
+        "accuracy": 0.9983,
+        "precision_macro": 0.781391986394225,
+        "recall_macro": 0.9153916978320265,
+        "f1_macro": 0.8363026173337103
+      },
+      "best_params": {
+        "n_estimators": 150,
+        "max_depth": 12,
+        "min_samples_split": 10,
+        "min_samples_leaf": 5,
+        "random_state": 42,
+        "class_weight": "balanced",
+        "n_jobs": -1
+      },
+      "training_time": 7.983524,
+      "train_size": 160000,
+      "test_size": 40000
+    }
+  },
+  "summary_statistics": {
+    "call_success": {
+      "accuracy_mean": 0.9983,
+      "accuracy_std": 0.0016264736907391647,
+      "precision_mean": 0.6992360963818104,
+      "precision_std": 0.04824962457775453,
+      "recall_mean": 0.8096144774309183,
+      "recall_std": 0.026607601830583024,
+      "f1_mean": 0.7500429936056783,
+      "f1_std": 0.03846263879655032,
+      "roc_auc_mean": 0.9991285397648624,
+      "roc_auc_std": 0.0007864627145447756
+    },
+    "ngd_category": {
+      "accuracy_mean": 0.9984999999999999,
+      "accuracy_std": 0.0004903230227785261,
+      "precision_macro_mean": 0.8184385417766356,
+      "precision_macro_std": 0.11694169422117687,
+      "recall_macro_mean": 0.9305308368093868,
+      "recall_macro_std": 0.04283782219813462,
+      "f1_macro_mean": 0.8632651718219088,
+      "f1_macro_std": 0.08852592614202368
+    }
+  }
+}

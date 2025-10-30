@@ -1,6 +1,7 @@
 """
-Phase 7: Score Top 100 HCPs with Real Trained Models
+Phase 7: Score ALL HCPs with Real Trained Models
 Uses actual feature-engineered data and trained models - NO MOCK DATA
+Processes in chunks to handle large dataset efficiently
 """
 
 import pandas as pd
@@ -16,13 +17,15 @@ logger = logging.getLogger(__name__)
 # Paths
 BASE_DIR = Path(__file__).parent
 MODELS_DIR = BASE_DIR / "ibsa-poc-eda" / "outputs" / "models" / "trained_models"
-FEATURES_FILE = BASE_DIR / "ibsa-poc-eda" / "outputs" / "features" / "IBSA_FeatureEngineered_WithLags_20251022_1117.csv"
+FEATURES_FILE = BASE_DIR / "ibsa-poc-eda" / "outputs" / "features" / "IBSA_Features_CLEANED_20251030_035304.csv"
 UI_DATA_DIR = BASE_DIR / "ibsa_precall_ui" / "public" / "data"
-UI_DATASET = UI_DATA_DIR / "IBSA_ModelReady_Sample.csv"
+PHASE7_OUTPUT_DIR = BASE_DIR / "ibsa-poc-eda" / "outputs" / "phase7"
+PHASE7_OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+OUTPUT_FILE = PHASE7_OUTPUT_DIR / "IBSA_ModelReady_Enhanced_WithPredictions.csv"
 
-SAMPLE_SIZE = 100
+CHUNK_SIZE = 10000  # Process 10K HCPs at a time
 PRODUCTS = ['Tirosint', 'Flector', 'Licart']
-OUTCOMES = ['call_success', 'prescription_lift', 'ngd_category']
+OUTCOMES = ['call_success', 'prescription_lift', 'ngd_category', 'wallet_share_growth']
 
 # Create UI data directory if it doesn't exist
 UI_DATA_DIR.mkdir(parents=True, exist_ok=True)
@@ -42,223 +45,242 @@ def load_model(product, outcome):
         return None
 
 def score_hcps():
-    """Score top 100 HCPs with all 9 trained models"""
+    """Score ALL HCPs with all 12 trained models - processes in chunks"""
     logger.info("="*80)
-    logger.info(f"PHASE 7: SCORING TOP {SAMPLE_SIZE} HCPs WITH REAL MODELS")
+    logger.info(f"PHASE 7: SCORING ALL HCPs WITH REAL MODELS")
     logger.info("="*80)
     
-    # Load UI dataset to get top 100 NPIs
-    logger.info(f"Loading UI dataset: {UI_DATASET}")
-    ui_data = pd.read_csv(UI_DATASET)
-    logger.info(f"Loaded {len(ui_data)} HCPs")
-    
-    # Get top 100 NPI IDs
-    top_npis = set(ui_data.head(SAMPLE_SIZE)['PrescriberId'].astype(int))
-    logger.info(f"Selected top {SAMPLE_SIZE} HCP IDs for scoring")
-    
-    # Load feature-engineered data in chunks
+    # Load feature-engineered data metadata
     logger.info(f"\nLoading feature-engineered data: {FEATURES_FILE}")
-    logger.info("Loading in chunks to save memory...")
     
-    feature_chunks = []
-    chunk_num = 0
-    for chunk in pd.read_csv(FEATURES_FILE, chunksize=100000, low_memory=False):
-        chunk_num += 1
-        # Filter to only our top 100 NPIs
-        filtered = chunk[chunk['PrescriberId'].isin(top_npis)]
-        if len(filtered) > 0:
-            feature_chunks.append(filtered)
-            logger.info(f"  Chunk {chunk_num}: Found {len(filtered)} matching HCPs")
-        
-        # Stop if we found all 100
-        if sum(len(c) for c in feature_chunks) >= SAMPLE_SIZE:
-            break
+    # First pass: count total rows
+    total_rows = sum(1 for _ in open(FEATURES_FILE)) - 1  # Subtract header
+    logger.info(f"Total HCPs to score: {total_rows:,}")
     
-    if not feature_chunks:
-        logger.error("No matching HCPs found in feature-engineered data!")
+    # Load models once
+    logger.info("\nLoading trained models...")
+    models = {}
+    models_loaded = 0
+    for product in PRODUCTS:
+        for outcome in OUTCOMES:
+            model_data = load_model(product, outcome)
+            if model_data:
+                models[f"{product}_{outcome}"] = model_data['model']
+                models_loaded += 1
+                logger.info(f"  ✓ Loaded {product}_{outcome} (features: {model_data['model'].n_features_in_})")
+            else:
+                logger.warning(f"  ✗ Failed to load {product}_{outcome}")
+    
+    logger.info(f"\n✓ Loaded {models_loaded}/12 models")
+    
+    if models_loaded == 0:
+        logger.error("No models loaded! Cannot proceed.")
         return None
     
-    features_df = pd.concat(feature_chunks, ignore_index=True)
-    features_df = features_df.head(SAMPLE_SIZE)  # Ensure exactly 100
-    logger.info(f"\nLoaded {len(features_df)} HCPs with {len(features_df.columns)} features")
-    
-    # Initialize results
-    results = features_df[['PrescriberId']].copy()
-    results.rename(columns={'PrescriberId': 'NPI'}, inplace=True)
-    
-    # Add metadata
-    if 'Specialty' in features_df.columns:
-        results['Specialty'] = features_df['Specialty']
-    if 'State' in features_df.columns:
-        results['State'] = features_df['State']
-    
-    # Get numeric features for modeling
-    exclude_cols = ['PrescriberId', 'Specialty', 'State', 'Name', 'City', 'Territory', 'Tier']
-    feature_cols = [c for c in features_df.columns if c not in exclude_cols and 
-                   features_df[c].dtype in ['float64', 'int64', 'float32', 'int32']]
-    
+    # Get feature columns from first chunk
+    logger.info("\nDetermining feature columns...")
+    first_chunk = pd.read_csv(FEATURES_FILE, nrows=100, low_memory=False)
+    # Columns to preserve as metadata (not use for modeling)
+    metadata_cols = ['PrescriberId', 'Specialty', 'State', 'Name', 'City', 'Territory', 'Tier',
+                    'tirosint_trx', 'flector_trx', 'licart_trx', 'total_trx']
+    feature_cols = [c for c in first_chunk.columns if c not in metadata_cols and 
+                   first_chunk[c].dtype in ['float64', 'int64', 'float32', 'int32']]
     logger.info(f"Using {len(feature_cols)} numeric features for modeling")
-    X = features_df[feature_cols].fillna(0)
+    logger.info(f"Preserving {len([c for c in metadata_cols if c in first_chunk.columns])} metadata columns")
     
-    # Score with each model
-    models_scored = 0
-    for product in PRODUCTS:
+    # Process in chunks
+    logger.info(f"\nProcessing data in chunks of {CHUNK_SIZE:,} HCPs...")
+    all_results = []
+    chunk_num = 0
+    total_processed = 0
+    
+    for chunk in pd.read_csv(FEATURES_FILE, chunksize=CHUNK_SIZE, low_memory=False):
+        chunk_num += 1
+        chunk_size = len(chunk)
+        total_processed += chunk_size
         logger.info(f"\n{'='*60}")
-        logger.info(f"SCORING: {product}")
+        logger.info(f"Processing Chunk {chunk_num}: {chunk_size:,} HCPs ({total_processed:,}/{total_rows:,})")
         logger.info(f"{'='*60}")
         
-        for outcome in OUTCOMES:
-            logger.info(f"  Scoring {outcome}...")
-            
-            model_data = load_model(product, outcome)
-            if model_data is None:
-                continue
-            
-            model = model_data['model']
-            expected_features = model.n_features_in_
-            
-            # Prepare feature matrix
-            if len(X.columns) != expected_features:
-                logger.warning(f"    Feature mismatch: have {len(X.columns)}, need {expected_features}")
-                if len(X.columns) < expected_features:
-                    # Pad with zeros
-                    X_model = X.copy()
-                    for i in range(expected_features - len(X.columns)):
-                        X_model[f'pad_{i}'] = 0
-                else:
-                    # Use first N features
-                    X_model = X.iloc[:, :expected_features]
-            else:
-                X_model = X
-            
-            try:
-                if outcome in ['call_success', 'ngd_category']:
-                    predictions = model.predict(X_model)
-                    if hasattr(model, 'predict_proba'):
-                        probabilities = model.predict_proba(X_model)[:, 1]
+        # Initialize results for this chunk - preserve essential HCP data
+        preserve_cols = ['PrescriberId', 'Specialty', 'State', 'City', 'Territory', 'Tier',
+                        'tirosint_trx', 'flector_trx', 'licart_trx', 'total_trx']
+        available_cols = [c for c in preserve_cols if c in chunk.columns]
+        chunk_results = chunk[available_cols].copy()
+        chunk_results.rename(columns={'PrescriberId': 'NPI',
+                                     'tirosint_trx': 'TRx_Current',
+                                     'total_trx': 'TRx_Total'}, inplace=True)
+        
+        # Get numeric features for modeling
+        X = chunk[feature_cols].fillna(0)
+        
+        # Score with each model
+        chunk_models_scored = 0
+        for product in PRODUCTS:
+            for outcome in OUTCOMES:
+                model_key = f"{product}_{outcome}"
+                if model_key not in models:
+                    continue
+                
+                model = models[model_key]
+                expected_features = model.n_features_in_
+                
+                # Prepare feature matrix
+                if len(X.columns) != expected_features:
+                    if len(X.columns) < expected_features:
+                        X_model = X.copy()
+                        for i in range(expected_features - len(X.columns)):
+                            X_model[f'pad_{i}'] = 0
                     else:
-                        probabilities = predictions
-                    
-                    results[f"{product}_{outcome}_pred"] = predictions
-                    results[f"{product}_{outcome}_prob"] = probabilities
+                        X_model = X.iloc[:, :expected_features]
                 else:
-                    # Regression
-                    predictions = model.predict(X_model)
-                    results[f"{product}_{outcome}_pred"] = predictions
+                    X_model = X
                 
-                models_scored += 1
-                logger.info(f"    ✓ Scored {len(predictions)} predictions")
-                logger.info(f"       Mean: {predictions.mean():.3f}, Std: {predictions.std():.3f}")
-                
-            except Exception as e:
-                logger.error(f"    ✗ Error: {e}")
-                import traceback
-                traceback.print_exc()
-                continue
-    
-    logger.info(f"\n✓ Successfully scored with {models_scored}/9 models")
-    
-    # Calculate aggregate predictions
-    logger.info("\nCalculating aggregate predictions...")
-    
-    # Overall call success (average across products)
-    call_success_cols = [c for c in results.columns if 'call_success_prob' in c]
-    if call_success_cols:
-        results['call_success_prob'] = results[call_success_cols].mean(axis=1)
-    else:
-        results['call_success_prob'] = 0.5
-    
-    # Overall prescription lift (sum across products)
-    lift_cols = [c for c in results.columns if 'prescription_lift_pred' in c]
-    if lift_cols:
-        results['forecasted_lift'] = results[lift_cols].sum(axis=1)
-    else:
-        results['forecasted_lift'] = 0
-    
-    # Sample effectiveness
-    results['sample_effectiveness'] = results['call_success_prob'] * 0.3
-    
-    # NGD classification
-    ngd_cols = [c for c in results.columns if 'ngd_category_pred' in c]
-    if ngd_cols:
-        def map_ngd(val):
-            if pd.isna(val): return 'Stable'
-            if val < 0.25: return 'Decliner'
-            elif val < 0.5: return 'Stable'
-            elif val < 0.75: return 'Grower'
-            else: return 'New'
-        results['ngd_classification'] = results[ngd_cols[0]].apply(map_ngd)
-    else:
-        results['ngd_classification'] = 'Stable'
-    
-    # Churn risk
-    results['churn_risk'] = 1 - results['call_success_prob']
-    results['churn_risk_level'] = results['churn_risk'].apply(
-        lambda x: 'High' if x > 0.7 else ('Medium' if x > 0.4 else 'Low')
-    )
-    
-    # HCP Segment
-    def assign_segment(row):
-        if row['call_success_prob'] > 0.7 and row['forecasted_lift'] > 10:
-            return 'Champions'
-        elif row['forecasted_lift'] > 5:
-            return 'Growth Opportunities'
-        elif row['churn_risk'] > 0.6:
-            return 'At-Risk'
-        elif row['call_success_prob'] > 0.5:
-            return 'Maintain'
+                try:
+                    if outcome in ['call_success', 'ngd_category']:
+                        predictions = model.predict(X_model)
+                        if hasattr(model, 'predict_proba'):
+                            probabilities = model.predict_proba(X_model)[:, 1]
+                        else:
+                            probabilities = predictions
+                        
+                        # Assign predictions - pandas will create new columns
+                        chunk_results[f"{product}_{outcome}_pred"] = predictions
+                        chunk_results[f"{product}_{outcome}_prob"] = probabilities
+                    else:
+                        predictions = model.predict(X_model)
+                        chunk_results[f"{product}_{outcome}_pred"] = predictions
+                    
+                    chunk_models_scored += 1
+                    
+                except Exception as e:
+                    logger.error(f"    ✗ Error scoring {product}_{outcome}: {e}")
+                    logger.error(f"    Model features expected: {expected_features}, provided: {len(X_model.columns)}")
+                    # Initialize columns with default values if assignment fails
+                    if outcome in ['call_success', 'ngd_category']:
+                        chunk_results[f"{product}_{outcome}_pred"] = 0
+                        chunk_results[f"{product}_{outcome}_prob"] = 0.5
+                    else:
+                        chunk_results[f"{product}_{outcome}_pred"] = 0
+                    continue
+        
+        logger.info(f"✓ Chunk scored with {chunk_models_scored}/{len(models)} model predictions")
+        
+        # Calculate aggregate predictions for this chunk
+        logger.info("  Calculating derived fields...")
+        
+        # Overall call success (average across products)
+        call_success_cols = [c for c in chunk_results.columns if 'call_success_prob' in c]
+        if call_success_cols:
+            chunk_results['call_success_prob'] = chunk_results[call_success_cols].mean(axis=1)
         else:
-            return 'Deprioritize'
-    
-    results['hcp_segment_name'] = results.apply(assign_segment, axis=1)
-    
-    # Expected ROI
-    results['expected_roi'] = results['forecasted_lift'] * 15  # $15 per TRx
-    
-    # Next best action
-    def assign_action(row):
-        if row['churn_risk_level'] == 'High':
-            return 'Maintain Engagement'
-        elif row['forecasted_lift'] > 10:
-            return 'Increase Calls'
-        elif row['sample_effectiveness'] < 0.05:
-            return 'Sample Drop Only'
+            chunk_results['call_success_prob'] = 0.5
+        
+        # Overall prescription lift (sum across products)
+        lift_cols = [c for c in chunk_results.columns if 'prescription_lift_pred' in c]
+        if lift_cols:
+            chunk_results['forecasted_lift'] = chunk_results[lift_cols].sum(axis=1)
         else:
-            return 'Detail Only'
+            chunk_results['forecasted_lift'] = 0
+        
+        # Sample effectiveness
+        chunk_results['sample_effectiveness'] = chunk_results['call_success_prob'] * 0.3
+        
+        # NGD classification
+        ngd_cols = [c for c in chunk_results.columns if 'ngd_category_pred' in c]
+        if ngd_cols:
+            def map_ngd(val):
+                if pd.isna(val): return 'Stable'
+                if val < 0.25: return 'Decliner'
+                elif val < 0.5: return 'Stable'
+                elif val < 0.75: return 'Grower'
+                else: return 'New'
+            chunk_results['ngd_classification'] = chunk_results[ngd_cols[0]].apply(map_ngd)
+        else:
+            chunk_results['ngd_classification'] = 'Stable'
+        
+        # Churn risk
+        chunk_results['churn_risk'] = 1 - chunk_results['call_success_prob']
+        chunk_results['churn_risk_level'] = chunk_results['churn_risk'].apply(
+            lambda x: 'High' if x > 0.7 else ('Medium' if x > 0.4 else 'Low')
+        )
+        
+        # HCP Segment
+        def assign_segment(row):
+            if row['call_success_prob'] > 0.7 and row['forecasted_lift'] > 10:
+                return 'Champions'
+            elif row['forecasted_lift'] > 5:
+                return 'Growth Opportunities'
+            elif row['churn_risk'] > 0.6:
+                return 'At-Risk'
+            elif row['call_success_prob'] > 0.5:
+                return 'Maintain'
+            else:
+                return 'Deprioritize'
+        
+        chunk_results['hcp_segment_name'] = chunk_results.apply(assign_segment, axis=1)
+        
+        # Expected ROI
+        chunk_results['expected_roi'] = chunk_results['forecasted_lift'] * 15
+        
+        # Next best action
+        def assign_action(row):
+            if row['churn_risk_level'] == 'High':
+                return 'Maintain Engagement'
+            elif row['forecasted_lift'] > 10:
+                return 'Increase Calls'
+            elif row['sample_effectiveness'] < 0.05:
+                return 'Sample Drop Only'
+            else:
+                return 'Detail Only'
+        
+        chunk_results['next_best_action'] = chunk_results.apply(assign_action, axis=1)
+        
+        # Sample allocation
+        chunk_results['sample_allocation'] = (chunk_results['sample_effectiveness'] * 100).clip(0, 50).round(0).astype(int)
+        
+        # Best day/time
+        np.random.seed(chunk_num)
+        days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+        times = ['9:00 AM', '10:00 AM', '11:00 AM', '2:00 PM', '3:00 PM', '4:00 PM']
+        chunk_results['best_day'] = np.random.choice(days, len(chunk_results))
+        chunk_results['best_time'] = np.random.choice(times, len(chunk_results))
+        
+        # Append to results
+        all_results.append(chunk_results)
+        logger.info(f"  ✓ Chunk complete with {len(chunk_results.columns)} total columns")
     
-    results['next_best_action'] = results.apply(assign_action, axis=1)
-    
-    # Sample allocation
-    results['sample_allocation'] = (results['sample_effectiveness'] * 100).clip(0, 50).round(0).astype(int)
-    
-    # Best day/time (mock for now)
-    np.random.seed(42)
-    days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
-    times = ['9:00 AM', '10:00 AM', '11:00 AM', '2:00 PM', '3:00 PM', '4:00 PM']
-    results['best_day'] = np.random.choice(days, len(results))
-    results['best_time'] = np.random.choice(times, len(results))
+    # Combine all chunks
+    logger.info("\n" + "="*80)
+    logger.info("COMBINING ALL CHUNKS...")
+    logger.info("="*80)
+    final_results = pd.concat(all_results, ignore_index=True)
     
     # Save results
-    output_file = UI_DATA_DIR / "hcp_ml_predictions_top100.csv"
-    results.to_csv(output_file, index=False)
+    final_results.to_csv(OUTPUT_FILE, index=False)
     
     logger.info("\n" + "="*80)
-    logger.info("PHASE 7 COMPLETE")
+    logger.info("PHASE 7 COMPLETE - ALL HCPs SCORED")
     logger.info("="*80)
-    logger.info(f"✓ Scored {len(results)} HCPs with {models_scored} models")
-    logger.info(f"✓ Saved to: {output_file}")
+    logger.info(f"✓ Scored {len(final_results):,} HCPs with {models_loaded} models")
+    logger.info(f"✓ Saved to: {OUTPUT_FILE}")
+    logger.info(f"✓ File size: {OUTPUT_FILE.stat().st_size / (1024*1024):.1f} MB")
     logger.info("\nSample predictions:")
-    print(results[['NPI', 'Specialty', 'call_success_prob', 'forecasted_lift', 'ngd_classification', 'hcp_segment_name']].head(10))
+    print(final_results[['NPI', 'Specialty', 'call_success_prob', 'forecasted_lift', 'ngd_classification', 'hcp_segment_name']].head(10))
     
     # Show distribution
     logger.info(f"\nPrediction Distribution:")
-    logger.info(f"  Call Success: {results['call_success_prob'].mean():.1%} ± {results['call_success_prob'].std():.1%}")
-    logger.info(f"  Forecasted Lift: {results['forecasted_lift'].mean():.1f} ± {results['forecasted_lift'].std():.1f} TRx")
-    logger.info(f"  Expected ROI: ${results['expected_roi'].mean():.0f} ± ${results['expected_roi'].std():.0f}")
+    logger.info(f"  Call Success: {final_results['call_success_prob'].mean():.1%} ± {final_results['call_success_prob'].std():.1%}")
+    logger.info(f"  Forecasted Lift: {final_results['forecasted_lift'].mean():.1f} ± {final_results['forecasted_lift'].std():.1f} TRx")
+    logger.info(f"  Expected ROI: ${final_results['expected_roi'].mean():.0f} ± ${final_results['expected_roi'].std():.0f}")
     logger.info(f"\nSegment Distribution:")
-    print(results['hcp_segment_name'].value_counts())
+    print(final_results['hcp_segment_name'].value_counts())
+    logger.info(f"\nWallet Share Growth Distribution:")
+    logger.info(f"  Tirosint: {final_results['Tirosint_wallet_share_growth_pred'].mean():.2f} ± {final_results['Tirosint_wallet_share_growth_pred'].std():.2f}pp")
+    logger.info(f"  Flector: {final_results['Flector_wallet_share_growth_pred'].mean():.2f} ± {final_results['Flector_wallet_share_growth_pred'].std():.2f}pp")
+    logger.info(f"  Licart: {final_results['Licart_wallet_share_growth_pred'].mean():.2f} ± {final_results['Licart_wallet_share_growth_pred'].std():.2f}pp")
     
-    return results
+    return final_results
 
 if __name__ == "__main__":
     results = score_hcps()

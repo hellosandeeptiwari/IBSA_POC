@@ -1,0 +1,126 @@
+{
+  "created_at": "2025-10-30T04:02:24.916634",
+  "random_seed": 42,
+  "library_versions": {
+    "optuna": false,
+    "xgboost": false,
+    "shap": true
+  },
+  "upstream_integration": {
+    "phase3_eda_applied": true,
+    "phase4b_features_loaded": 77,
+    "phase5_targets_loaded": 12
+  },
+  "training_history": [
+    {
+      "step": "data_loading",
+      "timestamp": "2025-10-30T04:02:30.943185",
+      "features_loaded": 349864,
+      "targets_loaded": 349864,
+      "selected_features": 66,
+      "eda_applied": true
+    },
+    {
+      "model": "Tirosint_call_success",
+      "timestamp": "2025-10-30T04:02:57.689782",
+      "metrics": {
+        "optimal_threshold": 0.8000000000000002,
+        "roc_auc": 0.998577607314117,
+        "accuracy": 0.9958841267345976,
+        "precision": 0.7045769764216366,
+        "recall": 0.8713550600343053,
+        "f1": 0.7791411042944786
+      },
+      "training_time": 26.709748
+    },
+    {
+      "model": "Tirosint_prescription_lift",
+      "timestamp": "2025-10-30T04:04:34.382820",
+      "metrics": {
+        "mae": 0.008923860128235182,
+        "rmse": 0.06322594548240304,
+        "r2": 0.9973991884507036
+      },
+      "training_time": 96.641888
+    },
+    {
+      "model": "Tirosint_ngd_category",
+      "timestamp": "2025-10-30T04:05:15.853734",
+      "metrics": {
+        "accuracy": 0.9991996913095051,
+        "precision_macro": 0.9740761873103677,
+        "recall_macro": 0.9919032024995206,
+        "f1_macro": 0.9828581684161035
+      },
+      "training_time": 41.419902
+    },
+    {
+      "model": "Flector_call_success",
+      "timestamp": "2025-10-30T04:05:32.143256",
+      "metrics": {
+        "optimal_threshold": 0.6500000000000001,
+        "roc_auc": 0.9997981791628726,
+        "accuracy": 0.9995855544281366,
+        "precision": 0.6811594202898551,
+        "recall": 0.8703703703703703,
+        "f1": 0.7642276422764228
+      },
+      "training_time": 15.463585
+    },
+    {
+      "model": "Flector_prescription_lift",
+      "timestamp": "2025-10-30T04:06:49.389429",
+      "metrics": {
+        "mae": 0.002476100166175675,
+        "rmse": 0.2304306124435494,
+        "r2": 0.4184718438088284
+      },
+      "training_time": 77.220759
+    },
+    {
+      "model": "Flector_ngd_category",
+      "timestamp": "2025-10-30T04:07:19.601318",
+      "metrics": {
+        "accuracy": 0.9979563545939147,
+        "precision_macro": 0.7265816682950618,
+        "recall_macro": 0.9209775297411568,
+        "f1_macro": 0.7962552481901488
+      },
+      "training_time": 30.165081
+    },
+    {
+      "model": "Licart_call_success",
+      "timestamp": "2025-10-30T04:07:36.458725",
+      "metrics": {
+        "optimal_threshold": 0.7500000000000002,
+        "roc_auc": 0.9997092827515623,
+        "accuracy": 0.9993711860288969,
+        "precision": 0.7303370786516854,
+        "recall": 0.7647058823529411,
+        "f1": 0.7471264367816092
+      },
+      "training_time": 15.99893
+    },
+    {
+      "model": "Licart_prescription_lift",
+      "timestamp": "2025-10-30T04:08:47.576558",
+      "metrics": {
+        "mae": 0.0035226546074477367,
+        "rmse": 0.3180420238886906,
+        "r2": 0.6831169126138922
+      },
+      "training_time": 71.090327
+    },
+    {
+      "model": "Licart_ngd_category",
+      "timestamp": "2025-10-30T04:09:15.173058",
+      "metrics": {
+        "accuracy": 0.9983708001657783,
+        "precision_macro": 0.7871469371281911,
+        "recall_macro": 0.9549202506167737,
+        "f1_macro": 0.8559525148541871
+      },
+      "training_time": 27.574141
+    }
+  ]
+}

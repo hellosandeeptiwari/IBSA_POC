@@ -56,6 +56,9 @@ export default function DashboardPage() {
 
   const filteredData = useMemo(() => {
     let filtered = data.filter(hcp => {
+      // Filter out invalid NPIs (empty, null, or undefined)
+      if (!hcp.npi || hcp.npi === '' || hcp.npi === 'undefined') return false
+      
       // Apply tier filter
       if (selectedTiers.length > 0 && !selectedTiers.includes(hcp.tier)) return false
       
@@ -621,7 +624,7 @@ export default function DashboardPage() {
               </tr>
             </thead>
             <tbody className="bg-white dark:bg-gray-900">
-              {filteredData.slice(currentPage * pageSize, (currentPage + 1) * pageSize).map((hcp) => {
+              {filteredData.slice(currentPage * pageSize, (currentPage + 1) * pageSize).map((hcp, index) => {
                 const colors = {
                   New: 'bg-blue-100 text-blue-800 border-blue-300',
                   Grower: 'bg-green-100 text-green-800 border-green-300',
@@ -633,7 +636,7 @@ export default function DashboardPage() {
                 
                 return (
                   <tr 
-                    key={hcp.npi} 
+                    key={`${hcp.npi}-${index}`} 
                     className="border-b hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer"
                     onClick={() => router.push(`/hcp/${hcp.npi}`)}
                   >

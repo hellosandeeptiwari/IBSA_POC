@@ -1,10 +1,61 @@
 {
   "territory_count": {
-    "total": 91,
-    "regions": 9,
-    "territories_per_region": 10.1
+    "total": 91
   },
   "performance_variation": {},
   "statistical_tests": {},
-  "recommendations": []
+  "recommendations": [
+    "Target tier alignment is effective"
+  ],
+  "target_tier_alignment": {
+    "tier_distribution": {
+      "NON-TARGET": 98057,
+      "Tier 1": 57,
+      "Tier 2": 343,
+      "Tier 3": 578,
+      "Tier 4": 965
+    },
+    "tier_performance": [
+      {
+        "tier": "NON-TARGET",
+        "hcp_count": 98029,
+        "total_trx": 463090,
+        "avg_trx_per_hcp": 4.72,
+        "trx_per_call": 154.98,
+        "trx_per_sample": 68.535
+      },
+      {
+        "tier": "Tier 1",
+        "hcp_count": 57,
+        "total_trx": 2714,
+        "avg_trx_per_hcp": 47.61,
+        "trx_per_call": 542.8,
+        "trx_per_sample": 69.59
+      },
+      {
+        "tier": "Tier 2",
+        "hcp_count": 335,
+        "total_trx": 1650,
+        "avg_trx_per_hcp": 4.93,
+        "trx_per_call": 15.14,
+        "trx_per_sample": 6.371
+      },
+      {
+        "tier": "Tier 3",
+        "hcp_count": 569,
+        "total_trx": 2381,
+        "avg_trx_per_hcp": 4.18,
+        "trx_per_call": 21.45,
+        "trx_per_sample": 4.879
+      },
+      {
+        "tier": "Tier 4",
+        "hcp_count": 949,
+        "total_trx": 3086,
+        "avg_trx_per_hcp": 3.25,
+        "trx_per_call": 20.04,
+        "trx_per_sample": 11.061
+      }
+    ]
+  }
 }

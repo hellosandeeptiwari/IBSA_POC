@@ -1,0 +1,212 @@
+{
+  "created_at": "2025-10-30T04:09:15.976041",
+  "total_models": 9,
+  "models": {
+    "Tirosint_call_success": {
+      "metrics": {
+        "optimal_threshold": 0.8000000000000002,
+        "roc_auc": 0.998577607314117,
+        "accuracy": 0.9958841267345976,
+        "precision": 0.7045769764216366,
+        "recall": 0.8713550600343053,
+        "f1": 0.7791411042944786
+      },
+      "best_params": {
+        "n_estimators": 150,
+        "max_depth": 12,
+        "min_samples_split": 10,
+        "min_samples_leaf": 5,
+        "random_state": 42,
+        "class_weight": "balanced",
+        "n_jobs": -1
+      },
+      "training_time": 26.709748,
+      "train_size": 279891,
+      "test_size": 69973
+    },
+    "Tirosint_prescription_lift": {
+      "metrics": {
+        "mae": 0.008923860128235182,
+        "rmse": 0.06322594548240304,
+        "r2": 0.9973991884507036
+      },
+      "best_params": {
+        "n_estimators": 150,
+        "max_depth": 10,
+        "learning_rate": 0.1,
+        "random_state": 42
+      },
+      "training_time": 96.641888,
+      "train_size": 279891,
+      "test_size": 69973
+    },
+    "Tirosint_ngd_category": {
+      "metrics": {
+        "accuracy": 0.9991996913095051,
+        "precision_macro": 0.9740761873103677,
+        "recall_macro": 0.9919032024995206,
+        "f1_macro": 0.9828581684161035
+      },
+      "best_params": {
+        "n_estimators": 150,
+        "max_depth": 12,
+        "min_samples_split": 10,
+        "min_samples_leaf": 5,
+        "random_state": 42,
+        "class_weight": "balanced",
+        "n_jobs": -1
+      },
+      "training_time": 41.419902,
+      "train_size": 279891,
+      "test_size": 69973
+    },
+    "Flector_call_success": {
+      "metrics": {
+        "optimal_threshold": 0.6500000000000001,
+        "roc_auc": 0.9997981791628726,
+        "accuracy": 0.9995855544281366,
+        "precision": 0.6811594202898551,
+        "recall": 0.8703703703703703,
+        "f1": 0.7642276422764228
+      },
+      "best_params": {
+        "n_estimators": 150,
+        "max_depth": 12,
+        "min_samples_split": 10,
+        "min_samples_leaf": 5,
+        "random_state": 42,
+        "class_weight": "balanced",
+        "n_jobs": -1
+      },
+      "training_time": 15.463585,
+      "train_size": 279891,
+      "test_size": 69973
+    },
+    "Flector_prescription_lift": {
+      "metrics": {
+        "mae": 0.002476100166175675,
+        "rmse": 0.2304306124435494,
+        "r2": 0.4184718438088284
+      },
+      "best_params": {
+        "n_estimators": 150,
+        "max_depth": 10,
+        "learning_rate": 0.1,
+        "random_state": 42
+      },
+      "training_time": 77.220759,
+      "train_size": 279891,
+      "test_size": 69973
+    },
+    "Flector_ngd_category": {
+      "metrics": {
+        "accuracy": 0.9979563545939147,
+        "precision_macro": 0.7265816682950618,
+        "recall_macro": 0.9209775297411568,
+        "f1_macro": 0.7962552481901488
+      },
+      "best_params": {
+        "n_estimators": 150,
+        "max_depth": 12,
+        "min_samples_split": 10,
+        "min_samples_leaf": 5,
+        "random_state": 42,
+        "class_weight": "balanced",
+        "n_jobs": -1
+      },
+      "training_time": 30.165081,
+      "train_size": 279891,
+      "test_size": 69973
+    },
+    "Licart_call_success": {
+      "metrics": {
+        "optimal_threshold": 0.7500000000000002,
+        "roc_auc": 0.9997092827515623,
+        "accuracy": 0.9993711860288969,
+        "precision": 0.7303370786516854,
+        "recall": 0.7647058823529411,
+        "f1": 0.7471264367816092
+      },
+      "best_params": {
+        "n_estimators": 150,
+        "max_depth": 12,
+        "min_samples_split": 10,
+        "min_samples_leaf": 5,
+        "random_state": 42,
+        "class_weight": "balanced",
+        "n_jobs": -1
+      },
+      "training_time": 15.99893,
+      "train_size": 279891,
+      "test_size": 69973
+    },
+    "Licart_prescription_lift": {
+      "metrics": {
+        "mae": 0.0035226546074477367,
+        "rmse": 0.3180420238886906,
+        "r2": 0.6831169126138922
+      },
+      "best_params": {
+        "n_estimators": 150,
+        "max_depth": 10,
+        "learning_rate": 0.1,
+        "random_state": 42
+      },
+      "training_time": 71.090327,
+      "train_size": 279891,
+      "test_size": 69973
+    },
+    "Licart_ngd_category": {
+      "metrics": {
+        "accuracy": 0.9983708001657783,
+        "precision_macro": 0.7871469371281911,
+        "recall_macro": 0.9549202506167737,
+        "f1_macro": 0.8559525148541871
+      },
+      "best_params": {
+        "n_estimators": 150,
+        "max_depth": 12,
+        "min_samples_split": 10,
+        "min_samples_leaf": 5,
+        "random_state": 42,
+        "class_weight": "balanced",
+        "n_jobs": -1
+      },
+      "training_time": 27.574141,
+      "train_size": 279891,
+      "test_size": 69973
+    }
+  },
+  "summary_statistics": {
+    "call_success": {
+      "accuracy_mean": 0.998280289063877,
+      "accuracy_std": 0.0016966012856770383,
+      "precision_mean": 0.7053578251210592,
+      "precision_std": 0.020084285963687575,
+      "recall_mean": 0.835477104252539,
+      "recall_std": 0.05004442553242168,
+      "f1_mean": 0.7634983944508368,
+      "f1_std": 0.013080101574101922,
+      "roc_auc_mean": 0.9993616897428507,
+      "roc_auc_std": 0.000555616524995777
+    },
+    "prescription_lift": {
+      "mae_mean": 0.004974204967286198,
+      "mae_std": 0.00282532015500837,
+      "rmse_mean": 0.20389952727154767,
+      "rmse_std": 0.10570629850011407,
+      "r2_mean": 0.6996626482911413,
+      "r2_std": 0.2366354983518593
+    },
+    "ngd_category": {
+      "accuracy_mean": 0.9985089486897327,
+      "accuracy_std": 0.0005169044451262253,
+      "precision_macro_mean": 0.8292682642445403,
+      "precision_macro_std": 0.1053376757043312,
+      "recall_macro_mean": 0.9559336609524837,
+      "recall_macro_std": 0.028964150421259504,
+      "f1_macro_mean": 0.8783553104868131,
+      "f1_macro_std": 0.07780992395288838
+    }
+  }
+}
