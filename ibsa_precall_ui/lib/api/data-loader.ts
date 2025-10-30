@@ -204,6 +204,11 @@ export async function getHCPs(filters?: {
   params.set('limit', '50')  // Reduced from 100 to 50 for faster initial load
   params.set('offset', '0')
   
+  // Enable random sampling when no search filter is applied (for diverse initial view)
+  if (!filters?.search) {
+    params.set('random', 'true')
+  }
+  
   if (filters?.search) params.set('search', filters.search)
   if (filters?.territory) params.set('territory', filters.territory)
   
@@ -223,6 +228,15 @@ export async function getHCPs(filters?: {
     const npi = String(row.NPI || row.PrescriberId || '').replace('.0', '')
     const specialty = row.Specialty || 'General Practice'
     
+    // Map tier values from CSV format to standard tier names
+    const rawTier = String(row.Tier || 'Silver').toUpperCase()
+    let tier = 'Silver' // Default
+    if (rawTier.includes('TIER 1') || rawTier.includes('PLATINUM')) tier = 'Platinum'
+    else if (rawTier.includes('TIER 2') || rawTier.includes('GOLD')) tier = 'Gold'
+    else if (rawTier.includes('TIER 3') || rawTier.includes('SILVER')) tier = 'Silver'
+    else if (rawTier.includes('TIER 4') || rawTier.includes('BRONZE')) tier = 'Bronze'
+    else if (rawTier.includes('NON-TARGET')) tier = 'Bronze' // Map NON-TARGET to Bronze
+    
     return {
       npi,
       name: String(row.PrescriberName || npi),
@@ -231,7 +245,7 @@ export async function getHCPs(filters?: {
       state: String(row.State || ''),
       territory: String(row.Territory || row.TerritoryName || row.State || 'Unknown'),
       region: String(row.RegionName || row.State || 'Unknown'),
-      tier: String(row.Tier || 'Silver'),
+      tier,
       trx_current: Number(row.TRx_Current || row.trx_current_qtd) || 0,
       trx_prior: Number(row.trx_prior_qtd) || 0,
       trx_growth: Number(row.forecasted_lift) || 0,

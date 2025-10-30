@@ -11,6 +11,7 @@ export async function GET(request: NextRequest) {
     const offset = parseInt(searchParams.get('offset') || '0')
     const search = searchParams.get('search')
     const territory = searchParams.get('territory')
+    const random = searchParams.get('random') === 'true' // New parameter for random sampling
     
     let filtered = data
     
@@ -26,7 +27,61 @@ export async function GET(request: NextRequest) {
       filtered = filtered.filter((row: any) => row.State === territory)
     }
     
-    const paginated = filtered.slice(offset, offset + limit)
+    // If random sampling requested and no search term, return stratified random sample
+    let paginated
+    if (random && !search && offset === 0) {
+      // Stratified sampling: ensure diverse representation across key dimensions
+      const totalRecords = filtered.length
+      const sampleSize = Math.min(limit, totalRecords)
+      
+      // Group by key dimensions for diversity
+      const byTier: Record<string, any[]> = {}
+      const byTerritory: Record<string, any[]> = {}
+      const bySpecialty: Record<string, any[]> = {}
+      
+      filtered.forEach((row: any) => {
+        const tier = row.Tier || 'Unknown'
+        const territory = row.State || 'Unknown'
+        const specialty = row.Specialty || 'Unknown'
+        
+        if (!byTier[tier]) byTier[tier] = []
+        if (!byTerritory[territory]) byTerritory[territory] = []
+        if (!bySpecialty[specialty]) bySpecialty[specialty] = []
+        
+        byTier[tier].push(row)
+        byTerritory[territory].push(row)
+        bySpecialty[specialty].push(row)
+      })
+      
+      // Calculate samples per stratum (proportional to size)
+      const tiers = Object.keys(byTier)
+      const samplesPerTier = Math.floor(sampleSize / tiers.length)
+      
+      const selectedRecords = new Set<any>()
+      
+      // Sample from each tier to ensure diversity
+      tiers.forEach(tier => {
+        const tierRecords = byTier[tier]
+        const tierSampleSize = Math.min(samplesPerTier, tierRecords.length)
+        
+        // Random sample from this tier
+        const shuffled = [...tierRecords].sort(() => Math.random() - 0.5)
+        shuffled.slice(0, tierSampleSize).forEach(record => selectedRecords.add(record))
+      })
+      
+      // Fill remaining slots with random records to reach sampleSize
+      if (selectedRecords.size < sampleSize) {
+        const remaining = sampleSize - selectedRecords.size
+        const availableRecords = filtered.filter((r: any) => !selectedRecords.has(r))
+        const shuffled = [...availableRecords].sort(() => Math.random() - 0.5)
+        shuffled.slice(0, remaining).forEach(record => selectedRecords.add(record))
+      }
+      
+      paginated = Array.from(selectedRecords)
+    } else {
+      // Normal pagination
+      paginated = filtered.slice(offset, offset + limit)
+    }
     
     const res = NextResponse.json({
       data: paginated,
