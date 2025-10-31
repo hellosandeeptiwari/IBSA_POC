@@ -288,6 +288,15 @@ def score_hcps():
             
             logger.info(f"✓ Loaded {len(profiles):,} prescriber profiles")
             
+            # CRITICAL: Remove duplicate PrescriberId to prevent row explosion during merge
+            profiles_before = len(profiles)
+            profiles = profiles.drop_duplicates(subset=['PrescriberId'], keep='first')
+            profiles_after = len(profiles)
+            if profiles_before != profiles_after:
+                logger.info(f"⚠️ Removed {profiles_before - profiles_after:,} duplicate PrescriberId entries")
+            
+            logger.info(f"✓ Using {len(profiles):,} unique prescriber profiles for merge")
+            
             # Merge with predictions - NPI already contains real PrescriberId
             merged = final_results.merge(
                 profiles,
@@ -372,9 +381,16 @@ def score_hcps():
             logger.info(f"✓ {hcps_with_calls:,} HCPs have call history")
             logger.info(f"✓ {len(final_results) - hcps_with_calls:,} HCPs have no call history")
             
+            # FINAL DEDUPLICATION: Remove duplicate NPIs (keep first occurrence)
+            rows_before = len(final_results)
+            final_results = final_results.drop_duplicates(subset=['NPI'], keep='first')
+            rows_after = len(final_results)
+            if rows_before != rows_after:
+                logger.info(f"✅ Removed {rows_before - rows_after:,} duplicate NPI rows (final cleanup)")
+            
             # Save updated file with call history
             final_results.to_csv(OUTPUT_FILE, index=False)
-            logger.info(f"✓ Saved with embedded call history")
+            logger.info(f"✓ Saved {len(final_results):,} unique HCPs with embedded call history")
             
         except Exception as e:
             logger.warning(f"⚠️ Could not merge call history: {e}")
