@@ -552,7 +552,7 @@ export default function DashboardPage() {
                       <span className="px-1.5 py-0.5 bg-purple-200 text-purple-700 rounded text-[10px] font-bold">AI</span>
                     </span>
                     <SortIcon column="ngd_decile" />
-                    <Tooltip content="AI Classification: New (0-10% decile), Grower (11-40%), Stable (41-70%), Decliner (71-100%)" />
+                    <Tooltip content="ML Model Predicted NGD Category for recommended product (Tirosint/Flector/Licart). Each product has its own NGD model prediction. New=new prescriber, Grower=increasing TRx, Stable=steady, Decliner=decreasing" />
                   </div>
                 </th>
                 <th className="px-2 py-2 text-left text-[11px] font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100" onClick={() => handleSort('call_success_score')}>
@@ -628,7 +628,6 @@ export default function DashboardPage() {
                   </div>
                 </th>
                 <th className="px-2 py-2 text-center text-[11px] font-medium text-gray-500 uppercase border-b">
-                  <Tooltip content="Note: NGD Status showing 'New' for all records - phase7 classification needs recalibration" />
                 </th>
               </tr>
             </thead>

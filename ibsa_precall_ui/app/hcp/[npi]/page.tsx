@@ -824,14 +824,32 @@ export default function HCPDetailPage() {
               {/* Competitive Pressure Trend */}
               {hcp.competitive_intel.competitive_pressure_score && (
                 <div className="pt-4 border-t">
-                  <div className="text-xs font-semibold text-gray-700 mb-3">Competitive Pressure Analysis</div>
+                  <div className="text-xs font-semibold text-gray-700 mb-3 flex items-center gap-1">
+                    Competitive Pressure Analysis
+                    <span className="text-gray-500 hover:text-gray-700 cursor-help" title="4-metric competitive snapshot: Red bar shows competitive market pressure, Blue shows your current IBSA share, Green shows AI-predicted call success rate, Amber shows risk of HCP switching to competitors. Higher bars = higher intensity">
+                      <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                      </svg>
+                    </span>
+                  </div>
                   <ResponsiveContainer width="100%" height={150}>
                     <BarChart
                       data={[
                         { metric: 'Comp\nPressure', value: hcp.competitive_intel.competitive_pressure_score || 0, fill: '#ef4444' },
                         { metric: 'IBSA\nShare', value: hcp.ibsa_share, fill: '#2563eb' },
                         { metric: 'Call\nSuccess', value: (hcp.predictions.call_success_prob || 0) * 100, fill: '#10b981' },
-                        { metric: 'Conversion\nRisk', value: (hcp.competitive_intel.competitive_conversion_probability || 0) * 100, fill: '#f59e0b' }
+                        { 
+                          metric: 'Conversion\nRisk', 
+                          value: (() => {
+                            // Calculate conversion risk: high competitive pressure + low IBSA share + declining trend = high risk
+                            const compPressure = hcp.competitive_intel.competitive_pressure_score || 0;
+                            const ibsaShare = hcp.ibsa_share || 0;
+                            const isDecliner = hcp.predictions.ngd_classification === 'Decliner';
+                            const baseRisk = (compPressure * (100 - ibsaShare)) / 100;
+                            return isDecliner ? Math.min(baseRisk * 1.3, 100) : baseRisk;
+                          })(), 
+                          fill: '#f59e0b' 
+                        }
                       ]}
                       layout="vertical"
                       margin={{ top: 5, right: 30, left: 60, bottom: 5 }}
@@ -857,7 +875,14 @@ export default function HCPDetailPage() {
                       <div className="text-gray-600">AI predicted success rate</div>
                     </div>
                     <div className="bg-amber-50 p-2 rounded">
-                      <div className="text-amber-700 font-semibold">Conversion Risk</div>
+                      <div className="text-amber-700 font-semibold flex items-center gap-1">
+                        Conversion Risk
+                        <span className="text-amber-600 hover:text-amber-800 cursor-help" title="Formula: (Competitive Pressure × (100 - IBSA Share)) / 100. Decliners get 1.3x multiplier. Higher when competitors are strong and IBSA share is low.">
+                          <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                          </svg>
+                        </span>
+                      </div>
                       <div className="text-gray-600">Risk of switching to competitor</div>
                     </div>
                   </div>
