@@ -1,5 +1,5 @@
 import Papa from 'papaparse'
-import type { HCP, HCPDetail } from '../types'
+import type { HCP, HCPDetail, CallHistory } from '../types'
 
 // Helper function to map NGD category predictions (0=Decliner, 1=Grower, 2=New)
 function mapNGDCategory(pred: number | undefined): 'New' | 'Grower' | 'Stable' | 'Decliner' {
@@ -170,6 +170,43 @@ async function loadCompetitiveConversionPredictions(): Promise<void> {
   }
 }
 
+// Store call history data
+const callHistoryData = new Map<string, CallHistory[]>()
+
+async function loadCallHistory(): Promise<void> {
+  if (callHistoryData.size > 0) return
+
+  try {
+    const response = await fetch('/data/call_history.csv')
+    if (!response.ok) {
+      console.warn('⚠️ Call history data not available')
+      return
+    }
+    const csvText = await response.text()
+
+    const parsed = Papa.parse<CallHistory>(csvText, {
+      header: true,
+      dynamicTyping: false, // Keep as strings
+      skipEmptyLines: true
+    })
+
+    // Group calls by NPI
+    parsed.data.forEach((row) => {
+      if (row.npi) {
+        const cleanNpi = String(row.npi).trim()
+        if (!callHistoryData.has(cleanNpi)) {
+          callHistoryData.set(cleanNpi, [])
+        }
+        callHistoryData.get(cleanNpi)!.push(row)
+      }
+    })
+    
+    console.log(`✅ Loaded call history for ${callHistoryData.size} HCPs`)
+  } catch (error) {
+    console.warn('⚠️ Failed to load call history:', error)
+  }
+}
+
 export async function loadModelReadyDataset(): Promise<ModelReadyRow[]> {
   // For browser-side calls, return empty (use API routes instead)
   // This function is kept for backward compatibility but data should be fetched via /api/hcps
@@ -291,6 +328,9 @@ export async function getHCPs(filters?: {
 }
 
 export async function getHCPDetail(npiParam: string): Promise<HCPDetail | null> {
+  // Load call history data if not already loaded
+  await loadCallHistory()
+  
   // Use API route for single HCP lookup
   const response = await fetch(`/api/hcps/${npiParam}`)
   if (!response.ok) {
@@ -306,6 +346,9 @@ export async function getHCPDetail(npiParam: string): Promise<HCPDetail | null> 
   // Look up competitive conversion predictions
   const cleanNpi = String(row.PrescriberId).replace('.0', '')
   const conversionPred = competitiveConversionData.get(cleanNpi)
+  
+  // Look up call history for this HCP
+  const hcpCallHistory = callHistoryData.get(cleanNpi) || []
 
   // Use ACTUAL product TRx data from CSV columns
   const tirosintTrx = Number(row.tirosint_trx) || 0
@@ -478,7 +521,7 @@ export async function getHCPDetail(npiParam: string): Promise<HCPDetail | null> 
     ngd_decile: ngdDecile,
     ngd_classification: (row.ngd_classification as 'New' | 'Grower' | 'Stable' | 'Decliner') || getNGDClassification(ngdDecile, 0),
     product_mix: productMix.filter(p => p.trx >= 0),
-    call_history: [],
+    call_history: hcpCallHistory,
     predictions: {
       // REAL predictions from 12 trained ML models (Phase 7 output)
       

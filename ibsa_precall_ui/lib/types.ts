@@ -58,13 +58,16 @@ export interface ProductMix {
 }
 
 export interface CallHistory {
-  id: string
-  date: string
-  type: 'Detail' | 'Sample Drop' | 'Virtual'
+  npi: string
+  call_date: string
+  call_type: 'Detail' | 'Sample Drop' | 'Virtual' | 'Group Detail'
   rep_name: string
-  products: string[]
-  samples: number
-  notes: string
+  next_call_objective: string
+  status: string
+  products: string
+  is_sampled: boolean
+  duration: number
+  location: string
 }
 
 export interface Predictions {

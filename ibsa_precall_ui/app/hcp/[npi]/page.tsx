@@ -1016,10 +1016,47 @@ export default function HCPDetailPage() {
         <TabsContent value="history">
           <Card>
             <CardHeader>
-              <CardTitle>Call History</CardTitle>
+              <CardTitle>Call History ({hcp.call_history.length} calls in 2025)</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-muted-foreground">Call history timeline coming soon...</p>
+              {hcp.call_history.length === 0 ? (
+                <p className="text-muted-foreground">No call history available for 2025</p>
+              ) : (
+                <div className="space-y-4">
+                  {hcp.call_history.map((call, idx) => (
+                    <div key={idx} className="border-l-4 border-blue-500 pl-4 py-2">
+                      <div className="flex items-center justify-between mb-1">
+                        <div className="flex items-center gap-3">
+                          <span className="font-semibold text-sm">{call.call_date}</span>
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                            {call.call_type}
+                          </span>
+                          {call.is_sampled && (
+                            <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
+                              📦 Samples
+                            </span>
+                          )}
+                        </div>
+                        <span className="text-xs text-gray-500">{call.duration}min</span>
+                      </div>
+                      <div className="text-sm text-gray-600 mb-1">
+                        <span className="font-medium">Rep:</span> {call.rep_name}
+                      </div>
+                      {call.products && (
+                        <div className="text-sm text-gray-600 mb-1">
+                          <span className="font-medium">Products:</span> {call.products}
+                        </div>
+                      )}
+                      {call.next_call_objective && (
+                        <div className="text-sm bg-amber-50 p-2 rounded mt-2">
+                          <span className="font-medium text-amber-900">Next Objective:</span>
+                          <span className="text-amber-800 ml-1">{call.next_call_objective}</span>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>
