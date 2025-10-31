@@ -170,43 +170,15 @@ async function loadCompetitiveConversionPredictions(): Promise<void> {
   }
 }
 
-// Store call history data
-const callHistoryData = new Map<string, CallHistory[]>()
-
-async function loadCallHistory(): Promise<void> {
-  if (callHistoryData.size > 0) return
-
+// Helper function to parse embedded call history JSON
+function parseCallHistory(callHistoryJson: string | undefined): CallHistory[] {
+  if (!callHistoryJson || callHistoryJson === '[]') return []
   try {
-    const response = await fetch('/data/call_history.csv')
-    if (!response.ok) {
-      console.warn('⚠️ Call history data not available')
-      return
-    }
-    const csvText = await response.text()
-
-    const parsed = Papa.parse<CallHistory>(csvText, {
-      header: true,
-      dynamicTyping: false, // Keep as strings
-      skipEmptyLines: true
-    })
-
-    // Group calls by NPI
-    parsed.data.forEach((row) => {
-      if (row.npi) {
-        const cleanNpi = String(row.npi).trim()
-        if (!callHistoryData.has(cleanNpi)) {
-          callHistoryData.set(cleanNpi, [])
-        }
-        callHistoryData.get(cleanNpi)!.push(row)
-      }
-    })
-    
-    console.log(`✅ Loaded call history for ${callHistoryData.size} HCPs`)
-    // Debug: show first 5 NPIs with call history
-    const firstFive = Array.from(callHistoryData.keys()).slice(0, 5)
-    console.log('📋 Sample NPIs with call history:', firstFive)
+    const parsed = JSON.parse(callHistoryJson)
+    return Array.isArray(parsed) ? parsed : []
   } catch (error) {
-    console.warn('⚠️ Failed to load call history:', error)
+    console.warn('⚠️ Failed to parse call_history_json:', error)
+    return []
   }
 }
 
@@ -344,10 +316,7 @@ export async function getHCPs(filters?: {
 }
 
 export async function getHCPDetail(npiParam: string): Promise<HCPDetail | null> {
-  // Load call history data if not already loaded
-  await loadCallHistory()
-  
-  // Use API route for single HCP lookup
+  // Use API route for single HCP lookup (call history is now embedded in CSV)
   const response = await fetch(`/api/hcps/${npiParam}`)
   if (!response.ok) {
     console.error(`Failed to fetch HCP ${npiParam} from API`)
@@ -363,9 +332,9 @@ export async function getHCPDetail(npiParam: string): Promise<HCPDetail | null> 
   const cleanNpi = String(row.PrescriberId).replace('.0', '')
   const conversionPred = competitiveConversionData.get(cleanNpi)
   
-  // Look up call history for this HCP - use npi (not cleanNpi) since call_history.csv uses NPI column
-  const hcpCallHistory = callHistoryData.get(npi) || []
-  console.log(`📞 Call history lookup for NPI ${npi}:`, hcpCallHistory.length, 'calls found')
+  // Parse call history from embedded JSON column
+  const hcpCallHistory = parseCallHistory((row as any).call_history_json)
+  console.log(`📞 Call history for NPI ${npi}:`, hcpCallHistory.length, 'calls found')
 
   // Use ACTUAL product TRx data from CSV columns
   const tirosintTrx = Number(row.tirosint_trx) || 0

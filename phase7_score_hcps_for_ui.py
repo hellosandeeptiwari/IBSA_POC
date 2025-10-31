@@ -332,6 +332,57 @@ def score_hcps():
         logger.warning(f"⚠️ Prescriber profile file not found: {profile_file}")
         logger.warning("Continuing with NPI only...")
     
+    # Merge call history into final results
+    logger.info("\n" + "="*80)
+    logger.info("MERGING CALL HISTORY DATA...")
+    logger.info("="*80)
+    
+    call_history_file = BASE_DIR / "ibsa-poc-eda" / "data" / "call_history.csv"
+    if call_history_file.exists():
+        try:
+            import json
+            logger.info(f"Loading call history from: {call_history_file}")
+            df_calls = pd.read_csv(call_history_file, dtype={'npi': str})
+            logger.info(f"✓ Loaded {len(df_calls):,} call records")
+            
+            # Clean NPI values
+            final_results['NPI'] = final_results['NPI'].astype(str).str.strip()
+            df_calls['npi'] = df_calls['npi'].astype(str).str.strip()
+            
+            # Group call history by NPI and convert to JSON
+            logger.info("Grouping call history by NPI...")
+            call_history_grouped = df_calls.groupby('npi').apply(
+                lambda x: x.to_dict('records')
+            ).to_dict()
+            
+            logger.info(f"✓ Found call history for {len(call_history_grouped):,} unique NPIs")
+            
+            # Add call_history column as JSON string
+            def get_call_history_json(npi):
+                if pd.isna(npi):
+                    return '[]'
+                npi_str = str(npi).strip()
+                calls = call_history_grouped.get(npi_str, [])
+                return json.dumps(calls) if calls else '[]'
+            
+            final_results['call_history_json'] = final_results['NPI'].apply(get_call_history_json)
+            
+            # Count HCPs with call history
+            hcps_with_calls = (final_results['call_history_json'] != '[]').sum()
+            logger.info(f"✓ {hcps_with_calls:,} HCPs have call history")
+            logger.info(f"✓ {len(final_results) - hcps_with_calls:,} HCPs have no call history")
+            
+            # Save updated file with call history
+            final_results.to_csv(OUTPUT_FILE, index=False)
+            logger.info(f"✓ Saved with embedded call history")
+            
+        except Exception as e:
+            logger.warning(f"⚠️ Could not merge call history: {e}")
+            logger.warning("Continuing without call history...")
+    else:
+        logger.warning(f"⚠️ Call history file not found: {call_history_file}")
+        logger.warning("Run export_call_history.py first to create call history data")
+    
     logger.info("\n" + "="*80)
     logger.info("PHASE 7 COMPLETE - ALL HCPs SCORED")
     logger.info("="*80)
