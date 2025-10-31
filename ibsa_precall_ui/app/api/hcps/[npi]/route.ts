@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getDataCached, findByNpi } from '@/lib/server/data-cache'
-import { getHCPDetailFromRow } from '@/lib/server/hcp-detail-server.js'
+import { getHCPDetailFromRow } from '@/lib/server/hcp-detail-server'
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ npi: string }> }) {
   try {
