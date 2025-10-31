@@ -507,7 +507,10 @@ export async function getHCPDetail(npiParam: string): Promise<HCPDetail | null> 
       product_focus: productFocus,
       call_success_prob: callSuccessProb,
       forecasted_lift: prescriptionLift,
-      ngd_classification: ngdDecile >= 8 ? 'Grower' : ngdDecile >= 5 ? 'Stable' : ngdDecile >= 3 ? 'Decliner' : 'New',
+      // Use ML model's NGD prediction for the recommended product
+      ngd_classification: productFocus === 'Tirosint' ? mapNGDCategory(row.Tirosint_ngd_category_pred) :
+                         productFocus === 'Flector' ? mapNGDCategory(row.Flector_ngd_category_pred) :
+                         mapNGDCategory(row.Licart_ngd_category_pred),
       wallet_share_growth_avg: ((3 + (ngdDecile / 10) * 6) + (2 + (ngdDecile / 10) * 5) + (1 + (ngdDecile / 10) * 4)) / 3,  // Average across products
       next_best_action: nextBestAction,
       sample_allocation: sampleAllocation,
