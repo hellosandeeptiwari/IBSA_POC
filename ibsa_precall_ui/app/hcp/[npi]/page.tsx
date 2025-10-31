@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { TierBadge } from '@/components/ui/tier-badge'
 import { formatNumber, formatPercent } from '@/lib/utils'
-import { ArrowLeft, MapPin, TrendingUp, Target, Calendar, Bot, Sparkles, Zap } from 'lucide-react'
+import { ArrowLeft, MapPin, TrendingUp, Target, Calendar, Bot, Sparkles, Zap, FileText } from 'lucide-react'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
 import { AIKeyMessages } from '@/components/ai-key-messages'
 import { CallScriptGenerator } from '@/components/call-script-generator'
@@ -709,50 +709,6 @@ export default function HCPDetailPage() {
 
       <div className="grid grid-cols-1 gap-4">
 
-        {/* Recent Call Activity - Context for Today's Visit */}
-        {hcp.call_history && hcp.call_history.length > 0 && (
-          <Card className="border-l-4 border-l-blue-500">
-            <CardHeader>
-              <CardTitle className="flex items-center justify-between">
-                <span className="text-base">📞 Recent Call Activity</span>
-                <span className="text-xs font-normal text-gray-500">{hcp.call_history.length} calls in 2025</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {/* Show most recent 3 calls */}
-                {hcp.call_history.slice(0, 3).map((call, idx) => (
-                  <div key={idx} className={`text-sm ${idx > 0 ? 'pt-3 border-t' : ''}`}>
-                    <div className="flex items-center justify-between mb-1">
-                      <div className="flex items-center gap-2">
-                        <span className="font-semibold">{call.call_date}</span>
-                        <span className="text-xs px-2 py-0.5 rounded-full bg-blue-100 text-blue-700">
-                          {call.call_type}
-                        </span>
-                        {call.is_sampled && (
-                          <span className="text-xs">📦</span>
-                        )}
-                      </div>
-                      <span className="text-xs text-gray-500">{call.rep_name}</span>
-                    </div>
-                    {call.products && (
-                      <div className="text-xs text-gray-600 mb-1">
-                        <span className="font-medium">Products:</span> {call.products}
-                      </div>
-                    )}
-                    {call.next_call_objective && idx === 0 && (
-                      <div className="text-xs bg-amber-50 px-2 py-1 rounded mt-1 border-l-2 border-amber-400">
-                        <span className="font-semibold text-amber-900">Last Objective:</span>
-                        <span className="text-amber-800 ml-1">{call.next_call_objective}</span>
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
         <Card>
           <CardHeader>
             <CardTitle>Competitive Intelligence</CardTitle>
@@ -1048,7 +1004,94 @@ export default function HCPDetailPage() {
           </div>
         </TabsContent>
 
-        <TabsContent value="call-script">
+        <TabsContent value="call-script" className="space-y-4">
+          {/* Recent Call Activity - Historical Context */}
+          {hcp.call_history && hcp.call_history.length > 0 && (
+            <Card className="border-2 border-blue-200 bg-gradient-to-r from-blue-50/50 to-indigo-50/30">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
+                      <Calendar className="h-5 w-5 text-blue-600" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold">Recent Call History</h3>
+                      <p className="text-sm text-gray-600">
+                        {hcp.call_history.length} interactions in 2025 • Last contact: {hcp.call_history[0]?.call_date}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {hcp.call_history.slice(0, 3).map((call, idx) => (
+                    <div 
+                      key={idx} 
+                      className={`p-4 bg-white rounded-lg border ${idx === 0 ? 'border-blue-300 shadow-sm' : 'border-gray-200'}`}
+                    >
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center gap-3">
+                          <div className={`text-sm font-bold px-3 py-1 rounded-full ${
+                            idx === 0 ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700'
+                          }`}>
+                            {call.call_date}
+                          </div>
+                          <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${
+                            call.call_type === 'Detail' ? 'bg-green-100 text-green-700' :
+                            call.call_type === 'Sample Drop' ? 'bg-purple-100 text-purple-700' :
+                            call.call_type === 'Virtual' ? 'bg-blue-100 text-blue-700' :
+                            'bg-gray-100 text-gray-700'
+                          }`}>
+                            {call.call_type}
+                          </span>
+                          {call.is_sampled && (
+                            <span className="text-xs px-2 py-1 rounded-full bg-amber-100 text-amber-700 font-medium">
+                              📦 Samples
+                            </span>
+                          )}
+                        </div>
+                        <div className="text-xs text-gray-500 font-medium">
+                          Rep: {call.rep_name}
+                        </div>
+                      </div>
+
+                      {call.products && (
+                        <div className="mb-2 flex items-start gap-2">
+                          <FileText className="h-4 w-4 text-gray-400 mt-0.5 flex-shrink-0" />
+                          <div className="text-sm">
+                            <span className="font-semibold text-gray-700">Products: </span>
+                            <span className="text-gray-600">{call.products}</span>
+                          </div>
+                        </div>
+                      )}
+
+                      {call.next_call_objective && idx === 0 && (
+                        <div className="mt-3 p-3 bg-gradient-to-r from-amber-50 to-orange-50 rounded-lg border-l-4 border-amber-500">
+                          <div className="flex items-start gap-2">
+                            <TrendingUp className="h-4 w-4 text-amber-600 mt-0.5 flex-shrink-0" />
+                            <div>
+                              <div className="text-xs font-bold text-amber-900 mb-1">PREVIOUS OBJECTIVE</div>
+                              <div className="text-sm text-amber-800 font-medium">{call.next_call_objective}</div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+
+                {hcp.call_history.length > 3 && (
+                  <div className="mt-4 text-center">
+                    <div className="text-xs text-gray-500 font-medium">
+                      + {hcp.call_history.length - 3} more interactions this year
+                    </div>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          )}
+
           <CallScriptGenerator 
             hcpId={hcp.npi}
             hcpName={hcp.name}
