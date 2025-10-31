@@ -6,9 +6,11 @@ export async function getHCPDetailFromRow(row: any, npiParam: string): Promise<H
   
   // Parse call history from embedded JSON column
   let hcpCallHistory: CallHistory[] = []
-  if (row.call_history_json) {
+  if (row.call_history_json && row.call_history_json !== '[]') {
     try {
-      const parsed = JSON.parse(row.call_history_json)
+      // Clean up the JSON string - replace NaN with null
+      const cleanedJson = String(row.call_history_json).replace(/:\s*NaN/g, ': null')
+      const parsed = JSON.parse(cleanedJson)
       if (Array.isArray(parsed)) {
         hcpCallHistory = parsed
       }
