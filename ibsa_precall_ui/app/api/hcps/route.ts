@@ -19,7 +19,9 @@ export async function GET(request: NextRequest) {
       const searchLower = search.toLowerCase()
       filtered = filtered.filter((row: any) => 
         String(row.PrescriberName || '').toLowerCase().includes(searchLower) ||
-        String(row.PrescriberId || '').includes(search)
+        String(row.NPI || '').replace('.0', '').includes(search) ||
+        String(row.Specialty || '').toLowerCase().includes(searchLower) ||
+        String(row.Territory || row.State || '').toLowerCase().includes(searchLower)
       )
     }
     

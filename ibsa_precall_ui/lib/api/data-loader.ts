@@ -286,6 +286,15 @@ export async function getHCPs(filters?: {
     // Keep original tier value from CSV
     const tier = String(row.Tier || 'N/A')
     
+    // Determine best product focus by highest call success (same logic as detail page)
+    const tirosint_cs = Number(row.Tirosint_call_success_prob) || 0
+    const flector_cs = Number(row.Flector_call_success_prob) || 0
+    const licart_cs = Number(row.Licart_call_success_prob) || 0
+    const bestCallSuccess = Math.max(tirosint_cs, flector_cs, licart_cs)
+    
+    // Use the highest product-specific call success instead of average
+    const callSuccessScore = bestCallSuccess > 0 ? bestCallSuccess : (Number(row.call_success_prob) || 0)
+    
     return {
       npi,
       name: String(row.PrescriberName || npi),
@@ -304,7 +313,7 @@ export async function getHCPs(filters?: {
       priority: 1,
       ibsa_share: Number(row.ibsa_share) || 0,
       nrx_count: Number(row.nrx_current_qtd) || 0,
-      call_success_score: Number(row.call_success_prob) || 0,
+      call_success_score: callSuccessScore,  // Now using product-specific call success!
       value_score: Number(row.expected_roi) || 0,
       rx_lift: Number(row.forecasted_lift) || 0,
       ngd_decile: 5,

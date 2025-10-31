@@ -556,10 +556,10 @@ export default function DashboardPage() {
                   </div>
                 </th>
                 <th className="px-2 py-2 text-left text-[11px] font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100" onClick={() => handleSort('call_success_score')}>
-                  <div className="flex items-center">
+                  <div className="flex items-center gap-1">
                     Call Success
                     <SortIcon column="call_success_score" />
-                    <Tooltip content="Likelihood of prescription after sales call (ML prediction 0-100%)" />
+                    <Tooltip content="ML prediction for best product opportunity - shows highest success rate among Tirosint, Flector, or Licart (0-100%)" />
                   </div>
                 </th>
                 <th className="px-2 py-2 text-left text-[11px] font-medium text-gray-500 uppercase border-b bg-purple-50 cursor-pointer hover:bg-gray-100" onClick={() => handleSort('value_score')}>
