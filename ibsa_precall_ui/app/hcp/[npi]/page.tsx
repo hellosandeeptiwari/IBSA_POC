@@ -30,6 +30,13 @@ export default function HCPDetailPage() {
     setLoading(true)
     const npi = Array.isArray(resolvedParams.npi) ? resolvedParams.npi[0] : resolvedParams.npi as string
     const data = await getHCPDetail(npi)
+    console.log('🔍 HCP Detail loaded:', {
+      npi: data?.npi,
+      name: data?.name,
+      call_history_exists: !!data?.call_history,
+      call_history_length: data?.call_history?.length || 0,
+      call_history_sample: data?.call_history?.[0]
+    })
     setHcp(data)
     setLoading(false)
   }
@@ -901,6 +908,80 @@ export default function HCPDetailPage() {
         </TabsList>
 
         <TabsContent value="overview" className="space-y-4">
+          {/* Recent Call History - Compact */}
+          {hcp.call_history && hcp.call_history.length > 0 ? (
+            <Card className="border border-blue-200 bg-blue-50/30">
+              <CardHeader className="py-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Calendar className="h-4 w-4 text-blue-600" />
+                    <h3 className="text-base font-semibold">Recent Call History</h3>
+                    <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">
+                      {hcp.call_history.length} calls from CRM
+                    </span>
+                  </div>
+                  <span className="text-xs text-gray-600">Last: {hcp.call_history[0]?.call_date}</span>
+                </div>
+              </CardHeader>
+              <CardContent className="pt-0">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead className="border-b border-gray-200 bg-gray-50">
+                      <tr>
+                        <th className="text-left py-2 px-3 font-semibold text-gray-700">Date</th>
+                        <th className="text-left py-2 px-3 font-semibold text-gray-700">Type</th>
+                        <th className="text-left py-2 px-3 font-semibold text-gray-700">Products</th>
+                        <th className="text-left py-2 px-3 font-semibold text-gray-700">Rep</th>
+                        <th className="text-left py-2 px-3 font-semibold text-gray-700">Details</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-100">
+                      {hcp.call_history.slice(0, 3).map((call, idx) => (
+                        <tr key={idx} className={idx === 0 ? 'bg-blue-50' : 'bg-white hover:bg-gray-50'}>
+                          <td className="py-2 px-3">
+                            <span className={`text-xs font-medium ${idx === 0 ? 'text-blue-700' : 'text-gray-700'}`}>
+                              {call.call_date}
+                            </span>
+                          </td>
+                          <td className="py-2 px-3">
+                            <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
+                              call.call_type === 'Detail' ? 'bg-green-100 text-green-700' :
+                              call.call_type === 'Sample Drop' ? 'bg-purple-100 text-purple-700' :
+                              'bg-gray-100 text-gray-700'
+                            }`}>
+                              {call.call_type}
+                            </span>
+                          </td>
+                          <td className="py-2 px-3 text-xs text-gray-900">{call.products || '-'}</td>
+                          <td className="py-2 px-3 text-xs text-gray-600">{call.rep_name}</td>
+                          <td className="py-2 px-3">
+                            <div className="flex items-center gap-2 text-xs">
+                              {call.is_sampled === 'True' && (
+                                <span className="bg-purple-100 text-purple-700 px-1.5 py-0.5 rounded">
+                                  📦 Samples
+                                </span>
+                              )}
+                              {call.next_call_objective && call.next_call_objective.trim() !== '' && (
+                                <span className="bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded truncate max-w-[200px]" title={call.next_call_objective}>
+                                  🎯 {call.next_call_objective}
+                                </span>
+                              )}
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                {hcp.call_history.length > 3 && (
+                  <div className="mt-2 text-center text-xs text-gray-500">
+                    + {hcp.call_history.length - 3} more interactions
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          ) : null}
+
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             {/* AI Key Messages - Prominent left column */}
             <div className="lg:col-span-2">

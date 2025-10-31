@@ -17,12 +17,32 @@ export async function GET(request: NextRequest) {
     
     if (search) {
       const searchLower = search.toLowerCase()
-      filtered = filtered.filter((row: any) => 
-        String(row.PrescriberName || '').toLowerCase().includes(searchLower) ||
-        String(row.NPI || '').replace('.0', '').includes(search) ||
-        String(row.Specialty || '').toLowerCase().includes(searchLower) ||
-        String(row.Territory || row.State || '').toLowerCase().includes(searchLower)
-      )
+      
+      // Fast path: if search looks like an NPI (all digits), do exact match first
+      if (/^\d+$/.test(search)) {
+        const exactMatch = data.filter((row: any) => 
+          String(row.NPI || '').replace('.0', '') === search
+        )
+        if (exactMatch.length > 0) {
+          filtered = exactMatch
+        } else {
+          // Fall back to fuzzy search if no exact match
+          filtered = filtered.filter((row: any) => 
+            String(row.PrescriberName || '').toLowerCase().includes(searchLower) ||
+            String(row.NPI || '').replace('.0', '').includes(search) ||
+            String(row.Specialty || '').toLowerCase().includes(searchLower) ||
+            String(row.Territory || row.State || '').toLowerCase().includes(searchLower)
+          )
+        }
+      } else {
+        // Text search for names, specialties, territories
+        filtered = filtered.filter((row: any) => 
+          String(row.PrescriberName || '').toLowerCase().includes(searchLower) ||
+          String(row.NPI || '').replace('.0', '').includes(search) ||
+          String(row.Specialty || '').toLowerCase().includes(searchLower) ||
+          String(row.Territory || row.State || '').toLowerCase().includes(searchLower)
+        )
+      }
     }
     
     if (territory) {
@@ -129,8 +149,15 @@ export async function GET(request: NextRequest) {
       paginated = filtered.slice(offset, offset + limit)
     }
     
+    // Transform data to match frontend expectations (lowercase npi, clean format)
+    const transformed = paginated.map((row: any) => ({
+      ...row,
+      npi: String(row.NPI || '').replace('.0', ''),
+      NPI: String(row.NPI || '').replace('.0', '')  // Keep both for compatibility
+    }))
+
     const res = NextResponse.json({
-      data: paginated,
+      data: transformed,
       total: filtered.length,
       limit,
       offset,

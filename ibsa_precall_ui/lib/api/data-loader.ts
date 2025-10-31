@@ -202,6 +202,9 @@ async function loadCallHistory(): Promise<void> {
     })
     
     console.log(`✅ Loaded call history for ${callHistoryData.size} HCPs`)
+    // Debug: show first 5 NPIs with call history
+    const firstFive = Array.from(callHistoryData.keys()).slice(0, 5)
+    console.log('📋 Sample NPIs with call history:', firstFive)
   } catch (error) {
     console.warn('⚠️ Failed to load call history:', error)
   }
@@ -256,7 +259,10 @@ export async function getHCPs(filters?: {
 }): Promise<HCP[]> {
   // Use API route for data fetching with diverse product mix
   const params = new URLSearchParams()
-  params.set('limit', '100')  // Load 100 records for better diversity
+  
+  // Use larger limit when searching to show all matching results
+  const limit = filters?.search ? '1000' : '100'
+  params.set('limit', limit)
   params.set('offset', '0')
   
   // Enable random sampling when no search filter is applied (for diverse initial view)
@@ -280,7 +286,8 @@ export async function getHCPs(filters?: {
   
   // Transform to HCP format - handle both new phase7 columns and legacy columns
   return data.map((row: ModelReadyRow) => {
-    const npi = String(row.NPI || row.PrescriberId || '').replace('.0', '')
+    // Use npi if already transformed by API, otherwise transform from NPI
+    const npi = (row as any).npi || String(row.NPI || row.PrescriberId || '').replace('.0', '')
     const specialty = row.Specialty || 'General Practice'
     
     // Keep original tier value from CSV
@@ -356,8 +363,9 @@ export async function getHCPDetail(npiParam: string): Promise<HCPDetail | null> 
   const cleanNpi = String(row.PrescriberId).replace('.0', '')
   const conversionPred = competitiveConversionData.get(cleanNpi)
   
-  // Look up call history for this HCP
-  const hcpCallHistory = callHistoryData.get(cleanNpi) || []
+  // Look up call history for this HCP - use npi (not cleanNpi) since call_history.csv uses NPI column
+  const hcpCallHistory = callHistoryData.get(npi) || []
+  console.log(`📞 Call history lookup for NPI ${npi}:`, hcpCallHistory.length, 'calls found')
 
   // Use ACTUAL product TRx data from CSV columns
   const tirosintTrx = Number(row.tirosint_trx) || 0

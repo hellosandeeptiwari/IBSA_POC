@@ -35,22 +35,43 @@ export default function DashboardPage() {
     loadData()
   }, [])
 
-  async function loadData() {
+  // Fast debounced search effect - fetch from API when user types
+  useEffect(() => {
+    const trimmed = globalFilter.trim()
+    
+    // For numeric searches (NPIs), start searching after 4 digits for better performance
+    // For text searches, require at least 2 characters
+    const minLength = /^\d+$/.test(trimmed) ? 4 : 2
+    
+    if (trimmed.length >= minLength) {
+      // Trigger API search after 150ms of no typing for faster response
+      const timer = setTimeout(() => {
+        loadData(trimmed)
+      }, 150)
+      return () => clearTimeout(timer)
+    } else if (trimmed === '' && data.length > 0) {
+      // Clear search - reload default data instantly
+      loadData()
+    }
+  }, [globalFilter])
+
+  async function loadData(searchQuery?: string) {
     setLoading(true)
     setLoadingProgress(10)
     const startTime = performance.now()
     try {
       setLoadingProgress(30)
-      const hcps = await getHCPs()
+      const hcps = await getHCPs(searchQuery ? { search: searchQuery } : undefined)
       setLoadingProgress(80)
       const loadTime = performance.now() - startTime
-      console.log(`⚡ Data loaded in ${loadTime.toFixed(0)}ms (${hcps.length} HCPs)`)
+      console.log(`⚡ Data loaded in ${loadTime.toFixed(0)}ms (${hcps.length} HCPs)${searchQuery ? ` for search: "${searchQuery}"` : ''}`)
       setData(hcps)
       setLoadingProgress(100)
     } catch (error) {
       console.error('Error loading HCPs:', error)
     } finally {
-      setTimeout(() => setLoading(false), 200) // Small delay for smooth transition
+      // Instant loading for searches, smooth for initial load
+      setTimeout(() => setLoading(false), searchQuery ? 50 : 200)
     }
   }
 
@@ -71,18 +92,8 @@ export default function DashboardPage() {
       // Apply minimum TRx filter
       if (minTrx > 0 && hcp.trx_current < minTrx) return false
       
-      // Apply global search filter
-      if (globalFilter) {
-        const searchLower = globalFilter.toLowerCase()
-        const matchesNpi = hcp.npi.toLowerCase().includes(searchLower)
-        const matchesName = hcp.name.toLowerCase().includes(searchLower)
-        const matchesTerritory = hcp.territory.toLowerCase().includes(searchLower)
-        const matchesSpecialty = hcp.specialty.toLowerCase().includes(searchLower)
-        
-        if (!matchesNpi && !matchesName && !matchesTerritory && !matchesSpecialty) {
-          return false
-        }
-      }
+      // Note: globalFilter search is now handled by API call in useEffect
+      // No need to filter again client-side for search
       
       return true
     })
