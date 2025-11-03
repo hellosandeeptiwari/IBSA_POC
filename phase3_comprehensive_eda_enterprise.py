@@ -279,17 +279,82 @@ class ComprehensiveEnterpriseEDA:
         analysis['coverage']['hcps_with_payer_data'] = int(total_hcps)
         
         # 2. ADVANCED: Payer type distribution + Co-pay Tier Analysis
-        if 'PayerName' in payment_df.columns:
+        # Use PaymentType if available (more accurate than PayerName string matching)
+        if 'PaymentType' in payment_df.columns:
+            payment_df['payer_type'] = payment_df['PaymentType']
+            payer_dist = payment_df['payer_type'].value_counts()
+            print(f"\n📊 Payer Distribution (from PaymentType column):")
+            for payer_type, count in payer_dist.items():
+                pct = count / len(payment_df) * 100
+                print(f"   • {payer_type}: {count:,} ({pct:.1f}%)")
+                analysis['payer_distribution'][payer_type] = {'count': int(count), 'percentage': round(pct, 2)}
+            
+            # HCP-level payer coverage (unique HCPs per payer type)
+            if 'PrescriberId' in payment_df.columns:
+                hcp_by_payer = payment_df.groupby('payer_type')['PrescriberId'].nunique()
+                print(f"\n👥 Unique HCPs by Payer Type:")
+                for payer_type, hcp_count in hcp_by_payer.items():
+                    print(f"   • {payer_type}: {hcp_count:,} HCPs")
+                    if payer_type in analysis['payer_distribution']:
+                        analysis['payer_distribution'][payer_type]['unique_hcps'] = int(hcp_count)
+            
+            # TRx volume by payer type
+            if 'TRX' in payment_df.columns:
+                trx_by_payer = payment_df.groupby('payer_type')['TRX'].sum()
+                total_trx = payment_df['TRX'].sum()
+                print(f"\n💊 TRx Volume by Payer Type:")
+                for payer_type, trx_vol in trx_by_payer.items():
+                    pct_trx = (trx_vol / total_trx * 100) if total_trx > 0 else 0
+                    print(f"   • {payer_type}: {trx_vol:,.0f} TRx ({pct_trx:.1f}%)")
+                    if payer_type in analysis['payer_distribution']:
+                        analysis['payer_distribution'][payer_type]['trx_volume'] = int(trx_vol)
+                        analysis['payer_distribution'][payer_type]['trx_percentage'] = round(pct_trx, 2)
+            
+            # Visualize payer distribution
+            plt.figure(figsize=(10, 6))
+            payer_dist.plot(kind='bar', color=['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728'])
+            plt.title('Payer Type Distribution', fontsize=14, fontweight='bold')
+            plt.xlabel('Payer Type')
+            plt.ylabel('Count')
+            plt.xticks(rotation=45)
+            plt.tight_layout()
+            plt.savefig(os.path.join(self.plots_dir, 'payer_distribution.png'), dpi=150)
+            plt.close()
+            print(f"\n✅ Saved plot: payer_distribution.png")
+            
+        elif 'PayerName' in payment_df.columns:
+            # Fallback: Infer from PayerName if PaymentType not available
             payment_df['payer_type'] = 'Commercial'  # Default
             payment_df.loc[payment_df['PayerName'].str.contains('medicaid|medi-cal', case=False, na=False), 'payer_type'] = 'Medicaid'
             payment_df.loc[payment_df['PayerName'].str.contains('medicare|part d', case=False, na=False), 'payer_type'] = 'Medicare'
             
             payer_dist = payment_df['payer_type'].value_counts()
-            print(f"\n📊 Payer Distribution:")
+            print(f"\n📊 Payer Distribution (inferred from PayerName):")
             for payer_type, count in payer_dist.items():
                 pct = count / len(payment_df) * 100
                 print(f"   • {payer_type}: {count:,} ({pct:.1f}%)")
                 analysis['payer_distribution'][payer_type] = {'count': int(count), 'percentage': round(pct, 2)}
+            
+            # HCP-level payer coverage (unique HCPs per payer type)
+            if 'PrescriberId' in payment_df.columns:
+                hcp_by_payer = payment_df.groupby('payer_type')['PrescriberId'].nunique()
+                print(f"\n👥 Unique HCPs by Payer Type:")
+                for payer_type, hcp_count in hcp_by_payer.items():
+                    print(f"   • {payer_type}: {hcp_count:,} HCPs")
+                    if payer_type in analysis['payer_distribution']:
+                        analysis['payer_distribution'][payer_type]['unique_hcps'] = int(hcp_count)
+            
+            # TRx volume by payer type
+            if 'TRX' in payment_df.columns:
+                trx_by_payer = payment_df.groupby('payer_type')['TRX'].sum()
+                total_trx = payment_df['TRX'].sum()
+                print(f"\n💊 TRx Volume by Payer Type:")
+                for payer_type, trx_vol in trx_by_payer.items():
+                    pct_trx = (trx_vol / total_trx * 100) if total_trx > 0 else 0
+                    print(f"   • {payer_type}: {trx_vol:,.0f} TRx ({pct_trx:.1f}%)")
+                    if payer_type in analysis['payer_distribution']:
+                        analysis['payer_distribution'][payer_type]['trx_volume'] = int(trx_vol)
+                        analysis['payer_distribution'][payer_type]['trx_percentage'] = round(pct_trx, 2)
             
             # ⭐ NEW: Co-pay Tier Impact on Rx Volume
             if 'Tier' in payment_df.columns and 'TRx' in payment_df.columns:

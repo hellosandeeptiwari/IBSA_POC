@@ -1,0 +1,30 @@
+{
+  "analysis_date": "2025-11-03T11:00:18.641181",
+  "total_hcps": 221266,
+  "wallet_share_metrics": {
+    "active_hcps": 30760,
+    "active_hcp_percentage": 13.9,
+    "average_ibsa_share": 87.4,
+    "median_ibsa_share": 100.0
+  },
+  "competitor_analysis": {
+    "product_distribution": {
+      "Trx": 656225.0562739016
+    }
+  },
+  "growth_opportunities": {
+    "distribution": {
+      "Medium (5-10 pts)": 191617,
+      "Low (0-5 pts)": 25968,
+      "High (>10 pts)": 3681
+    }
+  },
+  "segmentation": {
+    "Non-Prescriber": 190506,
+    "Retention (70-100%)": 25895,
+    "Growth (10-30%)": 2027,
+    "Conversion (0-10%)": 1536,
+    "Expansion (30-50%)": 865,
+    "Loyalty (50-70%)": 437
+  }
+}

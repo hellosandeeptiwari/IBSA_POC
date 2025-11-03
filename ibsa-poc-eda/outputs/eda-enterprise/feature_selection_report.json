@@ -2081,8 +2081,8 @@
       ],
       "priority": "MEDIUM",
       "coverage": 1.49,
-      "coefficient_of_variation": 0.4031,
-      "value_score": 0.006
+      "coefficient_of_variation": 0.3719,
+      "value_score": 0.0056
     },
     "prescriber_profile.TRXShare": {
       "feature": "prescriber_profile.TRXShare",

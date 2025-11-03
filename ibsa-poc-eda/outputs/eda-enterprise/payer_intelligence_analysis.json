@@ -3,13 +3,33 @@
     "hcps_with_payer_data": 8729
   },
   "payer_distribution": {
-    "Commercial": {
-      "count": 99956,
-      "percentage": 99.96
+    "COMMERCIAL": {
+      "count": 66241,
+      "percentage": 66.24,
+      "unique_hcps": 7679,
+      "trx_volume": 164259,
+      "trx_percentage": 67.24
     },
-    "Medicare": {
-      "count": 44,
-      "percentage": 0.04
+    "MEDICARE D": {
+      "count": 30759,
+      "percentage": 30.76,
+      "unique_hcps": 5481,
+      "trx_volume": 70417,
+      "trx_percentage": 28.83
+    },
+    "CASH": {
+      "count": 2924,
+      "percentage": 2.92,
+      "unique_hcps": 1469,
+      "trx_volume": 9451,
+      "trx_percentage": 3.87
+    },
+    "WORK COMP": {
+      "count": 51,
+      "percentage": 0.05,
+      "unique_hcps": 20,
+      "trx_volume": 93,
+      "trx_percentage": 0.04
     }
   },
   "trx_by_payer": {},
