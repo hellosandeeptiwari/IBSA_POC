@@ -1,0 +1,2 @@
+﻿CREATE USER [prakashp@cnxsi.com] FOR EXTERNAL PROVIDER;
+

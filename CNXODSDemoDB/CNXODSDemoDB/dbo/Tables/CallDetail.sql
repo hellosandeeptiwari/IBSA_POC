@@ -1,0 +1,27 @@
+﻿CREATE TABLE [dbo].[CallDetail] (
+    [Id]               INT              IDENTITY (1, 1) NOT NULL,
+    [EndDate]          DATETIME         NULL,
+    [CreatedDate]      DATETIME         NULL,
+    [UpdatedDate]      DATETIME         NULL,
+    [ExternalId1]      VARCHAR (400)    NULL,
+    [CallDetailId]     UNIQUEIDENTIFIER NULL,
+    [IsDeleted]        VARCHAR (400)    NULL,
+    [Name]             VARCHAR (400)    NULL,
+    [VeevaCreatedDate] VARCHAR (400)    NULL,
+    [VeevaCreatedById] VARCHAR (400)    NULL,
+    [LastModifiedDate] VARCHAR (400)    NULL,
+    [LastModifiedById] VARCHAR (400)    NULL,
+    [SystemModstamp]   VARCHAR (400)    NULL,
+    [MayEdit]          VARCHAR (400)    NULL,
+    [IsLocked]         VARCHAR (400)    NULL,
+    [IsParentCall]     VARCHAR (400)    NULL,
+    [Call2]            VARCHAR (400)    NULL,
+    [Product]          VARCHAR (400)    NULL,
+    [DetailPriority]   VARCHAR (400)    NULL,
+    [MobileID]         VARCHAR (400)    NULL,
+    [OverrideLock]     VARCHAR (400)    NULL,
+    [Type]             VARCHAR (400)    NULL,
+    [DetailGroup]      VARCHAR (400)    NULL,
+    CONSTRAINT [PK_CallDetail] PRIMARY KEY CLUSTERED ([Id] ASC)
+);
+

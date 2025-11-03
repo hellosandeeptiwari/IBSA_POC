@@ -1,0 +1,100 @@
+﻿CREATE TABLE [dbo].[CMS_AccountAddress] (
+    [CmsAddressId]               INT              IDENTITY (1, 1) NOT NULL,
+    [CmsId]                      INT              NOT NULL,
+    [McKessonId]                 NVARCHAR (50)    NULL,
+    [OdsAddressId]               UNIQUEIDENTIFIER NULL,
+    [VeevaAddressId]             NVARCHAR (200)   NULL,
+    [Source]                     NVARCHAR (4)     NOT NULL,
+    [AddressType]                INT              NULL,
+    [PrimaryAddressIndicator]    BIT              NOT NULL,
+    [AddressDescription]         NVARCHAR (200)   NULL,
+    [ExternalId2]                NVARCHAR (200)   NULL,
+    [InActive]                   BIT              NULL,
+    [ComputedStatus]             NVARCHAR (4)     NULL,
+    [AddressLine1]               NVARCHAR (200)   NULL,
+    [AddressLine2]               NVARCHAR (200)   NULL,
+    [City]                       NVARCHAR (200)   NULL,
+    [State]                      NVARCHAR (200)   NULL,
+    [Province]                   NVARCHAR (200)   NULL,
+    [Country]                    NVARCHAR (4)     NULL,
+    [ZipCode]                    NVARCHAR (200)   NULL,
+    [ZipCodeExtension]           NVARCHAR (200)   NULL,
+    [Latitude]                   NUMERIC (18)     NULL,
+    [Longitude]                  NUMERIC (18)     NULL,
+    [MailingAddressIndicator]    BIT              NULL,
+    [BillingAddressIndicator]    BIT              NULL,
+    [ShippingAddressIndicator]   BIT              NULL,
+    [SamplingAddressIndicator]   BIT              NULL,
+    [HomeAddressIndicator]       BIT              NULL,
+    [BusinessAddressIndicator]   BIT              NULL,
+    [Comments]                   NVARCHAR (200)   NULL,
+    [StateLicenseNumber]         NVARCHAR (25)    NULL,
+    [StateLicenseStatus]         NVARCHAR (20)    NULL,
+    [StateLicenseExpirationDate] DATETIME         NULL,
+    [StateLicenseState]          NVARCHAR (50)    NULL,
+    [IsDeleted]                  BIT              NULL,
+    [IsLocked]                   BIT              NULL,
+    [MayEdit]                    BIT              NULL,
+    [IsSmartyStreetAPICalled]    BIT              CONSTRAINT [DF_CMS_AccountAddress_IsSmartyStreetAPICalled] DEFAULT ((0)) NOT NULL,
+    [IsAddressStandardized]      BIT              CONSTRAINT [DF_CMS_AccountAddress_IsAddressStandardized] DEFAULT ((0)) NOT NULL,
+    [CreatedUtcDate]             DATETIME         NOT NULL,
+    [ExternalUpdatedUtcDate]     DATETIME         NULL,
+    [VeevaUpdatedUtcDate]        DATETIME         NULL,
+    [UpdatedBy]                  INT              NULL,
+    [EndUtcDate]                 DATETIME         NULL,
+    [Phone]                      NVARCHAR (50)    NULL,
+    [Fax]                        NVARCHAR (50)    NULL,
+    [GenText1]                   NVARCHAR (200)   NULL,
+    [GenText2]                   NVARCHAR (200)   NULL,
+    [GenText3]                   NVARCHAR (200)   NULL,
+    [GenText4]                   NVARCHAR (200)   NULL,
+    [GenText5]                   NVARCHAR (200)   NULL,
+    [GenText6]                   NVARCHAR (200)   NULL,
+    [GenText7]                   NVARCHAR (200)   NULL,
+    [GenText8]                   NVARCHAR (200)   NULL,
+    [GenText9]                   NVARCHAR (200)   NULL,
+    [GenText10]                  NVARCHAR (200)   NULL,
+    [GenText11]                  NVARCHAR (200)   NULL,
+    [GenText12]                  NVARCHAR (200)   NULL,
+    [GenText13]                  NVARCHAR (200)   NULL,
+    [GenText14]                  NVARCHAR (200)   NULL,
+    [GenText15]                  NVARCHAR (200)   NULL,
+    [GenInteger1]                INT              NULL,
+    [GenInteger2]                INT              NULL,
+    [GenInteger3]                INT              NULL,
+    [GenInteger4]                INT              NULL,
+    [GenInteger5]                INT              NULL,
+    [GenBoolean1]                BIT              NULL,
+    [GenBoolean2]                BIT              NULL,
+    [GenBoolean3]                BIT              NULL,
+    [GenBoolean4]                BIT              NULL,
+    [GenBoolean5]                BIT              NULL,
+    [GenDecimal1]                DECIMAL (18, 4)  NULL,
+    [GenDecimal2]                DECIMAL (18, 4)  NULL,
+    [GenDecimal3]                DECIMAL (18, 4)  NULL,
+    [GenDecimal4]                DECIMAL (18, 4)  NULL,
+    [GenDecimal5]                DECIMAL (18, 4)  NULL,
+    [GenDateTime1]               DATETIME         NULL,
+    [GenDateTime2]               DATETIME         NULL,
+    [GenDateTime3]               DATETIME         NULL,
+    [GenDateTime4]               DATETIME         NULL,
+    [GenDateTime5]               DATETIME         NULL,
+    CONSTRAINT [PK_CMS_AccountAddress] PRIMARY KEY CLUSTERED ([CmsAddressId] ASC),
+    CONSTRAINT [FK_CMS_AccountAddress_CmsId_CMS_Account_CmsId] FOREIGN KEY ([CmsId]) REFERENCES [dbo].[CMS_Account] ([CmsId])
+);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_CMS_AccountAddress_CmsId]
+    ON [dbo].[CMS_AccountAddress]([CmsId] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_CMS_AccountAddress_EndUtcDate]
+    ON [dbo].[CMS_AccountAddress]([EndUtcDate] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_CMS_AccountAddress_IsSmartyStreetAPICalled]
+    ON [dbo].[CMS_AccountAddress]([IsSmartyStreetAPICalled] ASC);
+
