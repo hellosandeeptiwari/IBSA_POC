@@ -1,0 +1,2 @@
+﻿CREATE USER [susantaj@cnxsi.com] FOR EXTERNAL PROVIDER;
+

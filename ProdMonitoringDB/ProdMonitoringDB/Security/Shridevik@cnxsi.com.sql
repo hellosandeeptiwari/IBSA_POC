@@ -1,0 +1,2 @@
+﻿CREATE USER [Shridevik@cnxsi.com] FOR EXTERNAL PROVIDER;
+

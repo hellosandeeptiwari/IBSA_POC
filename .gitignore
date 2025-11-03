@@ -1,4 +1,8 @@
-﻿# Virtual Environment
+﻿# ============================================
+# IBSA NGD Pre-Call Planning Project
+# ============================================
+
+# Virtual Environment
 ibsa_env/
 venv/
 env/
@@ -19,3 +23,50 @@ __pycache__/
 # IDE
 .vscode/
 .idea/
+
+# ============================================
+# Azure DevOps Internal Repository
+# (Existing C# / .NET projects)
+# ============================================
+
+/.vs
+/ExcelExportEngine/ExcelExportEngine/obj
+/JobMonitor/JobMonitor/obj
+/ODSAutomationUtility/ODSAutomationUtility/obj
+/SendEmailActivity/SendEmailActivity/obj
+/VeevaDeleteActivity
+/ODSDataConnector/ODSDataConnector.Core/obj
+/ODSDataConnector/ODSDataConnector.API/obj
+/ODSDataConnector/ODSDataConnector.API/.vs/ODSDataConnector
+/ODSDataConnector/ODSDataConnector.API/bin/Debug/net6.0
+/ODSDataConnector/ODSDataConnector.Core/bin/Debug/net6.0
+/DWHPackages/DWHPackages/.vs/DWHPackages
+/DWHPackages/DWHPackages/DWHPackages.API/obj
+/DWHPackages/DWHPackages/DWHPackages.API/bin/Debug/net6.0
+/DWHPackages/DWHPackages/DWHPackages.Core/bin/Debug/net6.0
+/DWHPackages/DWHPackages/DWHPackages.Core/obj
+/ODSDataConnector/ODSDataConnector.API/bin/Release/net6.0
+/ODSDataConnector/ODSDataConnector.API/.vs/ProjectEvaluation
+/ODSDataConnector/ODSDataConnector.API/Properties
+/ODSDataConnector/ODSDataConnector.API/ODSDataConnector.API.csproj.user
+/ODSDataConnector/ODSDataConnector.Core/bin/Release/net6.0
+/DWHPackages/DWHPackages/.vs/ProjectEvaluation
+/ODSAutomationUtility/.vs/ODSAutomationUtility/FileContentIndex
+/ODSAutomationUtility/.vs/ODSAutomationUtility/v17/.suo
+/ODSAutomationUtility/.vs/ODSAutomationUtility/v16/.suo
+/ODSAutomationUtility/ODSAutomationUtility/bin/Debug
+/ODSAutomationUtility/packages
+/DWHPackages/DWHPackages/DWHPackages.API/bin/Release/net6.0
+/DWHPackages/DWHPackages/DWHPackages.API/Properties/PublishProfiles
+/DWHPackages/DWHPackages/DWHPackages.API/Properties/ServiceDependencies
+/DWHPackages/DWHPackages/DWHPackages.API/DWHPackages.API.csproj.user
+/DWHPackages/DWHPackages/DWHPackages.Core/bin/Release/net6.0
+/JobMonitor/.vs/JobMonitor
+/JobMonitor/JobMonitor/bin/Release
+/JobMonitor/JobMonitor/bin/Debug/Log
+/JobMonitor/JobMonitor/bin/Debug/*.exe
+/JobMonitor/JobMonitor/bin/Debug/*.exe.config
+/JobMonitor/JobMonitor/bin/Debug/*.pdb
+/JobMonitor/JobMonitor/bin/Debug/*.dll
+/JobMonitor/JobMonitor/bin/Debug/*.xml
+/JobMonitor/packages
