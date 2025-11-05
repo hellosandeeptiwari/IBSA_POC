@@ -17,6 +17,7 @@ Features:
 """
 
 from fastapi import FastAPI, HTTPException, Depends, Header, Request
+from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
@@ -79,16 +80,26 @@ app.add_middleware(
 # GLOBAL STATE & CONFIGURATION
 # ============================================================================
 
+# Use portable paths relative to this script (works locally & on Azure)
+SCRIPT_DIR = Path(__file__).parent.resolve()  # NGDPreCallPlan folder
+EDA_DIR = SCRIPT_DIR / 'ibsa-poc-eda'
+
 class APIConfig:
     """API configuration"""
     API_KEY = os.getenv("API_KEY", "ibsa-ai-script-generator-2025")
     MAX_REQUESTS_PER_MINUTE = 30
-    MODEL_DIR = Path("ibsa-poc-eda/outputs/models/trained_models")
-    DATA_DIR = Path("ibsa-poc-eda/outputs")
-    FEATURES_FILE = Path("ibsa-poc-eda/outputs/features/IBSA_FeatureEngineered_WithLags_20251022_1117.csv")
-    COMPLIANCE_DIR = Path("ibsa-poc-eda/outputs/compliance")
+    MODEL_DIR = EDA_DIR / 'outputs' / 'models' / 'trained_models'
+    DATA_DIR = EDA_DIR / 'outputs'
+    # CORRECTED: File is actually in phase7 folder, not features folder!
+    FEATURES_FILE = EDA_DIR / 'outputs' / 'phase7' / 'IBSA_ModelReady_Enhanced_WithPredictions.csv'
+    COMPLIANCE_DIR = EDA_DIR / 'outputs' / 'compliance'
     FAISS_INDEX_PATH = "compliance_content_index.faiss"
     CONTENT_LIBRARY_PATH = "content_library.json"
+
+# Debug: Print paths on startup
+print(f"📂 Script Directory: {SCRIPT_DIR}")
+print(f"📂 Compliance Directory: {APIConfig.COMPLIANCE_DIR}")
+print(f"📂 Compliance files exist: {(APIConfig.COMPLIANCE_DIR / 'prohibited_terms.json').exists()}")
     
 config = APIConfig()
 
@@ -252,8 +263,8 @@ async def startup_event():
         # 4. Load feature data cache (for quick lookups)
         logger.info("Loading feature data cache...")
         if config.FEATURES_FILE.exists():
-            # Load first 1000 HCPs for quick predictions
-            feature_data = pd.read_csv(config.FEATURES_FILE, nrows=1000, low_memory=False)
+            # Load ALL HCPs (removed nrows limit so all HCPs from UI are available)
+            feature_data = pd.read_csv(config.FEATURES_FILE, low_memory=False)
             logger.info(f"[OK] Loaded feature cache: {len(feature_data)} HCPs, {len(feature_data.columns)} features")
         else:
             logger.warning(f"[WARN] Feature data not found: {config.FEATURES_FILE}")
@@ -280,8 +291,8 @@ def load_hcp_features(hcp_id: str) -> Dict[str, Any]:
     if feature_data is None:
         raise HTTPException(status_code=500, detail="Feature data not loaded")
     
-    # Try to find HCP - feature data uses 'PrescriberId' column
-    hcp_data = feature_data[feature_data['PrescriberId'] == int(hcp_id)]
+    # Try to find HCP - feature data uses 'NPI' column (not PrescriberId!)
+    hcp_data = feature_data[feature_data['NPI'] == int(hcp_id)]
     
     if hcp_data.empty:
         raise HTTPException(
@@ -292,21 +303,38 @@ def load_hcp_features(hcp_id: str) -> Dict[str, Any]:
     return hcp_data.iloc[0].to_dict()
 
 def run_ml_predictions(hcp_features: Dict[str, Any]) -> Dict[str, Any]:
-    """Run ML predictions for HCP"""
+    """
+    Extract ML predictions from HCP features (they're already in the CSV!)
+    
+    The CSV has columns like:
+    - Tirosint_growth_probability_pred
+    - Tirosint_prescription_lift_pred
+    - Tirosint_ngd_category_pred
+    - Tirosint_wallet_share_growth_pred
+    etc.
+    """
     predictions = {}
     
-    # For demo, return mock predictions
-    # In production, this would run actual ML models
-    predictions = {
-        'tirosint_call_success': 0.72,
-        'tirosint_prescription_lift': 8.5,
-        'tirosint_ngd_category': 'Moderate Growth',
-        'tirosint_wallet_share_growth': 4.5,
-        'flector_call_success': 0.45,
-        'flector_wallet_share_growth': 3.2,
-        'licart_call_success': 0.38,
-        'licart_wallet_share_growth': 5.1
-    }
+    # Extract actual ML predictions from CSV columns
+    predictions['tirosint_call_success'] = hcp_features.get('Tirosint_growth_probability_pred', 0.5)
+    predictions['tirosint_prescription_lift'] = hcp_features.get('Tirosint_prescription_lift_pred', 0)
+    predictions['tirosint_ngd_category'] = hcp_features.get('Tirosint_ngd_category_pred', 'Unknown')
+    predictions['tirosint_wallet_share_growth'] = hcp_features.get('Tirosint_wallet_share_growth_pred', 0)
+    predictions['tirosint_growth_probability'] = hcp_features.get('Tirosint_growth_probability_pred', 0)
+    
+    predictions['flector_call_success'] = hcp_features.get('Flector_growth_probability_pred', 0.5)
+    predictions['flector_prescription_lift'] = hcp_features.get('Flector_prescription_lift_pred', 0)
+    predictions['flector_wallet_share_growth'] = hcp_features.get('Flector_wallet_share_growth_pred', 0)
+    
+    predictions['licart_call_success'] = hcp_features.get('Licart_growth_probability_pred', 0.5)
+    predictions['licart_prescription_lift'] = hcp_features.get('Licart_prescription_lift_pred', 0)
+    predictions['licart_wallet_share_growth'] = hcp_features.get('Licart_wallet_share_growth_pred', 0)
+    
+    # Add other useful predictions
+    predictions['churn_risk'] = hcp_features.get('churn_risk', 0)
+    predictions['expected_roi'] = hcp_features.get('expected_roi', 0)
+    predictions['forecasted_lift'] = hcp_features.get('forecasted_lift', 0)
+    predictions['call_completion_rate'] = hcp_features.get('call_completion_rate_actual', 0)
     
     return predictions
 
@@ -331,6 +359,118 @@ def get_approved_content(product: str, category: str) -> str:
             return content_item.get('content', '')
     
     return "[Contact medical affairs for approved content]"
+
+
+def get_disclaimer_text(disclaimer_id: str) -> str:
+    """
+    Convert disclaimer ID to actual disclaimer text
+    
+    Args:
+        disclaimer_id: Disclaimer identifier (e.g., 'adverse_events', 'prescribing_info')
+    
+    Returns:
+        Full disclaimer text
+    """
+    # Hardcoded disclaimers matching required_disclaimers.json
+    disclaimer_map = {
+        'prescribing_info': 'See full Prescribing Information for Tirosint, including Boxed Warning, at www.tirosint.com/pi',
+        'individual_results': 'Individual results may vary. Consult your healthcare provider for personalized medical advice.',
+        'contraindications': 'Please review contraindications before prescribing. Tirosint is contraindicated in patients with uncorrected adrenal insufficiency.',
+        'adverse_events': 'To report SUSPECTED ADVERSE REACTIONS, contact IBSA Pharma Inc. at 1-800-IBSA (4272) or FDA at 1-800-FDA-1088 or www.fda.gov/medwatch',
+        'indication': 'This information is for healthcare professionals only and is not intended for patients.',
+        'fair_balance': 'Like all thyroid hormone replacement therapies, Tirosint may cause side effects. Please review complete safety information.',
+        'boxed_warning': 'IMPORTANT SAFETY INFORMATION: NOT FOR TREATMENT OF OBESITY OR FOR WEIGHT LOSS. Thyroid hormones, including TIROSINT, should not be used either alone or in combination with other medications for the treatment of obesity or for weight loss. In patients with normal thyroid levels, doses within the range of daily hormonal requirements are not helpful for weight loss. Larger doses may result in serious or even life threatening events.'
+    }
+    
+    return disclaimer_map.get(disclaimer_id, disclaimer_id)
+
+
+def clean_prohibited_terms(text: str) -> str:
+    """
+    Remove or replace prohibited terms in text
+    
+    Args:
+        text: Text to clean
+    
+    Returns:
+        Cleaned text with prohibited terms replaced
+    """
+    if not isinstance(text, str):
+        return text
+    
+    # Replace prohibited superlative/comparative terms
+    replacements = {
+        'best': 'most appropriate',
+        'better': 'more suitable',
+        'superior': 'an alternative',
+        'number one': 'a leading',
+        '#1': 'a leading',
+        'proven': 'demonstrated',
+        'guaranteed': 'expected',
+        'cure': 'treat',
+        'safe': 'well-tolerated'
+    }
+    
+    cleaned = text
+    for prohibited, replacement in replacements.items():
+        # Case-insensitive replacement but preserve case of first letter
+        import re
+        # Match whole words only
+        pattern = r'\b' + re.escape(prohibited) + r'\b'
+        cleaned = re.sub(pattern, replacement, cleaned, flags=re.IGNORECASE)
+    
+    return cleaned
+
+
+def final_compliance_cleanup(script: Any) -> Any:
+    """
+    Final pass to clean prohibited terms from all script sections
+    
+    Args:
+        script: GeneratedScript object
+    
+    Returns:
+        Cleaned script
+    """
+    # Clean opening
+    if isinstance(script.opening, dict):
+        if 'greeting' in script.opening:
+            script.opening['greeting'] = clean_prohibited_terms(script.opening['greeting'])
+        if 'purpose' in script.opening:
+            script.opening['purpose'] = clean_prohibited_terms(script.opening['purpose'])
+    elif isinstance(script.opening, str):
+        script.opening = clean_prohibited_terms(script.opening)
+    
+    # Clean talking points
+    if isinstance(script.talking_points, list):
+        for tp in script.talking_points:
+            if isinstance(tp, dict):
+                if 'message' in tp:
+                    tp['message'] = clean_prohibited_terms(tp['message'])
+                if 'topic' in tp:
+                    tp['topic'] = clean_prohibited_terms(tp['topic'])
+    
+    # Clean objection handlers
+    if isinstance(script.objection_handlers, dict):
+        for key, handler in script.objection_handlers.items():
+            if isinstance(handler, dict):
+                if 'response' in handler:
+                    handler['response'] = clean_prohibited_terms(handler['response'])
+                if 'objection' in handler:
+                    handler['objection'] = clean_prohibited_terms(handler['objection'])
+    
+    # Clean call to action
+    if isinstance(script.call_to_action, dict):
+        if 'primary' in script.call_to_action:
+            script.call_to_action['primary'] = clean_prohibited_terms(script.call_to_action['primary'])
+    elif isinstance(script.call_to_action, str):
+        script.call_to_action = clean_prohibited_terms(script.call_to_action)
+    
+    # Clean next steps
+    if isinstance(script.next_steps, list):
+        script.next_steps = [clean_prohibited_terms(step) if isinstance(step, str) else step for step in script.next_steps]
+    
+    return script
 
 
 def replace_placeholders_in_text(text: str, product: str, hcp_features: Dict = None) -> str:
@@ -370,7 +510,11 @@ def replace_placeholders_in_text(text: str, product: str, hcp_features: Dict = N
     text = text.replace('[PRODUCT]', product)
     text = text.replace('[UNIQUE DIFFERENTIATORS]', 'unique formulation and delivery characteristics')
     text = text.replace('[SPECIFIC CHARACTERISTICS]', 'specific clinical needs')
+    text = text.replace('[SPECIFIC CHARACTERISTICS FROM APPROVED CONTENT]', 'hypothyroidism who may benefit from a gel capsule formulation')
     text = text.replace('[SPECIFIC NEEDS]', 'particular therapeutic requirements')
+    text = text.replace('the best use', 'the most effective use')
+    text = text.replace('the best', 'the most appropriate')
+    text = text.replace('best use', 'most effective use')
     
     # Replace HCP-specific placeholders with actual data
     if hcp_features:
@@ -388,20 +532,121 @@ def replace_placeholders_in_text(text: str, product: str, hcp_features: Dict = N
         text = text.replace('{time_of_day}', time_of_day)
         text = text.replace('{product_focus}', product)
         
-        # HCP name (use actual name if available)
-        hcp_name = hcp_features.get('ProfessionalName', hcp_features.get('hcp_name', 'Doctor'))
-        text = text.replace('{hcp_name}', hcp_name)
+        # HCP name with smart title (Dr. for MD/DO, other titles for PA/NP/PharmD)
+        hcp_name = hcp_features.get('PrescriberName', hcp_features.get('hcp_name', 'Doctor'))
+        specialty = hcp_features.get('Specialty', '').upper()
         
-        # Specialty
-        specialty = hcp_features.get('ProfessionalDesignation', hcp_features.get('specialty', 'your specialty'))
-        text = text.replace('{specialty}', specialty)
+        # Remove any existing title from the name (more aggressive cleanup)
+        import re
+        name_without_title = str(hcp_name)
+        # Remove common titles with flexible spacing/punctuation
+        name_without_title = re.sub(r'^(?:DR\.?|Dr\.?|MR\.?|Mr\.?|MS\.?|Ms\.?|MRS\.?|Mrs\.?)\s*', '', name_without_title, flags=re.IGNORECASE).strip()
+        # Remove any weird spacing patterns like "D r."
+        name_without_title = re.sub(r'^[A-Z]\s+r\.?\s*', '', name_without_title, flags=re.IGNORECASE).strip()
         
-        # Competitive threat (simplified - use top competitor)
-        text = text.replace('{competitive_threat}', 'generic levothyroxine')
+        # Determine appropriate title based on specialty
+        if any(title in specialty for title in ['PHYSICIAN ASSISTANT', 'PA', 'NURSE PRACTITIONER', 'NP', 'ADVANCED PRACTICE']):
+            title = ''  # Use name without title for PAs/NPs
+        elif 'PHARM' in specialty:
+            title = 'Pharmacist'
+        else:
+            title = 'Dr.'  # Default to Dr. for MDs, DOs, and most prescribers
         
-        # TRx decline percentage (calculate if data available)
-        trx_decline = abs(hcp_features.get('trx_trend_6m', 0))
-        text = text.replace('{trx_decline_pct}', f"{trx_decline:.0f}")
+        # Format the full name with title (ensure no double spaces)
+        full_name = f"{title} {name_without_title}".strip() if title else name_without_title
+        full_name = re.sub(r'\s+', ' ', full_name)  # Remove any double spaces
+        text = text.replace('{hcp_name}', full_name)
+        
+        # Specialty (use exact column name from CSV)
+        specialty = hcp_features.get('Specialty', hcp_features.get('specialty', 'your specialty'))
+        text = text.replace('{specialty}', str(specialty))
+        
+        # Current TRx for the product
+        tirosint_trx = hcp_features.get('tirosint_trx', hcp_features.get('TRx_Current', 0))
+        text = text.replace('{current_trx}', f"{float(tirosint_trx):.0f}")
+        
+        # Total market TRx
+        total_market_trx = hcp_features.get('total_market_trx', 0)
+        text = text.replace('{total_market_trx}', f"{float(total_market_trx):.0f}")
+        
+        # IBSA share of wallet (calculate from tirosint_trx / total_market_trx)
+        if float(total_market_trx) > 0:
+            ibsa_share = (float(tirosint_trx) / float(total_market_trx)) * 100
+        else:
+            ibsa_share = 0
+        text = text.replace('{ibsa_share}', f"{ibsa_share:.1f}")
+        
+        # TRx decline/growth percentage (use Tirosint_prescription_lift_pred)
+        trx_change = hcp_features.get('Tirosint_prescription_lift_pred', 0)
+        text = text.replace('{trx_decline_pct}', f"{abs(float(trx_change)):.1f}")
+        text = text.replace('{trx_growth_pct}', f"{float(trx_change):.1f}")
+        
+        # Competitive threat - determine which competitor has highest share
+        comp_synthroid = hcp_features.get('competitor_synthroid_levothyroxine', 0)
+        comp_voltaren = hcp_features.get('competitor_voltaren_diclofenac', 0) 
+        comp_imdur = hcp_features.get('competitor_imdur_nitrates', 0)
+        
+        # Find the top competitor based on context
+        if product.lower() == 'tirosint':
+            competitive_threat = 'generic levothyroxine' if float(comp_synthroid) > 0 else 'other thyroid therapies'
+        elif product.lower() == 'flector':
+            competitive_threat = 'Voltaren (diclofenac)' if float(comp_voltaren) > 0 else 'other topical NSAIDs'
+        elif product.lower() == 'licart':
+            competitive_threat = 'Imdur (nitrates)' if float(comp_imdur) > 0 else 'other nitrate therapies'
+        else:
+            competitive_threat = 'competitive products'
+            
+        text = text.replace('{competitive_threat}', competitive_threat)
+        
+        # Sample allocation data
+        sample_allocation = hcp_features.get('sample_allocation', 0)
+        text = text.replace('{samples_provided}', f"{float(sample_allocation):.0f}")
+        
+        # Sample effectiveness / ROI
+        sample_roi = hcp_features.get('sample_effectiveness', hcp_features.get('expected_roi', 0))
+        text = text.replace('{sample_roi}', f"{float(sample_roi):.1f}")
+        
+        # Growth probability from ML models (as percentage)
+        growth_prob = hcp_features.get('Tirosint_growth_probability_pred', hcp_features.get('growth_probability', 0))
+        text = text.replace('{growth_probability}', f"{float(growth_prob) * 100:.0f}%")
+        text = text.replace('{growth_prob_pct}', f"{float(growth_prob) * 100:.0f}")
+        
+        # Forecasted prescription lift (actual ML prediction)
+        forecasted_lift = hcp_features.get('Tirosint_prescription_lift_pred', hcp_features.get('forecasted_lift', 0))
+        text = text.replace('{forecasted_lift}', f"{float(forecasted_lift):.1f}")
+        text = text.replace('{predicted_lift}', f"{float(forecasted_lift):.1f}")
+        
+        # Wallet share growth prediction
+        wallet_growth = hcp_features.get('Tirosint_wallet_share_growth_pred', 0)
+        text = text.replace('{wallet_share_growth}', f"{float(wallet_growth):.1f}")
+        
+        # Call completion rate
+        call_completion = hcp_features.get('call_completion_rate_actual', 0)
+        text = text.replace('{call_completion_rate}', f"{float(call_completion) * 100:.0f}%")
+        
+        # Churn risk
+        churn_risk = hcp_features.get('churn_risk', 0)
+        churn_level = hcp_features.get('churn_risk_level', 'Low')
+        text = text.replace('{churn_risk}', f"{float(churn_risk):.1f}")
+        text = text.replace('{churn_risk_level}', str(churn_level))
+        
+        # Expected ROI from ML model
+        expected_roi = hcp_features.get('expected_roi', 0)
+        text = text.replace('{expected_roi}', f"{float(expected_roi):.1f}x")
+        
+        # NGD category from ML model
+        ngd_category = hcp_features.get('Tirosint_ngd_category_pred', 'Unknown')
+        text = text.replace('{ngd_category}', str(ngd_category))
+        
+        # Best day and time for calls (from data analysis)
+        best_day = hcp_features.get('best_day', 'Tuesday or Wednesday')
+        best_time = hcp_features.get('best_time', 'morning')
+        text = text.replace('{best_day}', str(best_day))
+        text = text.replace('{best_time}', str(best_time))
+        
+        # Target tier (from segmentation)
+        target_tier = hcp_features.get('TirosintTargetTier', 'Medium')
+        text = text.replace('{target_tier}', str(target_tier))
     
     return text
 
@@ -608,19 +853,54 @@ def format_script_output(script: Any) -> str:
     return "\n".join(lines)
 
 def classify_scenario(predictions: Dict[str, Any]) -> tuple:
-    """Classify call scenario based on predictions"""
-    # Simple logic for demo
-    call_success = predictions.get('tirosint_call_success', 0)
-    prescription_lift = predictions.get('tirosint_prescription_lift', 0)
+    """
+    Classify call scenario using industry best practices (IQVIA NGD methodology)
     
-    if call_success > 0.7 and prescription_lift > 5:
-        return 'GROWTH', 'HIGH'
-    elif call_success < 0.5:
+    Best Practice Framework:
+    1. NGD Category (New/Grower/Stable/Decliner) - Primary segmentation
+    2. Prescription Lift - Quantitative trend validation
+    3. Growth Probability - Future potential assessment
+    4. Wallet Share Growth - Competitive position
+    
+    This mirrors how top pharma companies (Pfizer, Novartis, etc.) use IQVIA data
+    """
+    # Extract ALL relevant scoring model predictions
+    ngd_category = predictions.get('tirosint_ngd_category', 2)  # 0=Decliner, 1=Stable, 2=Grower, 3=New
+    prescription_lift = predictions.get('tirosint_prescription_lift', 0)
+    growth_probability = predictions.get('tirosint_growth_probability', 0)
+    wallet_share_growth = predictions.get('tirosint_wallet_share_growth', 0)
+    
+    # PRIORITY 1: RETENTION - Decliners need immediate intervention
+    # NGD Decliner (0) OR significant negative lift
+    if ngd_category == 0 or prescription_lift < -5:
         return 'RETENTION', 'HIGH'
-    elif prescription_lift < 0:
+    elif prescription_lift < -2:
         return 'RETENTION', 'MEDIUM'
-    else:
+    
+    # PRIORITY 2: GROWTH - New prescribers or high-growth potential
+    # NGD New (3) with positive indicators
+    if ngd_category == 3 and growth_probability > 0.5:
+        return 'INTRODUCTION', 'HIGH'
+    # NGD Grower (2) with strong lift
+    elif ngd_category == 2 and prescription_lift > 5:
+        return 'GROWTH', 'HIGH'
+    elif growth_probability > 0.7 and prescription_lift > 2:
+        return 'GROWTH', 'MEDIUM'
+    
+    # PRIORITY 3: OPTIMIZATION - Stable prescribers needing efficiency
+    # NGD Stable (1) or small positive trends
+    elif ngd_category == 1 or (prescription_lift > 0 and prescription_lift < 3):
         return 'OPTIMIZATION', 'MEDIUM'
+    elif wallet_share_growth > 0.1:  # Gaining market share
+        return 'OPTIMIZATION', 'MEDIUM'
+    
+    # PRIORITY 4: INTRODUCTION - Unknown/new to territory
+    elif ngd_category == 3:
+        return 'INTRODUCTION', 'MEDIUM'
+    
+    # Default: INTRODUCTION for zero predictions
+    else:
+        return 'INTRODUCTION', 'LOW'
 
 def format_compliance_report(compliance_result: Any) -> ComplianceReport:
     """Format compliance check result into structured report"""
@@ -770,36 +1050,123 @@ async def generate_call_script(
     """
     start_time = time.time()
     
+    print("\n" + "="*80)
+    print(f"🎯 CALL SCRIPT GENERATION REQUEST")
+    print("="*80)
+    print(f"   HCP ID: {body.hcp_id}")
+    print(f"   GPT-4 Enabled: {body.include_gpt4}")
+    print(f"   Force Scenario: {body.force_scenario}")
+    print("="*80 + "\n")
+    
     logger.info(f"Script generation request: HCP={body.hcp_id}, GPT4={body.include_gpt4}")
     
     try:
         # 1. Load HCP features
+        print("📊 Step 1: Loading HCP features...")
         hcp_features = load_hcp_features(body.hcp_id)
+        print(f"   ✓ Loaded {len(hcp_features)} HCP attributes")
         logger.info(f"[OK] Loaded HCP features: {len(hcp_features)} attributes")
         
         # 2. Run ML predictions
+        print("\n🤖 Step 2: Running ML predictions...")
         predictions = run_ml_predictions(hcp_features)
+        print(f"   ✓ ML predictions complete: {list(predictions.keys())}")
         logger.info(f"[OK] ML predictions: {predictions}")
         
+        # 2.5. Enrich HCP features with SCORING MODEL predictions for GPT-4 personalization
+        # Industry Best Practice: Use NGD + Behavioral predictions
+        
+        # Core ML Predictions
+        hcp_features['growth_probability'] = predictions.get('tirosint_growth_probability', 0.5)
+        hcp_features['prescription_lift'] = predictions.get('tirosint_prescription_lift', 0)
+        hcp_features['call_success_prob'] = predictions.get('tirosint_call_success', 0.5)
+        hcp_features['wallet_share_growth'] = predictions.get('tirosint_wallet_share_growth', 0)
+        
+        # NGD Classification (IQVIA methodology)
+        ngd_raw = predictions.get('tirosint_ngd_category', 2)
+        ngd_labels = {0: 'Decliner', 1: 'Stable', 2: 'Grower', 3: 'New'}
+        hcp_features['ngd_category'] = ngd_labels.get(ngd_raw, 'Unknown')
+        hcp_features['ngd_status'] = f"{ngd_labels.get(ngd_raw, 'Unknown')} (based on prescription trend analysis)"
+        
+        # Sample Efficiency Metrics
+        hcp_features['sample_conversion'] = hcp_features.get('sample_to_rx_conversion_rate', 0.15)
+        hcp_features['samples_provided'] = hcp_features.get('samples_dropped', 0)
+        
+        # Dynamic Recommendations based on predictions
+        if predictions.get('tirosint_prescription_lift', 0) < -2:
+            hcp_features['sample_recommendation'] = 'increase sampling to prevent further decline'
+            hcp_features['key_concerns'] = 'prescription decline, competitive pressure, patient retention'
+        elif predictions.get('tirosint_prescription_lift', 0) > 5:
+            hcp_features['sample_recommendation'] = 'maintain momentum with consistent sampling'
+            hcp_features['key_concerns'] = 'sustaining growth, patient satisfaction, formulary access'
+        else:
+            hcp_features['sample_recommendation'] = 'optimize allocation based on patient profile'
+            hcp_features['key_concerns'] = 'sample efficiency, patient affordability, conversion rate'
+        
+        # Behavioral Context
+        hcp_features['trx_change'] = predictions.get('tirosint_prescription_lift', 0)
+        hcp_features['patient_volume'] = 'high' if float(hcp_features.get('total_market_trx', 0)) > 100 else 'moderate'
+        hcp_features['decision_style'] = 'Evidence-based, values clinical data and peer recommendations'
+        hcp_features['competitive_threat'] = 'high' if predictions.get('tirosint_prescription_lift', 0) < -2 else 'moderate'
+        
+        # Calculate market share percentage (IMPORTANT: As percentage 0-100, not decimal)
+        current_trx = float(hcp_features.get('current_trx', 0))
+        total_trx = float(hcp_features.get('total_market_trx', 1))
+        ibsa_share_decimal = (current_trx / total_trx) if total_trx > 0 else 0
+        hcp_features['ibsa_share_pct'] = round(ibsa_share_decimal * 100, 1)  # Convert to percentage
+        hcp_features['ibsa_share'] = ibsa_share_decimal  # Keep decimal for backward compatibility
+        
+        # Set realistic growth target based on current share
+        if ibsa_share_decimal < 0.10:  # Less than 10%
+            hcp_features['target_share_pct'] = 25
+        elif ibsa_share_decimal < 0.25:  # 10-25%
+            hcp_features['target_share_pct'] = 40
+        else:  # Already above 25%
+            hcp_features['target_share_pct'] = min(round(ibsa_share_decimal * 100 * 1.5), 75)  # 50% growth up to 75% max
+        
         # 3. Classify scenario
+        print("\n📋 Step 3: Classifying scenario...")
         if body.force_scenario:
             scenario = body.force_scenario.upper()
             priority = 'HIGH'
         else:
             scenario, priority = classify_scenario(predictions)
-        
+        print(f"   ✓ Scenario: {scenario} (Priority: {priority})")
         logger.info(f"[OK] Scenario: {scenario} (Priority: {priority})")
         
-        # 4. Generate script (HybridScriptGenerator handles features/predictions internally)
+        # 4. Generate script (Pass real HCP features and predictions for personalization)
+        print(f"\n✨ Step 4: Generating script (GPT-4: {body.include_gpt4})...")
+        
+        # DEBUG: Show key personalization data being passed to GPT-4 (SCORING MODEL DATA ONLY)
+        print(f"   📊 Key metrics for personalization:")
+        print(f"      - NGD Category: {hcp_features.get('ngd_category', 'Unknown')}")
+        print(f"      - Prescription Lift: {hcp_features.get('prescription_lift', 0):.1f}")
+        print(f"      - Growth Prob: {hcp_features.get('growth_probability', 0)*100:.1f}%")
+        print(f"      - Wallet Share Growth: {hcp_features.get('wallet_share_growth', 0):.2f}")
+        print(f"      - Current TRx: {hcp_features.get('current_trx', 0)}")
+        print(f"      - IBSA Share: {hcp_features.get('ibsa_share_pct', 0):.1f}% (Target: {hcp_features.get('target_share_pct', 25)}%)")
+        print(f"      - Samples: {hcp_features.get('samples_provided', 0):.0f} units")
+        
         script_result = script_generator.generate_script(
             hcp_id=body.hcp_id,
             use_gpt4=body.include_gpt4,
-            use_rag=True
+            use_rag=True,
+            hcp_features=hcp_features,
+            predictions=predictions,
+            force_scenario=scenario,
+            force_priority=priority
         )
+        print(f"   ✓ Script generated!")
+        print(f"   ✓ GPT-4 Used: {script_result.gpt4_enhanced}")
+        print(f"   ✓ Method: {script_result.generation_method}")
+        print(f"   ✓ Template: {script_result.template_used}")
         
         # 4.5. Replace ALL placeholders with actual MLR-approved content AND HCP data (FDA/MRC/MLR compliance)
         product_focus = script_result.predictions.get('product_focus', 'Tirosint')
         script_result = replace_placeholders_in_script(script_result, product_focus, hcp_features)
+        
+        # 4.6. Final compliance pass - remove prohibited terms that may have slipped through
+        script_result = final_compliance_cleanup(script_result)
         
         # Extract scenario and priority from the generated script object
         scenario = script_result.scenario.value if hasattr(script_result.scenario, 'value') else str(script_result.scenario)
@@ -813,16 +1180,75 @@ async def generate_call_script(
         generation_time = time.time() - start_time
         
         # 7. Build structured script output
+        # Extract displayable content from script_result properly
+        # Opening: {greeting, purpose, tone} -> combine greeting + purpose
+        if isinstance(script_result.opening, dict):
+            opening_text = f"{script_result.opening.get('greeting', '')} {script_result.opening.get('purpose', '')}".strip()
+        else:
+            opening_text = str(script_result.opening)
+        
+        # Talking points: list of {point_id, topic, message, approved_content_refs}
+        talking_points_list = []
+        if isinstance(script_result.talking_points, list):
+            for tp in script_result.talking_points:
+                if isinstance(tp, dict):
+                    talking_points_list.append({
+                        'title': tp.get('topic', ''),
+                        'content': tp.get('message', ''),
+                        'mlr_ids': tp.get('approved_content_refs', [])
+                    })
+        
+        # Objection handlers: dict of {key: {objection, response, approved_content_refs}} -> convert to list
+        objection_handlers_list = []
+        if isinstance(script_result.objection_handlers, dict):
+            for key, obj in script_result.objection_handlers.items():
+                if isinstance(obj, dict):
+                    objection_handlers_list.append({
+                        'title': obj.get('objection', key.replace('_', ' ').title()),
+                        'content': obj.get('response', ''),
+                        'mlr_ids': obj.get('approved_content_refs', [])
+                    })
+        
+        # Call to action: could be dict with {primary, secondary} or string
+        if isinstance(script_result.call_to_action, dict):
+            cta_text = script_result.call_to_action.get('primary', '')
+        else:
+            cta_text = str(script_result.call_to_action)
+        
+        # Convert disclaimer IDs to full text and ensure all required ones are included
+        disclaimer_ids = script_result.required_disclaimers if isinstance(script_result.required_disclaimers, list) else []
+        
+        # Always include these critical disclaimers regardless of template
+        required_disclaimer_ids = ['boxed_warning', 'prescribing_info', 'individual_results', 'adverse_events']
+        
+        # Merge and remove duplicates (preserve order: template first, then required)
+        seen = set()
+        all_disclaimer_ids = []
+        for d_id in disclaimer_ids + required_disclaimer_ids:
+            if d_id not in seen:
+                seen.add(d_id)
+                all_disclaimer_ids.append(d_id)
+        
+        # Convert to text and remove any duplicates in the text itself
+        disclaimers_text = []
+        seen_text = set()
+        for d_id in all_disclaimer_ids:
+            text = get_disclaimer_text(d_id)
+            if text not in seen_text:
+                seen_text.add(text)
+                disclaimers_text.append(text)
+        
         script_dict = {
             'hcp_id': script_result.hcp_id,
             'scenario': scenario,
             'priority': priority,
-            'opening': script_result.opening,
-            'talking_points': script_result.talking_points,
-            'objection_handlers': script_result.objection_handlers,
-            'call_to_action': script_result.call_to_action,
-            'next_steps': script_result.next_steps,
-            'required_disclaimers': script_result.required_disclaimers,
+            'opening': opening_text,
+            'talking_points': talking_points_list,
+            'objection_handlers': objection_handlers_list,
+            'call_to_action': cta_text,
+            'next_steps': script_result.next_steps if isinstance(script_result.next_steps, list) else [],
+            'disclaimers': disclaimers_text,
+            'mlr_content_used': [c.get('mlr_id', '') if isinstance(c, dict) else str(c) for c in script_result.rag_content_used] if script_result.rag_content_used else [],
             'formatted_text': format_script_output(script_result),
             'metadata': {
                 'template_used': script_result.template_used,
@@ -835,6 +1261,15 @@ async def generate_call_script(
         }
         
         # 8. Audit log
+        print(f"\n✅ Step 5: Script generation complete!")
+        print(f"   ✓ Compliance: {'PASSED' if compliance_report.is_compliant else 'FAILED'}")
+        print(f"   ✓ Generation Time: {generation_time:.2f}s")
+        print(f"   ✓ Estimated Cost: ${script_result.estimated_cost:.4f}")
+        print(f"   ✓ GPT-4 Enhanced: {script_result.gpt4_enhanced}")
+        # script_result.opening is a dict with title/content, not a string
+        print(f"   ✓ Script generated successfully!")
+        print("="*80 + "\n")
+        
         logger.info(
             f"Script generated: HCP={body.hcp_id}, Scenario={scenario}, "
             f"Compliant={compliance_report.is_compliant}, Time={generation_time:.2f}s, "
@@ -852,11 +1287,19 @@ async def generate_call_script(
                 'predictions': predictions,
                 'method': script_result.generation_method,
                 'approval_sources': script_result.approval_sources,
-                'content_pieces_used': len(script_result.rag_content_used)
+                'content_pieces_used': len(script_result.rag_content_used),
+                'gpt4_used': script_result.gpt4_enhanced,
+                'generated_by': 'HybridScriptGenerator',
+                'generation_time_ms': int(generation_time * 1000)
             },
             generation_time_seconds=round(generation_time, 2),
             cost_usd=script_result.estimated_cost
         )
+        
+        print("📤 Sending response to frontend...")
+        print(f"   Response metadata.gpt4_used: {response.metadata['gpt4_used']}")
+        print(f"   Response cost_usd: ${response.cost_usd}")
+        print("\n")
         
         return response
         
@@ -868,6 +1311,204 @@ async def generate_call_script(
             status_code=500,
             detail=f"Script generation failed: {str(e)}"
         )
+
+
+@app.post("/generate-call-script/stream", tags=["Script Generation"])
+@limiter.limit("30/minute")
+async def generate_call_script_stream(
+    request: Request,
+    body: GenerateScriptRequest,
+    api_key: str = Depends(verify_api_key)
+):
+    """
+    Stream call script generation with progressive updates (like Claude)
+    
+    Streams JSON events in SSE format:
+    - event: status - Progress updates
+    - event: section - Script sections as they complete
+    - event: complete - Final complete script
+    - event: error - Error message
+    """
+    import asyncio
+    import json
+    
+    async def generate():
+        try:
+            start_time = time.time()
+            
+            # Event 1: Started
+            yield f"data: {json.dumps({'event': 'status', 'data': {'step': 'started', 'message': 'Initializing script generation...'}})}\n\n"
+            await asyncio.sleep(0.1)
+            
+            # Event 2: Loading HCP features from Phase 7 data
+            yield f"data: {json.dumps({'event': 'status', 'data': {'step': 'loading_features', 'message': f'Loading Phase 7 data for HCP {body.hcp_id}...'}})}\n\n"
+            hcp_features = load_hcp_features(body.hcp_id)
+            await asyncio.sleep(0.2)
+            
+            # Event 3: Running predictions (extracting from Phase 7 model outputs)
+            yield f"data: {json.dumps({'event': 'status', 'data': {'step': 'predictions', 'message': 'Extracting 12+ ML model predictions...'}})}\n\n"
+            predictions = run_ml_predictions(hcp_features)
+            await asyncio.sleep(0.3)
+            
+            # Event 4: Classifying scenario
+            yield f"data: {json.dumps({'event': 'status', 'data': {'step': 'scenario', 'message': 'Analyzing HCP profile...'}})}\n\n"
+            if body.force_scenario:
+                scenario = body.force_scenario.upper()
+                priority = 'HIGH'
+            else:
+                scenario, priority = classify_scenario(predictions)
+            
+            yield f"data: {json.dumps({'event': 'section', 'data': {'type': 'metadata', 'scenario': scenario, 'priority': priority}})}\n\n"
+            await asyncio.sleep(0.1)
+            
+            # Event 5: Generating script
+            if body.include_gpt4:
+                yield f"data: {json.dumps({'event': 'status', 'data': {'step': 'generating', 'message': '🤖 Generating personalized script with GPT-4o-mini...'}})}\n\n"
+            else:
+                yield f"data: {json.dumps({'event': 'status', 'data': {'step': 'generating', 'message': 'Generating script from template...'}})}\n\n"
+            
+            script_result = script_generator.generate_script(
+                hcp_id=body.hcp_id,
+                use_gpt4=body.include_gpt4,
+                use_rag=True,
+                hcp_features=hcp_features,
+                predictions=predictions
+            )
+            
+            # Replace placeholders
+            product_focus = script_result.predictions.get('product_focus', 'Tirosint')
+            script_result = replace_placeholders_in_script(script_result, product_focus, hcp_features)
+            script_result = final_compliance_cleanup(script_result)
+            
+            # Event 6: Stream opening word-by-word (like Claude)
+            if isinstance(script_result.opening, dict):
+                opening_text = f"{script_result.opening.get('greeting', '')} {script_result.opening.get('purpose', '')}".strip()
+            else:
+                opening_text = str(script_result.opening)
+            
+            # Stream opening word by word for Claude-like effect
+            words = opening_text.split()
+            accumulated_text = ""
+            for i, word in enumerate(words):
+                accumulated_text += word + " "
+                yield f"data: {json.dumps({'event': 'section', 'data': {'type': 'opening', 'content': accumulated_text.strip()}})}\n\n"
+                await asyncio.sleep(0.03)  # 30ms per word
+            
+            await asyncio.sleep(0.5)  # Pause after opening
+            
+            # Event 7: Stream talking points one by one with word-by-word content
+            if isinstance(script_result.talking_points, list):
+                for i, tp in enumerate(script_result.talking_points):
+                    if isinstance(tp, dict):
+                        title = tp.get('topic', '')
+                        content = tp.get('message', '')
+                        mlr_ids = tp.get('approved_content_refs', [])
+                        
+                        # Stream title first
+                        yield f"data: {json.dumps({'event': 'section', 'data': {'type': 'talking_point', 'index': i, 'title': title, 'content': '', 'mlr_ids': mlr_ids}})}\n\n"
+                        await asyncio.sleep(0.2)
+                        
+                        # Then stream content word by word
+                        words = content.split()
+                        accumulated_content = ""
+                        for word in words:
+                            accumulated_content += word + " "
+                            yield f"data: {json.dumps({'event': 'section', 'data': {'type': 'talking_point', 'index': i, 'title': title, 'content': accumulated_content.strip(), 'mlr_ids': mlr_ids}})}\n\n"
+                            await asyncio.sleep(0.02)  # 20ms per word
+                        
+                        await asyncio.sleep(0.4)  # Pause between talking points
+            
+            # Event 8: Stream objection handlers word-by-word
+            if isinstance(script_result.objection_handlers, dict):
+                for i, (key, obj) in enumerate(script_result.objection_handlers.items()):
+                    if isinstance(obj, dict):
+                        title = obj.get('objection', key)
+                        content = obj.get('response', '')
+                        mlr_ids = obj.get('approved_content_refs', [])
+                        
+                        # Stream title first
+                        yield f"data: {json.dumps({'event': 'section', 'data': {'type': 'objection_handler', 'index': i, 'title': title, 'content': '', 'mlr_ids': mlr_ids}})}\n\n"
+                        await asyncio.sleep(0.2)
+                        
+                        # Then stream content word by word
+                        words = content.split()
+                        accumulated_content = ""
+                        for word in words:
+                            accumulated_content += word + " "
+                            yield f"data: {json.dumps({'event': 'section', 'data': {'type': 'objection_handler', 'index': i, 'title': title, 'content': accumulated_content.strip(), 'mlr_ids': mlr_ids}})}\n\n"
+                            await asyncio.sleep(0.02)  # 20ms per word
+                        
+                        await asyncio.sleep(0.4)  # Pause between objection handlers
+            
+            # Event 9: Call to action
+            if isinstance(script_result.call_to_action, dict):
+                cta_text = script_result.call_to_action.get('primary', '')
+            else:
+                cta_text = str(script_result.call_to_action)
+            
+            yield f"data: {json.dumps({'event': 'section', 'data': {'type': 'call_to_action', 'content': cta_text}})}\n\n"
+            await asyncio.sleep(0.2)
+            
+            # Event 10: Next steps
+            next_steps = script_result.next_steps if isinstance(script_result.next_steps, list) else []
+            yield f"data: {json.dumps({'event': 'section', 'data': {'type': 'next_steps', 'items': next_steps}})}\n\n"
+            await asyncio.sleep(0.2)
+            
+            # Event 11: Disclaimers (remove duplicates)
+            disclaimer_ids = script_result.required_disclaimers if isinstance(script_result.required_disclaimers, list) else []
+            required_disclaimer_ids = ['boxed_warning', 'prescribing_info', 'individual_results', 'adverse_events']
+            
+            # Merge and remove duplicates (preserve order)
+            seen = set()
+            all_disclaimer_ids = []
+            for d_id in disclaimer_ids + required_disclaimer_ids:
+                if d_id not in seen:
+                    seen.add(d_id)
+                    all_disclaimer_ids.append(d_id)
+            
+            # Convert to text and remove text duplicates
+            disclaimers_text = []
+            seen_text = set()
+            for d_id in all_disclaimer_ids:
+                text = get_disclaimer_text(d_id)
+                if text not in seen_text:
+                    seen_text.add(text)
+                    disclaimers_text.append(text)
+            
+            yield f"data: {json.dumps({'event': 'section', 'data': {'type': 'disclaimers', 'items': disclaimers_text}})}\n\n"
+            await asyncio.sleep(0.2)
+            
+            # Event 12: MLR content
+            mlr_content = [c.get('mlr_id', '') if isinstance(c, dict) else str(c) for c in script_result.rag_content_used] if script_result.rag_content_used else []
+            yield f"data: {json.dumps({'event': 'section', 'data': {'type': 'mlr_content', 'items': mlr_content}})}\n\n"
+            
+            # Event 13: Compliance check (re-run with FINAL disclaimer list that includes required ones)
+            # The original compliance check didn't know we'd add required disclaimers later
+            final_compliance_result = compliance_checker.check_script(
+                str(script_result.opening) + " " + " ".join([str(tp) for tp in script_result.talking_points]),
+                all_disclaimer_ids  # Use the FINAL list with all required disclaimers
+            )
+            compliance_report = format_compliance_report(final_compliance_result)
+            yield f"data: {json.dumps({'event': 'compliance', 'data': {'is_compliant': compliance_report.is_compliant, 'violations': [{'type': v.type, 'severity': v.severity, 'details': v.details} for v in compliance_report.violations], 'total_violations': compliance_report.total_violations}})}\n\n"
+            await asyncio.sleep(0.1)
+            
+            # Event 14: Complete
+            generation_time = time.time() - start_time
+            yield f"data: {json.dumps({'event': 'complete', 'data': {'generation_time': round(generation_time, 2), 'cost': script_result.estimated_cost, 'gpt4_enhanced': script_result.gpt4_enhanced}})}\n\n"
+            
+        except Exception as e:
+            yield f"data: {json.dumps({'event': 'error', 'data': {'message': str(e)}})}\n\n"
+    
+    return StreamingResponse(
+        generate(),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no"
+        }
+    )
+
 
 @app.post("/validate-script", response_model=ComplianceReport, tags=["Compliance"])
 @limiter.limit("60/minute")

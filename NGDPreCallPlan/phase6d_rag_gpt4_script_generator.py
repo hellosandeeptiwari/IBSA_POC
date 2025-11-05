@@ -100,8 +100,8 @@ load_dotenv()
 
 warnings.filterwarnings('ignore')
 
-# Directories
-BASE_DIR = Path(r'c:\Users\SandeepT\IBSA PoC V2')
+# Directories - use script location to build portable paths (works locally & on Azure)
+BASE_DIR = Path(__file__).parent.resolve()  # NGDPreCallPlan folder (absolute path)
 DATA_DIR = BASE_DIR / 'ibsa-poc-eda' / 'data'
 FEATURES_DIR = BASE_DIR / 'ibsa-poc-eda' / 'outputs' / 'features'
 MODELS_DIR = BASE_DIR / 'ibsa-poc-eda' / 'outputs' / 'models' / 'trained_models'
@@ -109,6 +109,9 @@ COMPLIANCE_DIR = BASE_DIR / 'ibsa-poc-eda' / 'outputs' / 'compliance'
 TEMPLATES_DIR = BASE_DIR / 'ibsa-poc-eda' / 'outputs' / 'call_scripts'
 OUTPUT_DIR = BASE_DIR / 'ibsa-poc-eda' / 'outputs' / 'generated_scripts'
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+
+print(f"📂 BASE_DIR: {BASE_DIR}")
+print(f"📂 COMPLIANCE_DIR: {COMPLIANCE_DIR}")
 
 # Vector DB directory
 VECTOR_DB_DIR = BASE_DIR / 'ibsa-poc-eda' / 'outputs' / 'vector_db'
@@ -604,14 +607,42 @@ class GPT4ScriptEnhancer:
             for i, content in enumerate(rag_content)
         ])
         
-        # Build HCP context
+        # Build COMPREHENSIVE HCP context with ALL ML predictions
         hcp_context = f"""
-HCP Profile:
+HCP Profile & ML-Driven Insights:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+👤 PRESCRIBER INFORMATION:
 - Name: {hcp_profile.get('hcp_name', 'Dr. [Name]')}
 - Specialty: {hcp_profile.get('specialty', '[Specialty]')}
-- Current TRx: {hcp_profile.get('current_trx', 0):.0f}/month
-- IBSA Share: {hcp_profile.get('ibsa_share', 0)*100:.1f}%
-- Scenario: {scenario.value.upper()}
+- NPI: {hcp_profile.get('NPI', 'N/A')}
+
+📊 CURRENT PERFORMANCE:
+- Current TRx: {hcp_profile.get('current_trx', 0):.0f} prescriptions/month
+- IBSA Market Share: {hcp_profile.get('ibsa_share_pct', 0):.1f}% (Target: {hcp_profile.get('target_share_pct', 25)}%)
+- Total Market TRx: {hcp_profile.get('total_market_trx', 0):.0f}
+- Competitive Pressure: {hcp_profile.get('competitive_threat', 'moderate')}
+
+🎯 ML PREDICTIONS FROM SCORING MODELS (Use these for data-driven recommendations):
+- NGD Category: {hcp_profile.get('ngd_category', 'Unknown')} ({hcp_profile.get('ngd_status', 'trend analysis')})
+- Prescription Lift Forecast: {hcp_profile.get('prescription_lift', 0):+.1f} scripts/month
+- Growth Probability: {hcp_profile.get('growth_probability', 0)*100:.1f}% (likelihood to increase prescriptions)
+- Wallet Share Growth: {hcp_profile.get('wallet_share_growth', 0):+.2f}% (competitive position trend)
+- Call Success Probability: {hcp_profile.get('call_success_prob', 0)*100:.1f}% (engagement likelihood)
+
+💊 SAMPLE ALLOCATION:
+- Samples Provided (Last Quarter): {hcp_profile.get('samples_provided', 0):.0f} units
+- Sample-to-Rx Conversion: {hcp_profile.get('sample_conversion', 0)*100:.1f}%
+- Recommended Adjustment: {hcp_profile.get('sample_recommendation', 'maintain current level')}
+
+🎬 ENGAGEMENT STRATEGY:
+- Priority Level: {scenario.value.upper()}
+- Recommended Approach: {"URGENT - Focus on retention and addressing concerns" if scenario.value == "retention" else "GROWTH - Educational, value-focused messaging" if scenario.value == "growth" else "OPTIMIZE - Efficiency and sample allocation" if scenario.value == "optimization" else "BUILD RELATIONSHIP - Establish rapport"}
+- Key Pain Points: {hcp_profile.get('key_concerns', 'sample efficiency, patient affordability')}
+
+📈 TREND ANALYSIS:
+- TRx Trend (QoQ): {hcp_profile.get('trx_change', 0):+.1f}% {"⚠️ DECLINING" if hcp_profile.get('trx_change', 0) < 0 else "✓ GROWING"}
+- Patient Volume: {hcp_profile.get('patient_volume', 'moderate')} volume practice
+- Decision-Making Style: {hcp_profile.get('decision_style', 'Evidence-based, values clinical data')}
 """
         
         prompt = f"""
@@ -625,19 +656,78 @@ TEMPLATE SCRIPT:
 MLR-APPROVED CONTENT (USE THESE ONLY):
 {approved_snippets}
 
-STRICT RULES:
-1. Use ONLY the approved content provided above - do NOT add new medical claims
-2. Personalize by:
-   - Inserting HCP name/specialty naturally
-   - Adjusting tone based on scenario (urgent for RETENTION, educational for GROWTH)
-   - Selecting most relevant approved content snippets
-3. Keep script concise (under 500 words)
-4. Maintain professional, compliant tone
-5. Do NOT make comparative claims without citations
-6. Do NOT mention off-label uses
-7. If template mentions {{placeholders}}, replace with actual HCP data
+STRICT COMPLIANCE RULES:
+1. ✓ Use ONLY the MLR-approved content provided above
+2. ✗ Do NOT add new medical claims, efficacy statements, or safety data
+3. ✗ Do NOT make comparative claims (e.g., "better than", "superior to")
+4. ✗ Do NOT mention off-label uses or unapproved indications
+5. ✓ Always include required disclaimers when discussing efficacy/safety
+6. ✓ Use compliant language only (avoid: "best", "proven", "guarantee", "cure")
 
-OUTPUT: Enhanced, personalized script using ONLY approved content.
+PERSONALIZATION INSTRUCTIONS:
+
+Your task is to transform the generic template into a highly personalized script using the HCP data provided above. The script should feel like it was written specifically for THIS doctor based on their actual practice data.
+
+REQUIRED: Use AT LEAST 5-7 specific data points naturally in the conversation:
+1. HCP specialty - mention their practice type
+2. Current TRx volume - use actual prescription numbers from "Current TRx" field
+3. Market share percentage - use ONLY "IBSA Market Share" value, cite both current and target
+4. NGD Category OR prescription lift - frame the trend (Decliner/Stable/Grower/New)
+5. Sample metrics - cite actual units provided and conversion rates
+6. Prescription lift OR growth probability - quantify the potential value
+7. TRx trend direction - acknowledge if growing or declining based on "Prescription Lift Forecast"
+
+⚠️ CRITICAL: DO NOT INVENT NUMBERS! Use ONLY the exact values from the HCP Profile section above.
+- If "IBSA Market Share" shows 0.0%, say "limited current adoption" - don't make up 42.5% or any other percentage
+- If "Target" is 25%, say "grow to 25% target" - don't say "protect 25%" if current is 0%
+- If "Prescription Lift" is +8.9, say "potential for 9 additional scripts" - use the actual number
+- If "Current TRx" is 0, say "opportunity to establish Tirosint" - don't claim they're already prescribing
+
+EXAMPLES OF GOOD vs BAD PERSONALIZATION:
+
+Opening Examples:
+❌ BAD: "Thank you for seeing me today. I wanted to discuss Tirosint."
+❌ BAD: "Thank you for seeing me, Dr. NAME in TERRITORY..." (using placeholders)
+✅ GOOD: "Thank you for seeing me today, Dr. Khan. I've been reviewing your practice data, and I see you're currently prescribing about 15 Tirosint scripts per month, which represents roughly 12% of your thyroid patient volume. I wanted to discuss how we can build on this momentum."
+
+Talking Point Examples:
+❌ BAD: "Tirosint offers benefits for your patients."
+❌ BAD: "Given your SPECIALTY, Tirosint may be appropriate..." (using placeholders)
+✅ GOOD: "Based on your endocrinology practice and current volume of 15 monthly Tirosint prescriptions, our analytics suggest potential for approximately 9 additional scripts per month with optimized sampling. This represents a strong ROI of around $134 per engaged patient."
+
+Sample Discussion Examples:
+❌ BAD: "We've provided samples to support your practice."
+❌ BAD: "We've provided SAMPLE_COUNT samples recently..." (using placeholders)
+✅ GOOD: "Over the past quarter, we've allocated 11 sample units to your practice. With your current 23% sample-to-prescription conversion rate, there's opportunity to improve this through more targeted allocation to patients likely to continue therapy."
+
+CRITICAL RULES TO ELIMINATE PLACEHOLDERS:
+1. NEVER use brackets or placeholders: [SPECIALTY], [PRODUCT], [DATA POINT] - use actual values from HCP profile
+2. NEVER leave variables unfilled: territory_name, rep_name, sample_count - omit that sentence if data unavailable
+3. If a data point is 0, N/A, or missing - DON'T mention it, focus on available data instead
+4. If you don't have rep/territory info - skip that part, start with HCP-focused content
+5. Use phrases like "approximately", "around", "about" for rounded numbers to sound natural
+
+TONE CALIBRATION BASED ON SCENARIO:
+- RETENTION (High Churn): "I've noticed some changes in your prescribing patterns - you were averaging 18 scripts monthly but it's dropped to 12. I want to understand any concerns and ensure we're supporting you effectively."
+- GROWTH (High Potential): "Your practice shows excellent potential - with 15 current monthly scripts and 100% growth probability, our models suggest we could reach 24 scripts with optimized support, representing about $134 ROI per patient."
+- OPTIMIZATION: "You're currently prescribing 15 Tirosint scripts monthly with 11 samples provided last quarter. Let's optimize this - our data shows a 23% conversion rate, and we believe targeted allocation could improve outcomes."
+
+OUTPUT REQUIREMENTS:
+1. Replace ALL template placeholders with actual data from the HCP profile
+2. Include 5-7 specific numbers (TRx counts, percentages, ROI, sample counts)
+3. Mention the HCP's specialty naturally in context
+4. Reference their churn risk, growth probability, or prescription lift explicitly
+5. Make it sound conversational, not robotic - use "about", "approximately", "around"
+6. NO placeholders like {{name}}, [PRODUCT], or [DATA] should remain in output
+7. If data is missing (0, N/A, null) - skip that talking point, use other available data
+
+FINAL CHECK BEFORE RETURNING:
+- Search your output for any {{curly braces}} or [square brackets] - remove them
+- Ensure every number cited exists in the HCP profile data above
+- Verify specialty, TRx volume, and at least 3 other metrics are mentioned
+- Confirm the script sounds natural, like a human wrote it for THIS specific doctor
+
+OUTPUT: Return the fully personalized script with zero placeholders and rich data integration.
 """
         return prompt
 
@@ -687,14 +777,20 @@ class HybridScriptGenerator:
             return {}
     
     def generate_script(self, hcp_id: str, use_gpt4: bool = True, 
-                       use_rag: bool = True) -> GeneratedScript:
+                       use_rag: bool = True, hcp_features: Dict = None, 
+                       predictions: Dict = None, force_scenario: str = None, 
+                       force_priority: str = None) -> GeneratedScript:
         """
         Generate complete call script for HCP
         
         Args:
+            force_scenario: Override scenario classification (e.g., 'RETENTION', 'GROWTH')
+            force_priority: Override priority (e.g., 'HIGH', 'MEDIUM')
             hcp_id: HCP identifier
             use_gpt4: Enable GPT-4 enhancement (default True)
             use_rag: Enable RAG retrieval (default True)
+            hcp_features: Optional pre-loaded HCP features (if None, will load internally)
+            predictions: Optional pre-computed predictions (if None, will compute internally)
         
         Returns:
             GeneratedScript with all components and metadata
@@ -705,17 +801,39 @@ class HybridScriptGenerator:
         print(f"🎬 GENERATING CALL SCRIPT: HCP {hcp_id}")
         print(f"{'='*100}")
         
-        # 1. Load HCP features (placeholder - load from Phase 4 output)
-        hcp_features = self._load_hcp_features(hcp_id)
-        print(f"\n✓ HCP features loaded: {len(hcp_features)} attributes")
+        # 1. Load HCP features (use provided or load from dataset)
+        if hcp_features is None:
+            hcp_features = self._load_hcp_features(hcp_id)
+            print(f"\n✓ HCP features loaded internally: {len(hcp_features)} attributes")
+        else:
+            print(f"\n✓ HCP features provided externally: {len(hcp_features)} attributes")
+            print(f"   - Specialty: {hcp_features.get('Specialty', 'N/A')}")
+            print(f"   - TRx Tirosint: {hcp_features.get('TRx_Tirosint', 'N/A')}")
+            print(f"   - Payer Mix: {hcp_features.get('PayerMix_Commercial', 'N/A')}")
         
-        # 2. Run ML predictions (placeholder - use Phase 6 models)
-        predictions = self._run_predictions(hcp_features)
-        print(f"✓ ML predictions: {len(predictions)} targets")
+        # 2. Run ML predictions (use provided or compute internally)
+        if predictions is None:
+            predictions = self._run_predictions(hcp_features)
+            print(f"✓ ML predictions computed internally: {len(predictions)} targets")
+        else:
+            print(f"✓ ML predictions provided externally: {len(predictions)} targets")
         
-        # 3. Classify scenario
-        scenario, priority, reasoning = ScenarioClassifier.classify(hcp_features, predictions)
-        print(f"✓ Scenario classified: {scenario.value.upper()} (Priority: {priority})")
+        # 3. Classify scenario (or use forced scenario from backend)
+        if force_scenario:
+            # Backend already classified - use that
+            try:
+                scenario = ScenarioType(force_scenario.lower())
+                priority = force_priority or "MEDIUM"
+                reasoning = {'scenario_rationale': f'Backend classified as {force_scenario}'}
+                print(f"✓ Scenario provided by backend: {scenario.value.upper()} (Priority: {priority})")
+            except ValueError:
+                # Fallback if invalid scenario
+                scenario, priority, reasoning = ScenarioClassifier.classify(hcp_features, predictions)
+                print(f"✓ Scenario classified internally (fallback): {scenario.value.upper()} (Priority: {priority})")
+        else:
+            # Internal classification
+            scenario, priority, reasoning = ScenarioClassifier.classify(hcp_features, predictions)
+            print(f"✓ Scenario classified internally: {scenario.value.upper()} (Priority: {priority})")
         
         # 4. Select template
         template = self.templates.get(scenario.value, {})

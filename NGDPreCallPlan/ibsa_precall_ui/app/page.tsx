@@ -509,13 +509,13 @@ export default function DashboardPage() {
           <CardContent className="pt-6">
             <div className="flex items-center gap-2 text-orange-600 mb-2">
               <Target className="h-5 w-5" />
-              <div className="text-sm font-medium">Avg Call Success</div>
+              <div className="text-sm font-medium">Avg Growth Probability</div>
             </div>
             <div className="text-3xl font-bold text-orange-600">
               {(filteredData.reduce((sum, h) => sum + ((h.call_success_score || 0) * 100), 0) / Math.max(filteredData.length, 1)).toFixed(0)}%
             </div>
             <div className="text-xs text-gray-500 mt-1">
-              {formatNumber(filteredData.filter(h => (h.call_success_score || 0) >= 0.7).length)} High Probability (70%+)
+              {formatNumber(filteredData.filter(h => (h.call_success_score || 0) >= 0.7).length)} High Growth Potential (70%+)
             </div>
           </CardContent>
         </Card>
@@ -568,9 +568,9 @@ export default function DashboardPage() {
                 </th>
                 <th className="px-2 py-2 text-left text-[11px] font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100" onClick={() => handleSort('call_success_score')}>
                   <div className="flex items-center gap-1">
-                    Call Success
+                    Growth Probability
                     <SortIcon column="call_success_score" />
-                    <Tooltip content="ML prediction for best product opportunity - shows highest success rate among Tirosint, Flector, or Licart (0-100%)" />
+                    <Tooltip content="⚠️ CORRECTED: Predicts likelihood of prescription GROWTH (0-100%), not call completion. High % = HCP likely to increase Rx volume." />
                   </div>
                 </th>
                 <th className="px-2 py-2 text-left text-[11px] font-medium text-gray-500 uppercase border-b bg-purple-50 cursor-pointer hover:bg-gray-100" onClick={() => handleSort('value_score')}>
@@ -584,15 +584,15 @@ export default function DashboardPage() {
                     <Tooltip content="AI Prediction: ML model call success probability × 100 (higher = better engagement likelihood)" />
                   </div>
                 </th>
-                <th className="px-1 py-2 text-center text-[11px] font-medium text-gray-500 uppercase border-b bg-purple-50 cursor-pointer hover:bg-gray-100 w-20" onClick={() => handleSort('priority')}>
-                  <div className="flex items-center justify-center gap-0.5">
+                <th className="px-2 py-2 text-center text-[11px] font-medium text-gray-500 uppercase border-b bg-purple-50 cursor-pointer hover:bg-gray-100" onClick={() => handleSort('priority')}>
+                  <div className="flex items-center justify-center gap-1">
                     <Bot className="h-3 w-3 text-purple-600" />
-                    <span className="flex items-center gap-0.5">
-                      Pri
+                    <span className="flex items-center gap-1">
+                      Priority
                       <span className="px-1 py-0.5 bg-purple-200 text-purple-700 rounded text-[10px] font-bold">AI</span>
                     </span>
                     <SortIcon column="priority" />
-                    <Tooltip content="AI Ranking: 60% Call Success + 30% Rx Lift + 10% (Tier & NGD) mapped to 1-5" />
+                    <Tooltip content="AI Ranking: 60% Growth Probability + 30% Rx Lift + 10% (Tier & NGD) mapped to 1-5" />
                   </div>
                 </th>
                 <th className="px-2 py-2 text-left text-[11px] font-medium text-gray-500 uppercase border-b cursor-pointer hover:bg-gray-100" onClick={() => handleSort('trx_current')}>
